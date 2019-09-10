@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    @*<link rel="stylesheet" href="http://test.geoportal.ingeo.kz/geoserver/openlayers3/ol.css" type="text/css">
+    <script src="http://test.geoportal.ingeo.kz/geoserver/openlayers3/ol.js"></script>*@
+<h1>Index</h1>
+
+<label>Дата:</label>
+<select id="date" onchange="ChangeLayer()">
+    @foreach(DateTime dateTime in (DateTime []) ViewBag.DateTime)
+    {
+        <option>
+            @dateTime.ToString("yyyy-MM-dd")
+        </option>
+    }
+</select>
+<div id="map" class="map"></div>
+<script type="text/javascript">
+    var geoserver_url = "http://test.geoportal.ingeo.kz/geoserver/",
+        geoserver_workspace_name = "modis";
+
+    var url_MODIS = geoserver_url + geoserver_workspace_name + '/wms';
+    //var url_MODIS = geoserver_url + geoserver_workspace_name + '/wms?time=2000-02-26&';
+    var Source_MODIS = new ol.source.TileWMS({
+        url: url_MODIS,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": geoserver_workspace_name + ':Maximum_Snow_Extent_MOD10A2006',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_MODIS = new ol.layer.Tile({
+        source: Source_MODIS
+    });
+    Layer_MODIS.setOpacity(0.80);
+
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            }),
+            Layer_MODIS],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([66.902, 48.714]),
+            zoom: 5
+        })});
+
+    function ChangeLayer() {
+        console.log($('#date').val());
+        var Source_MODIS_New = new ol.source.TileWMS({
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#date').val() + '&',
+            params: {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                tiled: true,
+                "LAYERS": geoserver_workspace_name + ':Maximum_Snow_Extent_MOD10A2006',
+                "exceptions": 'application/vnd.ogc.se_inimage',
+                tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+            },
+            serverType: 'geoserver'
+        });
+        Layer_MODIS.setSource(Source_MODIS_New);
+    }
+</script>
