@@ -51,13 +51,32 @@
     });
     Layer_MODIS.setOpacity(0.80);
 
+    var url_WMA = geoserver_url + 'geonode' + '/wms';
+    var Source_WMA = new ol.source.TileWMS({
+        url: url_WMA,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wma_polygon',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_WMA = new ol.layer.Tile({
+        source: Source_WMA
+    });
+    Layer_WMA.setOpacity(0.80);
+
     var map = new ol.Map({
         target: 'map',
         layers: [
             new ol.layer.Tile({
                 source: new ol.source.OSM()
             }),
-            Layer_MODIS],
+            Layer_MODIS,
+            Layer_WMA],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 5
