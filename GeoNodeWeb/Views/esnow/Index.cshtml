@@ -70,7 +70,7 @@
             'FORMAT': 'image/png',
             'VERSION': '1.1.1',
             tiled: true,
-            "LAYERS": 'geonode:wma_polygon',
+            "LAYERS": 'geonode:wma_polygon_1',
             "exceptions": 'application/vnd.ogc.se_inimage',
             tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
         },
@@ -81,6 +81,25 @@
     });
     Layer_WMA.set('name', 'WMA');
     Layer_WMA.setOpacity(0.80);
+
+    //var url_WMA = 'http://localhost:8080/geoserver/' + 'Test' + '/wms';
+    //var Source_WMA = new ol.source.TileWMS({
+    //    url: url_WMA,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": 'Test:WMA_polygon',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_WMA = new ol.layer.Tile({
+    //    source: Source_WMA
+    //});
+    //Layer_WMA.set('name', 'WMA');
+    //Layer_WMA.setOpacity(0.80);
 
     var map = new ol.Map({
         target: 'map',
@@ -136,4 +155,62 @@
             }
         })
     }
+
+    map.on('singleclick', function (evt) {
+        var viewResolution = (map.getView().getResolution());
+        var url = Layer_WMA.getSource().getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {
+                'INFO_FORMAT': 'text/javascript'
+                //'INFO_FORMAT': 'application/json'
+            });
+        console.log(url);
+        if (url) {
+            var parser = new ol.format.GeoJSON();
+            $.ajax({
+                //headers: { "Accept": "application/json"},
+                jsonp: false,
+                jsonpCallback: 'getJson',
+                type: 'GET',
+                url: url + "&format_options=callback:getJson",
+                async: false,
+                dataType: 'jsonp',
+                //crossDomain: true,
+                //beforeSend: function(xhr){
+                //    xhr.withCredentials = true;
+                //},
+                error: function (xhr, status, error) {
+                    console.log('error');
+                },
+                //success: function (data) {
+                //    alert('success');
+                //},
+            }).then(function (response) {
+                var result = parser.readFeatures(response);
+                if (result.length > 0) {
+                    console.log(result[0].get('Id'))
+                }
+                console.log('OK');
+            });
+        }
+    });
+
+    //$(map.getViewport()).on("click", function(e) {
+    //    map.forEachFeatureAtPixel(map.getEventPixel(e), function (feature, layer) {
+    //        console.log('OK');
+    //    });
+    //});
+
+    //map.on("click", function(e) {
+    //    map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+    //        //console.log(feature.get("id"));
+    //        console.log('OK');
+    //    })
+    //});
+
+    //map.getViewport().addEventListener("click", function(e) {
+    //    map.forEachFeatureAtPixel(map.getEventPixel(e), function (feature, layer) {
+    //        console.log('OK');
+    //    });
+    //});
 </script>
