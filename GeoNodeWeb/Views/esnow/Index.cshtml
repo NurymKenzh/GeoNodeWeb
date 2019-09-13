@@ -7,25 +7,37 @@
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 
 @*<link rel="stylesheet" href="http://test.geoportal.ingeo.kz/geoserver/openlayers3/ol.css" type="text/css">
-<script src="http://test.geoportal.ingeo.kz/geoserver/openlayers3/ol.js"></script>*@
+    <script src="http://test.geoportal.ingeo.kz/geoserver/openlayers3/ol.js"></script>*@
 
 <script src="~/lib/moment.js/moment.js"></script>
 <h1>MODIS</h1>
 
-<select id="dates" onchange="ChangeLayer()" hidden="hidden">
-@foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
-{
-    <option value="@dateTime">
-        @dateTime.ToString("yyyy-MM-dd")
-    </option>
-}
+<select id="dates" onchange="ChangeLayerMODIS()" hidden="hidden">
+    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
+    {
+        <option value="@dateTime">
+            @dateTime.ToString("yyyy-MM-dd")
+        </option>
+    }
 </select>
-@{ 
+@{
     DateTime[] dates = ViewBag.DateTime;
 }
 
 <label>Дата</label>: <label id="DateLabel"></label>
 <input id="date" type="range" min="0" value="0" max="@(dates.Count()-1)" step="1">
+
+<label>
+    <input type="checkbox" id="layerMODISShow" checked="checked" onchange="ChangeLayers()">
+    MODIS
+</label>
+<input id="layerMODISOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+<label>
+    <input type="checkbox" id="layerWMAShow" checked="checked" onchange="ChangeLayers()">
+    ВХУ
+</label>
+<input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <div id="map" class="map"></div>
 <script type="text/javascript">
@@ -33,7 +45,6 @@
         geoserver_workspace_name = "modis";
 
     var url_MODIS = geoserver_url + geoserver_workspace_name + '/wms';
-    //var url_MODIS = geoserver_url + geoserver_workspace_name + '/wms?time=2000-02-26&';
     var Source_MODIS = new ol.source.TileWMS({
         url: url_MODIS,
         params: {
@@ -49,6 +60,7 @@
     var Layer_MODIS = new ol.layer.Tile({
         source: Source_MODIS
     });
+    Layer_MODIS.set('name', 'MODIS');
     Layer_MODIS.setOpacity(0.80);
 
     var url_WMA = geoserver_url + 'geonode' + '/wms';
@@ -67,6 +79,7 @@
     var Layer_WMA = new ol.layer.Tile({
         source: Source_WMA
     });
+    Layer_WMA.set('name', 'WMA');
     Layer_WMA.setOpacity(0.80);
 
     var map = new ol.Map({
@@ -84,20 +97,18 @@
     });
 
     var dates = new Array();
-    $('#dates option').each(function() {
+    $('#dates option').each(function () {
         dates.push($(this).val());
     });
     var input = document.getElementById('date'),
         output = document.getElementById('DateLabel');
     input.oninput = function () {
         output.innerHTML = moment(dates[this.value]).format('YYYY-MM-DD');
-        ChangeLayer();
+        ChangeLayerMODIS();
     };
     input.oninput();
 
-    function ChangeLayer() {
-        //console.log($('#date').val());
-        console.log($('#DateLabel').html());
+    function ChangeLayerMODIS() {
         var Source_MODIS_New = new ol.source.TileWMS({
             url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + /*$('#date').val()*/$('#DateLabel').html() + '&',
             params: {
@@ -111,5 +122,18 @@
             serverType: 'geoserver'
         });
         Layer_MODIS.setSource(Source_MODIS_New);
+    }
+
+    function ChangeLayers() {
+        map.getLayers().forEach(function (layer) {
+            if (layer.get('name') == 'MODIS') {
+                layer.setVisible(document.getElementById("layerMODISShow").checked);
+                layer.setOpacity($('#layerMODISOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'WMA') {
+                layer.setVisible(document.getElementById("layerWMAShow").checked);
+                layer.setOpacity($('#layerWMAOpacity').val() / 100)
+            }
+        })
     }
 </script>
