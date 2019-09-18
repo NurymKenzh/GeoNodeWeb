@@ -39,7 +39,13 @@
 </label>
 <input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
+<label id="WMAname"></label>
+<input type="hidden" id="featureId"/>
+
+<button class="btn btn-primary" onclick="Charts()">Графики</button>
+
 <div id="map" class="map"></div>
+
 <script type="text/javascript">
     var geoserver_url = "http://test.geoportal.ingeo.kz/geoserver/",
         geoserver_workspace_name = "modis";
@@ -162,55 +168,38 @@
             evt.coordinate, viewResolution, 'EPSG:3857',
             {
                 'INFO_FORMAT': 'text/javascript'
-                //'INFO_FORMAT': 'application/json'
             });
-        console.log(url);
         if (url) {
             var parser = new ol.format.GeoJSON();
             $.ajax({
-                //headers: { "Accept": "application/json"},
                 jsonp: false,
                 jsonpCallback: 'getJson',
                 type: 'GET',
                 url: url + "&format_options=callback:getJson",
                 async: false,
                 dataType: 'jsonp',
-                //crossDomain: true,
-                //beforeSend: function(xhr){
-                //    xhr.withCredentials = true;
-                //},
                 error: function (xhr, status, error) {
                     console.log('error');
+                    $('#featureId').val(-1);
                 },
-                //success: function (data) {
-                //    alert('success');
-                //},
             }).then(function (response) {
+                featureId = -1;
                 var result = parser.readFeatures(response);
                 if (result.length > 0) {
-                    console.log(result[0].get('Id'))
+                    //console.log(result[0].get('Id'));
+                    $('#featureId').val(result[0].get('Id'));
+                    $('#WMAname').text(result[0].get('NameWMB_Ru'));
                 }
-                console.log('OK');
             });
         }
     });
 
-    //$(map.getViewport()).on("click", function(e) {
-    //    map.forEachFeatureAtPixel(map.getEventPixel(e), function (feature, layer) {
-    //        console.log('OK');
-    //    });
-    //});
-
-    //map.on("click", function(e) {
-    //    map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-    //        //console.log(feature.get("id"));
-    //        console.log('OK');
-    //    })
-    //});
-
-    //map.getViewport().addEventListener("click", function(e) {
-    //    map.forEachFeatureAtPixel(map.getEventPixel(e), function (feature, layer) {
-    //        console.log('OK');
-    //    });
-    //});
+    function Charts() {
+        if ($('#featureId').val() > -1) {
+            var urlC = '@Url.Action("Charts", "esnow")';
+            var urlC = '/esnow/Charts?Id=' + $('#featureId').val();
+            var win = window.open(urlC, '_blank');
+            win.focus();
+        }
+    };
 </script>

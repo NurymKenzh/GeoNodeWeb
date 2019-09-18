@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "Charts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Графики</h1>
+
+<label>@ViewBag.WMAName</label>
+
+<input id="id" value="@ViewBag.Id" type="hidden"/>
+
+<script>
+    function Chart() {
+        $.ajax({
+            url: '@Url.Action("GetWMAInfo")',
+            data: {
+                Id: @ViewBag.Id
+            },
+            type: 'POST',
+            success: function (data) {
+
+            },
+            error: function () {
+            }
+        });
+    };    
+</script>
