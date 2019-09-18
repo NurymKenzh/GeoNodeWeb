@@ -106,6 +106,8 @@ namespace GeoNodeWeb.Controllers
                 }
             }
 
+            rasterstats = rasterstats.OrderBy(r => r.date).ToList();
+
             string wmaname = "";
             using (var connection = new NpgsqlConnection("Host=db-geodata.test.geoportal.ingeo.kz;Database=geoserver;Username=postgres;Password=;Port=15433"))
             {
