@@ -14,7 +14,21 @@
 
 <input id="id" value="@ViewBag.Id" type="hidden"/>
 
-<canvas width="704" height="352" class="chartjs-render-monitor" id="canvas" style="width: 704px; height: 352px; display: block;"></canvas>
+<canvas width="704" height="352" class="chartjs-render-monitor" id="canvas1" style="width: 704px; height: 352px; display: block;"></canvas>
+<select id="chart2DataType" onchange="ChartWMA()">
+    <option value="0">Потерянные данные</option>
+    <option value="1">Нет решения</option>
+    <option value="11">Ночь</option>
+    <option value="25">Нет снега</option>
+    <option value="37">Озеро</option>
+    <option value="39">Море</option>
+    <option value="50">Облако</option>
+    <option value="100">Лед</option>
+    <option value="200">Снег</option>
+    <option value="254">Детектор насыщен</option>
+    <option value="255">Заполнено</option>
+</select>
+<canvas width="704" height="352" class="chartjs-render-monitor" id="canvas2" style="width: 704px; height: 352px; display: block;"></canvas>
 
 <script>
     var colors = [
@@ -75,6 +89,9 @@
         }
     ]
 
+    var chart1 = null,
+        chart2 = null;
+
     function ChartWMA() {
         $.ajax({
             url: '@Url.Action("GetWMAInfo")',
@@ -83,24 +100,21 @@
             },
             type: 'POST',
             success: function (data) {
-                console.log('OK');
-
-                var barChartData = {
+                var barChartData1 = {
                     labels: [],
                     datasets: []
                 };
 
-                barChartData.labels = [];
-                barChartData.datasets = [];
-                console.log(data.rasterstats[0].snowData);
+                barChartData1.labels = [];
+                barChartData1.datasets = [];
                 for (i = 0; i < data.rasterstats.length; i++) {
-                    barChartData.labels.push(moment(data.rasterstats[i].date).format('YYYY-MM-DD'));
+                    barChartData1.labels.push(moment(data.rasterstats[i].date).format('YYYY-MM-DD'));
                     for (j = 0; j < data.rasterstats[i].snowData.length; j++) {
                         var exist = false;
-                        for (k = 0; k < barChartData.datasets.length; k++) {
-                            if (barChartData.datasets[k].snowtype == data.rasterstats[i].snowData[j].dataType) {
+                        for (k = 0; k < barChartData1.datasets.length; k++) {
+                            if (barChartData1.datasets[k].snowtype == data.rasterstats[i].snowData[j].dataType) {
                                 exist = true;
-                                barChartData.datasets[k].data.push(data.rasterstats[i].snowData[j].area);
+                                barChartData1.datasets[k].data.push(data.rasterstats[i].snowData[j].area);
                             }
                         }
                         if (!exist) {
@@ -113,7 +127,7 @@
                                     break;
                                 }
                             }
-                            barChartData.datasets.push({
+                            barChartData1.datasets.push({
                                 label: label,
                                 snowtype: data.rasterstats[i].snowData[j].dataType,
                                 backgroundColor: backgroundColor,
@@ -125,10 +139,13 @@
                     }
                 }
 
-                var ctx = document.getElementById('canvas').getContext('2d');
-                var Bar1 = new Chart(ctx, {
+                var ctx1 = document.getElementById('canvas1').getContext('2d');
+                if (chart1 != null) {
+                    chart1.destroy();
+                }
+                var chart1 = new Chart(ctx1, {
                     type: 'bar',
-                    data: barChartData,
+                    data: barChartData1,
                     options: {
                         title: {
                             display: true,
@@ -154,6 +171,120 @@
                                     labelString: 'Площадь, м²'
                                 }
                             }]
+                        }
+                    }
+                });
+
+                //---------------------------------------------------------------------------------
+
+                var barChartData2 = {
+                    labels: [],
+                    datasets: []
+                };
+
+                barChartData2.labels = [];
+                barChartData2.datasets = [];
+                var color2 = '#000000',
+                    label = '';
+                for (k = 0; k < colors.length; k++) {
+                    if (colors[k].type == $('#chart2DataType').val()) {
+                        color2 = colors[k].color;
+                        label = colors[k].label;
+                        break;
+                    }
+                }
+                barChartData2.datasets.push({
+                    label: label,
+                    backgroundColor: color2,
+                    borderColor: color2,
+                    borderWidth: 2,
+                    fill: false,
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Среднее',
+                    backgroundColor: '#ff0000',
+                    borderColor: '#ff0000',
+                    borderWidth: 2,
+                    fill: false,
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Минимум',
+                    backgroundColor: '#c3c3c3',
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: '+1',
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Максимум',
+                    backgroundColor: '#c3c3c3',
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: false,
+                    data: []
+                });
+                for (i = 0; i < data.rasterstats.length; i++) {
+                    barChartData2.labels.push(moment(data.rasterstats[i].date).format('YYYY-MM-DD'));
+                    for (j = 0; j < data.rasterstats[i].snowData.length; j++) {
+                        if (data.rasterstats[i].snowData[j].dataType == $('#chart2DataType').val()) {
+                            barChartData2.datasets[0].data.push(data.rasterstats[i].snowData[j].area);
+                        }
+                    }
+                }
+                for (i = 0; i < data.avg.length; i++) {
+                    if (data.avg[i].dataType == $('#chart2DataType').val()) {
+                        barChartData2.datasets[1].data.push(data.avg[i].area);
+                    }
+                }
+                for (i = 0; i < data.min.length; i++) {
+                    if (data.min[i].dataType == $('#chart2DataType').val()) {
+                        barChartData2.datasets[2].data.push(data.min[i].area);
+                    }
+                }
+                for (i = 0; i < data.max.length; i++) {
+                    if (data.max[i].dataType == $('#chart2DataType').val()) {
+                        barChartData2.datasets[3].data.push(data.max[i].area);
+                    }
+                }
+                var ctx2 = document.getElementById('canvas2').getContext('2d');
+                if (chart2 != null) {
+                    chart2.destroy();
+                }
+                chart2 = new Chart(ctx2, {
+                    type: 'line',
+                    data: barChartData2,
+                    options: {
+                        title: {
+                            display: true,
+                            text: data.wmaname
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                //stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Дата'
+                                }
+                            }],
+                            yAxes: [{
+                                //stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Площадь, м²'
+                                }
+                            }]
+                        },
+                        plugins: {
+                            filler: {
+                                propagate: false
+                            }
                         }
                     }
                 });

@@ -29,6 +29,7 @@ namespace GeoNodeWeb.Controllers
 
         private class SnowData
         {
+            public DateTime date; // for Min, Max, Avg
             public DataType DataType;
             public int PixelsCount;
             public decimal Area;
@@ -108,6 +109,103 @@ namespace GeoNodeWeb.Controllers
 
             rasterstats = rasterstats.OrderBy(r => r.date).ToList();
 
+            // Min, Max, Avg
+            List<SnowData> min = new List<SnowData>(),
+                max = new List<SnowData>(),
+                avg = new List<SnowData>();
+            for (int i = 0; i < rasterstats.Count(); i++)
+            {
+                for (int k = 0; k < rasterstats[i].SnowData.Count(); k++)
+                {
+                    bool exist = false;
+                    for (int j = 0; j < min.Count(); j++)
+                    {
+                        if (rasterstats[i].date.Month == min[i].date.Month && rasterstats[i].date.Day == min[i].date.Day)
+                        {
+                            if (min[i].DataType == rasterstats[i].SnowData[k].DataType)
+                            {
+                                exist = true;
+                                if (min[i].Area > rasterstats[i].SnowData[k].Area)
+                                {
+                                    min[i].Area = rasterstats[i].SnowData[k].Area - 10000;
+                                    min[i].Percentage = rasterstats[i].SnowData[k].Percentage;
+                                    min[i].PixelsCount = rasterstats[i].SnowData[k].PixelsCount;
+                                }
+                            }
+                        }
+                    }
+                    for (int j = 0; j < max.Count(); j++)
+                    {
+                        if (rasterstats[i].date.Month == max[i].date.Month && rasterstats[i].date.Day == max[i].date.Day)
+                        {
+                            if (max[i].DataType == rasterstats[i].SnowData[k].DataType)
+                            {
+                                exist = true;
+                                if (max[i].Area < rasterstats[i].SnowData[k].Area)
+                                {
+                                    max[i].Area = rasterstats[i].SnowData[k].Area + 10000;
+                                    max[i].Percentage = rasterstats[i].SnowData[k].Percentage;
+                                    max[i].PixelsCount = rasterstats[i].SnowData[k].PixelsCount;
+                                }
+                            }
+                        }
+                    }
+                    if (!exist)
+                    {
+                        min.Add(new SnowData()
+                        {
+                            DataType = rasterstats[i].SnowData[k].DataType,
+                            date = rasterstats[i].date,
+                            Area = rasterstats[i].SnowData[k].Area - 10000,
+                            Percentage = rasterstats[i].SnowData[k].Percentage,
+                            PixelsCount = rasterstats[i].SnowData[k].PixelsCount
+                        });
+                        max.Add(new SnowData()
+                        {
+                            DataType = rasterstats[i].SnowData[k].DataType,
+                            date = rasterstats[i].date,
+                            Area = rasterstats[i].SnowData[k].Area + 10000,
+                            Percentage = rasterstats[i].SnowData[k].Percentage,
+                            PixelsCount = rasterstats[i].SnowData[k].PixelsCount
+                        });
+                    }
+                }
+            }
+            for (int i = 0; i < rasterstats.Count(); i++)
+            {
+                for (int k = 0; k < rasterstats[i].SnowData.Count(); k++)
+                {
+                    decimal area = 0,
+                        percentage = 0;
+                    int pixelsCount = 0,
+                        count = 0;
+                    for (int j = 0; j < rasterstats.Count(); j++)
+                    {
+                        if(rasterstats[j].date.Month == rasterstats[i].date.Month && rasterstats[j].date.Day == rasterstats[i].date.Day)
+                        {
+                            for (int l = 0; l < rasterstats[j].SnowData.Count(); l++)
+                            {
+                                if(rasterstats[i].SnowData[k].DataType == rasterstats[j].SnowData[l].DataType)
+                                {
+                                    area += rasterstats[j].SnowData[l].Area;
+                                    pixelsCount += rasterstats[j].SnowData[l].PixelsCount;
+                                    percentage += rasterstats[j].SnowData[l].Percentage;
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                    avg.Add(new SnowData()
+                    {
+                        DataType = rasterstats[i].SnowData[k].DataType,
+                        date = rasterstats[i].date,
+                        Area = area / count + 3000,
+                        Percentage = percentage / count,
+                        PixelsCount = pixelsCount / count
+                    });
+                }
+            }
+
             string wmaname = "";
             using (var connection = new NpgsqlConnection("Host=db-geodata.test.geoportal.ingeo.kz;Database=geoserver;Username=postgres;Password=;Port=15433"))
             {
@@ -121,7 +219,10 @@ namespace GeoNodeWeb.Controllers
             return Json(new
             {
                 wmaname,
-                rasterstats
+                rasterstats,
+                min,
+                max,
+                avg
             });
         }
     }
