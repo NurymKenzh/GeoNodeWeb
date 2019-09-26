@@ -12,10 +12,27 @@
 
 @*<label>@ViewBag.WMAName</label>*@
 
-<input id="id" value="@ViewBag.Id" type="hidden"/>
+<input id="id" value="@ViewBag.Id" type="hidden" />
 
+<select id="chart1DateFrom" onchange="Chart1()">
+    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
+    {
+        <option value="@dateTime">
+            @dateTime.ToString("yyyy-MM-dd")
+        </option>
+    }
+</select>
+<select id="chart1DateTo" onchange="Chart1()">
+    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
+    {
+        <option value="@dateTime" selected="selected">
+            @dateTime.ToString("yyyy-MM-dd")
+        </option>
+    }
+</select>
 <canvas width="704" height="352" class="chartjs-render-monitor" id="canvas1" style="width: 704px; height: 352px; display: block;"></canvas>
-<select id="chart2DataType" onchange="ChartWMA(2)">
+
+<select id="chart2DataType" onchange="Chart2()">
     <option value="0">Потерянные данные</option>
     <option value="1">Нет решения</option>
     <option value="11">Ночь</option>
@@ -27,6 +44,42 @@
     <option value="200">Снег</option>
     <option value="254">Детектор насыщен</option>
     <option value="255">Заполнено</option>
+</select>
+<select id="chart2StartMonth" onchange="Chart2()">
+    <option value="1">Январь</option>
+    <option value="2">Февраль</option>
+    <option value="3">Март</option>
+    <option value="4">Апрель</option>
+    <option value="5">Май</option>
+    <option value="6">Июнь</option>
+    <option value="7">Июль</option>
+    <option value="8">Август</option>
+    <option value="9">Сентябрь</option>
+    <option value="10">Октябрь</option>
+    <option value="11">Ноябрь</option>
+    <option value="12">Декабрь</option>
+</select>
+<select id="chart2MonthsCount" onchange="Chart2()">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12" selected="selected">12</option>
+</select>
+<select id="chart2Years" multiple onchange="Chart2()">
+    @foreach (int year in ((DateTime[])ViewBag.DateTime).Select(d => d.Date.Year).Distinct())
+    {
+        <option value="@year" selected="selected">
+            @year.ToString()
+        </option>
+    }
 </select>
 <canvas width="704" height="352" class="chartjs-render-monitor" id="canvas2" style="width: 704px; height: 352px; display: block;"></canvas>
 
@@ -92,204 +145,225 @@
     var chart1 = null,
         chart2 = null;
 
-    function ChartWMA(chartIndex) {
+    function Chart1() {
         $.ajax({
-            url: '@Url.Action("GetWMAInfo")',
+            url: '@Url.Action("GetWMAInfo1")',
             data: {
                 Id: @ViewBag.Id,
+                DateTimeFrom: $('#chart1DateFrom').val(),
+                DateTimeTo: $('#chart1DateTo').val()
             },
             type: 'POST',
             success: function (data) {
-                if (chartIndex == 0 || chartIndex == 1) {
-                    var barChartData1 = {
-                        labels: [],
-                        datasets: []
-                    };
+                var barChartData1 = {
+                    labels: [],
+                    datasets: []
+                };
 
-                    barChartData1.labels = [];
-                    barChartData1.datasets = [];
-                    for (i = 0; i < data.rasterstats.length; i++) {
-                        barChartData1.labels.push(moment(data.rasterstats[i].date).format('YYYY-MM-DD'));
-                        for (j = 0; j < data.rasterstats[i].snowData.length; j++) {
-                            var exist = false;
-                            for (k = 0; k < barChartData1.datasets.length; k++) {
-                                if (barChartData1.datasets[k].snowtype == data.rasterstats[i].snowData[j].dataType) {
-                                    exist = true;
-                                    barChartData1.datasets[k].data.push(data.rasterstats[i].snowData[j].area);
-                                }
-                            }
-                            if (!exist) {
-                                var backgroundColor = '#000000',
-                                    label = '';
-                                for (k = 0; k < colors.length; k++) {
-                                    if (colors[k].type == data.rasterstats[i].snowData[j].dataType) {
-                                        backgroundColor = colors[k].color;
-                                        label = colors[k].label;
-                                        break;
-                                    }
-                                }
-                                barChartData1.datasets.push({
-                                    label: label,
-                                    snowtype: data.rasterstats[i].snowData[j].dataType,
-                                    backgroundColor: backgroundColor,
-                                    borderColor: '#000000',
-                                    borderWidth: 1,
-                                    data: [data.rasterstats[i].snowData[j].area]
-                                });
+                barChartData1.labels = [];
+                barChartData1.datasets = [];
+                for (i = 0; i < data.rasterstats.length; i++) {
+                    barChartData1.labels.push(moment(data.rasterstats[i].date).format('YYYY-MM-DD'));
+                    for (j = 0; j < data.rasterstats[i].snowData.length; j++) {
+                        var exist = false;
+                        for (k = 0; k < barChartData1.datasets.length; k++) {
+                            if (barChartData1.datasets[k].snowtype == data.rasterstats[i].snowData[j].dataType) {
+                                exist = true;
+                                barChartData1.datasets[k].data.push(data.rasterstats[i].snowData[j].area.toFixed(2));
                             }
                         }
-                    }
-
-                    var ctx1 = document.getElementById('canvas1').getContext('2d');
-                    if (chart1 != null) {
-                        chart1.destroy();
-                    }
-                    var chart1 = new Chart(ctx1, {
-                        type: 'bar',
-                        data: barChartData1,
-                        options: {
-                            title: {
-                                display: true,
-                                text: data.wmaname
-                            },
-                            tooltips: {
-                                mode: 'index',
-                                intersect: false
-                            },
-                            responsive: true,
-                            scales: {
-                                xAxes: [{
-                                    stacked: true,
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Дата'
-                                    }
-                                }],
-                                yAxes: [{
-                                    stacked: true,
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Площадь, м²'
-                                    }
-                                }]
+                        if (!exist) {
+                            var backgroundColor = '#000000',
+                                label = '';
+                            for (k = 0; k < colors.length; k++) {
+                                if (colors[k].type == data.rasterstats[i].snowData[j].dataType) {
+                                    backgroundColor = colors[k].color;
+                                    label = colors[k].label;
+                                    break;
+                                }
                             }
+                            barChartData1.datasets.push({
+                                label: label,
+                                snowtype: data.rasterstats[i].snowData[j].dataType,
+                                backgroundColor: backgroundColor,
+                                borderColor: '#000000',
+                                borderWidth: 1,
+                                data: [data.rasterstats[i].snowData[j].area]
+                            });
                         }
-                    });
+                    }
                 }
-                //---------------------------------------------------------------------------------
-                if (chartIndex == 0 || chartIndex == 2) {
-                    var barChartData2 = {
-                        labels: [],
-                        datasets: []
-                    };
 
-                    barChartData2.labels = [];
-                    barChartData2.datasets = [];
-                    var color2 = '#000000',
-                        label = '';
-                    for (k = 0; k < colors.length; k++) {
-                        if (colors[k].type == $('#chart2DataType').val()) {
-                            color2 = colors[k].color;
-                            label = colors[k].label;
-                            break;
-                        }
-                    }
-                    barChartData2.datasets.push({
-                        label: label,
-                        backgroundColor: color2,
-                        borderColor: color2,
-                        borderWidth: 2,
-                        fill: false,
-                        data: []
-                    });
-                    barChartData2.datasets.push({
-                        label: 'Среднее',
-                        backgroundColor: '#ff0000',
-                        borderColor: '#ff0000',
-                        borderWidth: 2,
-                        fill: false,
-                        data: []
-                    });
-                    barChartData2.datasets.push({
-                        label: 'Минимум',
-                        backgroundColor: '#c3c3c3',
-                        borderColor: '#c3c3c3',
-                        borderWidth: 2,
-                        fill: '+1',
-                        data: []
-                    });
-                    barChartData2.datasets.push({
-                        label: 'Максимум',
-                        backgroundColor: '#c3c3c3',
-                        borderColor: '#c3c3c3',
-                        borderWidth: 2,
-                        fill: false,
-                        data: []
-                    });
-                    for (i = 0; i < data.rasterstats.length; i++) {
-                        barChartData2.labels.push(moment(data.rasterstats[i].date).format('YYYY-MM-DD'));
-                        for (j = 0; j < data.rasterstats[i].snowData.length; j++) {
-                            if (data.rasterstats[i].snowData[j].dataType == $('#chart2DataType').val()) {
-                                barChartData2.datasets[0].data.push(data.rasterstats[i].snowData[j].area);
-                            }
-                        }
-                    }
-                    for (i = 0; i < data.avg.length; i++) {
-                        if (data.avg[i].dataType == $('#chart2DataType').val()) {
-                            barChartData2.datasets[1].data.push(data.avg[i].area);
-                        }
-                    }
-                    for (i = 0; i < data.min.length; i++) {
-                        if (data.min[i].dataType == $('#chart2DataType').val()) {
-                            barChartData2.datasets[2].data.push(data.min[i].area);
-                        }
-                    }
-                    for (i = 0; i < data.max.length; i++) {
-                        if (data.max[i].dataType == $('#chart2DataType').val()) {
-                            barChartData2.datasets[3].data.push(data.max[i].area);
-                        }
-                    }
-                    var ctx2 = document.getElementById('canvas2').getContext('2d');
-                    if (chart2 != null) {
-                        chart2.destroy();
-                    }
-                    chart2 = new Chart(ctx2, {
-                        type: 'line',
-                        data: barChartData2,
-                        options: {
-                            title: {
-                                display: true,
-                                text: data.wmaname
-                            },
-                            tooltips: {
-                                mode: 'index',
-                                intersect: false
-                            },
-                            responsive: true,
-                            scales: {
-                                xAxes: [{
-                                    //stacked: true,
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Дата'
-                                    }
-                                }],
-                                yAxes: [{
-                                    //stacked: true,
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Площадь, м²'
-                                    }
-                                }]
-                            },
-                            plugins: {
-                                filler: {
-                                    propagate: false
-                                }
-                            }
-                        }
-                    });
+                var ctx1 = document.getElementById('canvas1').getContext('2d');
+                if (chart1 != null) {
+                    chart1.destroy();
                 }
+                chart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: barChartData1,
+                    options: {
+                        title: {
+                            display: true,
+                            text: data.wmaname
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Дата'
+                                }
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Площадь, км²'
+                                }
+                            }]
+                        }
+                    }
+                });
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+    };
+
+    function Chart2() {
+        $.ajax({
+            url: '@Url.Action("GetWMAInfo2")',
+            data: {
+                Id: @ViewBag.Id,
+                StartMonth: $('#chart2StartMonth').val(),
+                MonthsCount: $('#chart2MonthsCount').val(),
+                Years: $('#chart2Years').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                var barChartData2 = {
+                    labels: [],
+                    datasets: []
+                };
+
+                barChartData2.labels = [];
+                barChartData2.datasets = [];
+                var color2 = '#000000',
+                    label = '';
+                for (k = 0; k < colors.length; k++) {
+                    if (colors[k].type == $('#chart2DataType').val()) {
+                        color2 = colors[k].color;
+                        label = colors[k].label;
+                        break;
+                    }
+                }
+                barChartData2.datasets.push({
+                    label: label,
+                    backgroundColor: color2,
+                    borderColor: color2,
+                    borderWidth: 2,
+                    fill: false,
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Среднее',
+                    backgroundColor: '#ff0000',
+                    borderColor: '#ff0000',
+                    borderWidth: 2,
+                    fill: false,
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Минимум',
+                    backgroundColor: '#c3c3c3',
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: '+1',
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Максимум',
+                    backgroundColor: '#c3c3c3',
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: false,
+                    data: []
+                });
+                //for (i = 0; i < data.rasterstats.length; i++) {
+                //    barChartData2.labels.push(moment(data.rasterstats[i].date).format('YYYY-MM-DD'));
+                //    for (j = 0; j < data.rasterstats[i].snowData.length; j++) {
+                //        if (data.rasterstats[i].snowData[j].dataType == $('#chart2DataType').val()) {
+                //            barChartData2.datasets[0].data.push(data.rasterstats[i].snowData[j].area.toFixed(2));
+                //        }
+                //    }
+                //}
+                for (i = 0; i < data.avgyears.length; i++) {
+                    if (data.avgyears[i].dataType == $('#chart2DataType').val()) {
+                        barChartData2.labels.push(moment(data.avgyears[i].date).format('YYYY-MM-DD'));
+                        barChartData2.datasets[0].data.push(data.avgyears[i].area.toFixed(2));
+                    }
+                }
+                for (i = 0; i < data.avg.length; i++) {
+                    if (data.avg[i].dataType == $('#chart2DataType').val()) {
+                        barChartData2.datasets[1].data.push(data.avg[i].area.toFixed(2));
+                    }
+                }
+                for (i = 0; i < data.min.length; i++) {
+                    if (data.min[i].dataType == $('#chart2DataType').val()) {
+                        barChartData2.datasets[2].data.push(data.min[i].area.toFixed(2));
+                    }
+                }
+                for (i = 0; i < data.max.length; i++) {
+                    if (data.max[i].dataType == $('#chart2DataType').val()) {
+                        barChartData2.datasets[3].data.push(data.max[i].area.toFixed(2));
+                    }
+                }
+                var ctx2 = document.getElementById('canvas2').getContext('2d');
+                if (chart2 != null) {
+                    chart2.destroy();
+                }
+                chart2 = new Chart(ctx2, {
+                    type: 'line',
+                    data: barChartData2,
+                    options: {
+                        title: {
+                            display: true,
+                            text: data.wmaname
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                //stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Дата'
+                                }
+                            }],
+                            yAxes: [{
+                                //stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Площадь, км²'
+                                }
+                            }]
+                        },
+                        plugins: {
+                            filler: {
+                                propagate: false
+                            }
+                        }
+                    }
+                });
             },
             error: function () {
                 console.log('Error');
@@ -298,6 +372,7 @@
     };
 
     $(document).ready(function () {
-        ChartWMA(0);
+        Chart1();
+        Chart2();
     });
 </script>
