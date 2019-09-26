@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Карта";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
@@ -39,10 +39,10 @@
 </label>
 <input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
-<label id="WMAname"></label>
-<input type="hidden" id="featureId"/>
-
 <button class="btn btn-primary" onclick="Charts()">Графики</button>
+
+<label id="WMAname"></label>
+<input type="hidden" id="featureId" />
 
 <div id="map" class="map"></div>
 
