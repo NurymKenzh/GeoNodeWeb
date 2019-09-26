@@ -49,14 +49,19 @@ namespace GeoNodeWeb.Controllers
             }
         }
 
+        private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
+        private string geoserverConnection = server ? Startup.Configuration["geoserverConnectionServer"].ToString() : Startup.Configuration["geoserverConnectionDebug"].ToString(),
+            postgresConnection = server ? Startup.Configuration["postgresConnectionServer"].ToString() : Startup.Configuration["postgresConnectionDebug"].ToString();
+
         public IActionResult Index()
         {
-            using (var connection = new NpgsqlConnection("Host=db-geodata.test.geoportal.ingeo.kz;Database=geoserver;Username=postgres;Password=;Port=15433"))
+            using (var connection = new NpgsqlConnection(geoserverConnection))
             {
                 connection.Open();
-                var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"Maximum_Snow_Extent_MOD10A2006\"");
+                var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
                 ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
             }
+            ViewBag.GeoServerUrl = Startup.Configuration["GeoServerUrl"].ToString();
             return View();
         }
 
@@ -70,7 +75,7 @@ namespace GeoNodeWeb.Controllers
         public ActionResult GetWMAInfo(int Id)
         {
             List<rasterstat> rasterstats = new List<rasterstat>();
-            using (var connection = new NpgsqlConnection("Host=db-geodata.test.geoportal.ingeo.kz;Database=postgres;Username=postgres;Password=;Port=15433"))
+            using (var connection = new NpgsqlConnection(postgresConnection))
             {
                 connection.Open();
                 var rasterstatsC = connection.Query<rasterstat>($"SELECT date, data FROM public.esnow_rasterstats " +
@@ -207,11 +212,11 @@ namespace GeoNodeWeb.Controllers
             }
 
             string wmaname = "";
-            using (var connection = new NpgsqlConnection("Host=db-geodata.test.geoportal.ingeo.kz;Database=geoserver;Username=postgres;Password=;Port=15433"))
+            using (var connection = new NpgsqlConnection(geoserverConnection))
             {
                 connection.Open();
                 var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
-                    $"FROM public.wma_polygon_1 " +
+                    $"FROM public.wma_polygon " +
                     $"WHERE fid = 1 " +
                     $"LIMIT 1;");
                 wmaname = name.FirstOrDefault();
