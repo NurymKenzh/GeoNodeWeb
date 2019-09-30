@@ -61,7 +61,7 @@ namespace GeoNodeWeb.Controllers
                 var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
                 ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
             }
-            ViewBag.GeoServerUrl = Startup.Configuration["GeoServerUrl"].ToString();
+            ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerUrlServer"].ToString() : Startup.Configuration["GeoServerUrlDebug"].ToString();
             return View();
         }
 

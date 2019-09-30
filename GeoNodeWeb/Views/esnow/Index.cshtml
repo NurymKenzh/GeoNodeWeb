@@ -285,7 +285,10 @@
     var input = document.getElementById('date'),
         output = document.getElementById('DateLabel');
     input.oninput = function () {
-        output.innerHTML = moment(dates[this.value]).format('YYYY-MM-DD');
+        //console.log(dates[this.value] + ', ' + moment(dates[this.value]).format('YYYY-MM-DD'));
+        //output.innerHTML = moment(dates[this.value]).format('YYYY-MM-DD');
+        console.log(dates[this.value].toString().substr(6, 4) + '-' + dates[this.value].toString().substr(3, 2) + '-' + dates[this.value].toString().substr(0, 2));
+        output.innerHTML = dates[this.value].toString().substr(6, 4) + '-' + dates[this.value].toString().substr(3, 2) + '-' + dates[this.value].toString().substr(0, 2);
         ChangeLayerMODIS();
     };
     input.oninput();
