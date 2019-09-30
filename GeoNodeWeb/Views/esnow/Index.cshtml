@@ -15,7 +15,7 @@
 <select id="dates" onchange="ChangeLayerMODIS()" hidden="hidden">
     @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
     {
-        <option value="@dateTime">
+        <option value="@dateTime.ToString("yyyy-MM-dd")">
             @dateTime.ToString("yyyy-MM-dd")
         </option>
     }
@@ -287,8 +287,12 @@
     input.oninput = function () {
         //console.log(dates[this.value] + ', ' + moment(dates[this.value]).format('YYYY-MM-DD'));
         //output.innerHTML = moment(dates[this.value]).format('YYYY-MM-DD');
-        console.log(dates[this.value].toString().substr(6, 4) + '-' + dates[this.value].toString().substr(3, 2) + '-' + dates[this.value].toString().substr(0, 2));
-        output.innerHTML = dates[this.value].toString().substr(6, 4) + '-' + dates[this.value].toString().substr(3, 2) + '-' + dates[this.value].toString().substr(0, 2);
+
+        //console.log(dates[this.value].toString());
+        //console.log(dates[this.value].toString().substr(6, 4) + '-' + dates[this.value].toString().substr(3, 2) + '-' + dates[this.value].toString().substr(0, 2));
+        //output.innerHTML = dates[this.value].toString().substr(6, 4) + '-' + dates[this.value].toString().substr(3, 2) + '-' + dates[this.value].toString().substr(0, 2);
+
+        output.innerHTML = dates[this.value];
         ChangeLayerMODIS();
     };
     input.oninput();
