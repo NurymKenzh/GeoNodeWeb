@@ -593,7 +593,7 @@
             return;
         }
         Source_Select.clear();
-        $('#WMAname').text('');
+        $('#WMAname').html('');
         $('#ChartsButton').hide();
         var viewResolution = (map.getView().getResolution());
         var url = Layer_WMA.getSource().getGetFeatureInfoUrl(
@@ -619,7 +619,7 @@
                 var result = parser.readFeatures(response);
                 if (result.length > 0) {
                     $('#featureId').val(result[0].get('Id'));
-                    $('#WMAname').text(result[0].get('NameWMB_Ru'));
+                    $('#WMAname').html(result[0].get('NameWMB_Ru') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' м<sup>2</sup>)');
                     $('#ChartsButton').show();
 
                     var polyFeature = new ol.Feature({
@@ -655,7 +655,7 @@
         $('.measure').hide();
         $('.select').show();
         $('#ChartsButton').hide();
-        $('#WMAname').text('');
+        $('#WMAname').html('');
         $('#SelectButton').addClass('btn-dark');
         $('#SelectButton').removeClass('btn-primary');
         $('#MeasureButton').removeClass('btn-dark');
