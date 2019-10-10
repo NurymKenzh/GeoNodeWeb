@@ -1,4 +1,4 @@
-﻿
+﻿@using GeoNodeWeb.Controllers
 @{
     ViewData["Title"] = "Карта";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -68,6 +68,14 @@
     ВХУ
 </label>
 <input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+<select id="LayerCalc" @*onchange="ChangeLayerMODIS()"*@>
+    @foreach (datasetcalculationlayer datasetcalculationlayer_ in (datasetcalculationlayer[])ViewBag.CalculationLayers)
+    {
+        <option value="@datasetcalculationlayer_.layer_id">
+            @datasetcalculationlayer_.layer_alias
+        </option>
+    }
+</select>
 
 <input id="SelectButton" type="button" value="Выделять" class="btn btn-dark" onclick="SelectTool()" />
 <input id="MeasureButton" type="button" value="Измерять" class="btn btn-primary" onclick="MeasureTool()" />

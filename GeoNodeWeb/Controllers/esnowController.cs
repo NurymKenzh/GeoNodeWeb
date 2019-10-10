@@ -10,6 +10,11 @@ using Newtonsoft.Json.Linq;
 
 namespace GeoNodeWeb.Controllers
 {
+    public class datasetcalculationlayer
+    {
+        public int layer_id;
+        public string layer_alias;
+    }
     public class esnowController : Controller
     {
         enum DataType
@@ -42,11 +47,26 @@ namespace GeoNodeWeb.Controllers
             public string data;
             public List<SnowData> SnowData;
             public int PixelsCount;
+            public int feature_id;
             public decimal Area;
             public rasterstat()
             {
                 SnowData = new List<SnowData>();
             }
+        }
+
+        private class stat
+        {
+            public int feature_id;
+            public int DataType; // 0, 1, 11, 25, 37 ...
+            public DateTime Date;
+            public decimal area;
+            public decimal percentage;
+            public decimal area_full;
+
+            public decimal area_avg;
+            public decimal area_min;
+            public decimal area_max;
         }
 
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
@@ -60,6 +80,12 @@ namespace GeoNodeWeb.Controllers
                 connection.Open();
                 var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
                 ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
+            }
+            using (var connection = new NpgsqlConnection(postgresConnection))
+            {
+                connection.Open();
+                var datasetcalculationlayer = connection.Query<datasetcalculationlayer>($"SELECT layer_id, layer_alias FROM public.\"esnow_datasetcalculationlayer\"");
+                ViewBag.CalculationLayers = datasetcalculationlayer.OrderBy(l => l.layer_id).ToArray();
             }
             ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerUrlServer"].ToString() : Startup.Configuration["GeoServerUrlDebug"].ToString();
             return View();
@@ -248,6 +274,33 @@ namespace GeoNodeWeb.Controllers
             int MonthsCount,
             int[] Years)
         {
+            List<stat> statsd = TranslateStat();
+            List<stat> stats = new List<stat>();
+            foreach(stat stat in statsd)
+            {
+                if(stats.Count(s => s.feature_id == stat.feature_id && s.DataType == stat.DataType && 
+                    s.Date.Month == stat.Date.Month && s.Date.Day == stat.Date.Day) == 0)
+                {
+                    List<stat> statsSame = statsd
+                        .Where(s => s.feature_id == stat.feature_id && s.DataType == stat.DataType &&
+                            s.Date.Month == stat.Date.Month && s.Date.Day == stat.Date.Day)
+                        .ToList();
+                    stats.Add(new stat()
+                    {
+                        feature_id = stat.feature_id,
+                        DataType = stat.DataType,
+                        Date = new DateTime(1, stat.Date.Month, stat.Date.Day),
+                        area = statsSame.Where(s => Years.Contains(s.Date.Year)).Average(s => s.area),
+                        percentage = statsSame.Where(s => Years.Contains(s.Date.Year)).Average(s => s.percentage),
+                        area_full = stat.area_full,
+                        area_avg = stat.area_avg,
+                        area_min = stat.area_min,
+                        area_max = stat.area_max
+                    });
+                }
+            }
+            stats = stats.Where(s => s.feature_id == Id).ToList();
+
             List<rasterstat> rasterstats = new List<rasterstat>();
             using (var connection = new NpgsqlConnection(postgresConnection))
             {
@@ -436,6 +489,79 @@ namespace GeoNodeWeb.Controllers
                 avg,
                 avgyears
             });
+        }
+
+        private List<stat> TranslateStat()
+        {
+            List<stat> stats = new List<stat>();
+            List<rasterstat> rasterstats = new List<rasterstat>();
+            using (var connection = new NpgsqlConnection(postgresConnection))
+            {
+                connection.Open();
+                var rasterstatsC = connection.Query<rasterstat>($"SELECT feature_id, date, data FROM public.esnow_rasterstats");
+                rasterstats = rasterstatsC.ToList();
+            }
+            rasterstats = rasterstats.ToList();
+            // формирование rasterstats (SnowData)
+            foreach (rasterstat rasterstat in rasterstats)
+            {
+                var data = JObject.Parse(rasterstat.data);
+                foreach (JProperty property in data.Properties())
+                {
+                    if (int.TryParse(property.Name, out int n))
+                    {
+                        rasterstat.SnowData.Add(new SnowData()
+                        {
+                            DataType = (DataType)Convert.ToInt32(property.Name),
+                            PixelsCount = Convert.ToInt32(property.Value)
+                        });
+                    }
+                    if (property.Name == "count")
+                    {
+                        rasterstat.PixelsCount = Convert.ToInt32(property.Value);
+                    }
+
+                    if (property.Name == "AreaInSkm")
+                    {
+                        rasterstat.Area = Convert.ToDecimal(property.Value);
+                    }
+                }
+                for (int i = 0; i < rasterstat.SnowData.Count(); i++)
+                {
+                    rasterstat.SnowData[i].Area = rasterstat.Area * rasterstat.SnowData[i].PixelsCount / rasterstat.PixelsCount;
+                    rasterstat.SnowData[i].Percentage = (decimal)rasterstat.SnowData[i].PixelsCount / rasterstat.PixelsCount * 100;
+                }
+            }
+            foreach (rasterstat rasterstat in rasterstats)
+            {
+                foreach(SnowData snowData in rasterstat.SnowData)
+                {
+                    stats.Add(new stat()
+                    {
+                        feature_id = rasterstat.feature_id,
+                        DataType = (int) snowData.DataType,
+                        Date = rasterstat.date,
+                        area = snowData.Area,
+                        percentage = snowData.Percentage,
+                        area_full = rasterstat.Area
+                    });
+                }
+            }
+            for (int i = 0; i < stats.Count(); i++)
+            {
+                List<stat> statsSame = stats
+                    .Where(s => s.feature_id == stats[i].feature_id && s.DataType == stats[i].DataType &&
+                        s.Date.Month == stats[i].Date.Month && s.Date.Day == stats[i].Date.Day)
+                    .ToList();
+                stats[i].area_avg = statsSame.Average(s => s.area);
+                stats[i].area_min = statsSame.Min(s => s.area);
+                stats[i].area_max = statsSame.Max(s => s.area);
+                if(stats[i].area_min != stats[i].area_max)
+                {
+
+                }
+            }
+            return stats;
         }
     }
 }
