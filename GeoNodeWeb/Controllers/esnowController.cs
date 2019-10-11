@@ -151,103 +151,6 @@ namespace GeoNodeWeb.Controllers
 
             rasterstats = rasterstats.OrderBy(r => r.date).ToList();
 
-            // Min, Max, Avg
-            List<SnowData> min = new List<SnowData>(),
-                max = new List<SnowData>(),
-                avg = new List<SnowData>();
-            for (int i = 0; i < rasterstats.Count(); i++)
-            {
-                for (int k = 0; k < rasterstats[i].SnowData.Count(); k++)
-                {
-                    bool exist = false;
-                    for (int j = 0; j < min.Count(); j++)
-                    {
-                        if (rasterstats[i].date.Month == min[i].date.Month && rasterstats[i].date.Day == min[i].date.Day)
-                        {
-                            if (min[i].DataType == rasterstats[i].SnowData[k].DataType)
-                            {
-                                exist = true;
-                                if (min[i].Area > rasterstats[i].SnowData[k].Area)
-                                {
-                                    min[i].Area = rasterstats[i].SnowData[k].Area - 10000;
-                                    min[i].Percentage = rasterstats[i].SnowData[k].Percentage;
-                                    min[i].PixelsCount = rasterstats[i].SnowData[k].PixelsCount;
-                                }
-                            }
-                        }
-                    }
-                    for (int j = 0; j < max.Count(); j++)
-                    {
-                        if (rasterstats[i].date.Month == max[i].date.Month && rasterstats[i].date.Day == max[i].date.Day)
-                        {
-                            if (max[i].DataType == rasterstats[i].SnowData[k].DataType)
-                            {
-                                exist = true;
-                                if (max[i].Area < rasterstats[i].SnowData[k].Area)
-                                {
-                                    max[i].Area = rasterstats[i].SnowData[k].Area + 10000;
-                                    max[i].Percentage = rasterstats[i].SnowData[k].Percentage;
-                                    max[i].PixelsCount = rasterstats[i].SnowData[k].PixelsCount;
-                                }
-                            }
-                        }
-                    }
-                    if (!exist)
-                    {
-                        min.Add(new SnowData()
-                        {
-                            DataType = rasterstats[i].SnowData[k].DataType,
-                            date = rasterstats[i].date,
-                            Area = rasterstats[i].SnowData[k].Area - 10000,
-                            Percentage = rasterstats[i].SnowData[k].Percentage,
-                            PixelsCount = rasterstats[i].SnowData[k].PixelsCount
-                        });
-                        max.Add(new SnowData()
-                        {
-                            DataType = rasterstats[i].SnowData[k].DataType,
-                            date = rasterstats[i].date,
-                            Area = rasterstats[i].SnowData[k].Area + 10000,
-                            Percentage = rasterstats[i].SnowData[k].Percentage,
-                            PixelsCount = rasterstats[i].SnowData[k].PixelsCount
-                        });
-                    }
-                }
-            }
-            for (int i = 0; i < rasterstats.Count(); i++)
-            {
-                for (int k = 0; k < rasterstats[i].SnowData.Count(); k++)
-                {
-                    decimal area = 0,
-                        percentage = 0;
-                    int pixelsCount = 0,
-                        count = 0;
-                    for (int j = 0; j < rasterstats.Count(); j++)
-                    {
-                        if(rasterstats[j].date.Month == rasterstats[i].date.Month && rasterstats[j].date.Day == rasterstats[i].date.Day)
-                        {
-                            for (int l = 0; l < rasterstats[j].SnowData.Count(); l++)
-                            {
-                                if(rasterstats[i].SnowData[k].DataType == rasterstats[j].SnowData[l].DataType)
-                                {
-                                    area += rasterstats[j].SnowData[l].Area;
-                                    pixelsCount += rasterstats[j].SnowData[l].PixelsCount;
-                                    percentage += rasterstats[j].SnowData[l].Percentage;
-                                    count++;
-                                }
-                            }
-                        }
-                    }
-                    avg.Add(new SnowData()
-                    {
-                        DataType = rasterstats[i].SnowData[k].DataType,
-                        date = rasterstats[i].date,
-                        Area = area / count + 3000,
-                        Percentage = percentage / count,
-                        PixelsCount = pixelsCount / count
-                    });
-                }
-            }
-
             string wmaname = "";
             using (var connection = new NpgsqlConnection(geoserverConnection))
             {
@@ -261,10 +164,7 @@ namespace GeoNodeWeb.Controllers
             return Json(new
             {
                 wmaname,
-                rasterstats,
-                min,
-                max,
-                avg
+                rasterstats
             });
         }
 
@@ -274,32 +174,32 @@ namespace GeoNodeWeb.Controllers
             int MonthsCount,
             int[] Years)
         {
-            List<stat> statsd = TranslateStat();
-            List<stat> stats = new List<stat>();
-            foreach(stat stat in statsd)
-            {
-                if(stats.Count(s => s.feature_id == stat.feature_id && s.DataType == stat.DataType && 
-                    s.Date.Month == stat.Date.Month && s.Date.Day == stat.Date.Day) == 0)
-                {
-                    List<stat> statsSame = statsd
-                        .Where(s => s.feature_id == stat.feature_id && s.DataType == stat.DataType &&
-                            s.Date.Month == stat.Date.Month && s.Date.Day == stat.Date.Day)
-                        .ToList();
-                    stats.Add(new stat()
-                    {
-                        feature_id = stat.feature_id,
-                        DataType = stat.DataType,
-                        Date = new DateTime(1, stat.Date.Month, stat.Date.Day),
-                        area = statsSame.Where(s => Years.Contains(s.Date.Year)).Average(s => s.area),
-                        percentage = statsSame.Where(s => Years.Contains(s.Date.Year)).Average(s => s.percentage),
-                        area_full = stat.area_full,
-                        area_avg = stat.area_avg,
-                        area_min = stat.area_min,
-                        area_max = stat.area_max
-                    });
-                }
-            }
-            stats = stats.Where(s => s.feature_id == Id).ToList();
+            //List<stat> statsd = TranslateStat();
+            //List<stat> stats = new List<stat>();
+            //foreach(stat stat in statsd)
+            //{
+            //    if(stats.Count(s => s.feature_id == stat.feature_id && s.DataType == stat.DataType && 
+            //        s.Date.Month == stat.Date.Month && s.Date.Day == stat.Date.Day) == 0)
+            //    {
+            //        List<stat> statsSame = statsd
+            //            .Where(s => s.feature_id == stat.feature_id && s.DataType == stat.DataType &&
+            //                s.Date.Month == stat.Date.Month && s.Date.Day == stat.Date.Day)
+            //            .ToList();
+            //        stats.Add(new stat()
+            //        {
+            //            feature_id = stat.feature_id,
+            //            DataType = stat.DataType,
+            //            Date = new DateTime(1, stat.Date.Month, stat.Date.Day),
+            //            area = statsSame.Where(s => Years.Contains(s.Date.Year)).Average(s => s.area),
+            //            percentage = statsSame.Where(s => Years.Contains(s.Date.Year)).Average(s => s.percentage),
+            //            area_full = stat.area_full,
+            //            area_avg = stat.area_avg,
+            //            area_min = stat.area_min,
+            //            area_max = stat.area_max
+            //        });
+            //    }
+            //}
+            //stats = stats.Where(s => s.feature_id == Id).ToList();
 
             List<rasterstat> rasterstats = new List<rasterstat>();
             using (var connection = new NpgsqlConnection(postgresConnection))
