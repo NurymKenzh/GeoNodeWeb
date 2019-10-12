@@ -159,6 +159,105 @@
                     labels: [],
                     datasets: []
                 };
+                // labels
+                for (i = 0; i < data.datasets.length; i++) {
+                    if (!barChartData1.labels.includes(moment(data.datasets[i].date).format('YYYY-MM-DD'))) {
+                        barChartData1.labels.push(moment(data.datasets[i].date).format('YYYY-MM-DD'))
+                    }
+                }
+                // data (datasets)
+                for (i = 0; i < data.datasets.length; i++) {
+                    var exist = false;
+                    for (k = 0; k < barChartData1.datasets.length; k++) {
+                        if (barChartData1.datasets[k].snowtype == data.datasets[i].dataType) {
+                            exist = true;
+                            barChartData1.datasets[k].data.push(data.datasets[i].area.toFixed(2));
+                        }
+                    }
+                    if (!exist) {
+                        var backgroundColor = '#000000',
+                            label = '';
+                        for (k = 0; k < colors.length; k++) {
+                            if (colors[k].type == data.datasets[i].dataType) {
+                                backgroundColor = colors[k].color;
+                                label = colors[k].label;
+                                break;
+                            }
+                        }
+                        barChartData1.datasets.push({
+                            label: label,
+                            snowtype: data.datasets[i].dataType,
+                            backgroundColor: backgroundColor,
+                            borderColor: '#000000',
+                            borderWidth: 0.25,
+                            data: [data.datasets[i].area]
+                        });
+                    }
+                }
+                // chart
+                var ctx1 = document.getElementById('canvas1').getContext('2d');
+                if (chart1 != null) {
+                    chart1.destroy();
+                }
+                chart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: barChartData1,
+                    options: {
+                        title: {
+                            display: true,
+                            text: data.wmainfo
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Дата'
+                                }
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Площадь, м²'
+                                }
+                            }]
+                        }
+                    }
+                });
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+    };
+
+    $(document).ready(function () {
+        Chart1();
+        //Chart2();
+    });
+</script>
+
+<script>
+    function Chart1Old() {
+        $.ajax({
+            url: '@Url.Action("GetWMAInfo1")',
+            data: {
+                Id: @ViewBag.Id,
+                DateTimeFrom: $('#chart1DateFrom').val(),
+                DateTimeTo: $('#chart1DateTo').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                var barChartData1 = {
+                    labels: [],
+                    datasets: []
+                };
 
                 barChartData1.labels = [];
                 barChartData1.datasets = [];
@@ -236,7 +335,7 @@
         });
     };
 
-    function Chart2() {
+    function Chart2Old() {
         $.ajax({
             url: '@Url.Action("GetWMAInfo2")',
             data: {
@@ -370,9 +469,4 @@
             }
         });
     };
-
-    $(document).ready(function () {
-        Chart1();
-        //Chart2();
-    });
 </script>
