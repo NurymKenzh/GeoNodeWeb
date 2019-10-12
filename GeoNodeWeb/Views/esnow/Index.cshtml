@@ -68,21 +68,21 @@
     ВХУ
 </label>
 <input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
-<select id="LayerCalc" @*onchange="ChangeLayerMODIS()"*@>
+@*<select id="LayerCalc" onchange="ChangeLayerMODIS()">
     @foreach (datasetcalculationlayer datasetcalculationlayer_ in (datasetcalculationlayer[])ViewBag.CalculationLayers)
     {
         <option value="@datasetcalculationlayer_.layer_id">
             @datasetcalculationlayer_.layer_alias
         </option>
     }
-</select>
+</select>*@
 
 <input id="SelectButton" type="button" value="Выделять" class="btn btn-dark" onclick="SelectTool()" />
 <input id="MeasureButton" type="button" value="Измерять" class="btn btn-primary" onclick="MeasureTool()" />
 
 <button id="ChartsButton" class="btn btn-primary select" onclick="Charts()">Графики</button>
 
-<label id="WMAname" class="select"></label>
+<label id="WMAinfo" class="select"></label>
 <input type="hidden" id="featureId" />
 
 <label class="measure">Тип измерения</label>
@@ -601,7 +601,7 @@
             return;
         }
         Source_Select.clear();
-        $('#WMAname').html('');
+        $('#WMAinfo').html('');
         $('#ChartsButton').hide();
         var viewResolution = (map.getView().getResolution());
         var url = Layer_WMA.getSource().getGetFeatureInfoUrl(
@@ -627,7 +627,7 @@
                 var result = parser.readFeatures(response);
                 if (result.length > 0) {
                     $('#featureId').val(result[0].get('Id'));
-                    $('#WMAname').html(result[0].get('NameWMB_Ru') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' м<sup>2</sup>)');
+                    $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' м<sup>2</sup>)');
                     $('#ChartsButton').show();
 
                     var polyFeature = new ol.Feature({
@@ -663,7 +663,7 @@
         $('.measure').hide();
         $('.select').show();
         $('#ChartsButton').hide();
-        $('#WMAname').html('');
+        $('#WMAinfo').html('');
         $('#SelectButton').addClass('btn-dark');
         $('#SelectButton').removeClass('btn-primary');
         $('#MeasureButton').removeClass('btn-dark');

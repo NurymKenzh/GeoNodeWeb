@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace GeoNodeWeb.Controllers
 {
@@ -49,14 +50,16 @@ namespace GeoNodeWeb.Controllers
             public int PixelsCount;
             public int feature_id;
             public decimal Area;
+            public int calculation_layer_id;
             public rasterstat()
             {
                 SnowData = new List<SnowData>();
             }
         }
 
-        private class stat
+        private class dataset
         {
+            public int calculation_layer_id;
             public int feature_id;
             public int DataType; // 0, 1, 11, 25, 37 ...
             public DateTime Date;
@@ -391,9 +394,9 @@ namespace GeoNodeWeb.Controllers
             });
         }
 
-        private List<stat> TranslateStat()
+        private List<dataset> TranslateStat()
         {
-            List<stat> stats = new List<stat>();
+            List<dataset> stats = new List<dataset>();
             List<rasterstat> rasterstats = new List<rasterstat>();
             using (var connection = new NpgsqlConnection(postgresConnection))
             {
@@ -436,7 +439,7 @@ namespace GeoNodeWeb.Controllers
             {
                 foreach(SnowData snowData in rasterstat.SnowData)
                 {
-                    stats.Add(new stat()
+                    stats.Add(new dataset()
                     {
                         feature_id = rasterstat.feature_id,
                         DataType = (int) snowData.DataType,
@@ -449,7 +452,7 @@ namespace GeoNodeWeb.Controllers
             }
             for (int i = 0; i < stats.Count(); i++)
             {
-                List<stat> statsSame = stats
+                List<dataset> statsSame = stats
                     .Where(s => s.feature_id == stats[i].feature_id && s.DataType == stats[i].DataType &&
                         s.Date.Month == stats[i].Date.Month && s.Date.Day == stats[i].Date.Day)
                     .ToList();
@@ -462,6 +465,118 @@ namespace GeoNodeWeb.Controllers
                 }
             }
             return stats;
+        }
+
+        public IActionResult Calc()
+        {
+            //// erase table esnow_datasets
+            //using (var connection = new NpgsqlConnection(postgresConnection))
+            //{
+            //    connection.Open();
+            //    connection.Execute($"DELETE FROM public.esnow_datasets;");
+            //}
+            // get data from esnow_rasterstats
+            List<rasterstat> rasterstats = new List<rasterstat>();
+            using (var connection = new NpgsqlConnection(postgresConnection))
+            {
+                connection.Open();
+                var rasterstatsC = connection.Query<rasterstat>($"SELECT feature_id, date, data, calculation_layer_id FROM public.esnow_rasterstats");
+                rasterstats = rasterstatsC.ToList();
+            }
+            rasterstats = rasterstats.ToList();
+            // calculate rasterstats: Area, Percentage
+            foreach(rasterstat rasterstat in rasterstats)
+            {
+                var data = JObject.Parse(rasterstat.data);
+                foreach (JProperty property in data.Properties())
+                {
+                    if (int.TryParse(property.Name, out int n))
+                    {
+                        rasterstat.SnowData.Add(new SnowData()
+                        {
+                            DataType = (DataType)Convert.ToInt32(property.Name),
+                            PixelsCount = Convert.ToInt32(property.Value)
+                        });
+                    }
+                    if (property.Name == "count")
+                    {
+                        rasterstat.PixelsCount = Convert.ToInt32(property.Value);
+                    }
+
+                    if (property.Name == "AreaInSkm")
+                    {
+                        rasterstat.Area = Convert.ToDecimal(property.Value);
+                    }
+                }
+                for (int i = 0; i < rasterstat.SnowData.Count(); i++)
+                {
+                    rasterstat.SnowData[i].Area = rasterstat.Area * rasterstat.SnowData[i].PixelsCount / rasterstat.PixelsCount;
+                    rasterstat.SnowData[i].Percentage = (decimal)rasterstat.SnowData[i].PixelsCount / rasterstat.PixelsCount * 100;
+                }
+            }
+            // rasterstats to datasets
+            List<dataset> datasets = new List<dataset>();
+            foreach(rasterstat rasterstat in rasterstats)
+            {
+                foreach(SnowData snowData in rasterstat.SnowData)
+                {
+                    datasets.Add(new dataset()
+                    {
+                        calculation_layer_id = rasterstat.calculation_layer_id,
+                        feature_id = rasterstat.feature_id,
+                        DataType = (int) snowData.DataType,
+                        Date = rasterstat.date,
+                        area = snowData.Area,
+                        percentage = snowData.Percentage,
+                        area_full = rasterstat.Area,
+                        area_avg = 0,
+                        area_min = 0,
+                        area_max = 0
+                    });
+                }
+            }
+            // insert datasets into table
+            //using (var connection = new NpgsqlConnection(postgresConnection))
+            //{
+            //    connection.Open();
+            //    for (int i = 0; i < datasets.Count(); i++)
+            //    {
+            //        string execute = $"INSERT INTO public.esnow_datasets" +
+            //            $"(feature_id, \"DataType\", \"Date\", area, percentage, area_full, area_avg, area_min, area_max, calculation_layer_id)" +
+            //            $"VALUES (" +
+            //            $"{datasets[i].feature_id.ToString()}," +
+            //            $"{Convert.ToInt32(datasets[i].DataType).ToString()}," +
+            //            $"'{datasets[i].Date.Year.ToString()}-{datasets[i].Date.Month.ToString("00")}-{datasets[i].Date.Day.ToString("00")}'," +
+            //            $"{datasets[i].area.ToString()}," +
+            //            $"{datasets[i].percentage.ToString()}," +
+            //            $"{datasets[i].area_full.ToString()}," +
+            //            $"{datasets[i].area_avg.ToString()}," +
+            //            $"{datasets[i].area_min.ToString()}," +
+            //            $"{datasets[i].area_max.ToString()}," +
+            //            $"{datasets[i].calculation_layer_id.ToString()});";
+            //        connection.Execute(execute);
+            //    }
+            //    connection.Close();
+            //}
+            using (TextWriter tw = new StreamWriter(@"E:\Documents\Google Drive\Share\Backups\esnow_datasets.csv"))
+            {
+                tw.WriteLine("feature_id\tDataType\tDate\tarea\tpercentage\tarea_full\tarea_avg\tarea_min\tarea_max\tcalculation_layer_id");
+                for (int i = 0; i < datasets.Count(); i++)
+                {
+                    string line = $"{datasets[i].feature_id.ToString()}\t" +
+                        $"{datasets[i].DataType.ToString()}\t" +
+                        $"'{datasets[i].Date.Year.ToString()}-{datasets[i].Date.Month.ToString("00")}-{datasets[i].Date.Day.ToString("00")}'\t" +
+                        $"{datasets[i].area.ToString()}\t" +
+                        $"{datasets[i].percentage.ToString()}\t" +
+                        $"{datasets[i].area_full.ToString()}\t" +
+                        $"{datasets[i].area_avg.ToString()}\t" +
+                        $"{datasets[i].area_min.ToString()}\t" +
+                        $"{datasets[i].area_max.ToString()}\t" +
+                        $"{datasets[i].calculation_layer_id.ToString()}";
+                    tw.WriteLine(line);
+                }
+            }
+            return View("Index");
         }
     }
 }
