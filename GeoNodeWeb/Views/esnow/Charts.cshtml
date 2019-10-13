@@ -5,8 +5,8 @@
 }
 
 <link href="~/lib/сhart.js/dist/Chart.css" rel="stylesheet" />
-<script src="~/lib/сhart.js/dist/Chart.js"></script>
 <script src="~/lib/moment.js/moment.js"></script>
+<script src="~/lib/сhart.js/dist/Chart.js"></script>
 
 <h1>Графики</h1>
 
@@ -237,9 +237,145 @@
         });
     };
 
+    function Chart2() {
+        $.ajax({
+            url: '@Url.Action("GetWMAInfo2")',
+            data: {
+                Id: @ViewBag.Id,
+                DataType: $('#chart2DataType').val(),
+                StartMonth: $('#chart2StartMonth').val(),
+                MonthsCount: $('#chart2MonthsCount').val(),
+                Years: $('#chart2Years').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                var dateFormat = 'YYYY-MM-DD';
+                var barChartData2 = {
+                    labels: [],
+                    datasets: []
+                };
+                // labels
+                for (i = 0; i < data.datasetsamm.length; i++) {
+                    barChartData2.labels.push(moment(data.datasetsamm[i].date).toDate());
+                }
+                // data (datasets)
+                barChartData2.datasets.push({
+                    label: 'Среднее за выбранные годы',
+                    backgroundColor: '#ff0000',
+                    borderColor: '#ff0000',
+                    borderWidth: 2,
+                    fill: false,
+                    lineTension: 0,
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Среднее',
+                    backgroundColor: '#000000',
+                    borderColor: '#000000',
+                    borderWidth: 2,
+                    fill: false,
+                    lineTension: 0,
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Минимум',
+                    backgroundColor: "rgba(195,195,195,0.5)",
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: '+1',
+                    lineTension: 0,
+                    data: []
+                });
+                barChartData2.datasets.push({
+                    label: 'Максимум',
+                    backgroundColor: '#c3c3c3',
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: false,
+                    lineTension: 0,
+                    data: []
+                });
+                for (i = 0; i < data.datasetsyears.length; i++) {
+                    barChartData2.datasets[0].data.push({
+					    x: moment(data.datasetsyears[i].date).format(dateFormat),
+					    y: data.datasetsyears[i].area_avg.toFixed(2)
+				    });
+                }
+                for (i = 0; i < data.datasetsamm.length; i++) {
+                    barChartData2.datasets[1].data.push({
+					    x: moment(data.datasetsamm[i].date).format(dateFormat),
+					    y: data.datasetsamm[i].area_avg.toFixed(2)
+				    });
+                    barChartData2.datasets[2].data.push({
+					    x: moment(data.datasetsamm[i].date).format(dateFormat),
+					    y: data.datasetsamm[i].area_min.toFixed(2)
+				    });
+                    barChartData2.datasets[3].data.push({
+					    x: moment(data.datasetsamm[i].date).format(dateFormat),
+					    y: data.datasetsamm[i].area_max.toFixed(2)
+				    });
+                }
+                // chart
+                var ctx2 = document.getElementById('canvas2').getContext('2d');
+                if (chart2 != null) {
+                    chart2.destroy();
+                }
+                chart2 = new Chart(ctx2, {
+                    type: 'line',
+                    data: barChartData2,
+                    options: {
+                        title: {
+                            display: true,
+                            text: data.wmainfo
+                        },
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+							        parser: dateFormat,
+							        //tooltipFormat: 'll HH:mm',
+                                    tooltipFormat: 'MM-DD',
+                                    displayFormats: {
+                                        'millisecond': 'MM-DD',
+                                        'second': 'MM-DD',
+                                        'minute': 'MM-DD',
+                                        'hour': 'MM-DD',
+                                        'day': 'MM-DD',
+                                        'week': 'MM-DD',
+                                        'month': 'MM-DD',
+                                        'quarter': 'MM-DD',
+                                        'year': 'MM-DD'
+                                    }
+						        },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Месяц, день'
+                                }
+                            }],
+                            yAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Площадь, м²'
+                                }
+                            }]
+                        },
+                        plugins: {
+                            filler: {
+                                propagate: false
+                            }
+                        }
+                    }
+                });
+            },
+            error: function () {
+                console.log('Error 2');
+            }
+        });
+    };
+
     $(document).ready(function () {
         Chart1();
-        //Chart2();
+        Chart2();
     });
 </script>
 

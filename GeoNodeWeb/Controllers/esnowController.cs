@@ -78,6 +78,14 @@ namespace GeoNodeWeb.Controllers
                     return Date.ToString("MM-dd");
                 }
             }
+
+            public int dayofyear
+            {
+                get
+                {
+                    return Date.DayOfYear;
+                }
+            }
         }
 
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
@@ -178,10 +186,9 @@ namespace GeoNodeWeb.Controllers
             int MonthsCount,
             int[] Years)
         {
+            const int startYear = 2000;
             List<dataset> datasets = new List<dataset>(),
-                datasetsavg = new List<dataset>(),
-                datasetsmin = new List<dataset>(),
-                datasetsmax = new List<dataset>(),
+                datasetsamm = new List<dataset>(),
                 datasetsyears = new List<dataset>();
             using (var connection = new NpgsqlConnection(postgresConnection))
             {
@@ -193,7 +200,66 @@ namespace GeoNodeWeb.Controllers
                     $"AND \"DataType\" = {DataType.ToString()};");
                 datasets = datasetsC.OrderBy(d => d.Date).ToList();
 
+                // average, min, max
+                for (int month = StartMonth, monthsCount = 0; monthsCount < 12; monthsCount++, month++)
+                {
+                    int monthR = month,
+                        year = startYear;
+                    if (monthR > 12)
+                    {
+                        monthR -= 12;
+                        year = startYear + 1;
+                    }
+                    for (int day = 1; day < 32; day++)
+                    {
+                        dataset dataset = datasets.FirstOrDefault(d => d.Date.Month == monthR && d.Date.Day == day);
+                        if (dataset != null)
+                        {
+                            //dataset.Date = new DateTime(year, dataset.Date.Month, dataset.Date.Day);
+                            dataset datasetamm = new dataset()
+                            {
+                                calculation_layer_id = dataset.calculation_layer_id,
+                                feature_id = dataset.feature_id,
+                                DataType = dataset.DataType,
+                                Date = new DateTime(year, dataset.Date.Month, dataset.Date.Day),
+                                area = dataset.area,
+                                percentage = dataset.percentage,
+                                area_full = dataset.area_full,
+                                area_avg = dataset.area_avg,
+                                area_min = dataset.area_min,
+                                area_max = dataset.area_max
+                            };
+                            datasetsamm.Add(datasetamm);
+                        }
+                    }
+                }
 
+                // years average
+                foreach (dataset dataset in datasetsamm)
+                {
+                    List<dataset> datasets_avg = datasets
+                        .Where(d => d.MonthDay == dataset.MonthDay)
+                        .Where(d => Years.Contains(d.Date.Year))
+                        .ToList();
+                    if (datasets_avg.Count() > 0)
+                    {
+                        decimal area_avg = datasets_avg.Average(d => d.area);
+                        dataset datasetyear = new dataset()
+                        {
+                            calculation_layer_id = dataset.calculation_layer_id,
+                            feature_id = dataset.feature_id,
+                            DataType = dataset.DataType,
+                            Date = dataset.Date,
+                            area = dataset.area,
+                            percentage = dataset.percentage,
+                            area_full = dataset.area_full,
+                            area_avg = area_avg,
+                            area_min = dataset.area_min,
+                            area_max = dataset.area_max
+                        };
+                        datasetsyears.Add(datasetyear);
+                    }
+                }
             }
 
             string wmainfo = "";
@@ -217,7 +283,8 @@ namespace GeoNodeWeb.Controllers
             return Json(new
             {
                 wmainfo,
-                datasets
+                datasetsamm,
+                datasetsyears
             });
         }
 
@@ -698,18 +765,28 @@ namespace GeoNodeWeb.Controllers
                     {
                         List<dataset> datasets3 = datasets2.Where(d => d.DataType == Convert.ToInt32(DataTypeValues.GetValue(i))).ToList();
                         //foreach (string monthday in datasets3.Select(d => d.MonthDay).Distinct())
-                        foreach (int dayofyear in datasets3.Select(d => d.Date.DayOfYear).Distinct())
+                        foreach (string MonthDay in datasets3.Select(d => d.MonthDay).Distinct())
                         {
-                            List<dataset> datasets4 = datasets3.Where(d => d.Date.DayOfYear == dayofyear).ToList();
+                            List<dataset> datasets4 = datasets3.Where(d => d.MonthDay == MonthDay).ToList();
                             decimal area_avg = datasets4.Average(d => d.area),
                                 area_min = datasets4.Min(d => d.area),
                                 area_max = datasets4.Max(d => d.area);
                             foreach(dataset dataset in datasets4)
                             {
-                                dataset.area_avg = area_avg;
-                                dataset.area_min = area_min;
-                                dataset.area_max = area_max;
-                                datasetsAM.Add(dataset);
+                                dataset datasetAM = new dataset()
+                                {
+                                    calculation_layer_id = dataset.calculation_layer_id,
+                                    feature_id = dataset.feature_id,
+                                    DataType = dataset.DataType,
+                                    Date = dataset.Date,
+                                    area = dataset.area,
+                                    percentage = dataset.percentage,
+                                    area_full = dataset.area_full,
+                                    area_avg = area_avg,
+                                    area_min = area_min,
+                                    area_max = area_max
+                                };
+                                datasetsAM.Add(datasetAM);
                             }
                         }
                     }
