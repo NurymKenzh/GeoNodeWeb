@@ -215,7 +215,6 @@ namespace GeoNodeWeb.Controllers
                         dataset dataset = datasets.FirstOrDefault(d => d.Date.Month == monthR && d.Date.Day == day);
                         if (dataset != null)
                         {
-                            //dataset.Date = new DateTime(year, dataset.Date.Month, dataset.Date.Day);
                             dataset datasetamm = new dataset()
                             {
                                 calculation_layer_id = dataset.calculation_layer_id,
@@ -237,27 +236,30 @@ namespace GeoNodeWeb.Controllers
                 // years average
                 foreach (dataset dataset in datasetsamm)
                 {
-                    List<dataset> datasets_avg = datasets
+                    if(dataset.Date < new DateTime(startYear, 1, 1).AddMonths(StartMonth + MonthsCount - 1))
+                    {
+                        List<dataset> datasets_avg = datasets
                         .Where(d => d.MonthDay == dataset.MonthDay)
                         .Where(d => Years.Contains(d.Date.Year))
                         .ToList();
-                    if (datasets_avg.Count() > 0)
-                    {
-                        decimal area_avg = datasets_avg.Average(d => d.area);
-                        dataset datasetyear = new dataset()
+                        if (datasets_avg.Count() > 0)
                         {
-                            calculation_layer_id = dataset.calculation_layer_id,
-                            feature_id = dataset.feature_id,
-                            DataType = dataset.DataType,
-                            Date = dataset.Date,
-                            area = dataset.area,
-                            percentage = dataset.percentage,
-                            area_full = dataset.area_full,
-                            area_avg = area_avg,
-                            area_min = dataset.area_min,
-                            area_max = dataset.area_max
-                        };
-                        datasetsyears.Add(datasetyear);
+                            decimal area_avg = datasets_avg.Average(d => d.area);
+                            dataset datasetyear = new dataset()
+                            {
+                                calculation_layer_id = dataset.calculation_layer_id,
+                                feature_id = dataset.feature_id,
+                                DataType = dataset.DataType,
+                                Date = dataset.Date,
+                                area = dataset.area,
+                                percentage = dataset.percentage,
+                                area_full = dataset.area_full,
+                                area_avg = area_avg,
+                                area_min = dataset.area_min,
+                                area_max = dataset.area_max
+                            };
+                            datasetsyears.Add(datasetyear);
+                        }
                     }
                 }
             }
