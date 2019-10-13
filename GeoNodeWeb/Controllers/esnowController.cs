@@ -70,6 +70,14 @@ namespace GeoNodeWeb.Controllers
             public decimal area_avg;
             public decimal area_min;
             public decimal area_max;
+
+            public string MonthDay
+            {
+                get
+                {
+                    return Date.ToString("MM-dd");
+                }
+            }
         }
 
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
@@ -164,6 +172,56 @@ namespace GeoNodeWeb.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetWMAInfo2(int Id,
+            int DataType,
+            int StartMonth,
+            int MonthsCount,
+            int[] Years)
+        {
+            List<dataset> datasets = new List<dataset>(),
+                datasetsavg = new List<dataset>(),
+                datasetsmin = new List<dataset>(),
+                datasetsmax = new List<dataset>(),
+                datasetsyears = new List<dataset>();
+            using (var connection = new NpgsqlConnection(postgresConnection))
+            {
+                connection.Open();
+                var datasetsC = connection.Query<dataset>($"SELECT feature_id, \"DataType\", \"Date\", area, percentage, area_full, area_avg, area_min, area_max, calculation_layer_id " +
+                    $"FROM public.esnow_datasets " +
+                    $"WHERE calculation_layer_id = 1 " +
+                    $"AND feature_id = {Id.ToString()} " +
+                    $"AND \"DataType\" = {DataType.ToString()};");
+                datasets = datasetsC.OrderBy(d => d.Date).ToList();
+
+
+            }
+
+            string wmainfo = "";
+            using (var connection = new NpgsqlConnection(geoserverConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var area = connection.Query<string>($"SELECT \"AreaInSkm\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                wmainfo = $"{name.FirstOrDefault()}, {code.FirstOrDefault()} ({Convert.ToDecimal(area.FirstOrDefault()).ToString("0.00")}, м²)";
+            }
+            return Json(new
+            {
+                wmainfo,
+                datasets
+            });
+        }
+
+        [HttpPost]
         public ActionResult GetWMAInfo1Old(int Id,
             DateTime? DateTimeFrom,
             DateTime? DateTimeTo)
@@ -229,7 +287,7 @@ namespace GeoNodeWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetWMAInfo2(int Id,
+        public ActionResult GetWMAInfo2Old(int Id,
             int StartMonth,
             int MonthsCount,
             int[] Years)
@@ -629,7 +687,36 @@ namespace GeoNodeWeb.Controllers
             }
             datasets.AddRange(datasets0);
             // calculate atasets: area_avg, area_min, area_max
-            //.......................................................................................
+            List<dataset> datasetsAM = new List<dataset>();
+            foreach (int calculation_layer_id in datasets.Select(d => d.calculation_layer_id).Distinct())
+            {
+                List<dataset> datasets1 = datasets.Where(d => d.calculation_layer_id == calculation_layer_id).ToList();
+                foreach (int feature_id in datasets1.Select(d => d.feature_id).Distinct())
+                {
+                    List<dataset> datasets2 = datasets1.Where(d => d.feature_id == feature_id).ToList();
+                    for (int i = 0; i < DataTypeValues.Length; i++)
+                    {
+                        List<dataset> datasets3 = datasets2.Where(d => d.DataType == Convert.ToInt32(DataTypeValues.GetValue(i))).ToList();
+                        //foreach (string monthday in datasets3.Select(d => d.MonthDay).Distinct())
+                        foreach (int dayofyear in datasets3.Select(d => d.Date.DayOfYear).Distinct())
+                        {
+                            List<dataset> datasets4 = datasets3.Where(d => d.Date.DayOfYear == dayofyear).ToList();
+                            decimal area_avg = datasets4.Average(d => d.area),
+                                area_min = datasets4.Min(d => d.area),
+                                area_max = datasets4.Max(d => d.area);
+                            foreach(dataset dataset in datasets4)
+                            {
+                                dataset.area_avg = area_avg;
+                                dataset.area_min = area_min;
+                                dataset.area_max = area_max;
+                                datasetsAM.Add(dataset);
+                            }
+                        }
+                    }
+                }
+            }
+            datasets.Clear();
+            datasets.AddRange(datasetsAM);
             // insert datasets into table
             //using (var connection = new NpgsqlConnection(postgresConnection))
             //{
