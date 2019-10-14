@@ -170,7 +170,16 @@ namespace GeoNodeWeb.Controllers
                     $"FROM public.wma_polygon " +
                     $"WHERE fid = {Id.ToString()} " +
                     $"LIMIT 1;");
-                wmainfo = $"{name.FirstOrDefault()}, {code.FirstOrDefault()} ({Convert.ToDecimal(area.FirstOrDefault()).ToString("0.00")}, м²)";
+                decimal areaD = 0;
+                try
+                {
+                    areaD = Convert.ToDecimal(area.FirstOrDefault().Replace('.', ','));
+                }
+                catch
+                {
+                    areaD = Convert.ToDecimal(area.FirstOrDefault().Replace(',', '.'));
+                }
+                wmainfo = $"{name.FirstOrDefault()}, {code.FirstOrDefault()} ({areaD.ToString("0.00")}, м²)";
             }
             return Json(new
             {
@@ -280,7 +289,16 @@ namespace GeoNodeWeb.Controllers
                     $"FROM public.wma_polygon " +
                     $"WHERE fid = {Id.ToString()} " +
                     $"LIMIT 1;");
-                wmainfo = $"{name.FirstOrDefault()}, {code.FirstOrDefault()} ({Convert.ToDecimal(area.FirstOrDefault()).ToString("0.00")}, м²)";
+                decimal areaD = 0;
+                try
+                {
+                    areaD = Convert.ToDecimal(area.FirstOrDefault().Replace('.', ','));
+                }
+                catch
+                {
+                    areaD = Convert.ToDecimal(area.FirstOrDefault().Replace(',', '.'));
+                }
+                wmainfo = $"{name.FirstOrDefault()}, {code.FirstOrDefault()} ({areaD.ToString("0.00")}, м²)";
             }
             return Json(new
             {
