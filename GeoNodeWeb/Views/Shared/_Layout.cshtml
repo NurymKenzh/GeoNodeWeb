@@ -15,7 +15,12 @@
               crossorigin="anonymous"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/vendor/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -39,26 +44,29 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="esnow" asp-action="Index">esnow</a>
-                <a class="navbar-brand" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="esnow" asp-action="Index">
+                    <img class="mb-1" src="~/images/logoGeoServer.png" height="30" alt="">
+                    <span class="font-weight-light text-white">Geo</span><span class="font-weight-light text-white">Node</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    @*<partial name="_LoginPartial" />*@
-                    <ul class="navbar-nav flex-grow-1">
-                        @*<li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>*@
+                <div class="collapse navbar-collapse" id="navbarsExample07">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-info-circle"></i> Приложения</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown07">
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
+            <div class="float-right mr-5"><button class="menu btn btn-outline-light btn-sm"><i class="fa fa-bars"></i> Меню</button></div>
         </nav>
     </header>
     <div class="container">
@@ -68,12 +76,18 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- FOOTER -->
+    <footer class="footer bg-light border-top">
         <div class="container">
-            &copy; @DateTime.Now.Year.ToString() - GeoNode @*- <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
+            <div class="row">
+                <div class="col-12 col-md">
+                    <small class="text-muted">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
+                </div>
+            </div>
         </div>
     </footer>
-
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
