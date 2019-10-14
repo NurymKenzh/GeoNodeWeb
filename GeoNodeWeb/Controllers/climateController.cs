@@ -8,11 +8,20 @@ using Npgsql;
 
 namespace GeoNodeWeb.Controllers
 {
+    public class GSLayer
+    {
+        public int resourcebase_ptr_id;
+        public string title_en;
+        public string supplemental_information_en;
+    }
+
     public class climateController : Controller
     {
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
         private string geoserverConnection = server ? Startup.Configuration["geoserverConnectionServer"].ToString() : Startup.Configuration["geoserverConnectionDebug"].ToString(),
-            postgresConnection = server ? Startup.Configuration["postgresConnectionServer"].ToString() : Startup.Configuration["postgresConnectionDebug"].ToString();
+            postgresConnection = server ? Startup.Configuration["postgresConnectionServer"].ToString() : Startup.Configuration["postgresConnectionDebug"].ToString(),
+            geoportalConnection = server ? Startup.Configuration["geoportalConnectionServer"].ToString() : Startup.Configuration["geoportalConnectionDebug"].ToString();
+
         public IActionResult Index()
         {
             using (var connection = new NpgsqlConnection(geoserverConnection))
@@ -54,6 +63,13 @@ namespace GeoNodeWeb.Controllers
 
                 var datetimetasmin_pd_avg_m_rcp45_30_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmin_pd_avg_m_rcp45_30_2011_2090\"");
                 ViewBag.DateTimetasmin_pd_avg_m_rcp45_30_2011_2090 = datetimetasmin_pd_avg_m_rcp45_30_2011_2090.OrderBy(d => d).ToArray();
+            }
+            using (var connection = new NpgsqlConnection(geoportalConnection))
+            {
+                connection.Open();
+
+                var GSLayers = connection.Query<GSLayer>($"SELECT resourcebase_ptr_id, title_en, supplemental_information_en FROM public.layers_layer");
+                ViewBag.GSLayers = GSLayers.OrderBy(l => l.resourcebase_ptr_id).ToArray();
             }
             ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerUrlServer"].ToString() : Startup.Configuration["GeoServerUrlDebug"].ToString();
             return View();

@@ -189,6 +189,19 @@
 <label class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090">Дата: </label><label class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090" id="DateLabeltasmin_pd_avg_m_rcp45_30_2011_2090"></label>
 <input class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090" id="datetasmin_pd_avg_m_rcp45_30_2011_2090" type="range" min="0" value="0" max="@(datestasmin_pd_avg_m_rcp45_30_2011_2090.Count()-1)" step="1">
 
+<select id="gslayer" onchange="ChangeLayers()">
+    @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
+    {
+        <option value="@gSLayer.title_en">
+            @gSLayer.supplemental_information_en
+        </option>
+    }
+</select>
+<input type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
+<input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+
+
 <label>
     <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
     Базовый слой
@@ -219,89 +232,77 @@
 </select>
 
 <select id="layerClimate" onchange="ChangeLayersClimate()">
-    <option value="pr_pd_avg_m_rcp45_10_2011_2090">pr_pd_avg_m_rcp45_10_2011_2090</option>
-    <option value="pr_pd_avg_m_rcp45_20_2011_2090">pr_pd_avg_m_rcp45_20_2011_2090</option>
-    <option value="pr_pd_avg_m_rcp45_30_2011_2070">pr_pd_avg_m_rcp45_30_2011_2070</option>
-    <option value="tas_pd_avg_m_rcp45_10_2011_2090">tas_pd_avg_m_rcp45_10_2011_2090</option>
-    <option value="tas_pd_avg_m_rcp45_20_2011_2090">tas_pd_avg_m_rcp45_20_2011_2090</option>
-    <option value="tas_pd_avg_m_rcp45_30_2011_2070">tas_pd_avg_m_rcp45_30_2011_2070</option>
-    <option value="tasmax_pd_avg_m_rcp45_10_2011_2090">tasmax_pd_avg_m_rcp45_10_2011_2090</option>
-    <option value="tasmax_pd_avg_m_rcp45_20_2011_2090">tasmax_pd_avg_m_rcp45_20_2011_2090</option>
-    <option value="tasmax_pd_avg_m_rcp45_30_2011_2090">tasmax_pd_avg_m_rcp45_30_2011_2090</option>
-    <option value="tasmin_pd_avg_m_rcp45_10_2011_2090">tasmin_pd_avg_m_rcp45_10_2011_2090</option>
-    <option value="tasmin_pd_avg_m_rcp45_20_2011_2090">tasmin_pd_avg_m_rcp45_20_2011_2090</option>
-    <option value="tasmin_pd_avg_m_rcp45_30_2011_2090">tasmin_pd_avg_m_rcp45_30_2011_2090</option>
+    <option value="pr_pd_avg_m_rcp45_10_2011_2090">Среднемноголетняя месячная сумма осадков в разрезе 10-летних периодов</option>
+    <option value="pr_pd_avg_m_rcp45_20_2011_2090">Среднемноголетняя месячная сумма осадков в разрезе 20-летних периодов</option>
+    <option value="pr_pd_avg_m_rcp45_30_2011_2070">Среднемноголетняя месячная сумма осадков в разрезе 30-летних периодов</option>
+    <option value="tas_pd_avg_m_rcp45_10_2011_2090">Среднемесячная температура воздуха в разрезе 10-летних периодов</option>
+    <option value="tas_pd_avg_m_rcp45_20_2011_2090">Среднемесячная температура воздуха в разрезе 20-летних периодов</option>
+    <option value="tas_pd_avg_m_rcp45_30_2011_2070">Среднемесячная температура воздуха в разрезе 30-летних периодов</option>
+    <option value="tasmax_pd_avg_m_rcp45_10_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 10-летних периодов</option>
+    <option value="tasmax_pd_avg_m_rcp45_20_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 20-летних периодов</option>
+    <option value="tasmax_pd_avg_m_rcp45_30_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 30-летних периодов</option>
+    <option value="tasmin_pd_avg_m_rcp45_10_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 10-летних периодов</option>
+    <option value="tasmin_pd_avg_m_rcp45_20_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 20-летних периодов</option>
+    <option value="tasmin_pd_avg_m_rcp45_30_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 30-летних периодов</option>
 </select>
 
 <label class="Climate pr_pd_avg_m_rcp45_10_2011_2090">
     <input type="checkbox" id="layerpr_pd_avg_m_rcp45_10_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    pr_pd_avg_m_rcp45_10_2011_2090
 </label>
 <input class="Climate pr_pd_avg_m_rcp45_10_2011_2090" id="layerpr_pd_avg_m_rcp45_10_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate pr_pd_avg_m_rcp45_20_2011_2090">
     <input type="checkbox" id="layerpr_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    pr_pd_avg_m_rcp45_20_2011_2090
 </label>
 <input class="Climate pr_pd_avg_m_rcp45_20_2011_2090" id="layerpr_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate pr_pd_avg_m_rcp45_30_2011_2070">
     <input type="checkbox" id="layerpr_pd_avg_m_rcp45_30_2011_2070Show" checked="checked" onchange="ChangeLayers()">
-    pr_pd_avg_m_rcp45_30_2011_2070
 </label>
 <input class="Climate pr_pd_avg_m_rcp45_30_2011_2070" id="layerpr_pd_avg_m_rcp45_30_2011_2070Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tas_pd_avg_m_rcp45_10_2011_2090">
     <input type="checkbox" id="layertas_pd_avg_m_rcp45_10_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tas_pd_avg_m_rcp45_10_2011_2090
 </label>
 <input class="Climate tas_pd_avg_m_rcp45_10_2011_2090" id="layertas_pd_avg_m_rcp45_10_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tas_pd_avg_m_rcp45_20_2011_2090">
     <input type="checkbox" id="layertas_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tas_pd_avg_m_rcp45_20_2011_2090
 </label>
 <input class="Climate tas_pd_avg_m_rcp45_20_2011_2090" id="layertas_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tas_pd_avg_m_rcp45_30_2011_2070">
     <input type="checkbox" id="layertas_pd_avg_m_rcp45_30_2011_2070Show" checked="checked" onchange="ChangeLayers()">
-    tas_pd_avg_m_rcp45_30_2011_2070
 </label>
 <input class="Climate tas_pd_avg_m_rcp45_30_2011_2070" id="layertas_pd_avg_m_rcp45_30_2011_2070Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tasmax_pd_avg_m_rcp45_10_2011_2090">
     <input type="checkbox" id="layertasmax_pd_avg_m_rcp45_10_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tasmax_pd_avg_m_rcp45_10_2011_2090
 </label>
 <input class="Climate tasmax_pd_avg_m_rcp45_10_2011_2090" id="layertasmax_pd_avg_m_rcp45_10_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tasmax_pd_avg_m_rcp45_20_2011_2090">
     <input type="checkbox" id="layertasmax_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tasmax_pd_avg_m_rcp45_20_2011_2090
 </label>
 <input class="Climate tasmax_pd_avg_m_rcp45_20_2011_2090" id="layertasmax_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tasmax_pd_avg_m_rcp45_30_2011_2090">
     <input type="checkbox" id="layertasmax_pd_avg_m_rcp45_30_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tasmax_pd_avg_m_rcp45_30_2011_2090
 </label>
 <input class="Climate tasmax_pd_avg_m_rcp45_30_2011_2090" id="layertasmax_pd_avg_m_rcp45_30_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tasmin_pd_avg_m_rcp45_10_2011_2090">
     <input type="checkbox" id="layertasmin_pd_avg_m_rcp45_10_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tasmin_pd_avg_m_rcp45_10_2011_2090
 </label>
 <input class="Climate tasmin_pd_avg_m_rcp45_10_2011_2090" id="layertasmin_pd_avg_m_rcp45_10_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tasmin_pd_avg_m_rcp45_20_2011_2090">
     <input type="checkbox" id="layertasmin_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tasmin_pd_avg_m_rcp45_20_2011_2090
 </label>
 <input class="Climate tasmin_pd_avg_m_rcp45_20_2011_2090" id="layertasmin_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
 <label class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090">
     <input type="checkbox" id="layertasmin_pd_avg_m_rcp45_30_2011_2090Show" checked="checked" onchange="ChangeLayers()">
-    tasmin_pd_avg_m_rcp45_30_2011_2090
 </label>
 <input class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090" id="layertasmin_pd_avg_m_rcp45_30_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
@@ -690,6 +691,25 @@
     Layer_tasmin_pd_avg_m_rcp45_30_2011_2090.set('name', 'tasmin_pd_avg_m_rcp45_30_2011_2090');
     Layer_tasmin_pd_avg_m_rcp45_30_2011_2090.setOpacity(0.80);
 
+    var url_WMA = geoserver_url + 'geonode' + '/wms';
+    var Source_WMA = new ol.source.TileWMS({
+        url: url_WMA,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_WMA = new ol.layer.Tile({
+        source: Source_WMA
+    });
+    Layer_WMA.set('name', 'WMA');
+    Layer_WMA.setOpacity(0.80);
+
     var map = new ol.Map({
         target: 'map',
         layers: [
@@ -705,7 +725,8 @@
             Layer_tasmax_pd_avg_m_rcp45_30_2011_2090,
             Layer_tasmin_pd_avg_m_rcp45_10_2011_2090,
             Layer_tasmin_pd_avg_m_rcp45_20_2011_2090,
-            Layer_tasmin_pd_avg_m_rcp45_30_2011_2090
+            Layer_tasmin_pd_avg_m_rcp45_30_2011_2090,
+            Layer_WMA
         ],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
@@ -714,7 +735,7 @@
     });
 </script>
 
-@* ChangeLayerXXX, ChangeLayers, map.on('singleclick'), Charts *@
+@* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, map.on('singleclick'), Charts *@
 <script>
     var datespr_pd_avg_m_rcp45_10_2011_2090 = new Array();
     $('#datespr_pd_avg_m_rcp45_10_2011_2090 option').each(function () {
@@ -1157,6 +1178,25 @@
                 layer.setVisible(document.getElementById("layertasmin_pd_avg_m_rcp45_30_2011_2090Show").checked);
                 layer.setOpacity($('#layertasmin_pd_avg_m_rcp45_30_2011_2090Opacity').val() / 100)
             }
+            if (layer.get('name') == 'WMA') {
+                var Source_WMA_New = new ol.source.TileWMS({
+                    url: geoserver_url + 'geonode' + '/wms',
+                    params: {
+                        'FORMAT': 'image/png',
+                        'VERSION': '1.1.1',
+                        tiled: true,
+                        "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
+                        "exceptions": 'application/vnd.ogc.se_inimage',
+                        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+                    },
+                    serverType: 'geoserver'
+                });
+                Layer_WMA.setSource(Source_WMA_New);
+
+                layer.setVisible(document.getElementById("layerWMAShow").checked);
+                layer.setOpacity($('#layerWMAOpacity').val() / 100);
+            }
+
         })
     }
 </script>
