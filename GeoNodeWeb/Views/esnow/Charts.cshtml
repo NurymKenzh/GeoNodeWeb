@@ -83,6 +83,57 @@
 </select>
 <canvas width="704" height="352" class="chartjs-render-monitor" id="canvas2" style="width: 704px; height: 352px; display: block;"></canvas>
 
+<select id="chart3DataType" onchange="Chart3()">
+    <option value="0">Потерянные данные</option>
+    <option value="1">Нет решения</option>
+    <option value="11">Ночь</option>
+    <option value="25">Нет снега</option>
+    <option value="37">Озеро</option>
+    <option value="39">Море</option>
+    <option value="50">Облако</option>
+    <option value="100">Лед</option>
+    <option value="200" selected="selected">Снег</option>
+    <option value="254">Детектор насыщен</option>
+    <option value="255">Заполнено</option>
+</select>
+<select id="chart3StartMonth" onchange="Chart3()">
+    <option value="1">Январь</option>
+    <option value="2">Февраль</option>
+    <option value="3">Март</option>
+    <option value="4">Апрель</option>
+    <option value="5">Май</option>
+    <option value="6">Июнь</option>
+    <option value="7">Июль</option>
+    <option value="8">Август</option>
+    <option value="9">Сентябрь</option>
+    <option value="10">Октябрь</option>
+    <option value="11">Ноябрь</option>
+    <option value="12">Декабрь</option>
+</select>
+<select id="chart3MonthsCount" onchange="Chart3()">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12" selected="selected">12</option>
+</select>
+<select id="chart3Years" multiple onchange="Chart3()">
+    @foreach (int year in ((DateTime[])ViewBag.DateTime).Select(d => d.Date.Year).Distinct())
+    {
+        <option value="@year" selected="selected">
+            @year.ToString()
+        </option>
+    }
+</select>
+<canvas width="704" height="352" class="chartjs-render-monitor" id="canvas3" style="width: 704px; height: 352px; display: block;"></canvas>
+
 <script>
     var colors = [
         {
@@ -143,7 +194,8 @@
     ]
 
     var chart1 = null,
-        chart2 = null;
+        chart2 = null,
+        chart3 = null;
 
     function Chart1() {
         $.ajax({
@@ -232,7 +284,7 @@
                 });
             },
             error: function () {
-                console.log('Error');
+                console.log('Error 1');
             }
         });
     };
@@ -373,9 +425,167 @@
         });
     };
 
+    var dynamicColors = function() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    };
+
+    function Chart3() {
+        $.ajax({
+            url: '@Url.Action("GetWMAInfo3")',
+            data: {
+                Id: @ViewBag.Id,
+                DataType: $('#chart3DataType').val(),
+                StartMonth: $('#chart3StartMonth').val(),
+                MonthsCount: $('#chart3MonthsCount').val(),
+                Years: $('#chart3Years').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                var dateFormat = 'YYYY-MM-DD';
+                var barChartData3 = {
+                    labels: [],
+                    datasets: []
+                };
+                // labels
+                for (i = 0; i < data.datasetsamm.length; i++) {
+                    barChartData3.labels.push(moment(data.datasetsamm[i].date).toDate());
+                }
+                // data (datasets)
+                barChartData3.datasets.push({
+                    label: 'Среднее',
+                    backgroundColor: '#000000',
+                    borderColor: '#000000',
+                    borderWidth: 2,
+                    fill: false,
+                    lineTension: 0,
+                    data: []
+                });
+                barChartData3.datasets.push({
+                    label: 'Минимум',
+                    backgroundColor: "rgba(195,195,195,0.5)",
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: '+1',
+                    lineTension: 0,
+                    data: []
+                });
+                barChartData3.datasets.push({
+                    label: 'Максимум',
+                    backgroundColor: '#c3c3c3',
+                    borderColor: '#c3c3c3',
+                    borderWidth: 2,
+                    fill: false,
+                    lineTension: 0,
+                    data: []
+                });
+                for (i = 0; i < data.datasetsamm.length; i++) {
+                    barChartData3.datasets[0].data.push({
+					    x: moment(data.datasetsamm[i].date).format(dateFormat),
+					    y: data.datasetsamm[i].area_avg.toFixed(2)
+				    });
+                    barChartData3.datasets[1].data.push({
+					    x: moment(data.datasetsamm[i].date).format(dateFormat),
+					    y: data.datasetsamm[i].area_min.toFixed(2)
+				    });
+                    barChartData3.datasets[2].data.push({
+					    x: moment(data.datasetsamm[i].date).format(dateFormat),
+					    y: data.datasetsamm[i].area_max.toFixed(2)
+				    });
+                }
+                for (i = 0; i < data.datasetsyears.length; i++) {
+                    var exist = false;
+                    for (k = 0; k < barChartData3.datasets.length; k++) {
+                        if (barChartData3.datasets[k].yearchart == data.datasetsyears[i].yearchart) {
+                            exist = true;
+                            barChartData3.datasets[k].data.push({
+					            x: moment(data.datasetsyears[i].date).format(dateFormat),
+					            y: data.datasetsyears[i].area.toFixed(2)
+				            });
+                        }
+                    }
+                    if (!exist) {
+                        var color = dynamicColors();
+                        barChartData3.datasets.push({
+                            label: data.datasetsyears[i].yearchart,
+                            yearchart: data.datasetsyears[i].yearchart,
+                            backgroundColor: color,
+                            borderColor: color,
+                            borderWidth: 2,
+                            fill: false,
+                            lineTension: 0,
+                            data: [{
+					            x: moment(data.datasetsyears[i].date).format(dateFormat),
+					            y: data.datasetsyears[i].area.toFixed(2)
+				            }]
+                        });
+                    }
+                    
+                }
+                // chart
+                var ctx3 = document.getElementById('canvas3').getContext('2d');
+                if (chart3 != null) {
+                    chart3.destroy();
+                }
+                chart3 = new Chart(ctx3, {
+                    type: 'line',
+                    data: barChartData3,
+                    options: {
+                        title: {
+                            display: true,
+                            text: data.wmainfo
+                        },
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+							        parser: dateFormat,
+							        //tooltipFormat: 'll HH:mm',
+                                    tooltipFormat: 'MM-DD',
+                                    displayFormats: {
+                                        'millisecond': 'MM-DD',
+                                        'second': 'MM-DD',
+                                        'minute': 'MM-DD',
+                                        'hour': 'MM-DD',
+                                        'day': 'MM-DD',
+                                        'week': 'MM-DD',
+                                        'month': 'MM-DD',
+                                        'quarter': 'MM-DD',
+                                        'year': 'MM-DD'
+                                    }
+						        },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Месяц, день'
+                                }
+                            }],
+                            yAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Площадь, м²'
+                                }
+                            }]
+                        },
+                        plugins: {
+                            filler: {
+                                propagate: false
+                            }
+                        }
+                    }
+                });
+            },
+            error: function () {
+                console.log('Error 3');
+            }
+        });
+    };
+
     $(document).ready(function () {
         Chart1();
         Chart2();
+        Chart3();
     });
 </script>
 

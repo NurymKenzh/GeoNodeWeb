@@ -8,6 +8,7 @@ using Npgsql;
 using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GeoNodeWeb.Controllers
 {
@@ -86,6 +87,9 @@ namespace GeoNodeWeb.Controllers
                     return Date.DayOfYear;
                 }
             }
+
+            [NotMapped]
+            public int yearchart;
         }
 
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
@@ -271,6 +275,124 @@ namespace GeoNodeWeb.Controllers
                         }
                     }
                 }
+            }
+
+            string wmainfo = "";
+            using (var connection = new NpgsqlConnection(geoserverConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var area = connection.Query<string>($"SELECT \"AreaInSkm\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                decimal areaD = 0;
+                try
+                {
+                    areaD = Convert.ToDecimal(area.FirstOrDefault().Replace('.', ','));
+                }
+                catch
+                {
+                    areaD = Convert.ToDecimal(area.FirstOrDefault().Replace(',', '.'));
+                }
+                wmainfo = $"{name.FirstOrDefault()}, {code.FirstOrDefault()} ({areaD.ToString("0.00")}, м²)";
+            }
+            return Json(new
+            {
+                wmainfo,
+                datasetsamm,
+                datasetsyears
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetWMAInfo3(int Id,
+            int DataType,
+            int StartMonth,
+            int MonthsCount,
+            int[] Years)
+        {
+            const int startYear = 2000;
+            List<dataset> datasets = new List<dataset>(),
+                datasetsamm = new List<dataset>(),
+                datasetsyears = new List<dataset>();
+            using (var connection = new NpgsqlConnection(postgresConnection))
+            {
+                connection.Open();
+                var datasetsC = connection.Query<dataset>($"SELECT feature_id, \"DataType\", \"Date\", area, percentage, area_full, area_avg, area_min, area_max, calculation_layer_id " +
+                    $"FROM public.esnow_datasets " +
+                    $"WHERE calculation_layer_id = 1 " +
+                    $"AND feature_id = {Id.ToString()} " +
+                    $"AND \"DataType\" = {DataType.ToString()};");
+                datasets = datasetsC.OrderBy(d => d.Date).ToList();
+
+                //datasetsyears = datasets.Where(d => Years.Contains(d.Date.Year)).OrderBy(d => d.Date).ToList();
+
+                // average, min, max, years
+                for (int month = StartMonth, monthsCount = 0; monthsCount < 12; monthsCount++, month++)
+                {
+                    int monthR = month,
+                        year = startYear;
+                    if (monthR > 12)
+                    {
+                        monthR -= 12;
+                        year = startYear + 1;
+                    }
+                    for (int day = 1; day < 32; day++)
+                    {
+                        dataset dataset = datasets.FirstOrDefault(d => d.Date.Month == monthR && d.Date.Day == day);
+                        if (dataset != null)
+                        {
+                            dataset datasetamm = new dataset()
+                            {
+                                calculation_layer_id = dataset.calculation_layer_id,
+                                feature_id = dataset.feature_id,
+                                DataType = dataset.DataType,
+                                Date = new DateTime(year, dataset.Date.Month, dataset.Date.Day),
+                                area = dataset.area,
+                                percentage = dataset.percentage,
+                                area_full = dataset.area_full,
+                                area_avg = dataset.area_avg,
+                                area_min = dataset.area_min,
+                                area_max = dataset.area_max
+                            };
+                            datasetsamm.Add(datasetamm);
+                        }
+                        // years
+                        foreach(int yearyear in Years)
+                        {
+                            dataset datasetyear = datasets.FirstOrDefault(d => d.Date.Month == monthR && d.Date.Day == day && d.Date.Year == yearyear);
+                            if (datasetyear != null)
+                            {
+                                dataset datasetyearnew = new dataset()
+                                {
+                                    calculation_layer_id = datasetyear.calculation_layer_id,
+                                    feature_id = datasetyear.feature_id,
+                                    DataType = datasetyear.DataType,
+                                    Date = new DateTime(year, datasetyear.Date.Month, datasetyear.Date.Day),
+                                    area = datasetyear.area,
+                                    percentage = datasetyear.percentage,
+                                    area_full = datasetyear.area_full,
+                                    area_avg = datasetyear.area_avg,
+                                    area_min = datasetyear.area_min,
+                                    area_max = datasetyear.area_max,
+                                    yearchart = datasetyear.Date.Year
+                                };
+                                datasetsyears.Add(datasetyearnew);
+                            }
+                        }
+                    }
+                }
+
+                // years average
+                datasetsyears = datasetsyears.OrderBy(d => d.yearchart).ThenBy(d => d.Date).ToList();
             }
 
             string wmainfo = "";
