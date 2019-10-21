@@ -14,6 +14,11 @@ namespace GeoNodeWeb.Controllers
         public string title_en;
         public string supplemental_information_en;
     }
+    public class esnow_datasetcalculationlayer
+    {
+        public int id;
+        public int layer_id;
+    }
 
     public class climateController : Controller
     {
@@ -67,9 +72,16 @@ namespace GeoNodeWeb.Controllers
             using (var connection = new NpgsqlConnection(geoportalConnection))
             {
                 connection.Open();
-
                 var GSLayers = connection.Query<GSLayer>($"SELECT resourcebase_ptr_id, title_en, supplemental_information_en FROM public.layers_layer");
-                ViewBag.GSLayers = GSLayers.OrderBy(l => l.resourcebase_ptr_id).ToArray();
+                using (var connection2 = new NpgsqlConnection(postgresConnection))
+                {
+                    connection2.Open();
+                    var esnow_datasetcalculationlayers = connection2.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
+                    ViewBag.GSLayers = GSLayers
+                        .Where(g => esnow_datasetcalculationlayers.Select(l => l.layer_id).Contains(g.resourcebase_ptr_id))
+                        .OrderBy(l => l.resourcebase_ptr_id)
+                        .ToArray();
+                }
             }
             ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerUrlServer"].ToString() : Startup.Configuration["GeoServerUrlDebug"].ToString();
             return View();

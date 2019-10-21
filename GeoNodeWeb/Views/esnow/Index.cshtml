@@ -151,7 +151,7 @@
                                                     ВОДНЫЕ РЕСУРСЫ
                                                 </label>
                                             </div>
-                                            <div class="form-check text-black-50">
+                                            @*<div class="form-check text-black-50">
                                                 <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
                                                 <label class="form-check-label" for="KATO">
                                                     <small> ВХБ</small>
@@ -162,8 +162,17 @@
                                                 <label class="form-check-label" for="KATO">
                                                     <small> ВХУ</small>
                                                 </label>
-                                            </div>
-
+                                            </div>*@
+                                            <select id="gslayer" onchange="ChangeLayers('gslayer');">
+                                                @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
+                                                {
+                                                    <option value="@gSLayer.title_en">
+                                                        @gSLayer.supplemental_information_en
+                                                    </option>
+                                                }
+                                            </select>
+                                            @*<input type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">*@
+                                            @*<input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />*@
                                             <input id="layerWMAOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
                                             <div class="dropdown-divider"></div>
                                         </div>
@@ -438,7 +447,7 @@
             'FORMAT': 'image/png',
             'VERSION': '1.1.1',
             tiled: true,
-            "LAYERS": 'geonode:wma_polygon',
+            "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
             "exceptions": 'application/vnd.ogc.se_inimage',
             tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
         },
@@ -623,7 +632,7 @@
         Layer_MODIS.setSource(Source_MODIS_New);
     }
 
-    function ChangeLayers() {
+    function ChangeLayers(funct) {
         map.getLayers().forEach(function (layer) {
             if (layer.get('name') == 'Base') {
                 layer.setVisible(document.getElementById("layerBaseShow").checked);
@@ -697,9 +706,29 @@
                 layer.setOpacity($('#layerMODISOpacity').val() / 100)
             }
             if (layer.get('name') == 'WMA') {
-                console.log($('#layerWMAOpacity').val() / 100);
+                var Source_WMA_New = new ol.source.TileWMS({
+                    url: geoserver_url + 'geonode' + '/wms',
+                    params: {
+                        'FORMAT': 'image/png',
+                        'VERSION': '1.1.1',
+                        tiled: true,
+                        "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
+                        "exceptions": 'application/vnd.ogc.se_inimage',
+                        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+                    },
+                    serverType: 'geoserver'
+                });
+                Layer_WMA.setSource(Source_WMA_New);
+
                 layer.setVisible(document.getElementById("layerWMAShow").checked);
                 layer.setOpacity($('#layerWMAOpacity').val() / 100);
+
+                if (funct == 'gslayer') {
+                    Source_Select.clear();
+                    $('#WMAinfo').html('');
+                    $('#ChartsButton').hide();
+                    $('#featureId').val(null);
+                }
             }
         })
     }
@@ -708,6 +737,7 @@
         if (tool != 'select') {
             return;
         }
+        $('#featureId').val(null);
         Source_Select.clear();
         $('#WMAinfo').html('');
         $('#ChartsButton').hide();
@@ -735,7 +765,12 @@
                 var result = parser.readFeatures(response);
                 if (result.length > 0) {
                     $('#featureId').val(result[0].get('Id'));
-                    $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' м<sup>2</sup>)');
+                    if ($('#gslayer').find(":selected").val() == 'wma_polygon') {
+                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' м<sup>2</sup>)');
+                    }
+                    else if ($('#gslayer').find(":selected").val() == 'wma_height') {
+                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ' (' + result[0].get('area_km').toFixed(2) + ' м<sup>2</sup>)');
+                    }
                     $('#ChartsButton').show();
 
                     var polyFeature = new ol.Feature({
