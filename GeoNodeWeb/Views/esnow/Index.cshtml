@@ -452,6 +452,9 @@
 
     var map = new ol.Map({
         target: 'map',
+        controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
+            new ol.control.ScaleLine()
+        ]),
         layers: [
             Layer_Base,
             Layer_MODIS,
@@ -804,7 +807,7 @@
             $("article").slideToggle("slow");
         });
         $('#YearSnow option:last').attr("selected", "selected");
-        ChangeYearSnow();
+        //ChangeYearSnow();
     });
 </script>
 
