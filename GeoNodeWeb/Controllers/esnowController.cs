@@ -156,6 +156,7 @@ namespace GeoNodeWeb.Controllers
                 var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
                 ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
             }
+            ViewBag.LayerId = layer_id;
             return View();
         }
 
@@ -992,7 +993,7 @@ namespace GeoNodeWeb.Controllers
             //    }
             //    connection.Close();
             //}
-            using (TextWriter tw = new StreamWriter(@"E:\Documents\Google Drive\Share\Backups\esnow_datasets.csv"))
+            using (TextWriter tw = new StreamWriter(@"D:\Documents\Google Drive\Share\Backups\esnow_datasets.csv"))
             {
                 tw.WriteLine("feature_id\tDataType\tDate\tarea\tpercentage\tarea_full\tarea_avg\tarea_min\tarea_max\tcalculation_layer_id");
                 for (int i = 0; i < datasets.Count(); i++)
