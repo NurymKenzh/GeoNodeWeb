@@ -129,9 +129,27 @@ namespace GeoNodeWeb.Controllers
             return View();
         }
 
-        public IActionResult Charts(int Id)
+        public IActionResult Charts(int Id, string LayerName)
         {
             ViewBag.Id = Id;
+            List<layers_layer> layers_layers = new List<layers_layer>();
+            List<esnow_datasetcalculationlayer> esnow_datasetcalculationlayers = new List<esnow_datasetcalculationlayer>();
+            using (var connection = new NpgsqlConnection(geoportalConnection))
+            {
+                connection.Open();
+                var layers_layers_ = connection.Query<layers_layer>($"SELECT resourcebase_ptr_id, name FROM public.layers_layer;");
+                layers_layers = layers_layers_.ToList();
+            }
+            using (var connection = new NpgsqlConnection(postgresConnection))
+            {
+                connection.Open();
+                var esnow_datasetcalculationlayers_ = connection.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
+                esnow_datasetcalculationlayers = esnow_datasetcalculationlayers_.ToList();
+            }
+            layers_layer layers_layer = layers_layers.FirstOrDefault(l => l.name == LayerName);
+            esnow_datasetcalculationlayer esnow_datasetcalculationlayer = esnow_datasetcalculationlayers
+                .FirstOrDefault(l => l.layer_id == layers_layer.resourcebase_ptr_id);
+            int layer_id = esnow_datasetcalculationlayer.id;
             using (var connection = new NpgsqlConnection(geoserverConnection))
             {
                 connection.Open();

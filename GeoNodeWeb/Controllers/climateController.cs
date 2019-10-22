@@ -20,6 +20,12 @@ namespace GeoNodeWeb.Controllers
         public int layer_id;
     }
 
+    public class layers_layer
+    {
+        public int resourcebase_ptr_id;
+        public string name;
+    }
+
     public class climateController : Controller
     {
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);

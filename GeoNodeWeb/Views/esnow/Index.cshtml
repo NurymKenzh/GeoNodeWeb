@@ -785,7 +785,7 @@
     function Charts() {
         if ($('#featureId').val() > -1) {
             var urlC = '@Url.Action("Charts", "esnow")';
-            var urlC = '/esnow/Charts?Id=' + $('#featureId').val();
+            var urlC = '/esnow/Charts?Id=' + $('#featureId').val() + '&LayerName=' + $('#gslayer').find(":selected").val();
             var win = window.open(urlC, '_blank');
             win.focus();
         }
