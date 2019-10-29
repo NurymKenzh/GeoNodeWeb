@@ -104,6 +104,11 @@ namespace GeoNodeWeb.Controllers
                 connection.Open();
                 var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
                 ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
+                //ViewBag.Years = datetime
+                //    .Select(d => d.Year)
+                //    .Distinct()
+                //    .OrderBy(y => y)
+                //    .ToArray();
             }
             //using (var connection = new NpgsqlConnection(postgresConnection))
             //{
@@ -1012,6 +1017,68 @@ namespace GeoNodeWeb.Controllers
                 }
             }
             return View("Index");
+        }
+
+        [HttpPost]
+        public ActionResult GetYears()
+        {
+            int[] years = new int[0];
+            using (var connection = new NpgsqlConnection(geoserverConnection))
+            {
+                connection.Open();
+                var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
+                years = datetime
+                    .Select(d => d.Year)
+                    .Distinct()
+                    .OrderBy(y => y)
+                    .ToArray();
+            }
+            return Json(new
+            {
+                years
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetMonths(int year)
+        {
+            int[] months = new int[0];
+            using (var connection = new NpgsqlConnection(geoserverConnection))
+            {
+                connection.Open();
+                var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
+                months = datetime
+                    .Where(d => d.Year == year)
+                    .Select(d => d.Month)
+                    .Distinct()
+                    .OrderBy(m => m)
+                    .ToArray();
+            }
+            return Json(new
+            {
+                months
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetDays(int year, int month)
+        {
+            int[] days = new int[0];
+            using (var connection = new NpgsqlConnection(geoserverConnection))
+            {
+                connection.Open();
+                var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
+                days = datetime
+                    .Where(d => d.Year == year && d.Month == month)
+                    .Select(d => d.Day)
+                    .Distinct()
+                    .OrderBy(d => d)
+                    .ToArray();
+            }
+            return Json(new
+            {
+                days
+            });
         }
     }
 }

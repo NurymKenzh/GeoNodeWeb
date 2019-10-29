@@ -82,23 +82,25 @@
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
+                        <label class="font-weight-normal m-1 Snow">Год</label>
+                        <select name="YearSnow" class="custom-select custom-select-sm Snow" id="YearSnow" onchange="ChangeYear()"></select>
                         <label class="font-weight-normal m-1 Snow">Месяц<i class="material-icons btn-sm Snow btn btn-default" id="legendSnow" value="Легенда" onclick="NDSILegend()">info_outline</i></label>
-                        <select name="MonthSnow" class="custom-select custom-select-sm Snow" id="MonthSnow" onchange=""></select>
+                        <select name="MonthSnow" class="custom-select custom-select-sm Snow" id="MonthSnow" onchange="ChangeMonth()"></select>
                         <label>
                             <input type="checkbox" id="layerMODISShow" checked="checked" onchange="ChangeLayers()">
                             День
                         </label>
-                        <select class="custom-select custom-select-sm Snow" id="dates" type="range" onchange="ChangeLayerMODIS()">
-                            @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
+                        <select class="custom-select custom-select-sm Snow" id="DaySnow" type="range" onchange="ChangeLayerMODIS()">
+                            @*@foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
                             {
                                 <option value="@dateTime.ToString(" yyyy-MM-dd")">
                                     @dateTime.ToString("yyyy-MM-dd")
                                 </option>
-                            }
+                            }*@
                         </select>
-                        @{
+                        @*@{
                             DateTime[] dates = ViewBag.DateTime;
-                        }
+                        }*@
                         <input id="layerMODISOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
                         <div class="dropdown-divider"></div>
                         <div data-spy="scroll" style="overflow:scroll;overflow-x:hidden;height:auto;">
@@ -152,17 +154,17 @@
                                                 </label>
                                             </div>
                                             @*<div class="form-check text-black-50">
-                                                <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
-                                                <label class="form-check-label" for="KATO">
-                                                    <small> ВХБ</small>
-                                                </label>
-                                            </div>
-                                            <div class="form-check text-black-50">
-                                                <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
-                                                <label class="form-check-label" for="KATO">
-                                                    <small> ВХУ</small>
-                                                </label>
-                                            </div>*@
+                                <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
+                                <label class="form-check-label" for="KATO">
+                                    <small> ВХБ</small>
+                                </label>
+                            </div>
+                            <div class="form-check text-black-50">
+                                <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
+                                <label class="form-check-label" for="KATO">
+                                    <small> ВХУ</small>
+                                </label>
+                            </div>*@
                                             <select id="gslayer" onchange="ChangeLayers('gslayer');">
                                                 @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
                                                 {
@@ -601,7 +603,7 @@
     addInteraction();
 </script>
 
-@* ChangeLayerMODIS, ChangeLayers, map.on('singleclick'), Charts *@
+@* GetYears, ChangeYear, ChangeMonth, ChangeLayerMODIS, ChangeLayers, map.on('singleclick'), Charts *@
 <script>
     //var dates = new Array();
     //$('#dates option').each(function () {
@@ -615,10 +617,72 @@
     //};
     //input.oninput();
 
+    function GetYears() {
+        $.ajax({
+            url: '@Url.Action("GetYears")',
+            type: 'POST',
+            success: function (data) {
+                $("#YearSnow").html('');
+                $.each(data.years, function() {
+                    $("#YearSnow").append($("<option />").val(this).text(this));
+                });
+                ChangeYear();
+            },
+            error: function () {
+                console.log('Error years');
+            }
+        });
+    }
+
+    function ChangeYear() {
+        $.ajax({
+            url: '@Url.Action("GetMonths")',
+            data: {
+                year: $('#YearSnow').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                $("#MonthSnow").html('');
+                $.each(data.months, function() {
+                    $("#MonthSnow").append($("<option />").val(this).text(this));
+                });
+                ChangeMonth();
+            },
+            error: function () {
+                console.log('Error months');
+            }
+        });
+    }
+
+    function ChangeMonth() {
+        $.ajax({
+            url: '@Url.Action("GetDays")',
+            data: {
+                year: $('#YearSnow').val(),
+                month: $('#MonthSnow').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                $("#DaySnow").html('');
+                $.each(data.days, function() {
+                    $("#DaySnow").append($("<option />").val(this).text(this));
+                });
+                ChangeLayerMODIS();
+            },
+            error: function () {
+                console.log('Error days');
+            }
+        });
+    }
+
     function ChangeLayerMODIS() {
         var Source_MODIS_New = new ol.source.TileWMS({
             //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabel').html() + '&',
-            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#dates').find(":selected").val() + '&',
+            //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#dates').find(":selected").val() + '&',
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' +
+                $('#YearSnow').find(":selected").val() + '-' +
+                $('#MonthSnow').find(":selected").val() + '-' +
+                $('#DaySnow').find(":selected").val() + '&',
             params: {
                 'FORMAT': 'image/png',
                 'VERSION': '1.1.1',
@@ -832,6 +896,7 @@
 <script>
     $(document).ready(function () {
         SelectTool();
+        GetYears();
     });
 </script>
 
