@@ -92,15 +92,15 @@
                         </label>
                         <select class="custom-select custom-select-sm Snow" id="DaySnow" type="range" onchange="ChangeLayerMODIS()">
                             @*@foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
-                            {
-                                <option value="@dateTime.ToString(" yyyy-MM-dd")">
-                                    @dateTime.ToString("yyyy-MM-dd")
-                                </option>
-                            }*@
+            {
+                <option value="@dateTime.ToString(" yyyy-MM-dd")">
+                    @dateTime.ToString("yyyy-MM-dd")
+                </option>
+            }*@
                         </select>
                         @*@{
-                            DateTime[] dates = ViewBag.DateTime;
-                        }*@
+            DateTime[] dates = ViewBag.DateTime;
+        }*@
                         <input id="layerMODISOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
                         <div class="dropdown-divider"></div>
                         <div data-spy="scroll" style="overflow:scroll;overflow-x:hidden;height:auto;">
@@ -190,6 +190,7 @@
                         </select>
                         <div class="dropdown-divider"></div>
                         <input id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()" />
+                        <input id="DownloadButton" type="button" value="Скачать растр" class="btn btn-primary btn-sm" onclick="DownloadLayer()" />
                         <div class="dropdown-divider"></div>
                         <div class="alert alert-info" role="alert">
                             <input type="hidden" id="featureId" />
@@ -889,6 +890,21 @@
         $('#SelectButton').removeClass('btn-dark');
         $('#SelectButton').addClass('btn-primary');
         Source_Select.clear();
+    }
+</script>
+
+@* DownloadLayer *@
+<script>
+    function DownloadLayer() {
+        var download_url = geoserver_url + geoserver_workspace_name + '/wms?' +
+            'service=WMS&version=1.1.0&request=GetMap&layers=' +
+            geoserver_workspace_name +
+            '%3ASANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT&bbox=39.1622186743878%2C39.9996233923096%2C139.999617505142%2C59.9999999946118&width=768&height=330&srs=EPSG%3A4326&time=' +
+            $('#YearSnow').find(":selected").val() + '-' +
+            $('#MonthSnow').find(":selected").val() + '-' +
+            $('#DaySnow').find(":selected").val() +
+            '&format=image%2Ftiff';
+        window.location.href = download_url;
     }
 </script>
 
