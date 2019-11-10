@@ -75,7 +75,7 @@
     body {
         font-family: Signika Negative, sans-serif;
         font-weight: 300;
-        color: white;
+        /*color: white;*/
         background-color: black;
         text-align: center;
     }
@@ -153,15 +153,15 @@
                         </label>
                         <select class="custom-select custom-select-sm Snow" id="DaySnow" type="range" onchange="ChangeLayerMODIS()">
                             @*@foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
-            {
-                <option value="@dateTime.ToString(" yyyy-MM-dd")">
-                    @dateTime.ToString("yyyy-MM-dd")
-                </option>
-            }*@
+                                {
+                                    <option value="@dateTime.ToString(" yyyy-MM-dd")">
+                                        @dateTime.ToString("yyyy-MM-dd")
+                                    </option>
+                                }*@
                         </select>
                         @*@{
-            DateTime[] dates = ViewBag.DateTime;
-        }*@
+                                DateTime[] dates = ViewBag.DateTime;
+                            }*@
                         <input id="layerMODISOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
                         <div class="dropdown-divider"></div>
                         <div data-spy="scroll" style="overflow:scroll;overflow-x:hidden;height:auto;">
@@ -215,17 +215,17 @@
                                                 </label>
                                             </div>
                                             @*<div class="form-check text-black-50">
-                                <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
-                                <label class="form-check-label" for="KATO">
-                                    <small> ВХБ</small>
-                                </label>
-                            </div>
-                            <div class="form-check text-black-50">
-                                <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
-                                <label class="form-check-label" for="KATO">
-                                    <small> ВХУ</small>
-                                </label>
-                            </div>*@
+                                                    <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
+                                                    <label class="form-check-label" for="KATO">
+                                                        <small> ВХБ</small>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check text-black-50">
+                                                    <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
+                                                    <label class="form-check-label" for="KATO">
+                                                        <small> ВХУ</small>
+                                                    </label>
+                                                </div>*@
                                             <select id="gslayer" onchange="ChangeLayers('gslayer');">
                                                 @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
                                                 {
@@ -253,15 +253,15 @@
                         </div>
                         <div id="slider"></div>
                         <div id="controls">
-                            <label id="slidervalue" style="color: black;">sdrb</label>
-                            <button id="pause">play</button>
-                            <button id="reverse">reverse</button>
-                            <button id="restart">restart</button>
+                            <button id="pause">запуск</button>
+                            <button id="reverse">обратно</button>
+                            <button id="restart">рестарт</button>
+                            @*<label id="slidervalue" style="color: black;"></label>*@
                             <div>
-                                Speed:
-                                <label><input type="radio" name="speed" value="0.25" id="slow"> slow</label>
-                                <label><input type="radio" name="speed" value="1" id="normal" checked> normal</label>
-                                <label><input type="radio" name="speed" value="2" id="fast"> fast</label>
+                                Скорость:
+                                <label><input type="radio" name="speed" value="0.005" id="slow"> медленно</label>
+                                <label><input type="radio" name="speed" value="0.010" id="normal" checked> средне</label>
+                                <label><input type="radio" name="speed" value="0.015" id="fast"> быстро</label>
                             </div>
                         </div>
 
@@ -718,7 +718,7 @@
     }
 
     function ChangeYear() {
-        $.ajax({
+        @*$.ajax({
             url: '@Url.Action("GetMonths")',
             data: {
                 year: $('#YearSnow').val()
@@ -734,11 +734,25 @@
             error: function () {
                 console.log('Error months');
             }
+        });*@
+        $("#MonthSnow").html('');
+        var months = [];
+        $.each(dates, function () {
+            var year = this.substr(0, 4),
+                month = parseInt(this.substr(5, 2)),
+                day = parseInt(this.substr(8, 2));
+            if (!months.includes(month) && $('#YearSnow').val() == year) {
+                months.push(month);
+            }
         });
+        $.each(months, function () {
+            $("#MonthSnow").append($("<option />").val(this).text(this));
+        });
+        ChangeMonth();
     }
 
     function ChangeMonth() {
-        $.ajax({
+        @*$.ajax({
             url: '@Url.Action("GetDays")',
             data: {
                 year: $('#YearSnow').val(),
@@ -755,7 +769,21 @@
             error: function () {
                 console.log('Error days');
             }
+        });*@
+        $("#DaySnow").html('');
+        var days = [];
+        $.each(dates, function () {
+            var year = this.substr(0, 4),
+                month = parseInt(this.substr(5, 2)),
+                day = parseInt(this.substr(8, 2));
+            if (!days.includes(day) && $('#YearSnow').val() == year && $('#MonthSnow').val() == month) {
+                days.push(day);
+            }
         });
+        $.each(days, function () {
+            $("#DaySnow").append($("<option />").val(this).text(this));
+        });
+        ChangeLayerMODIS();
     }
 
     function ChangeLayerMODIS() {
@@ -992,22 +1020,53 @@
 
 @* Animation *@
 <script>
+    var dates = new Array();
+</script>
+@foreach (DateTime date in (DateTime[])ViewBag.DateTime)
+{
+    <script>
+        dates.push('@date.ToString("yyyy-MM-dd")');
+    </script>
+}
+<script>
     var $text = $("#text"),
         $pause = $("#pause"),
         $reverse = $("#reverse"),
         $restart = $("#restart"),
         $speed = $("input[name='speed']"),
         $slider = $("#slider"),
-        //"tl" is the timeline we'll add our tweens to. Then we can easily control the whole sequence as one object. 
+        //"tl" is the timeline we'll add our tweens to. Then we can easily control the whole sequence as one object.
         tl = new TimelineLite({ onUpdate: updateSlider, onComplete: onComplete, onReverseComplete: onComplete, paused: true });
+    tl.timeScale(parseFloat($speed.val()));
 
     function updateSlider() {
-        $('#slidervalue').text('v: ' + tl.progress() * 100);
+        $('#slidervalue').text('v: ' + (tl.progress() * dates.length).toFixed(0));
+        var changed = false;
+        if ($('#YearSnow').val() != dates[(tl.progress() * dates.length).toFixed(0)].substr(0, 4)) {
+            $('#YearSnow').val(dates[(tl.progress() * dates.length).toFixed(0)].substr(0, 4));
+            ChangeYear();
+            //changed = true;
+            //console.log('year');
+        }
+        if ($('#MonthSnow').val() != parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(5, 2))) {
+            $('#MonthSnow').val(parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(5, 2)));
+            ChangeMonth();
+            //changed = true;
+            //console.log('month');
+        }
+        if ($('#DaySnow').val() != parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(8, 2))) {
+            $('#DaySnow').val(parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(8, 2)));
+            ChangeLayerMODIS();
+            //console.log('day');
+            //if (changed) {
+            //    ChangeYear();
+            //}
+        }        
         $slider.slider("value", tl.progress() * 100);
     }
     function onComplete() {
         tl.pause();
-        $pause.html("play");
+        $pause.html("запуск");
     }
 
     //do a simple split of the text so we can animate each character (doesn't require the advanced features of SplitText, so we just use split() and join())
@@ -1028,9 +1087,9 @@
         max: 100,
         step: .1,
         slide: function (event, ui) {
-            tl.progress(ui.value / 100).pause();
-            if (isPaused) $pause.html("resume");
-            
+            tl.progress(ui.value / dates.length).pause();
+            if (isPaused) $pause.html("продолжить");
+
         },
         start: function (event, ui) {
             isPaused = tl.paused();
@@ -1047,10 +1106,10 @@
             } else {
                 tl.resume();
             }
-            $pause.html("pause");
+            $pause.html("пауза");
         } else {
             tl.pause();
-            $pause.html("resume");
+            $pause.html("продолжить");
         }
     });
 
@@ -1061,26 +1120,26 @@
             } else {
                 tl.reverse(0);
             }
-            $pause.html("pause");
+            $pause.html("пауза");
         } else {
             tl.reversed(!tl.reversed()).resume();
-            $pause.html("pause");
+            $pause.html("пауза");
         }
     });
 
     $restart.click(function () {
         tl.restart();
-        $pause.html("pause");
+        $pause.html("пауза");
     });
 
     $speed.change(function (v, val) {
         tl.timeScale(parseFloat($(this).val()));
         if (tl.progress() === 1) {
             tl.restart();
-            $pause.html("pause");
+            $pause.html("пауза");
         } else if (tl.paused()) {
             tl.resume();
-            $pause.html("pause");
+            $pause.html("пауза");
         }
     });
 </script>
