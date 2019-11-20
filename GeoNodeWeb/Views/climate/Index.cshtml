@@ -1,12 +1,133 @@
 ﻿@using GeoNodeWeb.Controllers
 @{
     ViewData["Title"] = "Карта";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutMap.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 <script src="~/esnow/lib/moment.js/moment.js"></script>
+<script src="~/js/ClimSidebar.js"></script>
 <link href="~/esnow/css/site.css" rel="stylesheet" />
+<div class="page-wrapper chiller-theme toggled">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fa fa-bars"></i>
+    </a>
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+
+            <div class="sidebar-brand">
+                <a href="#">menu</a>
+                <div id="close-sidebar">
+                    <i class="fa fa-angle-double-left"></i>
+                </div>
+            </div>
+            <!-- sidebar-header  -->
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="header-menu">
+                        <span>Tematic</span>
+                    </li>
+                    <li class="header-menu">
+                        <div class="current_items">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                <label class="form-check-label" for="exampleRadios1">
+                                    10 years
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                <label class="form-check-label" for="exampleRadios2">
+                                    20 years
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+                                <label class="form-check-label" for="exampleRadios3">
+                                    30 years
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-tasks"></i>
+                            <span>RCP 8.5</span>
+                            <span class="badge">--</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li class="header-menu">
+                                    <div class="current_items">
+                                        <div class="form-check1">
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4">
+                                            <label class="form-check-label" for="exampleRadios4">
+                                                medium temperature
+                                            </label>
+                                        </div>
+                                        <div class="form-check1">
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios5" value="option5">
+                                            <label class="form-check-label" for="exampleRadios5">
+                                                large temperature
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="sidebar-dropdown">
+                        <a href="#">
+                            <i class="fa fa-globe"></i>
+                            <span>Base Maps</span>
+                        </a>
+                        <div class="sidebar-submenu">
+                            <ul>
+                                <li>
+                                    <a href="#">Google maps</a>
+                                </li>
+                                <li>
+                                    <a href="#">Open street map</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="header-menu">
+                        <span>Extra</span>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-book"></i>
+                            <span>Documentation</span>
+                            <span class="badge badge-pill badge-primary">i</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-content  -->
+        <div class="sidebar-footer">
+            <a href="#">
+                <i class="fa fa-area-chart"></i>
+            </a>
+            <a href="#">
+                <i class="fa fa-bar-chart-o"></i>
+            </a>
+            <a href="#">
+                <i class="fa fa-book"></i>
+            </a>
+            <a href="#">
+                <i class="fa fa-cog"></i>
+            </a>
+        </div>
+    </nav>
+    <!-- sidebar-wrapper  -->
+
+</div>
+
 <h1>Климат</h1>
 
 <select id="datespr_pd_avg_m_rcp45_10_2011_2090" onchange="ChangeLayer()" hidden="hidden">
