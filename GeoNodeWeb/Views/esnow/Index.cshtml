@@ -568,31 +568,31 @@
 
     console.log(atimes);
 
-    var url_Animator = geoserver_url + geoserver_workspace_name + '/wms/animate'; //?' + 'aparam=time&avalues=2000-02-26,2000-03-05,2000-03-13,2000-03-21,2000-03-29' + '&'
-    var Source_Animator = new ol.source.ImageWMS({
-        url: url_Animator,
-        params: {
-            'FORMAT': 'image/gif;subtype=animated',
-            //FORMAT_OPTIONS: 'antialias:none;gif_loop_continuosly:true;gif_frames_delay:100',
-            'VERSION': '1.1.1',
-            //tiled: false,
-            "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
-            //"exceptions": 'application/vnd.ogc.se_inimage',
-            //tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
-            TRANSPARENT: 'true',
-            REQUEST: 'getmap',
-            SERVICE: 'animate',
-            VERSION: '1.1.1',
-            aparam: 'time',
-            avalues: '2000-02-26,2000-03-05,2000-03-13,2000-03-21,2000-03-29' //atimes
-        },
-        serverType: 'geoserver'
-    });
-    var Layer_Animator = new ol.layer.Image({
-        source: Source_Animator
-    });
-    Layer_Animator.set('name', 'Animator');
-    Layer_Animator.setOpacity(0.80);
+    //var url_Animator = geoserver_url + geoserver_workspace_name + '/wms/animate'; //?' + 'aparam=time&avalues=2000-02-26,2000-03-05,2000-03-13,2000-03-21,2000-03-29' + '&'
+    //var Source_Animator = new ol.source.ImageWMS({
+    //    url: url_Animator,
+    //    params: {
+    //        'FORMAT': 'image/gif;subtype=animated',
+    //        //FORMAT_OPTIONS: 'antialias:none;gif_loop_continuosly:true;gif_frames_delay:100',
+    //        'VERSION': '1.1.1',
+    //        //tiled: false,
+    //        "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
+    //        //"exceptions": 'application/vnd.ogc.se_inimage',
+    //        //tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        TRANSPARENT: 'true',
+    //        REQUEST: 'getmap',
+    //        SERVICE: 'animate',
+    //        VERSION: '1.1.1',
+    //        aparam: 'time',
+    //        avalues: '2000-02-26,2000-03-05,2000-03-13,2000-03-21,2000-03-29' //atimes
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_Animator = new ol.layer.Image({
+    //    source: Source_Animator
+    //});
+    //Layer_Animator.set('name', 'Animator');
+    //Layer_Animator.setOpacity(0.80);
 
     var map = new ol.Map({
         target: 'map',
@@ -601,8 +601,8 @@
         ]),
         layers: [
             Layer_Base,
-            //Layer_MODIS,
-            Layer_Animator,
+            Layer_MODIS,
+            //Layer_Animator,
             Layer_WMA,
             Layer_Select,
             Layer_Measure],
