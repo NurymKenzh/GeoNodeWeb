@@ -1,19 +1,18 @@
 ﻿
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
-html {
-    position: relative;
-    min-height: 100%;
-}
+
 
 body {
     margin-bottom: 60px;
-    font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .navbar {
-    background: #326295 !important;
+    font-weight: 700;
+    background: #16344e !important;
+    background-color: transparent;
 }
+
 footer.footer {
     padding-top: 1rem;
     padding-bottom: 40px;
@@ -49,10 +48,6 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
 }
 
-/* QR code generator */
-#qrCode {
-    margin: 15px;
-}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
@@ -69,7 +64,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dropdown-menu {
-    background: #326295;
+    background: #16344e;
     border: 0;
     top: 80%;
     border-radius: 0px 0px 5px 5px;
@@ -91,7 +86,6 @@ h1, h2, h3, h4, h5, h6 {
 .dropdown-item:focus, .dropdown-item:hover {
     background: #fec400;
 }
-
 .nav-item::after {
     content: '';
     display: block;
@@ -106,6 +100,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar-dark .navbar-nav .active > .nav-link, .navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .show > .nav-link, .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
     color: #fec400;
+
 }
 
 .form-signin {
@@ -247,9 +242,6 @@ article {
     }
 }
 
-body {
-    font-size: 0.9rem;
-}
 
 .page-wrapper .sidebar-wrapper,
 .sidebar-wrapper .sidebar-brand > a,
@@ -300,10 +292,12 @@ body {
 #show-sidebar {
     position: fixed;
     left: 0;
-    top: 80px;
+    top: 13px;
     border-radius: 0 4px 4px 0px;
     width: 35px;
-    transition-delay: 0.3s;
+    background: 0 0;
+    transition-delay: 0.9s;
+
 }
 
 .page-wrapper.toggled #show-sidebar {
@@ -312,6 +306,7 @@ body {
 /*----------------sidebar-wrapper----------------*/
 
 .sidebar-wrapper {
+    font-size: 0.9rem;
     width: 260px;
     height: 80%;
     max-height: 100%;
@@ -451,7 +446,7 @@ body {
 
     .sidebar-wrapper .sidebar-menu .sidebar-dropdown > a:after {
         font-family: "Font Awesome 5 Free";
-        font-weight: 900;
+        font-weight: 700;
         content: "\f105";
         font-style: normal;
         display: inline-block;
@@ -473,7 +468,7 @@ body {
 
     .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li {
         padding-left: 25px;
-        font-size: 13px;
+        font-size: inherit;
     }
 
         .sidebar-wrapper .sidebar-menu .sidebar-dropdown .sidebar-submenu li a:before {
@@ -620,16 +615,16 @@ body {
 
 
 /*-----------------------------chiller-theme-------------------------------------------------*/
-
+/*----------------sidebar-main----------------*/
 .chiller-theme .sidebar-wrapper {
-    background: #31353D;
+    background: #3c4b64;
     opacity: 0.95;
 }
 
     .chiller-theme .sidebar-wrapper .sidebar-header,
     .chiller-theme .sidebar-wrapper .sidebar-search,
     .chiller-theme .sidebar-wrapper .sidebar-menu {
-        border-top: 1px solid #3a3f48;
+        border-top: 1px solid #e5e6e7;
     }
 
         .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
@@ -645,7 +640,7 @@ body {
         .chiller-theme .sidebar-wrapper .sidebar-brand > a,
         .chiller-theme .sidebar-wrapper .sidebar-menu ul li a,
         .chiller-theme .sidebar-footer > a {
-            color: #818896;
+            color: #f5f5f5;
         }
 
             .chiller-theme .sidebar-wrapper .sidebar-menu ul li:hover > a,
@@ -668,7 +663,7 @@ body {
 .chiller-theme .sidebar-wrapper .sidebar-dropdown .sidebar-submenu li a:hover:before,
 .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu:focus + span,
 .chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown.active a i {
-    color: #16c7ff;
+    color: #fec400;
     text-shadow: 0px 0px 10px rgba(22, 199, 255, 0.5);
 }
 
@@ -676,17 +671,17 @@ body {
 .chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown div,
 .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
 .chiller-theme .sidebar-wrapper .sidebar-search .input-group-text {
-    background: #3a3f48;
+    background: #586884;
 }
-
+/*----------------for Title----------------*/
 .chiller-theme .sidebar-wrapper .sidebar-menu .header-menu span {
-    color: #6c7b88;
+    color: #f5f5f5;
 }
 
 .chiller-theme .sidebar-footer {
-    background: #3a3f48;
-    box-shadow: 0px -1px 5px #282c33;
-    border-top: 1px solid #464a52;
+    background: rgba(0,0,21,.2);
+    box-shadow: 0px -1px 5px #3c4b64;
+    border-top: 1px solid #3b465d;
 }
 
     .chiller-theme .sidebar-footer > a:first-child {
@@ -721,7 +716,7 @@ body {
 
 }
 .current_items label {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 1);
   margin: 0;
   padding-left: 35px;
   display: inline-block;
@@ -741,7 +736,7 @@ body {
   
 }
 .current_items label:after {
-  background: #16c7ff;
+  background: #fec400;
   left: 0;
   top: 50%;
   transition: .3s;
@@ -756,9 +751,10 @@ body {
 }
 
 input[type=radio]:checked ~ .check::before {
-    background: #16c7ff;
+    background: #fec400;
 }
 
 input[type=radio]:checked ~ label {
-    color: #16c7ff;
+    color: #fec400;
 }
+
