@@ -531,13 +531,23 @@
     var url_MODIS = geoserver_url + geoserver_workspace_name + '/wms';
     var Source_MODIS = new ol.source.TileWMS({
         url: url_MODIS,
+        //params: {
+        //    'FORMAT': 'image/png',
+        //    'VERSION': '1.1.1',
+        //    //tiled: true,
+        //    "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT_3857',
+        //    "exceptions": 'application/vnd.ogc.se_inimage',
+        //    //tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        //    tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
+        //},
         params: {
             'FORMAT': 'image/png',
             'VERSION': '1.1.1',
-            //tiled: true,
+            tiled: true,
+            "TIME": '2000-02-26',
             "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
             "exceptions": 'application/vnd.ogc.se_inimage',
-            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+            tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
         },
         serverType: 'geoserver'
     });
@@ -607,8 +617,11 @@
             Layer_Select,
             Layer_Measure],
         view: new ol.View({
+            //projection: 'EPSG:4326',
             center: ol.proj.fromLonLat([66.902, 48.714]),
-            zoom: 5
+            //center: [0, 0],
+            zoom: 5,
+            maxZoom: 10
         })
     });
 
@@ -838,20 +851,21 @@
     }
 
     function ChangeLayerMODIS() {
+        console.log($('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2));
         var Source_MODIS_New = new ol.source.TileWMS({
-            //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabel').html() + '&',
-            //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#dates').find(":selected").val() + '&',
-            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' +
-                $('#YearSnow').find(":selected").val() + '-' +
-                $('#MonthSnow').find(":selected").val() + '-' +
-                $('#DaySnow').find(":selected").val() + '&',
+            //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' +
+            //    $('#YearSnow').find(":selected").val() + '-' +
+            //    $('#MonthSnow').find(":selected").val() + '-' +
+            //    $('#DaySnow').find(":selected").val() + '&',
+            url: geoserver_url + geoserver_workspace_name + '/wms',
             params: {
                 'FORMAT': 'image/png',
                 'VERSION': '1.1.1',
-                tiled: false,
+                tiled: true,
+                "TIME": $('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2),
                 "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
                 "exceptions": 'application/vnd.ogc.se_inimage',
-                tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+                tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
             },
             serverType: 'geoserver'
         });
