@@ -545,6 +545,7 @@
             'VERSION': '1.1.1',
             tiled: true,
             "TIME": '2000-02-26',
+            "STYLES": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
             "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
             "exceptions": 'application/vnd.ogc.se_inimage',
             tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
@@ -621,7 +622,7 @@
             center: ol.proj.fromLonLat([66.902, 48.714]),
             //center: [0, 0],
             zoom: 5,
-            maxZoom: 10
+            maxZoom: 8
         })
     });
 
@@ -863,6 +864,7 @@
                 'VERSION': '1.1.1',
                 tiled: true,
                 "TIME": $('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2),
+                "STYLES": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
                 "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
                 "exceptions": 'application/vnd.ogc.se_inimage',
                 tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
