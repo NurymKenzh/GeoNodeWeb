@@ -90,12 +90,12 @@
     </header>    
     <div class="position-relative overflow-hidden bg-light">
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3" style="max-width: 80%;">
             @RenderBody()
         </main>
     </div>
     <!-- FOOTER -->
-    <footer class="footer bg-light border-top">
+    @*<footer class="footer bg-light border-top">
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md">
@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer>*@
     <script src="~/esnow/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/esnow/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

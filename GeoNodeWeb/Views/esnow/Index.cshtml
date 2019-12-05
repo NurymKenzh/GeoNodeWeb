@@ -577,7 +577,7 @@
     Layer_WMA.set('name', 'WMA');
     Layer_WMA.setOpacity(0.80);
 
-    console.log(atimes);
+    //console.log(atimes);
 
     //var url_Animator = geoserver_url + geoserver_workspace_name + '/wms/animate'; //?' + 'aparam=time&avalues=2000-02-26,2000-03-05,2000-03-13,2000-03-21,2000-03-29' + '&'
     //var Source_Animator = new ol.source.ImageWMS({
@@ -622,7 +622,7 @@
             center: ol.proj.fromLonLat([66.902, 48.714]),
             //center: [0, 0],
             zoom: 5,
-            maxZoom: 8
+            maxZoom: 10
         })
     });
 
@@ -1008,10 +1008,10 @@
                 if (result.length > 0) {
                     $('#featureId').val(result[0].get('Id'));
                     if ($('#gslayer').find(":selected").val() == 'wma_polygon') {
-                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' м<sup>2</sup>)');
+                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' км<sup>2</sup>)');
                     }
                     else if ($('#gslayer').find(":selected").val() == 'wma_height') {
-                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ' (' + result[0].get('area_km').toFixed(2) + ' м<sup>2</sup>)');
+                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('area_km').toFixed(2) + ' км<sup>2</sup>)');
                     }
                     $('#ChartsButton').show();
 
