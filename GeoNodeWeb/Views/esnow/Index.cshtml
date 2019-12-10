@@ -774,6 +774,7 @@
                 $.each(data.years, function() {
                     $("#YearSnow").append($("<option />").val(this).text(this));
                 });
+                $("#YearSnow option:last").attr("selected", "selected");
                 ChangeYear();
             },
             error: function () {
@@ -852,7 +853,7 @@
     }
 
     function ChangeLayerMODIS() {
-        console.log($('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2));
+        //console.log($('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2));
         var Source_MODIS_New = new ol.source.TileWMS({
             //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' +
             //    $('#YearSnow').find(":selected").val() + '-' +

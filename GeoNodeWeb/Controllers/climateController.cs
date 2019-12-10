@@ -24,6 +24,7 @@ namespace GeoNodeWeb.Controllers
     {
         public int resourcebase_ptr_id;
         public string name;
+        public string supplemental_information_en;
     }
 
     public class climateController : Controller
