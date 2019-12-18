@@ -15,121 +15,6 @@
 
 <input id="id" value="@ViewBag.Id" type="hidden" />
 
-<label>
-    С
-</label>
-<select id="chart1DateFrom" @*onchange="Chart1()"*@>
-    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
-    {
-        <option value="@dateTime">
-            @dateTime.ToString("yyyy-MM-dd")
-        </option>
-    }
-</select>
-<label>
-    По
-</label>
-<select id="chart1DateTo" @*onchange="Chart1()"*@>
-    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
-    {
-        <option value="@dateTime" selected="selected">
-            @dateTime.ToString("yyyy-MM-dd")
-        </option>
-    }
-</select>
-<input type="button" value="Обновить" onclick="Chart1()" />
-<canvas width="704" height="352" class="chartjs-render-monitor" id="canvas1" style="width: 704px; height: 352px; display: block;"></canvas>
-
-<label>
-    Спутник:
-</label>
-<label>
-    TERRA
-</label>
-<label>
-    Продукт:
-</label>
-<label>
-    MODIS 8-day
-</label>
-<label>
-    Среднее:
-</label>
-<label>
-    @ViewBag.Mean
-</label>
-<label>
-    Shape:
-</label>
-<label>
-    @ViewBag.ShapeName
-</label>
-<label>
-    Тип:
-</label>
-<select id="chart2DataType" onchange="Chart2()">
-    <option value="0">Потерянные данные</option>
-    <option value="1">Нет решения</option>
-    <option value="11">Ночь</option>
-    <option value="25">Нет снега</option>
-    <option value="37">Озеро</option>
-    <option value="39">Море</option>
-    <option value="50">Облако</option>
-    <option value="100">Лед</option>
-    <option value="200" selected="selected">Снег</option>
-    <option value="254">Детектор насыщен</option>
-    <option value="255">Заполнено</option>
-</select>
-<label>
-    Первый месяц:
-</label>
-<select id="chart2StartMonth" onchange="Chart2()">
-    <option value="1">Январь</option>
-    <option value="2">Февраль</option>
-    <option value="3">Март</option>
-    <option value="4">Апрель</option>
-    <option value="5">Май</option>
-    <option value="6">Июнь</option>
-    <option value="7">Июль</option>
-    <option value="8">Август</option>
-    <option value="9">Сентябрь</option>
-    <option value="10">Октябрь</option>
-    <option value="11">Ноябрь</option>
-    <option value="12">Декабрь</option>
-</select>
-<label>
-    Количество месяцев:
-</label>
-<select id="chart2MonthsCount" onchange="Chart2()">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-    <option value="11">11</option>
-    <option value="12" selected="selected">12</option>
-</select>
-<label>
-    Выбранные годы:
-</label>
-<select id="chart2Years" multiple onchange="Chart2()">
-    @foreach (int year in ((DateTime[])ViewBag.DateTime).Select(d => d.Date.Year).Distinct())
-    {
-        <option value="@year" selected="selected">
-            @year.ToString()
-        </option>
-    }
-</select>
-<div id="chart-container">
-    <canvas width="704" height="352" class="chartjs-render-monitor" id="canvas2" style="width: 704px; height: 352px; display: block;"></canvas>
-</div>
-
-
 @*<button onclick="download()">save chart as...</button>*@
 <label>
     Спутник:
@@ -207,6 +92,120 @@
 }
 <input type="button" value="Обновить" onclick="Chart3()" />
 <canvas width="704" height="352" class="chartjs-render-monitor" id="canvas3" style="width: 704px; height: 352px; display: block;"></canvas>
+
+<label>
+    С
+</label>
+<select id="chart1DateFrom" @*onchange="Chart1()"*@>
+    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
+    {
+        <option value="@dateTime">
+            @dateTime.ToString("yyyy-MM-dd")
+        </option>
+    }
+</select>
+<label>
+    По
+</label>
+<select id="chart1DateTo" @*onchange="Chart1()"*@>
+    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
+    {
+        <option value="@dateTime" selected="selected">
+            @dateTime.ToString("yyyy-MM-dd")
+        </option>
+    }
+</select>
+<input type="button" value="Обновить" onclick="Chart1()" />
+<canvas width="704" height="352" class="chartjs-render-monitor" id="canvas1" style="width: 704px; height: 352px; display: block;"></canvas>
+
+@*<label>
+        Спутник:
+    </label>
+    <label>
+        TERRA
+    </label>
+    <label>
+        Продукт:
+    </label>
+    <label>
+        MODIS 8-day
+    </label>
+    <label>
+        Среднее:
+    </label>
+    <label>
+        @ViewBag.Mean
+    </label>
+    <label>
+        Shape:
+    </label>
+    <label>
+        @ViewBag.ShapeName
+    </label>
+    <label>
+        Тип:
+    </label>
+    <select id="chart2DataType" onchange="Chart2()">
+        <option value="0">Потерянные данные</option>
+        <option value="1">Нет решения</option>
+        <option value="11">Ночь</option>
+        <option value="25">Нет снега</option>
+        <option value="37">Озеро</option>
+        <option value="39">Море</option>
+        <option value="50">Облако</option>
+        <option value="100">Лед</option>
+        <option value="200" selected="selected">Снег</option>
+        <option value="254">Детектор насыщен</option>
+        <option value="255">Заполнено</option>
+    </select>
+    <label>
+        Первый месяц:
+    </label>
+    <select id="chart2StartMonth" onchange="Chart2()">
+        <option value="1">Январь</option>
+        <option value="2">Февраль</option>
+        <option value="3">Март</option>
+        <option value="4">Апрель</option>
+        <option value="5">Май</option>
+        <option value="6">Июнь</option>
+        <option value="7">Июль</option>
+        <option value="8">Август</option>
+        <option value="9">Сентябрь</option>
+        <option value="10">Октябрь</option>
+        <option value="11">Ноябрь</option>
+        <option value="12">Декабрь</option>
+    </select>
+    <label>
+        Количество месяцев:
+    </label>
+    <select id="chart2MonthsCount" onchange="Chart2()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12" selected="selected">12</option>
+    </select>
+    <label>
+        Выбранные годы:
+    </label>
+    <select id="chart2Years" multiple onchange="Chart2()">
+        @foreach (int year in ((DateTime[])ViewBag.DateTime).Select(d => d.Date.Year).Distinct())
+        {
+            <option value="@year" selected="selected">
+                @year.ToString()
+            </option>
+        }
+    </select>
+    <div id="chart-container">
+        <canvas width="704" height="352" class="chartjs-render-monitor" id="canvas2" style="width: 704px; height: 352px; display: block;"></canvas>
+    </div>*@
 
 <script>
     var colors = [
@@ -728,7 +727,7 @@
 
     $(document).ready(function () {
         Chart1();
-        Chart2();
+        //Chart2();
         Chart3();
     });
 </script>
