@@ -86,13 +86,40 @@
     </select>*@
 @foreach (int year in ((DateTime[])ViewBag.DateTime).Select(d => d.Date.Year).Distinct())
 {
-    <input type="checkbox" name="chart3Years" value="@year" checked @*onchange="Chart3()"*@>
-    @year
-    <br>
+    if (year == ((DateTime[])ViewBag.DateTime).Select(d => d.Date.Year).Max())
+    {
+        <input type="checkbox" name="chart3Years" value="@year" checked @*onchange="Chart3()"*@>
+        @year
+        <br>
+    }
+    else
+    {
+        <input type="checkbox" name="chart3Years" value="@year" @*onchange="Chart3()"*@>
+        @year
+        <br>
+    }
 }
 <input type="button" value="Обновить" onclick="Chart3()" />
 <canvas width="704" height="352" class="chartjs-render-monitor" id="canvas3" style="width: 704px; height: 352px; display: block;"></canvas>
 
+<label>
+    Спутник:
+</label>
+<label>
+    TERRA
+</label>
+<label>
+    Продукт:
+</label>
+<label>
+    MODIS 8-day
+</label>
+<label>
+    Shape:
+</label>
+<label>
+    @ViewBag.ShapeName
+</label>
 <label>
     С
 </label>
