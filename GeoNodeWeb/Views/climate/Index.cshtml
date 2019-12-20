@@ -1,13 +1,14 @@
 ﻿@using GeoNodeWeb.Controllers
 @{
     ViewData["Title"] = "Карта";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutClimate.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 <script src="~/esnow/lib/moment.js/moment.js"></script>
 @*<script src="~/esnow/js/ClimSidebar.js"></script>*@
 <script src="~/esnow/lib/clim-sidebar/ClimSidebar.js"></script>
+<script src="~/lib/jquery-ui/jquery-ui.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <link href="~/esnow/css/site.css" rel="stylesheet" />
@@ -20,7 +21,7 @@
                 <a id="show-sidebar" class="btn btn-sm btn-info" href="#">
                     <i class="fa fa-bars"></i>
                 </a>
-                <nav id="sidebar" class="sidebar-wrapper border border-secondary">
+                <nav id="sidebar" class="sidebar-wrapper border border-light">
                     <div class="sidebar-content">
                         <div class="sidebar-brand">
                             <a href="#">menu</a>
@@ -116,7 +117,7 @@
                                 </li>
                                 <li class="sidebar-dropdown">
                                     <a href="#">
-                                        <i class="fa fa-globe"></i>
+                                        <i class="fa fa-globe" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
                                         <span>Base Maps</span>
                                     </a>
                                     <div class="sidebar-submenu">
@@ -210,7 +211,7 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <i class="fa fa-book"></i>
+                                        <i class="fa fa-book" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
                                         <span>Documentation</span>
                                         <span class="badge badge-pill badge-primary">i</span>
                                     </a>
@@ -228,15 +229,15 @@
                             <i class="fa fa-bar-chart-o" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
                         </a>
                         <a href="#">
-                            <i class="fa fa-book" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                            <i class="fa fa-list-alt" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
                         </a>
-                        <a href="#">
-                            <i class="fa fa-cog" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                        <a href="#" id="TitleHide" class="ui-state-default ui-corner-all">
+                            <i class="fa fa-bookmark" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
                         </a>
                     </div>
                 </nav>
                 <!-- sidebar-wrapper  -->
-                <footer class="footer-classic fixed-bottom border-top border-secondary" style="background: #2d3246;">
+                <footer class="footer-classic fixed-bottom border-top border-light" style="background: #2d3246;">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col">
@@ -258,10 +259,10 @@
             </div>
         </main>
         <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light"></div>
-    </div>
+    </div>    
     <div class="row justify-content-end">
-        <div class="card text-center text-white m-1 border border-secondary" style="background: #3a465d;">
-            <div class="card-body m-0 clickable close-icon p-3" data-effect="fadeOut" type="button">
+        <div id="MapTitle" class="card text-center text-white m-1 border border-light" style="background: #3a465d;">
+            <div class="card-body m-0 p-3">
                 <h5 class="card-title m-0">Card title</h5>
                 <p class="card-text">Some quick example text</p>
             </div>
@@ -783,7 +784,15 @@
 </script>
 @*Close button to card*@
 <script>
-    $('.close-icon').on('click', function () {
-        $(this).closest('.card').fadeOut();
-    })
+    $(function () {
+        // run the currently selected effect
+        function runEffect() {
+            // Run the effect
+            $("#MapTitle").toggle("clip");
+        };
+
+        $("#TitleHide").on("click", function () {
+            runEffect();
+        });
+    });
 </script>

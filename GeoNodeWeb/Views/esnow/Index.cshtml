@@ -1,7 +1,7 @@
 ﻿@using GeoNodeWeb.Controllers
 @{
     ViewData["Title"] = "Карта";
-    Layout = "~/Views/Shared/_LayoutMap.cshtml";
+    Layout = "~/Views/Shared/_LayoutEsnow.cshtml";
 }
 
 <link href="~/esnow/lib/jquery-ui/jquery-ui.css" rel="stylesheet" />
@@ -11,135 +11,15 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.2/TweenMax.min.js"></script>
 
-<style>
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 30px;
-        height: 17px;
-    }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #2196F3;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 13px;
-            width: 13px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-    input:checked + .slider {
-        background-color: #00ff21;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px #00ff21;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(13px);
-        -ms-transform: translateX(13px);
-        transform: translateX(13px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 17px;
-    }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-
-    body {
-        font-family: Signika Negative, sans-serif;
-        font-weight: 300;
-        /*color: white;*/
-        background-color: black;
-        text-align: center;
-    }
-
-    #demo {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    #bg {
-        background-color: #000;
-        position: relative;
-        overflow: hidden;
-        display: inline-block;
-        width: 500px;
-        height: 70px;
-        border-radius: 8px;
-        border: 2px solid #777;
-    }
-
-    #text {
-        position: absolute;
-        text-align: center;
-        width: 500px;
-        height: 70px;
-        line-height: 68px;
-        font-size: 28px;
-    }
-
-        #text span {
-            -webkit-font-smoothing: antialiased;
-            -moz-font-smoothing: antialiased;
-            position: relative;
-            display: inline-block;
-            color: #FFF;
-        }
-
-    #slider {
-        display: inline-block;
-        width: 500px;
-        height: 12px;
-        margin: 8px 0px 8px 6px;
-    }
-
-    #controls button {
-        width: 80px;
-    }
-
-    #controls input {
-        display: inline;
-        padding: 2px;
-        margin: 2px;
-    }
-</style>
-
-<div class="container-fluid">
+<div class="container-fluid p-0">
     <div class="row">
         <main role="main" class="col-md-12 ml-sm-auto col-lg-12 p-0">
-            <div class="row justify-content-end mr-3">
+            <div class="row justify-content-end mr-2">
                 <article>
-                    <nav class="col-10 col-md-auto bg-light sidebar">
+                    <nav id="sidebar" class="col-2 col-md-auto bg-light border-info">
                         <div class="media">
                             <div class="media-body text-info">
-                                <h5 class="mt-2 mb-2">ESNOW</h5>
+                                <h5 class="mt-2">ESNOW</h5>
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
@@ -153,15 +33,15 @@
                         </label>
                         <select class="custom-select custom-select-sm Snow" id="DaySnow" type="range" onchange="ChangeLayerMODIS()">
                             @*@foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
-                                {
-                                    <option value="@dateTime.ToString(" yyyy-MM-dd")">
-                                        @dateTime.ToString("yyyy-MM-dd")
-                                    </option>
-                                }*@
+                        {
+                            <option value="@dateTime.ToString(" yyyy-MM-dd")">
+                                @dateTime.ToString("yyyy-MM-dd")
+                            </option>
+                        }*@
                         </select>
                         @*@{
-                                DateTime[] dates = ViewBag.DateTime;
-                            }*@
+                        DateTime[] dates = ViewBag.DateTime;
+                    }*@
                         <input id="layerMODISOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
                         <div class="dropdown-divider"></div>
                         <div data-spy="scroll" style="overflow:scroll;overflow-x:hidden;height:auto;">
@@ -215,17 +95,17 @@
                                                 </label>
                                             </div>
                                             @*<div class="form-check text-black-50">
-                                                    <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
-                                                    <label class="form-check-label" for="KATO">
-                                                        <small> ВХБ</small>
-                                                    </label>
-                                                </div>
-                                                <div class="form-check text-black-50">
-                                                    <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
-                                                    <label class="form-check-label" for="KATO">
-                                                        <small> ВХУ</small>
-                                                    </label>
-                                                </div>*@
+                                            <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
+                                            <label class="form-check-label" for="KATO">
+                                                <small> ВХБ</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check text-black-50">
+                                            <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
+                                            <label class="form-check-label" for="KATO">
+                                                <small> ВХУ</small>
+                                            </label>
+                                        </div>*@
                                             <select id="gslayer" onchange="ChangeLayers('gslayer');">
                                                 @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
                                                 {
@@ -281,10 +161,30 @@
                         </div>
                         <div class="dropdown-divider"></div>
                     </nav>
+
                 </article>
             </div>
-            <div id="map" class="map"></div>
+            <footer class="footer-classic fixed-bottom border-top border-light" style="background: #2d3246;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary btn-sm m-2">
+                                Notifications <span class="badge badge-light">4</span>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <div class="progress mt-3">
+                                <div class="progress-bar align-bottom" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="10" aria-valuemax="100">25%</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </main>
+        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light"></div>
     </div>
 </div>
 <div id="ndsilegenddialog" title="Легенда" hidden="hidden" style="width: 200px;">
