@@ -121,9 +121,9 @@
                                     </a>
                                     <div class="sidebar-submenu">
                                         <ul>
-                                            <li>
+                                            @*<li>
                                                 <a href="#">Google maps</a>
-                                            </li>
+                                            </li>*@
                                             <li>
 
                                                 <select id="datespr_pd_avg_m_rcp45_10" onchange="ChangeLayer()" hidden="hidden">
@@ -246,7 +246,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="progress mt-3">
-                                    <div class="progress-bar align-bottom" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="10" aria-valuemax="100">25%</div>
+                                    <div class="progress-bar align-bottom" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="10" aria-valuemax="100">50%</div>
                                 </div>
                             </div>
                             <div class="col">
@@ -448,6 +448,25 @@
     Layer_pr_pd_avg_m_rcp45_10.set('name', 'pr_pd_avg_m_rcp45_10');
     Layer_pr_pd_avg_m_rcp45_10.setOpacity(0.80);
 
+    var url_Climate = geoserver_url + geoserver_workspace_name + '/wms';
+    var Source_Climate = new ol.source.TileWMS({
+        url: url_Climate,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": geoserver_workspace_name + ':Climate',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_Climate = new ol.layer.Tile({
+        source: Source_Climate
+    });
+    Layer_Climate.set('name', 'Climate');
+    Layer_Climate.setOpacity(0.80);
+
     //var url_WMA = geoserver_url + 'geonode' + '/wms';
     //var Source_WMA = new ol.source.TileWMS({
     //    url: url_WMA,
@@ -471,7 +490,8 @@
         target: 'map',
         layers: [
             Layer_Base,
-            Layer_pr_pd_avg_m_rcp45_10,
+            Layer_Climate
+            //Layer_pr_pd_avg_m_rcp45_10,
             //Layer_WMA
         ],
         view: new ol.View({
@@ -572,6 +592,20 @@
     function ChangeLayerClimate() {
         var layerClimate = Parameter + '_' + SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         console.log(layerClimate);
+
+        var Source_Climate_New = new ol.source.TileWMS({
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabelpr_pd_avg_m_rcp45_10').html() + '&',
+            params: {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                tiled: true,
+                "LAYERS": geoserver_workspace_name + ':' + layerClimate,
+                "exceptions": 'application/vnd.ogc.se_inimage',
+                tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+            },
+            serverType: 'geoserver'
+        });
+        Layer_Climate.setSource(Source_Climate_New);
     }
 </script>
 
