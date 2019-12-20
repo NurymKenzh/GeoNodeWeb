@@ -1,7 +1,7 @@
 ﻿@using GeoNodeWeb.Controllers
 @{
     ViewData["Title"] = "Карта";
-    Layout = "~/Views/Shared/_LayoutClimate.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
@@ -24,7 +24,7 @@
                 <nav id="sidebar" class="sidebar-wrapper border border-light">
                     <div class="sidebar-content">
                         <div class="sidebar-brand">
-                            <a href="#">menu</a>
+                            <a href="#">МЕНЮ</a>
                             <div id="close-sidebar">
                                 <i class="fa fa-angle-double-left"></i>
                             </div>
@@ -33,7 +33,7 @@
                         <div class="sidebar-menu">
                             <ul>
                                 <li class="header-menu">
-                                    <span class="text-white-50">Tematic</span>
+                                    <span class="text-white-50">Период</span>
                                 </li>
                                 <li class="header-menu">
                                     <div class="current_items">
@@ -60,7 +60,7 @@
                                 <li class="sidebar-dropdown">
                                     <a href="#">
                                         <i class="fa fa-tasks" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
-                                        <span>RCP 8.5</span>
+                                        <span>RCP</span>
                                     </a>
                                     <div class="sidebar-submenu">
                                         <ul>
