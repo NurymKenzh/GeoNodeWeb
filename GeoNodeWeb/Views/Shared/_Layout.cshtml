@@ -62,38 +62,82 @@
     <script src="~/esnow/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="esnow" asp-action="Index">
-                    <img class="mb-1" src="~/esnow/lib/images/Logo Water G.jpg" height="35" alt="">
-                    <span class="font-weight-light text-white">E </span><span class="font-weight-light text-white">Snow</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarsExample07">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-info-circle"></i> Приложения</a>
-                            <div class="dropdown-menu" aria-labelledby="dropdown07">
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
-                            </div>
-                        </li>
-                    </ul>
+    <header>        
+        <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+            <a class="navbar-brand ml-5" asp-area="" asp-controller="Home" asp-action="Index">
+                <img class="mb-1" src="~/lib/images/GeoNode.png" height="20" alt="">
+                <span class="font-weight-bold text-white">GeoNode</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="btn-group btn-group-toggle ml-3 mr-3" data-toggle="buttons">
+                    <label class="btn btn-outline-light btn-sm active">
+                        <input type="radio" name="parameter" id="Temperature" autocomplete="off" checked onchange="ChangeParameter()"> Температура воздуха
+                    </label>
+                    <label class="btn btn-outline-light btn-sm">
+                        <input type="radio" name="parameter" id="Precipitation" autocomplete="off" onchange="ChangeParameter()"> Осадки
+                    </label>
+                    <label class="btn btn-outline-light btn-sm">
+                        <input type="radio" name="parameter" id="Evapotranspiration" autocomplete="off" onchange="ChangeParameter()"> Эвапотранспирация
+                    </label>
                 </div>
+                <ul class="navbar-nav mr-auto" id="subparameterlinks">
+                    <li class="nav-item active Temperature">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('max')">максимальная температура <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('pd')">средняя температура</a>
+                    </li>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('min')">минимальная температура</a>
+                    </li>
+                    @*<li class="nav-item Temperature">
+                        <a class="nav-link" href="#">Отклонения максимальной температуры от значений базового периода</a>
+                    </li>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#">Отклонения средней температуры</a>
+                    </li>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#">Отклонения минимальной температуры</a>
+                    </li>*@
+                    <li class="nav-item active Precipitation">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('avg')">Осадки <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item Precipitation">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения средней суммы осадков от значений базового периода в мм</a>
+                    </li>
+                    <li class="nav-item Precipitation">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения средней суммы осадков от значений базового периода в %</a>
+                    </li>
+                    <li class="nav-item active Evapotranspiration">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('?')">Эвапотранспирация <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item Evapotranspiration">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения эвапотранспирации от значений базового периода</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Другие</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown07">
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения максимальной температуры от значений базового периода</a>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения средней температуры</a>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения минимальной температуры</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
+                        </div>
+                    </li>
+                </ul>
             </div>
-            <div class="float-right mr-5"><button class="menu btn btn-outline-light btn-sm"><i class="fa fa-bars"></i> Меню</button></div>
         </nav>
-    </header>    
-    <div class="position-relative overflow-hidden bg-light">
+    </header>
+    <main role="main" class="flex-shrink-0">
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3" style="max-width: 80%;">
+        <div class="container-fluid">
             @RenderBody()
-        </main>
-    </div>
+        </div>
+    </main>
     <!-- FOOTER -->
     @*<footer class="footer bg-light border-top">
         <div class="container">

@@ -142,8 +142,9 @@ namespace GeoNodeWeb.Controllers
             using (var connection = new NpgsqlConnection(geoportalConnection))
             {
                 connection.Open();
-                var layers_layers_ = connection.Query<layers_layer>($"SELECT resourcebase_ptr_id, name FROM public.layers_layer;");
+                var layers_layers_ = connection.Query<layers_layer>($"SELECT resourcebase_ptr_id, name, supplemental_information_en FROM public.layers_layer;");
                 layers_layers = layers_layers_.ToList();
+                ViewBag.ShapeName = layers_layers.FirstOrDefault(l => l.name == LayerName)?.supplemental_information_en;
             }
             using (var connection = new NpgsqlConnection(postgresConnection))
             {
@@ -152,14 +153,30 @@ namespace GeoNodeWeb.Controllers
                 esnow_datasetcalculationlayers = esnow_datasetcalculationlayers_.ToList();
             }
             layers_layer layers_layer = layers_layers.FirstOrDefault(l => l.name == LayerName);
+            //using (var connection = new NpgsqlConnection(geoportalConnection))
+            //    {
+            //        connection.Open();
+            //        var GSLayers = connection.Query<GSLayer>($"SELECT resourcebase_ptr_id, title_en, supplemental_information_en FROM public.layers_layer");
+            //        using (var connection2 = new NpgsqlConnection(postgresConnection))
+            //        {
+            //            connection2.Open();
+            //            var esnow_datasetcalculationlayers = connection2.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
+            //            ViewBag.GSLayers = GSLayers
+            //                .Where(g => esnow_datasetcalculationlayers.Select(l => l.layer_id).Contains(g.resourcebase_ptr_id))
+            //                .OrderBy(l => l.resourcebase_ptr_id)
+            //                .ToArray();
+            //        }
+            //    }
             esnow_datasetcalculationlayer esnow_datasetcalculationlayer = esnow_datasetcalculationlayers
                 .FirstOrDefault(l => l.layer_id == layers_layer.resourcebase_ptr_id);
+
             int layer_id = esnow_datasetcalculationlayer.id;
             using (var connection = new NpgsqlConnection(geoserverConnection))
             {
                 connection.Open();
                 var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
                 ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
+                ViewBag.Mean = $"{datetime.Min().Year.ToString()} - {datetime.Max().Year.ToString()}";
             }
             ViewBag.LayerId = layer_id;
             return View();

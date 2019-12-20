@@ -1,0 +1,1419 @@
+﻿@using GeoNodeWeb.Controllers
+@{
+    ViewData["Title"] = "Карта";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+<script src="~/esnow/lib/moment.js/moment.js"></script>
+@*<script src="~/esnow/js/ClimSidebar.js"></script>*@
+<script src="~/esnow/lib/clim-sidebar/ClimSidebar.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<link href="~/esnow/css/site.css" rel="stylesheet" />
+<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+
+
+<div class="container-fluid p-0">
+    <div class="row">
+        <main role="main" class="sticky-top">
+            <div class="page-wrapper chiller-theme toggled">
+                <a id="show-sidebar" class="btn btn-sm btn-info" href="#">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <nav id="sidebar" class="sidebar-wrapper border border-secondary">
+                    <div class="sidebar-content">
+                        <div class="sidebar-brand">
+                            <a href="#">menu</a>
+                            <div id="close-sidebar">
+                                <i class="fa fa-angle-double-left"></i>
+                            </div>
+                        </div>
+                        <!-- sidebar-header  -->
+                        <div class="sidebar-menu">
+                            <ul>
+                                <li class="header-menu">
+                                    <span class="text-white-50">Tematic</span>
+                                </li>
+                                <li class="header-menu">
+                                    <div class="current_items">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                            <label class="form-check-label" for="exampleRadios1">
+                                                10 years
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                            <label class="form-check-label" for="exampleRadios2">
+                                                20 years
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+                                            <label class="form-check-label" for="exampleRadios3">
+                                                30 years
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="sidebar-dropdown">
+                                    <a href="#">
+                                        <i class="fa fa-tasks" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
+                                        <span>RCP 8.5</span>
+                                    </a>
+                                    <div class="sidebar-submenu">
+                                        <ul>
+                                            <li class="header-menu">
+                                                <div class="current_items">
+                                                    <div class="form-check1">
+                                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4">
+                                                        <label class="form-check-label" for="exampleRadios4">
+                                                            medium temperature
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check1">
+                                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios5" value="option5">
+                                                        <label class="form-check-label" for="exampleRadios5">
+                                                            large temperature
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="sidebar-dropdown">
+                                    <a href="#">
+                                        <i class="fa fa-globe"></i>
+                                        <span>Base Maps</span>
+                                    </a>
+                                    <div class="sidebar-submenu">
+                                        <ul>
+                                            <li>
+                                                <a href="#">Google maps</a>
+                                            </li>
+                                            <li>
+
+                                                <select id="datespr_pd_avg_m_rcp45_10" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimepr_pd_avg_m_rcp45_10)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datespr_pd_avg_m_rcp45_10 = ViewBag.DateTimepr_pd_avg_m_rcp45_10;
+                                                }
+
+                                                <label class="Climate pr_pd_avg_m_rcp45_10">Дата: </label><label class="Climate pr_pd_avg_m_rcp45_10" id="DateLabelpr_pd_avg_m_rcp45_10"></label>
+                                                <input class="Climate pr_pd_avg_m_rcp45_10" id="datepr_pd_avg_m_rcp45_10" type="range" min="0" value="0" max="@(datespr_pd_avg_m_rcp45_10.Count()-1)" step="1">
+
+                                                @*<select id="datespr_pd_avg_m_rcp45_20_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimepr_pd_avg_m_rcp45_20_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datespr_pd_avg_m_rcp45_20_2011_2090 = ViewBag.DateTimepr_pd_avg_m_rcp45_20_2011_2090;
+                                                }
+
+                                                <label class="Climate pr_pd_avg_m_rcp45_20_2011_2090">Дата: </label><label class="Climate pr_pd_avg_m_rcp45_20_2011_2090" id="DateLabelpr_pd_avg_m_rcp45_20_2011_2090"></label>
+                                                <input class="Climate pr_pd_avg_m_rcp45_20_2011_2090" id="datepr_pd_avg_m_rcp45_20_2011_2090" type="range" min="0" value="0" max="@(datespr_pd_avg_m_rcp45_20_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datespr_pd_avg_m_rcp45_30_2011_2070" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimepr_pd_avg_m_rcp45_30_2011_2070)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datespr_pd_avg_m_rcp45_30_2011_2070 = ViewBag.DateTimepr_pd_avg_m_rcp45_30_2011_2070;
+                                                }
+
+                                                <label class="Climate pr_pd_avg_m_rcp45_30_2011_2070">Дата: </label><label class="Climate pr_pd_avg_m_rcp45_30_2011_2070" id="DateLabelpr_pd_avg_m_rcp45_30_2011_2070"></label>
+                                                <input class="Climate pr_pd_avg_m_rcp45_30_2011_2070" id="datepr_pd_avg_m_rcp45_30_2011_2070" type="range" min="0" value="0" max="@(datespr_pd_avg_m_rcp45_30_2011_2070.Count()-1)" step="1">
+
+                                                <select id="datestas_pd_avg_m_rcp45_10_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetas_pd_avg_m_rcp45_10_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestas_pd_avg_m_rcp45_10_2011_2090 = ViewBag.DateTimetas_pd_avg_m_rcp45_10_2011_2090;
+                                                }
+
+                                                <label class="Climate tas_pd_avg_m_rcp45_10_2011_2090">Дата: </label><label class="Climate tas_pd_avg_m_rcp45_10_2011_2090" id="DateLabeltas_pd_avg_m_rcp45_10_2011_2090"></label>
+                                                <input class="Climate tas_pd_avg_m_rcp45_10_2011_2090" id="datetas_pd_avg_m_rcp45_10_2011_2090" type="range" min="0" value="0" max="@(datestas_pd_avg_m_rcp45_10_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datestas_pd_avg_m_rcp45_20_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetas_pd_avg_m_rcp45_20_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestas_pd_avg_m_rcp45_20_2011_2090 = ViewBag.DateTimetas_pd_avg_m_rcp45_20_2011_2090;
+                                                }
+
+                                                <label class="Climate tas_pd_avg_m_rcp45_20_2011_2090">Дата: </label><label class="Climate tas_pd_avg_m_rcp45_20_2011_2090" id="DateLabeltas_pd_avg_m_rcp45_20_2011_2090"></label>
+                                                <input class="Climate tas_pd_avg_m_rcp45_20_2011_2090" id="datetas_pd_avg_m_rcp45_20_2011_2090" type="range" min="0" value="0" max="@(datestas_pd_avg_m_rcp45_20_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datestas_pd_avg_m_rcp45_30_2011_2070" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetas_pd_avg_m_rcp45_30_2011_2070)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestas_pd_avg_m_rcp45_30_2011_2070 = ViewBag.DateTimetas_pd_avg_m_rcp45_30_2011_2070;
+                                                }
+
+                                                <label class="Climate tas_pd_avg_m_rcp45_30_2011_2070">Дата: </label><label class="Climate tas_pd_avg_m_rcp45_30_2011_2070" id="DateLabeltas_pd_avg_m_rcp45_30_2011_2070"></label>
+                                                <input class="Climate tas_pd_avg_m_rcp45_30_2011_2070" id="datetas_pd_avg_m_rcp45_30_2011_2070" type="range" min="0" value="0" max="@(datestas_pd_avg_m_rcp45_30_2011_2070.Count()-1)" step="1">
+
+                                                <select id="datestasmax_pd_avg_m_rcp45_10_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetasmax_pd_avg_m_rcp45_10_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestasmax_pd_avg_m_rcp45_10_2011_2090 = ViewBag.DateTimetasmax_pd_avg_m_rcp45_10_2011_2090;
+                                                }
+
+                                                <label class="Climate tasmax_pd_avg_m_rcp45_10_2011_2090">Дата: </label><label class="Climate tasmax_pd_avg_m_rcp45_10_2011_2090" id="DateLabeltasmax_pd_avg_m_rcp45_10_2011_2090"></label>
+                                                <input class="Climate tasmax_pd_avg_m_rcp45_10_2011_2090" id="datetasmax_pd_avg_m_rcp45_10_2011_2090" type="range" min="0" value="0" max="@(datestasmax_pd_avg_m_rcp45_10_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datestasmax_pd_avg_m_rcp45_20_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetasmax_pd_avg_m_rcp45_20_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestasmax_pd_avg_m_rcp45_20_2011_2090 = ViewBag.DateTimetasmax_pd_avg_m_rcp45_20_2011_2090;
+                                                }
+
+                                                <label class="Climate tasmax_pd_avg_m_rcp45_20_2011_2090">Дата: </label><label class="Climate tasmax_pd_avg_m_rcp45_20_2011_2090" id="DateLabeltasmax_pd_avg_m_rcp45_20_2011_2090"></label>
+                                                <input class="Climate tasmax_pd_avg_m_rcp45_20_2011_2090" id="datetasmax_pd_avg_m_rcp45_20_2011_2090" type="range" min="0" value="0" max="@(datestasmax_pd_avg_m_rcp45_20_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datestasmax_pd_avg_m_rcp45_30_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetasmax_pd_avg_m_rcp45_30_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestasmax_pd_avg_m_rcp45_30_2011_2090 = ViewBag.DateTimetasmax_pd_avg_m_rcp45_30_2011_2090;
+                                                }
+
+                                                <label class="Climate tasmax_pd_avg_m_rcp45_30_2011_2090">Дата: </label><label class="Climate tasmax_pd_avg_m_rcp45_30_2011_2090" id="DateLabeltasmax_pd_avg_m_rcp45_30_2011_2090"></label>
+                                                <input class="Climate tasmax_pd_avg_m_rcp45_30_2011_2090" id="datetasmax_pd_avg_m_rcp45_30_2011_2090" type="range" min="0" value="0" max="@(datestasmax_pd_avg_m_rcp45_30_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datestasmin_pd_avg_m_rcp45_10_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetasmin_pd_avg_m_rcp45_10_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestasmin_pd_avg_m_rcp45_10_2011_2090 = ViewBag.DateTimetasmin_pd_avg_m_rcp45_10_2011_2090;
+                                                }
+
+                                                <label class="Climate tasmin_pd_avg_m_rcp45_10_2011_2090">Дата: </label><label class="Climate tasmin_pd_avg_m_rcp45_10_2011_2090" id="DateLabeltasmin_pd_avg_m_rcp45_10_2011_2090"></label>
+                                                <input class="Climate tasmin_pd_avg_m_rcp45_10_2011_2090" id="datetasmin_pd_avg_m_rcp45_10_2011_2090" type="range" min="0" value="0" max="@(datestasmin_pd_avg_m_rcp45_10_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datestasmin_pd_avg_m_rcp45_20_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetasmin_pd_avg_m_rcp45_20_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestasmin_pd_avg_m_rcp45_20_2011_2090 = ViewBag.DateTimetasmin_pd_avg_m_rcp45_20_2011_2090;
+                                                }
+
+                                                <label class="Climate tasmin_pd_avg_m_rcp45_20_2011_2090">Дата: </label><label class="Climate tasmin_pd_avg_m_rcp45_20_2011_2090" id="DateLabeltasmin_pd_avg_m_rcp45_20_2011_2090"></label>
+                                                <input class="Climate tasmin_pd_avg_m_rcp45_20_2011_2090" id="datetasmin_pd_avg_m_rcp45_20_2011_2090" type="range" min="0" value="0" max="@(datestasmin_pd_avg_m_rcp45_20_2011_2090.Count()-1)" step="1">
+
+                                                <select id="datestasmin_pd_avg_m_rcp45_30_2011_2090" onchange="ChangeLayer()" hidden="hidden">
+                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimetasmin_pd_avg_m_rcp45_30_2011_2090)
+                                                    {
+                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
+                                                            @dateTime.ToString("yyyy-MM-dd")
+                                                        </option>
+                                                    }
+                                                </select>
+                                                @{
+                                                    DateTime[] datestasmin_pd_avg_m_rcp45_30_2011_2090 = ViewBag.DateTimetasmin_pd_avg_m_rcp45_30_2011_2090;
+                                                }
+
+                                                <label class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090">Дата: </label><label class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090" id="DateLabeltasmin_pd_avg_m_rcp45_30_2011_2090"></label>
+                                                <input class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090" id="datetasmin_pd_avg_m_rcp45_30_2011_2090" type="range" min="0" value="0" max="@(datestasmin_pd_avg_m_rcp45_30_2011_2090.Count()-1)" step="1">*@
+
+                                                <select id="gslayer" onchange="ChangeLayers()">
+                                                    @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
+                                                    {
+                                                        <option value="@gSLayer.title_en">
+                                                            @gSLayer.supplemental_information_en
+                                                        </option>
+                                                    }
+                                                </select>
+                                                <input type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
+                                                <input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+
+
+                                                <label>
+                                                    <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
+                                                    Базовый слой
+                                                </label>
+                                                <input id="layerBaseOpacity" type="range" min="0" max="100" value="100" oninput="ChangeLayers()" />
+                                                <select id="layerBaseType" onchange="ChangeLayers()">
+                                                    <option value="BingAerialWithLabels">Bing Aerial</option>
+                                                    <option value="OSM">OpenStreetMap</option>
+                                                    <option value="BingRoadStatic">Bing Road (static)</option>
+                                                    <option value="BingRoadDynamic">Bing Road (dynamic)</option>
+                                                    <option value="HERENormalDay">HERE Normal Day</option>
+                                                    <option value="HERENormalDayTransit">HERE Normal Day Transit</option>
+                                                    <option value="HERETerrainDay">HERE Terrain Day</option>
+                                                    <option value="HEREHybridDay">HERE Hybrid Day</option>
+                                                    <option value="StamenWatercolor">Stamen Watercolor</option>
+                                                    <option value="StamenTerrain">Stamen Terrain</option>
+                                                    <option value="StamenToner">Stamen Toner</option>
+                                                    <option value="ArcGIS">ArcGIS</option>
+                                                    <option value="ThunderforestOpenCycleMap">Thunderforest OpenCycleMap</option>
+                                                    <option value="ThunderforestTransport">Thunderforest Transport</option>
+                                                    <option value="ThunderforestLandscape">Thunderforest Landscape</option>
+                                                    <option value="ThunderforestOutdoors">Thunderforest Outdoors</option>
+                                                    <option value="ThunderforestSpinalMap">Thunderforest Spinal Map</option>
+                                                    <option value="ThunderforestPioneer">Thunderforest Pioneer</option>
+                                                    <option value="ThunderforestMobileAtlas">Thunderforest Mobile Atlas</option>
+                                                    <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
+                                                </select>
+
+                                                @*<select id="layerClimate" onchange="ChangeLayersClimate()">
+                                                    <option value="pr_pd_avg_m_rcp45_10">Среднемноголетняя месячная сумма осадков в разрезе 10-летних периодов</option>
+                                                    <option value="pr_pd_avg_m_rcp45_20_2011_2090">Среднемноголетняя месячная сумма осадков в разрезе 20-летних периодов</option>
+                                                    <option value="pr_pd_avg_m_rcp45_30_2011_2070">Среднемноголетняя месячная сумма осадков в разрезе 30-летних периодов</option>
+                                                    <option value="tas_pd_avg_m_rcp45_10_2011_2090">Среднемесячная температура воздуха в разрезе 10-летних периодов</option>
+                                                    <option value="tas_pd_avg_m_rcp45_20_2011_2090">Среднемесячная температура воздуха в разрезе 20-летних периодов</option>
+                                                    <option value="tas_pd_avg_m_rcp45_30_2011_2070">Среднемесячная температура воздуха в разрезе 30-летних периодов</option>
+                                                    <option value="tasmax_pd_avg_m_rcp45_10_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 10-летних периодов</option>
+                                                    <option value="tasmax_pd_avg_m_rcp45_20_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 20-летних периодов</option>
+                                                    <option value="tasmax_pd_avg_m_rcp45_30_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 30-летних периодов</option>
+                                                    <option value="tasmin_pd_avg_m_rcp45_10_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 10-летних периодов</option>
+                                                    <option value="tasmin_pd_avg_m_rcp45_20_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 20-летних периодов</option>
+                                                    <option value="tasmin_pd_avg_m_rcp45_30_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 30-летних периодов</option>
+                                                </select>*@
+
+                                                <label class="Climate pr_pd_avg_m_rcp45_10">
+                                                    <input type="checkbox" id="layerpr_pd_avg_m_rcp45_10Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate pr_pd_avg_m_rcp45_10" id="layerpr_pd_avg_m_rcp45_10Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                @*<label class="Climate pr_pd_avg_m_rcp45_20_2011_2090">
+                                                    <input type="checkbox" id="layerpr_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate pr_pd_avg_m_rcp45_20_2011_2090" id="layerpr_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate pr_pd_avg_m_rcp45_30_2011_2070">
+                                                    <input type="checkbox" id="layerpr_pd_avg_m_rcp45_30_2011_2070Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate pr_pd_avg_m_rcp45_30_2011_2070" id="layerpr_pd_avg_m_rcp45_30_2011_2070Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tas_pd_avg_m_rcp45_10_2011_2090">
+                                                    <input type="checkbox" id="layertas_pd_avg_m_rcp45_10_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tas_pd_avg_m_rcp45_10_2011_2090" id="layertas_pd_avg_m_rcp45_10_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tas_pd_avg_m_rcp45_20_2011_2090">
+                                                    <input type="checkbox" id="layertas_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tas_pd_avg_m_rcp45_20_2011_2090" id="layertas_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tas_pd_avg_m_rcp45_30_2011_2070">
+                                                    <input type="checkbox" id="layertas_pd_avg_m_rcp45_30_2011_2070Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tas_pd_avg_m_rcp45_30_2011_2070" id="layertas_pd_avg_m_rcp45_30_2011_2070Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tasmax_pd_avg_m_rcp45_10_2011_2090">
+                                                    <input type="checkbox" id="layertasmax_pd_avg_m_rcp45_10_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tasmax_pd_avg_m_rcp45_10_2011_2090" id="layertasmax_pd_avg_m_rcp45_10_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tasmax_pd_avg_m_rcp45_20_2011_2090">
+                                                    <input type="checkbox" id="layertasmax_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tasmax_pd_avg_m_rcp45_20_2011_2090" id="layertasmax_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tasmax_pd_avg_m_rcp45_30_2011_2090">
+                                                    <input type="checkbox" id="layertasmax_pd_avg_m_rcp45_30_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tasmax_pd_avg_m_rcp45_30_2011_2090" id="layertasmax_pd_avg_m_rcp45_30_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tasmin_pd_avg_m_rcp45_10_2011_2090">
+                                                    <input type="checkbox" id="layertasmin_pd_avg_m_rcp45_10_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tasmin_pd_avg_m_rcp45_10_2011_2090" id="layertasmin_pd_avg_m_rcp45_10_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tasmin_pd_avg_m_rcp45_20_2011_2090">
+                                                    <input type="checkbox" id="layertasmin_pd_avg_m_rcp45_20_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tasmin_pd_avg_m_rcp45_20_2011_2090" id="layertasmin_pd_avg_m_rcp45_20_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                <label class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090">
+                                                    <input type="checkbox" id="layertasmin_pd_avg_m_rcp45_30_2011_2090Show" checked="checked" onchange="ChangeLayers()">
+                                                </label>
+                                                <input class="Climate tasmin_pd_avg_m_rcp45_30_2011_2090" id="layertasmin_pd_avg_m_rcp45_30_2011_2090Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />*@
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="header-menu">
+                                    <span class="text-white-50">Extra</span>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-book"></i>
+                                        <span>Documentation</span>
+                                        <span class="badge badge-pill badge-primary">i</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- sidebar-menu  -->
+                    </div>
+                    <!-- sidebar-content  -->
+                    <div class="sidebar-footer">
+                        <a href="#">
+                            <i class="fa fa-file" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fa fa-bar-chart-o" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fa fa-book" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fa fa-cog" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                        </a>
+                    </div>
+                </nav>
+                <!-- sidebar-wrapper  -->
+                <footer class="footer-classic fixed-bottom border-top border-secondary" style="background: #2d3246;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-primary btn-sm m-2">
+                                    Notifications <span class="badge badge-light">4</span>
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <div class="progress mt-3">
+                                    <div class="progress-bar align-bottom" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="10" aria-valuemax="100">25%</div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light"></div>
+    </div>
+    <div class="row justify-content-end">
+        <div class="card text-center text-white m-1 border border-secondary" style="background: #3a465d;">
+            <div class="card-body m-0 clickable close-icon p-3" data-effect="fadeOut" type="button">
+                <h5 class="card-title m-0">Card title</h5>
+                <p class="card-text">Some quick example text</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@* Layers, Measure, map *@
+<script type="text/javascript">
+    var geoserver_url = "@ViewBag.GeoServerUrl",
+        geoserver_workspace_name = "climate";
+
+    var HEREappId = 'SLdBasp4s1oq2oUbVGxy';
+    var HEREappCode = 'D9-h9iVhjgUB_9eUlFETXA';
+
+    var Source_OSM = new ol.source.OSM();
+    var Layer_Base = new ol.layer.Tile({
+        source: Source_OSM
+    });
+    Layer_Base.set('name', 'Base');
+    Layer_Base.setOpacity(0.80);
+
+    Source_BingAerialWithLabels = new ol.source.BingMaps({
+        key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
+        imagerySet: 'AerialWithLabels',
+    });
+    Source_BingRoadStatic = new ol.source.BingMaps({
+        key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
+        imagerySet: 'Road',
+    });
+    Source_BingRoadDynamic = new ol.source.BingMaps({
+        key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
+        imagerySet: 'RoadOnDemand',
+    });
+
+    var urlTpl = 'https://{1-4}.{base}.maps.cit.api.here.com' +
+        '/{type}/2.1/maptile/newest/{scheme}/{z}/{x}/{y}/256/png' +
+        '?app_id={app_id}&app_code={app_code}';
+    function HEREcreateUrl(tpl, HERElayerDesc) {
+        return tpl
+            .replace('{base}', HERElayerDesc.base)
+            .replace('{type}', HERElayerDesc.type)
+            .replace('{scheme}', HERElayerDesc.scheme)
+            .replace('{app_id}', HERElayerDesc.app_id)
+            .replace('{app_code}', HERElayerDesc.app_code);
+    };
+
+    var HERElayerDescNormalDay = {
+        base: 'base',
+        type: 'maptile',
+        scheme: 'normal.day',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HERENormalDay = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescNormalDay),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' +
+            '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var HERElayerDescNormalDayTransit = {
+        base: 'base',
+        type: 'maptile',
+        scheme: 'normal.day.transit',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HERENormalDayTransit = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescNormalDayTransit),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' +
+            '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var HERElayerDescTerrainDay = {
+        base: 'aerial',
+        type: 'maptile',
+        scheme: 'terrain.day',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HERETerrainDay = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescTerrainDay),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' +
+            '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var HERElayerDescHybridDay = {
+        base: 'aerial',
+        type: 'maptile',
+        scheme: 'hybrid.day',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HEREHybridDay = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescHybridDay),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' + '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var Source_StamenWatercolor = new ol.source.Stamen({
+        layer: 'watercolor'
+    });
+
+    var Source_StamenTerrain = new ol.source.Stamen({
+        layer: 'terrain'
+    });
+
+    var Source_StamenToner = new ol.source.Stamen({
+        layer: 'toner'
+    });
+
+    var Source_ArcGIS = new ol.source.XYZ({
+        attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
+            'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+            'World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+    });
+
+    var Source_ThunderforestOpenCycleMap = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestTransport = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/transport/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestLandscape = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestOutdoors = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestTransportDark = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestSpinalMap = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestPioneer = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestMobileAtlas = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestNeighbourhood = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var url_pr_pd_avg_m_rcp45_10 = geoserver_url + geoserver_workspace_name + '/wms';
+    var Source_pr_pd_avg_m_rcp45_10 = new ol.source.TileWMS({
+        url: url_pr_pd_avg_m_rcp45_10,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": geoserver_workspace_name + ':pr_pd_avg_m_rcp45_10',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_pr_pd_avg_m_rcp45_10 = new ol.layer.Tile({
+        source: Source_pr_pd_avg_m_rcp45_10
+    });
+    Layer_pr_pd_avg_m_rcp45_10.set('name', 'pr_pd_avg_m_rcp45_10');
+    Layer_pr_pd_avg_m_rcp45_10.setOpacity(0.80);
+
+    //var url_pr_pd_avg_m_rcp45_20_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_pr_pd_avg_m_rcp45_20_2011_2090 = new ol.source.TileWMS({
+    //    url: url_pr_pd_avg_m_rcp45_20_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':pr_pd_avg_m_rcp45_20_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_pr_pd_avg_m_rcp45_20_2011_2090 = new ol.layer.Tile({
+    //    source: Source_pr_pd_avg_m_rcp45_20_2011_2090
+    //});
+    //Layer_pr_pd_avg_m_rcp45_20_2011_2090.set('name', 'pr_pd_avg_m_rcp45_20_2011_2090');
+    //Layer_pr_pd_avg_m_rcp45_20_2011_2090.setOpacity(0.80);
+
+    //var url_pr_pd_avg_m_rcp45_30_2011_2070 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_pr_pd_avg_m_rcp45_30_2011_2070 = new ol.source.TileWMS({
+    //    url: url_pr_pd_avg_m_rcp45_30_2011_2070,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':pr_pd_avg_m_rcp45_30_2011_2070',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_pr_pd_avg_m_rcp45_30_2011_2070 = new ol.layer.Tile({
+    //    source: Source_pr_pd_avg_m_rcp45_30_2011_2070
+    //});
+    //Layer_pr_pd_avg_m_rcp45_30_2011_2070.set('name', 'pr_pd_avg_m_rcp45_30_2011_2070');
+    //Layer_pr_pd_avg_m_rcp45_30_2011_2070.setOpacity(0.80);
+
+    //var url_tas_pd_avg_m_rcp45_10_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tas_pd_avg_m_rcp45_10_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tas_pd_avg_m_rcp45_10_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tas_pd_avg_m_rcp45_10_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tas_pd_avg_m_rcp45_10_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tas_pd_avg_m_rcp45_10_2011_2090
+    //});
+    //Layer_tas_pd_avg_m_rcp45_10_2011_2090.set('name', 'tas_pd_avg_m_rcp45_10_2011_2090');
+    //Layer_tas_pd_avg_m_rcp45_10_2011_2090.setOpacity(0.80);
+
+    //var url_tas_pd_avg_m_rcp45_20_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tas_pd_avg_m_rcp45_20_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tas_pd_avg_m_rcp45_20_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tas_pd_avg_m_rcp45_20_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tas_pd_avg_m_rcp45_20_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tas_pd_avg_m_rcp45_20_2011_2090
+    //});
+    //Layer_tas_pd_avg_m_rcp45_20_2011_2090.set('name', 'tas_pd_avg_m_rcp45_20_2011_2090');
+    //Layer_tas_pd_avg_m_rcp45_20_2011_2090.setOpacity(0.80);
+
+    //var url_tas_pd_avg_m_rcp45_30_2011_2070 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tas_pd_avg_m_rcp45_30_2011_2070 = new ol.source.TileWMS({
+    //    url: url_tas_pd_avg_m_rcp45_30_2011_2070,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tas_pd_avg_m_rcp45_30_2011_2070',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tas_pd_avg_m_rcp45_30_2011_2070 = new ol.layer.Tile({
+    //    source: Source_tas_pd_avg_m_rcp45_30_2011_2070
+    //});
+    //Layer_tas_pd_avg_m_rcp45_30_2011_2070.set('name', 'tas_pd_avg_m_rcp45_30_2011_2070');
+    //Layer_tas_pd_avg_m_rcp45_30_2011_2070.setOpacity(0.80);
+
+    //var url_tasmax_pd_avg_m_rcp45_10_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tasmax_pd_avg_m_rcp45_10_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tasmax_pd_avg_m_rcp45_10_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tasmax_pd_avg_m_rcp45_10_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tasmax_pd_avg_m_rcp45_10_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tasmax_pd_avg_m_rcp45_10_2011_2090
+    //});
+    //Layer_tasmax_pd_avg_m_rcp45_10_2011_2090.set('name', 'tasmax_pd_avg_m_rcp45_10_2011_2090');
+    //Layer_tasmax_pd_avg_m_rcp45_10_2011_2090.setOpacity(0.80);
+
+    //var url_tasmax_pd_avg_m_rcp45_20_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tasmax_pd_avg_m_rcp45_20_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tasmax_pd_avg_m_rcp45_20_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tasmax_pd_avg_m_rcp45_20_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tasmax_pd_avg_m_rcp45_20_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tasmax_pd_avg_m_rcp45_20_2011_2090
+    //});
+    //Layer_tasmax_pd_avg_m_rcp45_20_2011_2090.set('name', 'tasmax_pd_avg_m_rcp45_20_2011_2090');
+    //Layer_tasmax_pd_avg_m_rcp45_20_2011_2090.setOpacity(0.80);
+
+    //var url_tasmax_pd_avg_m_rcp45_30_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tasmax_pd_avg_m_rcp45_30_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tasmax_pd_avg_m_rcp45_30_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tasmax_pd_avg_m_rcp45_30_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tasmax_pd_avg_m_rcp45_30_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tasmax_pd_avg_m_rcp45_30_2011_2090
+    //});
+    //Layer_tasmax_pd_avg_m_rcp45_30_2011_2090.set('name', 'tasmax_pd_avg_m_rcp45_30_2011_2090');
+    //Layer_tasmax_pd_avg_m_rcp45_30_2011_2090.setOpacity(0.80);
+
+    //var url_tasmin_pd_avg_m_rcp45_10_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tasmin_pd_avg_m_rcp45_10_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tasmin_pd_avg_m_rcp45_10_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tasmin_pd_avg_m_rcp45_10_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tasmin_pd_avg_m_rcp45_10_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tasmin_pd_avg_m_rcp45_10_2011_2090
+    //});
+    //Layer_tasmin_pd_avg_m_rcp45_10_2011_2090.set('name', 'tasmin_pd_avg_m_rcp45_10_2011_2090');
+    //Layer_tasmin_pd_avg_m_rcp45_10_2011_2090.setOpacity(0.80);
+
+    //var url_tasmin_pd_avg_m_rcp45_20_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tasmin_pd_avg_m_rcp45_20_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tasmin_pd_avg_m_rcp45_20_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tasmin_pd_avg_m_rcp45_20_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tasmin_pd_avg_m_rcp45_20_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tasmin_pd_avg_m_rcp45_20_2011_2090
+    //});
+    //Layer_tasmin_pd_avg_m_rcp45_20_2011_2090.set('name', 'tasmin_pd_avg_m_rcp45_20_2011_2090');
+    //Layer_tasmin_pd_avg_m_rcp45_20_2011_2090.setOpacity(0.80);
+
+    //var url_tasmin_pd_avg_m_rcp45_30_2011_2090 = geoserver_url + geoserver_workspace_name + '/wms';
+    //var Source_tasmin_pd_avg_m_rcp45_30_2011_2090 = new ol.source.TileWMS({
+    //    url: url_tasmin_pd_avg_m_rcp45_30_2011_2090,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": geoserver_workspace_name + ':tasmin_pd_avg_m_rcp45_30_2011_2090',
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_tasmin_pd_avg_m_rcp45_30_2011_2090 = new ol.layer.Tile({
+    //    source: Source_tasmin_pd_avg_m_rcp45_30_2011_2090
+    //});
+    //Layer_tasmin_pd_avg_m_rcp45_30_2011_2090.set('name', 'tasmin_pd_avg_m_rcp45_30_2011_2090');
+    //Layer_tasmin_pd_avg_m_rcp45_30_2011_2090.setOpacity(0.80);
+
+    //var url_WMA = geoserver_url + 'geonode' + '/wms';
+    //var Source_WMA = new ol.source.TileWMS({
+    //    url: url_WMA,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'VERSION': '1.1.1',
+    //        tiled: true,
+    //        "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
+    //        "exceptions": 'application/vnd.ogc.se_inimage',
+    //        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_WMA = new ol.layer.Tile({
+    //    source: Source_WMA
+    //});
+    //Layer_WMA.set('name', 'WMA');
+    //Layer_WMA.setOpacity(0.80);
+
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            Layer_Base,
+            Layer_pr_pd_avg_m_rcp45_10,
+            //Layer_pr_pd_avg_m_rcp45_20_2011_2090,
+            //Layer_pr_pd_avg_m_rcp45_30_2011_2070,
+            //Layer_tas_pd_avg_m_rcp45_10_2011_2090,
+            //Layer_tas_pd_avg_m_rcp45_20_2011_2090,
+            //Layer_tas_pd_avg_m_rcp45_30_2011_2070,
+            //Layer_tasmax_pd_avg_m_rcp45_10_2011_2090,
+            //Layer_tasmax_pd_avg_m_rcp45_20_2011_2090,
+            //Layer_tasmax_pd_avg_m_rcp45_30_2011_2090,
+            //Layer_tasmin_pd_avg_m_rcp45_10_2011_2090,
+            //Layer_tasmin_pd_avg_m_rcp45_20_2011_2090,
+            //Layer_tasmin_pd_avg_m_rcp45_30_2011_2090,
+            //Layer_WMA
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([66.902, 48.714]),
+            zoom: 5
+        })
+    });
+</script>
+
+@* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, map.on('singleclick'), Charts *@
+<script>
+    var datespr_pd_avg_m_rcp45_10 = new Array();
+    $('#datespr_pd_avg_m_rcp45_10 option').each(function () {
+        datespr_pd_avg_m_rcp45_10.push($(this).val());
+    });
+    var inputpr_pd_avg_m_rcp45_10 = document.getElementById('datepr_pd_avg_m_rcp45_10'),
+        outputpr_pd_avg_m_rcp45_10 = document.getElementById('DateLabelpr_pd_avg_m_rcp45_10');
+    inputpr_pd_avg_m_rcp45_10.oninput = function () {
+        outputpr_pd_avg_m_rcp45_10.innerHTML = datespr_pd_avg_m_rcp45_10[this.value];
+        ChangeLayerpr_pd_avg_m_rcp45_10();
+    };
+    inputpr_pd_avg_m_rcp45_10.oninput();
+    function ChangeLayerpr_pd_avg_m_rcp45_10() {
+        var Source_pr_pd_avg_m_rcp45_10_New = new ol.source.TileWMS({
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabelpr_pd_avg_m_rcp45_10').html() + '&',
+            params: {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                tiled: true,
+                "LAYERS": geoserver_workspace_name + ':pr_pd_avg_m_rcp45_10',
+                "exceptions": 'application/vnd.ogc.se_inimage',
+                tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+            },
+            serverType: 'geoserver'
+        });
+        Layer_pr_pd_avg_m_rcp45_10.setSource(Source_pr_pd_avg_m_rcp45_10_New);
+    }
+
+    //var datespr_pd_avg_m_rcp45_20_2011_2090 = new Array();
+    //$('#datespr_pd_avg_m_rcp45_20_2011_2090 option').each(function () {
+    //    datespr_pd_avg_m_rcp45_20_2011_2090.push($(this).val());
+    //});
+    //var inputpr_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('datepr_pd_avg_m_rcp45_20_2011_2090'),
+    //    outputpr_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('DateLabelpr_pd_avg_m_rcp45_20_2011_2090');
+    //inputpr_pd_avg_m_rcp45_20_2011_2090.oninput = function () {
+    //    outputpr_pd_avg_m_rcp45_20_2011_2090.innerHTML = datespr_pd_avg_m_rcp45_20_2011_2090[this.value];
+    //    ChangeLayerpr_pd_avg_m_rcp45_20_2011_2090();
+    //};
+    //inputpr_pd_avg_m_rcp45_20_2011_2090.oninput();
+    //function ChangeLayerpr_pd_avg_m_rcp45_20_2011_2090() {
+    //    var Source_pr_pd_avg_m_rcp45_20_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabelpr_pd_avg_m_rcp45_20_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':pr_pd_avg_m_rcp45_20_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_pr_pd_avg_m_rcp45_20_2011_2090.setSource(Source_pr_pd_avg_m_rcp45_20_2011_2090_New);
+    //}
+
+    //var datespr_pd_avg_m_rcp45_30_2011_2070 = new Array();
+    //$('#datespr_pd_avg_m_rcp45_30_2011_2070 option').each(function () {
+    //    datespr_pd_avg_m_rcp45_30_2011_2070.push($(this).val());
+    //});
+    //var inputpr_pd_avg_m_rcp45_30_2011_2070 = document.getElementById('datepr_pd_avg_m_rcp45_30_2011_2070'),
+    //    outputpr_pd_avg_m_rcp45_30_2011_2070 = document.getElementById('DateLabelpr_pd_avg_m_rcp45_30_2011_2070');
+    //inputpr_pd_avg_m_rcp45_30_2011_2070.oninput = function () {
+    //    outputpr_pd_avg_m_rcp45_30_2011_2070.innerHTML = datespr_pd_avg_m_rcp45_30_2011_2070[this.value];
+    //    ChangeLayerpr_pd_avg_m_rcp45_30_2011_2070();
+    //};
+    //inputpr_pd_avg_m_rcp45_30_2011_2070.oninput();
+    //function ChangeLayerpr_pd_avg_m_rcp45_30_2011_2070() {
+    //    var Source_pr_pd_avg_m_rcp45_30_2011_2070_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabelpr_pd_avg_m_rcp45_30_2011_2070').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':pr_pd_avg_m_rcp45_30_2011_2070',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_pr_pd_avg_m_rcp45_30_2011_2070.setSource(Source_pr_pd_avg_m_rcp45_30_2011_2070_New);
+    //}
+
+    //var datestas_pd_avg_m_rcp45_10_2011_2090 = new Array();
+    //$('#datestas_pd_avg_m_rcp45_10_2011_2090 option').each(function () {
+    //    datestas_pd_avg_m_rcp45_10_2011_2090.push($(this).val());
+    //});
+    //var inputtas_pd_avg_m_rcp45_10_2011_2090 = document.getElementById('datetas_pd_avg_m_rcp45_10_2011_2090'),
+    //    outputtas_pd_avg_m_rcp45_10_2011_2090 = document.getElementById('DateLabeltas_pd_avg_m_rcp45_10_2011_2090');
+    //inputtas_pd_avg_m_rcp45_10_2011_2090.oninput = function () {
+    //    outputtas_pd_avg_m_rcp45_10_2011_2090.innerHTML = datestas_pd_avg_m_rcp45_10_2011_2090[this.value];
+    //    ChangeLayertas_pd_avg_m_rcp45_10_2011_2090();
+    //};
+    //inputtas_pd_avg_m_rcp45_10_2011_2090.oninput();
+    //function ChangeLayertas_pd_avg_m_rcp45_10_2011_2090() {
+    //    var Source_tas_pd_avg_m_rcp45_10_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltas_pd_avg_m_rcp45_10_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tas_pd_avg_m_rcp45_10_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tas_pd_avg_m_rcp45_10_2011_2090.setSource(Source_tas_pd_avg_m_rcp45_10_2011_2090_New);
+    //}
+
+    //var datestas_pd_avg_m_rcp45_20_2011_2090 = new Array();
+    //$('#datestas_pd_avg_m_rcp45_20_2011_2090 option').each(function () {
+    //    datestas_pd_avg_m_rcp45_20_2011_2090.push($(this).val());
+    //});
+    //var inputtas_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('datetas_pd_avg_m_rcp45_20_2011_2090'),
+    //    outputtas_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('DateLabeltas_pd_avg_m_rcp45_20_2011_2090');
+    //inputtas_pd_avg_m_rcp45_20_2011_2090.oninput = function () {
+    //    outputtas_pd_avg_m_rcp45_20_2011_2090.innerHTML = datestas_pd_avg_m_rcp45_20_2011_2090[this.value];
+    //    ChangeLayertas_pd_avg_m_rcp45_20_2011_2090();
+    //};
+    //inputtas_pd_avg_m_rcp45_20_2011_2090.oninput();
+    //function ChangeLayertas_pd_avg_m_rcp45_20_2011_2090() {
+    //    var Source_tas_pd_avg_m_rcp45_20_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltas_pd_avg_m_rcp45_20_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tas_pd_avg_m_rcp45_20_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tas_pd_avg_m_rcp45_20_2011_2090.setSource(Source_tas_pd_avg_m_rcp45_20_2011_2090_New);
+    //}
+
+    //var datestas_pd_avg_m_rcp45_30_2011_2070 = new Array();
+    //$('#datestas_pd_avg_m_rcp45_30_2011_2070 option').each(function () {
+    //    datestas_pd_avg_m_rcp45_30_2011_2070.push($(this).val());
+    //});
+    //var inputtas_pd_avg_m_rcp45_30_2011_2070 = document.getElementById('datetas_pd_avg_m_rcp45_30_2011_2070'),
+    //    outputtas_pd_avg_m_rcp45_30_2011_2070 = document.getElementById('DateLabeltas_pd_avg_m_rcp45_30_2011_2070');
+    //inputtas_pd_avg_m_rcp45_30_2011_2070.oninput = function () {
+    //    outputtas_pd_avg_m_rcp45_30_2011_2070.innerHTML = datestas_pd_avg_m_rcp45_30_2011_2070[this.value];
+    //    ChangeLayertas_pd_avg_m_rcp45_30_2011_2070();
+    //};
+    //inputtas_pd_avg_m_rcp45_30_2011_2070.oninput();
+    //function ChangeLayertas_pd_avg_m_rcp45_30_2011_2070() {
+    //    var Source_tas_pd_avg_m_rcp45_30_2011_2070_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltas_pd_avg_m_rcp45_30_2011_2070').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tas_pd_avg_m_rcp45_30_2011_2070',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tas_pd_avg_m_rcp45_30_2011_2070.setSource(Source_tas_pd_avg_m_rcp45_30_2011_2070_New);
+    //}
+
+    //var datestasmax_pd_avg_m_rcp45_10_2011_2090 = new Array();
+    //$('#datestasmax_pd_avg_m_rcp45_10_2011_2090 option').each(function () {
+    //    datestasmax_pd_avg_m_rcp45_10_2011_2090.push($(this).val());
+    //});
+    //var inputtasmax_pd_avg_m_rcp45_10_2011_2090 = document.getElementById('datetasmax_pd_avg_m_rcp45_10_2011_2090'),
+    //    outputtasmax_pd_avg_m_rcp45_10_2011_2090 = document.getElementById('DateLabeltasmax_pd_avg_m_rcp45_10_2011_2090');
+    //inputtasmax_pd_avg_m_rcp45_10_2011_2090.oninput = function () {
+    //    outputtasmax_pd_avg_m_rcp45_10_2011_2090.innerHTML = datestasmax_pd_avg_m_rcp45_10_2011_2090[this.value];
+    //    ChangeLayertasmax_pd_avg_m_rcp45_10_2011_2090();
+    //};
+    //inputtasmax_pd_avg_m_rcp45_10_2011_2090.oninput();
+    //function ChangeLayertasmax_pd_avg_m_rcp45_10_2011_2090() {
+    //    var Source_tasmax_pd_avg_m_rcp45_10_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltasmax_pd_avg_m_rcp45_10_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tasmax_pd_avg_m_rcp45_10_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tasmax_pd_avg_m_rcp45_10_2011_2090.setSource(Source_tasmax_pd_avg_m_rcp45_10_2011_2090_New);
+    //}
+
+    //var datestasmax_pd_avg_m_rcp45_20_2011_2090 = new Array();
+    //$('#datestasmax_pd_avg_m_rcp45_20_2011_2090 option').each(function () {
+    //    datestasmax_pd_avg_m_rcp45_20_2011_2090.push($(this).val());
+    //});
+    //var inputtasmax_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('datetasmax_pd_avg_m_rcp45_20_2011_2090'),
+    //    outputtasmax_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('DateLabeltasmax_pd_avg_m_rcp45_20_2011_2090');
+    //inputtasmax_pd_avg_m_rcp45_20_2011_2090.oninput = function () {
+    //    outputtasmax_pd_avg_m_rcp45_20_2011_2090.innerHTML = datestasmax_pd_avg_m_rcp45_20_2011_2090[this.value];
+    //    ChangeLayertasmax_pd_avg_m_rcp45_20_2011_2090();
+    //};
+    //inputtasmax_pd_avg_m_rcp45_20_2011_2090.oninput();
+    //function ChangeLayertasmax_pd_avg_m_rcp45_20_2011_2090() {
+    //    var Source_tasmax_pd_avg_m_rcp45_20_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltasmax_pd_avg_m_rcp45_20_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tasmax_pd_avg_m_rcp45_20_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tasmax_pd_avg_m_rcp45_20_2011_2090.setSource(Source_tasmax_pd_avg_m_rcp45_20_2011_2090_New);
+    //}
+
+    //var datestasmax_pd_avg_m_rcp45_30_2011_2090 = new Array();
+    //$('#datestasmax_pd_avg_m_rcp45_30_2011_2090 option').each(function () {
+    //    datestasmax_pd_avg_m_rcp45_30_2011_2090.push($(this).val());
+    //});
+    //var inputtasmax_pd_avg_m_rcp45_30_2011_2090 = document.getElementById('datetasmax_pd_avg_m_rcp45_30_2011_2090'),
+    //    outputtasmax_pd_avg_m_rcp45_30_2011_2090 = document.getElementById('DateLabeltasmax_pd_avg_m_rcp45_30_2011_2090');
+    //inputtasmax_pd_avg_m_rcp45_30_2011_2090.oninput = function () {
+    //    outputtasmax_pd_avg_m_rcp45_30_2011_2090.innerHTML = datestasmax_pd_avg_m_rcp45_30_2011_2090[this.value];
+    //    ChangeLayertasmax_pd_avg_m_rcp45_30_2011_2090();
+    //};
+    //inputtasmax_pd_avg_m_rcp45_30_2011_2090.oninput();
+    //function ChangeLayertasmax_pd_avg_m_rcp45_30_2011_2090() {
+    //    var Source_tasmax_pd_avg_m_rcp45_30_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltasmax_pd_avg_m_rcp45_30_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tasmax_pd_avg_m_rcp45_30_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tasmax_pd_avg_m_rcp45_30_2011_2090.setSource(Source_tasmax_pd_avg_m_rcp45_30_2011_2090_New);
+    //}
+
+    //var datestasmin_pd_avg_m_rcp45_10_2011_2090 = new Array();
+    //$('#datestasmin_pd_avg_m_rcp45_10_2011_2090 option').each(function () {
+    //    datestasmin_pd_avg_m_rcp45_10_2011_2090.push($(this).val());
+    //});
+    //var inputtasmin_pd_avg_m_rcp45_10_2011_2090 = document.getElementById('datetasmin_pd_avg_m_rcp45_10_2011_2090'),
+    //    outputtasmin_pd_avg_m_rcp45_10_2011_2090 = document.getElementById('DateLabeltasmin_pd_avg_m_rcp45_10_2011_2090');
+    //inputtasmin_pd_avg_m_rcp45_10_2011_2090.oninput = function () {
+    //    outputtasmin_pd_avg_m_rcp45_10_2011_2090.innerHTML = datestasmin_pd_avg_m_rcp45_10_2011_2090[this.value];
+    //    ChangeLayertasmin_pd_avg_m_rcp45_10_2011_2090();
+    //};
+    //inputtasmin_pd_avg_m_rcp45_10_2011_2090.oninput();
+    //function ChangeLayertasmin_pd_avg_m_rcp45_10_2011_2090() {
+    //    var Source_tasmin_pd_avg_m_rcp45_10_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltasmin_pd_avg_m_rcp45_10_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tasmin_pd_avg_m_rcp45_10_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tasmin_pd_avg_m_rcp45_10_2011_2090.setSource(Source_tasmin_pd_avg_m_rcp45_10_2011_2090_New);
+    //}
+
+    //var datestasmin_pd_avg_m_rcp45_20_2011_2090 = new Array();
+    //$('#datestasmin_pd_avg_m_rcp45_20_2011_2090 option').each(function () {
+    //    datestasmin_pd_avg_m_rcp45_20_2011_2090.push($(this).val());
+    //});
+    //var inputtasmin_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('datetasmin_pd_avg_m_rcp45_20_2011_2090'),
+    //    outputtasmin_pd_avg_m_rcp45_20_2011_2090 = document.getElementById('DateLabeltasmin_pd_avg_m_rcp45_20_2011_2090');
+    //inputtasmin_pd_avg_m_rcp45_20_2011_2090.oninput = function () {
+    //    outputtasmin_pd_avg_m_rcp45_20_2011_2090.innerHTML = datestasmin_pd_avg_m_rcp45_20_2011_2090[this.value];
+    //    ChangeLayertasmin_pd_avg_m_rcp45_20_2011_2090();
+    //};
+    //inputtasmin_pd_avg_m_rcp45_20_2011_2090.oninput();
+    //function ChangeLayertasmin_pd_avg_m_rcp45_20_2011_2090() {
+    //    var Source_tasmin_pd_avg_m_rcp45_20_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltasmin_pd_avg_m_rcp45_20_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tasmin_pd_avg_m_rcp45_20_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tasmin_pd_avg_m_rcp45_20_2011_2090.setSource(Source_tasmin_pd_avg_m_rcp45_20_2011_2090_New);
+    //}
+
+    //var datestasmin_pd_avg_m_rcp45_30_2011_2090 = new Array();
+    //$('#datestasmin_pd_avg_m_rcp45_30_2011_2090 option').each(function () {
+    //    datestasmin_pd_avg_m_rcp45_30_2011_2090.push($(this).val());
+    //});
+    //var inputtasmin_pd_avg_m_rcp45_30_2011_2090 = document.getElementById('datetasmin_pd_avg_m_rcp45_30_2011_2090'),
+    //    outputtasmin_pd_avg_m_rcp45_30_2011_2090 = document.getElementById('DateLabeltasmin_pd_avg_m_rcp45_30_2011_2090');
+    //inputtasmin_pd_avg_m_rcp45_30_2011_2090.oninput = function () {
+    //    outputtasmin_pd_avg_m_rcp45_30_2011_2090.innerHTML = datestasmin_pd_avg_m_rcp45_30_2011_2090[this.value];
+    //    ChangeLayertasmin_pd_avg_m_rcp45_30_2011_2090();
+    //};
+    //inputtasmin_pd_avg_m_rcp45_30_2011_2090.oninput();
+    //function ChangeLayertasmin_pd_avg_m_rcp45_30_2011_2090() {
+    //    var Source_tasmin_pd_avg_m_rcp45_30_2011_2090_New = new ol.source.TileWMS({
+    //        url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabeltasmin_pd_avg_m_rcp45_30_2011_2090').html() + '&',
+    //        params: {
+    //            'FORMAT': 'image/png',
+    //            'VERSION': '1.1.1',
+    //            tiled: true,
+    //            "LAYERS": geoserver_workspace_name + ':tasmin_pd_avg_m_rcp45_30_2011_2090',
+    //            "exceptions": 'application/vnd.ogc.se_inimage',
+    //            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        },
+    //        serverType: 'geoserver'
+    //    });
+    //    Layer_tasmin_pd_avg_m_rcp45_30_2011_2090.setSource(Source_tasmin_pd_avg_m_rcp45_30_2011_2090_New);
+    //}
+
+    function ChangeLayers() {
+        map.getLayers().forEach(function (layer) {
+            if (layer.get('name') == 'Base') {
+                layer.setVisible(document.getElementById("layerBaseShow").checked);
+                layer.setOpacity($('#layerBaseOpacity').val() / 100)
+                if ($('#layerBaseType').val() == 'OSM') {
+                    layer.setSource(Source_OSM);
+                }
+                else if ($('#layerBaseType').val() == 'BingAerialWithLabels') {
+                    layer.setSource(Source_BingAerialWithLabels);
+                }
+                else if ($('#layerBaseType').val() == 'BingRoadStatic') {
+                    layer.setSource(Source_BingRoadStatic);
+                }
+                else if ($('#layerBaseType').val() == 'BingRoadDynamic') {
+                    layer.setSource(Source_BingRoadDynamic);
+                }
+                else if ($('#layerBaseType').val() == 'HERENormalDay') {
+                    layer.setSource(Source_HERENormalDay);
+                }
+                else if ($('#layerBaseType').val() == 'HERENormalDayTransit') {
+                    layer.setSource(Source_HERENormalDayTransit);
+                }
+                else if ($('#layerBaseType').val() == 'HERETerrainDay') {
+                    layer.setSource(Source_HERETerrainDay);
+                }
+                else if ($('#layerBaseType').val() == 'HEREHybridDay') {
+                    layer.setSource(Source_HEREHybridDay);
+                }
+                else if ($('#layerBaseType').val() == 'StamenWatercolor') {
+                    layer.setSource(Source_StamenWatercolor);
+                }
+                else if ($('#layerBaseType').val() == 'StamenTerrain') {
+                    layer.setSource(Source_StamenTerrain);
+                }
+                else if ($('#layerBaseType').val() == 'StamenToner') {
+                    layer.setSource(Source_StamenToner);
+                }
+                else if ($('#layerBaseType').val() == 'ArcGIS') {
+                    layer.setSource(Source_ArcGIS);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestOpenCycleMap') {
+                    layer.setSource(Source_ThunderforestOpenCycleMap);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestTransport') {
+                    layer.setSource(Source_ThunderforestTransport);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestLandscape') {
+                    layer.setSource(Source_ThunderforestLandscape);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestOutdoors') {
+                    layer.setSource(Source_ThunderforestOutdoors);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestTransportDark') {
+                    layer.setSource(Source_ThunderforestTransportDark);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestSpinalMap') {
+                    layer.setSource(Source_ThunderforestSpinalMap);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestPioneer') {
+                    layer.setSource(Source_ThunderforestPioneer);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestMobileAtlas') {
+                    layer.setSource(Source_ThunderforestMobileAtlas);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestNeighbourhood') {
+                    layer.setSource(Source_ThunderforestNeighbourhood);
+                }
+            }
+            if (layer.get('name') == 'pr_pd_avg_m_rcp45_10') {
+                layer.setVisible(document.getElementById("layerpr_pd_avg_m_rcp45_10Show").checked);
+                layer.setOpacity($('#layerpr_pd_avg_m_rcp45_10Opacity').val() / 100)
+            }
+            //if (layer.get('name') == 'pr_pd_avg_m_rcp45_20_2011_2090') {
+            //    layer.setVisible(document.getElementById("layerpr_pd_avg_m_rcp45_20_2011_2090Show").checked);
+            //    layer.setOpacity($('#layerpr_pd_avg_m_rcp45_20_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'pr_pd_avg_m_rcp45_30_2011_2070') {
+            //    layer.setVisible(document.getElementById("layerpr_pd_avg_m_rcp45_30_2011_2070Show").checked);
+            //    layer.setOpacity($('#layerpr_pd_avg_m_rcp45_30_2011_2070Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tas_pd_avg_m_rcp45_10_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertas_pd_avg_m_rcp45_10_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertas_pd_avg_m_rcp45_10_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tas_pd_avg_m_rcp45_20_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertas_pd_avg_m_rcp45_20_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertas_pd_avg_m_rcp45_20_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tas_pd_avg_m_rcp45_30_2011_2070') {
+            //    layer.setVisible(document.getElementById("layertas_pd_avg_m_rcp45_30_2011_2070Show").checked);
+            //    layer.setOpacity($('#layertas_pd_avg_m_rcp45_30_2011_2070Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tasmax_pd_avg_m_rcp45_10_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertasmax_pd_avg_m_rcp45_10_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertasmax_pd_avg_m_rcp45_10_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tasmax_pd_avg_m_rcp45_20_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertasmax_pd_avg_m_rcp45_20_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertasmax_pd_avg_m_rcp45_20_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tasmax_pd_avg_m_rcp45_30_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertasmax_pd_avg_m_rcp45_30_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertasmax_pd_avg_m_rcp45_30_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tasmin_pd_avg_m_rcp45_10_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertasmin_pd_avg_m_rcp45_10_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertasmin_pd_avg_m_rcp45_10_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tasmin_pd_avg_m_rcp45_20_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertasmin_pd_avg_m_rcp45_20_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertasmin_pd_avg_m_rcp45_20_2011_2090Opacity').val() / 100)
+            //}
+            //if (layer.get('name') == 'tasmin_pd_avg_m_rcp45_30_2011_2090') {
+            //    layer.setVisible(document.getElementById("layertasmin_pd_avg_m_rcp45_30_2011_2090Show").checked);
+            //    layer.setOpacity($('#layertasmin_pd_avg_m_rcp45_30_2011_2090Opacity').val() / 100)
+            //}
+            if (layer.get('name') == 'WMA') {
+                var Source_WMA_New = new ol.source.TileWMS({
+                    url: geoserver_url + 'geonode' + '/wms',
+                    params: {
+                        'FORMAT': 'image/png',
+                        'VERSION': '1.1.1',
+                        tiled: true,
+                        "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
+                        "exceptions": 'application/vnd.ogc.se_inimage',
+                        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+                    },
+                    serverType: 'geoserver'
+                });
+                Layer_WMA.setSource(Source_WMA_New);
+
+                layer.setVisible(document.getElementById("layerWMAShow").checked);
+                layer.setOpacity($('#layerWMAOpacity').val() / 100);
+            }
+
+        })
+    }
+</script>
+
+@* ChangeLayersClimate *@
+<script>
+    function ChangeLayersClimate() {
+        $('.Climate').hide();
+        $('.' + $('#layerClimate').val()).show();
+        $('#layerpr_pd_avg_m_rcp45_10Show').prop("checked", false);
+        //$('#layerpr_pd_avg_m_rcp45_20_2011_2090Show').prop("checked", false);
+        //$('#layerpr_pd_avg_m_rcp45_30_2011_2070Show').prop("checked", false);
+        //$('#layertas_pd_avg_m_rcp45_10_2011_2090Show').prop("checked", false);
+        //$('#layertas_pd_avg_m_rcp45_20_2011_2090Show').prop("checked", false);
+        //$('#layertas_pd_avg_m_rcp45_30_2011_2070Show').prop("checked", false);
+        //$('#layertasmax_pd_avg_m_rcp45_10_2011_2090Show').prop("checked", false);
+        //$('#layertasmax_pd_avg_m_rcp45_20_2011_2090Show').prop("checked", false);
+        //$('#layertasmax_pd_avg_m_rcp45_30_2011_2090Show').prop("checked", false);
+        //$('#layertasmin_pd_avg_m_rcp45_10_2011_2090Show').prop("checked", false);
+        //$('#layertasmin_pd_avg_m_rcp45_20_2011_2090Show').prop("checked", false);
+        //$('#layertasmin_pd_avg_m_rcp45_30_2011_2090Show').prop("checked", false);
+        $('#layer' + $('#layerClimate').val() + 'Show').prop("checked", true);
+        ChangeLayers();
+    }
+</script>
+
+@* $(document).ready *@
+<script>
+    $(document).ready(function () {
+        ChangeLayersClimate();
+    });
+</script>
+
+@*Tooltips*@
+<script>
+    $(function () {
+        if (typeof document.body.attachShadow === 'function') {
+            var shadowRoot = $('#shadow')[0].attachShadow({ mode: 'open' })
+            shadowRoot.innerHTML =
+                '<button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top in a shadow dom">' +
+                '  Tooltip on top in a shadow dom' +
+                '</button>' +
+                '<button id="secondTooltip" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top in a shadow dom with container option">' +
+                '  Tooltip on top in a shadow dom' +
+                '</button>'
+
+            $(shadowRoot.firstChild).tooltip()
+            $(shadowRoot.getElementById('secondTooltip')).tooltip({
+                container: shadowRoot
+            })
+        }
+        $('[data-toggle="tooltip"]').tooltip()
+        $('#tooltipElement').tooltip({
+            container: $('#customContainer')[0]
+        })
+        $('#target').tooltip({
+            placement: 'top',
+            trigger: 'manual'
+        }).tooltip('show')
+    })
+</script>
+@*Close button to card*@
+<script>
+    $('.close-icon').on('click', function () {
+        $(this).closest('.card').fadeOut();
+    })
+</script>
