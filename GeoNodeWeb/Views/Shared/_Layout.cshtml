@@ -74,29 +74,56 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="btn-group btn-group-toggle ml-3 mr-3" data-toggle="buttons">
                     <label class="btn btn-outline-light btn-sm active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
+                        <input type="radio" name="parameter" id="Temperature" autocomplete="off" checked onchange="ChangeParameter()"> Температура воздуха
                     </label>
                     <label class="btn btn-outline-light btn-sm">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> Radio
+                        <input type="radio" name="parameter" id="Precipitation" autocomplete="off" onchange="ChangeParameter()"> Осадки
                     </label>
                     <label class="btn btn-outline-light btn-sm">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> Radio
+                        <input type="radio" name="parameter" id="Evapotranspiration" autocomplete="off" onchange="ChangeParameter()"> Эвапотранспирация
                     </label>
                 </div>
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link font-weight-bold" href="#">Link <span class="sr-only">(current)</span></a>
+                <ul class="navbar-nav mr-auto" id="subparameterlinks">
+                    <li class="nav-item active Temperature">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('max')">максимальная температура <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('pd')">средняя температура</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('min')">минимальная температура</a>
+                    </li>
+                    @*<li class="nav-item Temperature">
+                        <a class="nav-link" href="#">Отклонения максимальной температуры от значений базового периода</a>
+                    </li>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#">Отклонения средней температуры</a>
+                    </li>
+                    <li class="nav-item Temperature">
+                        <a class="nav-link" href="#">Отклонения минимальной температуры</a>
+                    </li>*@
+                    <li class="nav-item active Precipitation">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('avg')">Осадки <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item Precipitation">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения средней суммы осадков от значений базового периода в мм</a>
+                    </li>
+                    <li class="nav-item Precipitation">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения средней суммы осадков от значений базового периода в %</a>
+                    </li>
+                    <li class="nav-item active Evapotranspiration">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('?')">Эвапотранспирация <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item Evapotranspiration">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения эвапотранспирации от значений базового периода</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Другие</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown07">
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения максимальной температуры от значений базового периода</a>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения средней температуры</a>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения минимальной температуры</a>
                             <a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
                             <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
                         </div>
