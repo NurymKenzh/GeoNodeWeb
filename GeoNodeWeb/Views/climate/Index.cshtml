@@ -219,21 +219,11 @@
                                     <div class="sidebar-submenu">
                                         <ul>
                                             <li>
-                                                <select id="gslayer" onchange="ChangeLayers()">
-                                                    @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
-                                                    {
-                                                        <option value="@gSLayer.title_en">
-                                                            @gSLayer.supplemental_information_en
-                                                        </option>
-                                                    }
-                                                </select>
-                                                <input type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
-                                                <input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
-
                                                 <label>
                                                     <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
                                                     Базовый слой
                                                 </label>
+                                                <br />
                                                 <input id="layerBaseOpacity" type="range" min="0" max="100" value="100" oninput="ChangeLayers()" />
                                                 <select id="layerBaseType" onchange="ChangeLayers()">
                                                     <option value="BingAerialWithLabels">Bing Aerial</option>
@@ -258,10 +248,12 @@
                                                     <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
                                                 </select>
 
-                                                <label class="Climate pr_pd_avg_m_rcp45_10">
-                                                    <input type="checkbox" id="layerpr_pd_avg_m_rcp45_10Show" checked="checked" onchange="ChangeLayers()">
+                                                <label>
+                                                    <input type="checkbox" id="layerClimateShow" checked="checked" onchange="ChangeLayers()">
+                                                    Климат
                                                 </label>
-                                                <input class="Climate pr_pd_avg_m_rcp45_10" id="layerpr_pd_avg_m_rcp45_10Opacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+                                                <br />
+                                                <input id="layerClimateOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
                                             </li>
                                         </ul>
                                     </div>
@@ -526,7 +518,7 @@
         serverType: 'geoserver'
     });
     var Layer_Climate = new ol.layer.Tile({
-        source: Source_Climate
+        source: null
     });
     Layer_Climate.set('name', 'Climate');
     Layer_Climate.setOpacity(0.80);
@@ -869,9 +861,9 @@
                     layer.setSource(Source_ThunderforestNeighbourhood);
                 }
             }
-            if (layer.get('name') == 'pr_pd_avg_m_rcp45_10') {
-                layer.setVisible(document.getElementById("layerpr_pd_avg_m_rcp45_10Show").checked);
-                layer.setOpacity($('#layerpr_pd_avg_m_rcp45_10Opacity').val() / 100)
+            if (layer.get('name') == 'Climate') {
+                layer.setVisible(document.getElementById("layerClimateShow").checked);
+                layer.setOpacity($('#layerClimateOpacity').val() / 100)
             }
             if (layer.get('name') == 'WMA') {
                 var Source_WMA_New = new ol.source.TileWMS({
