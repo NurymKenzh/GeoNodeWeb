@@ -32,7 +32,9 @@ namespace GeoNodeWeb.Controllers
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
         private string geoserverConnection = server ? Startup.Configuration["geoserverConnectionServer"].ToString() : Startup.Configuration["geoserverConnectionDebug"].ToString(),
             postgresConnection = server ? Startup.Configuration["postgresConnectionServer"].ToString() : Startup.Configuration["postgresConnectionDebug"].ToString(),
-            geoportalConnection = server ? Startup.Configuration["geoportalConnectionServer"].ToString() : Startup.Configuration["geoportalConnectionDebug"].ToString();
+            geoportalConnection = server ? Startup.Configuration["geoportalConnectionServer"].ToString() : Startup.Configuration["geoportalConnectionDebug"].ToString(),
+
+            geodataProdConnection = server ? Startup.Configuration["geodataProdConnectionServer"].ToString() : Startup.Configuration["geodataProdConnectionDebug"].ToString();
 
         public IActionResult Index()
         {
@@ -99,14 +101,6 @@ namespace GeoNodeWeb.Controllers
             string workspace,
             string layer)
         {
-            //using (var connection = new NpgsqlConnection(geoserverConnection))
-            //{
-            //    connection.Open();
-
-            //    var datetimepr_pd_avg_m_rcp45_10 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"pr_pd_avg_m_rcp45_10_2011_2090\"");
-            //    ViewBag.DateTimepr_pd_avg_m_rcp45_10 = datetimepr_pd_avg_m_rcp45_10.OrderBy(d => d).ToArray();
-            //}
-
             List<string> datesL = new List<string>();
             if (layer == "pr_pd_avg_m_rcp45_10")
             {
@@ -5220,7 +5214,18 @@ namespace GeoNodeWeb.Controllers
                 datesL.Add("20610101");
                 datesL.Add("20710101");
             }
-            string[] dates = datesL.OrderBy(d => d).ToArray();
+
+            List<DateTime> datesD = new List<DateTime>();
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
+            {
+                connection.Open();
+
+                var datetime = connection.Query<DateTime>($"SELECT ingestion FROM public.{layer}");
+                datesD = datetime.OrderBy(d => d).ToList();
+            }
+
+            //string[] dates = datesL.OrderBy(d => d).ToArray();
+            string[] dates = datesD.Select(d => d.ToString("yyyyMMdd")).ToArray();
             return Json(new
             {
                 dates

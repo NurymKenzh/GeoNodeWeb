@@ -732,6 +732,7 @@
             success: function (data) {
                 dates = data.dates;
                 $('#date').attr('max', dates.length - 1);
+                $('#date').val(0);
                 ChangeDate();
             },
             error: function () {
