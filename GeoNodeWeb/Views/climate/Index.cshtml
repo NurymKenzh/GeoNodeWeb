@@ -33,115 +33,192 @@
                         <div class="sidebar-menu">
                             <ul>
                                 <li class="header-menu">
-                                    <span class="text-white-50">Период</span>
+                                    <span class="text-white-50">Периодичность</span>
                                 </li>
                                 <li class="header-menu">
                                     <div class="current_items">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="decade" id="decade10" value="10" checked onchange="ChangeDecade()">
                                             <label class="form-check-label" for="decade10">
-                                                10 years
+                                                10 лет
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="decade" id="decade20" value="20" onchange="ChangeDecade()">
                                             <label class="form-check-label" for="decade20">
-                                                20 years
+                                                20 лет
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="decade" id="decade30" value="30" onchange="ChangeDecade()">
                                             <label class="form-check-label" for="decade30">
-                                                30 years
+                                                30 лет
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="header-menu">
+                                    <span class="text-white-50">RCP</span>
+                                </li>
+                                <li class="header-menu">
+                                    <div class="current_items">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="RCP" id="RCP45" value="rcp45" checked onchange="ChangeRCP()">
+                                            <label class="form-check-label" for="RCP45">
+                                                rcp 4.5
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="RCP" id="RCP85" value="rcp85" onchange="ChangeRCP()">
+                                            <label class="form-check-label" for="RCP85">
+                                                rcp 8.5
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="header-menu">
+                                    <span class="text-white-50">Период</span>
+                                </li>
+                                <li class="header-menu">
+                                    <div class="current_items">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Period" id="Year" value="10" checked onchange="ChangePeriod()">
+                                            <label class="form-check-label" for="Year">
+                                                Год
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Period" id="Season" value="20" onchange="ChangePeriod()">
+                                            <label class="form-check-label" for="Season">
+                                                Сезон
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Period" id="Month" value="30" onchange="ChangePeriod()">
+                                            <label class="form-check-label" for="Month">
+                                                Месяц
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="header-menu Seasons">
+                                    <span class="text-white-50">Сезоны</span>
+                                </li>
+                                <li class="header-menu Seasons">
+                                    <div class="current_items">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Season" id="Season1" value="1" checked onchange="ChangeSeason()">
+                                            <label class="form-check-label" for="Season1">
+                                                Зима
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Season" id="Season2" value="2" onchange="ChangeSeason()">
+                                            <label class="form-check-label" for="Season2">
+                                                Весна
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Season" id="Season3" value="3" onchange="ChangeSeason()">
+                                            <label class="form-check-label" for="Season3">
+                                                Лето
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Season" id="Season4" value="4" onchange="ChangeSeason()">
+                                            <label class="form-check-label" for="Season4">
+                                                Осень
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="header-menu Months">
+                                    <span class="text-white-50">Месяцы</span>
+                                </li>
+                                <li class="header-menu Months">
+                                    <div class="current_items">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month01" value="01" checked onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month01">
+                                                Январь
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month02" value="02" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month02">
+                                                Февраль
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month03" value="03" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month03">
+                                                Март
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month04" value="04" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month04">
+                                                Апрель
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month05" value="05" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month05">
+                                                Май
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month06" value="06" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month06">
+                                                Июнь
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month07" value="07" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month07">
+                                                Июль
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month08" value="08" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month08">
+                                                Август
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month09" value="09" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month09">
+                                                Сентябрь
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month010" value="10" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month010">
+                                                Октябрь
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month011" value="11" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month011">
+                                                Ноябрь
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month012" value="12" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month012">
+                                                Декабрь
                                             </label>
                                         </div>
                                     </div>
                                 </li>
                                 <li class="sidebar-dropdown">
                                     <a href="#">
-                                        <i class="fa fa-tasks" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
-                                        <span>RCP</span>
-                                    </a>
-                                    <div class="sidebar-submenu">
-                                        <ul>
-                                            <li class="header-menu">
-                                                <div class="current_items">
-                                                    <div class="form-check1">
-                                                        <input class="form-check-input" type="radio" checked name="RCP" id="RCP45" value="rcp45" onchange="ChangeRCP()">
-                                                        <label class="form-check-label" for="RCP45">
-                                                            rcp 4.5
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check1">
-                                                        <input class="form-check-input" type="radio" name="RCP" id="RCP85" value="rcp85" onchange="ChangeRCP()">
-                                                        <label class="form-check-label" for="RCP85">
-                                                            rcp 8.5
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="sidebar-dropdown">
-                                    <a href="#">
-                                        <i class="fa fa-tasks" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
-                                        <span>Период</span>
-                                    </a>
-                                    <div class="sidebar-submenu">
-                                        <ul>
-                                            <li class="header-menu">
-                                                <div class="current_items">
-                                                    <div class="form-check1">
-                                                        <input class="form-check-input" type="radio" checked name="Period" id="Year" onchange="ChangePeriod()">
-                                                        <label class="form-check-label" for="Year">
-                                                            Год
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check1">
-                                                        <input class="form-check-input" type="radio" name="Period" id="Season" onchange="ChangePeriod()">
-                                                        <label class="form-check-label" for="Season">
-                                                            Сезон
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check1">
-                                                        <input class="form-check-input" type="radio" name="Period" id="Month" onchange="ChangePeriod()">
-                                                        <label class="form-check-label" for="Month">
-                                                            Месяц
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="sidebar-dropdown">
-                                    <a href="#">
                                         <i class="fa fa-globe" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
-                                        <span>Base Maps</span>
+                                        <span>Слои</span>
                                     </a>
                                     <div class="sidebar-submenu">
                                         <ul>
-                                            @*<li>
-                                                <a href="#">Google maps</a>
-                                            </li>*@
                                             <li>
-
-                                                <select id="datespr_pd_avg_m_rcp45_10" onchange="ChangeLayer()" hidden="hidden">
-                                                    @foreach (DateTime dateTime in (DateTime[])ViewBag.DateTimepr_pd_avg_m_rcp45_10)
-                                                    {
-                                                        <option value="@dateTime.ToString("yyyy-MM-dd")">
-                                                            @dateTime.ToString("yyyy-MM-dd")
-                                                        </option>
-                                                    }
-                                                </select>
-                                                @{
-                                                    DateTime[] datespr_pd_avg_m_rcp45_10 = ViewBag.DateTimepr_pd_avg_m_rcp45_10;
-                                                }
-
-                                                <label class="Climate pr_pd_avg_m_rcp45_10">Дата: </label><label class="Climate pr_pd_avg_m_rcp45_10" id="DateLabelpr_pd_avg_m_rcp45_10"></label>
-                                                <input class="Climate pr_pd_avg_m_rcp45_10" id="datepr_pd_avg_m_rcp45_10" type="range" min="0" value="0" max="@(datespr_pd_avg_m_rcp45_10.Count()-1)" step="1">
-
                                                 <select id="gslayer" onchange="ChangeLayers()">
                                                     @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
                                                     {
@@ -152,8 +229,6 @@
                                                 </select>
                                                 <input type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
                                                 <input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />
-
-
 
                                                 <label>
                                                     <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
@@ -182,21 +257,6 @@
                                                     <option value="ThunderforestMobileAtlas">Thunderforest Mobile Atlas</option>
                                                     <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
                                                 </select>
-
-                                                @*<select id="layerClimate" onchange="ChangeLayersClimate()">
-                            <option value="pr_pd_avg_m_rcp45_10">Среднемноголетняя месячная сумма осадков в разрезе 10-летних периодов</option>
-                            <option value="pr_pd_avg_m_rcp45_20_2011_2090">Среднемноголетняя месячная сумма осадков в разрезе 20-летних периодов</option>
-                            <option value="pr_pd_avg_m_rcp45_30_2011_2070">Среднемноголетняя месячная сумма осадков в разрезе 30-летних периодов</option>
-                            <option value="tas_pd_avg_m_rcp45_10_2011_2090">Среднемесячная температура воздуха в разрезе 10-летних периодов</option>
-                            <option value="tas_pd_avg_m_rcp45_20_2011_2090">Среднемесячная температура воздуха в разрезе 20-летних периодов</option>
-                            <option value="tas_pd_avg_m_rcp45_30_2011_2070">Среднемесячная температура воздуха в разрезе 30-летних периодов</option>
-                            <option value="tasmax_pd_avg_m_rcp45_10_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 10-летних периодов</option>
-                            <option value="tasmax_pd_avg_m_rcp45_20_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 20-летних периодов</option>
-                            <option value="tasmax_pd_avg_m_rcp45_30_2011_2090">Среднемесячная максимальная температура воздуха в разрезе 30-летних периодов</option>
-                            <option value="tasmin_pd_avg_m_rcp45_10_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 10-летних периодов</option>
-                            <option value="tasmin_pd_avg_m_rcp45_20_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 20-летних периодов</option>
-                            <option value="tasmin_pd_avg_m_rcp45_30_2011_2090">Среднемесячная минимальная температура воздуха в разрезе 30-летних периодов</option>
-                        </select>*@
 
                                                 <label class="Climate pr_pd_avg_m_rcp45_10">
                                                     <input type="checkbox" id="layerpr_pd_avg_m_rcp45_10Show" checked="checked" onchange="ChangeLayers()">
@@ -246,9 +306,12 @@
                                 </button>
                             </div>
                             <div class="col-6">
-                                <div class="progress mt-3">
+                                @*<div class="progress mt-3">
                                     <div class="progress-bar align-bottom" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="10" aria-valuemax="100">50%</div>
-                                </div>
+                                </div>*@
+                                <label style="color: white;">Год: </label>
+                                <label id="DateLabel" style="color: white;"></label>
+                                <input id="date" type="range" min="0" value="0" max="10" step="1" style="width: 100%;" oninput="ChangeDate()">
                             </div>
                             <div class="col">
                                 <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
@@ -263,8 +326,8 @@
     <div class="row justify-content-end">
         <div id="MapTitle" class="card text-center text-white m-1 border border-light" style="background: #3a465d;">
             <div class="card-body m-0 p-3">
-                <h5 class="card-title m-0">Card title</h5>
-                <p class="card-text">Some quick example text</p>
+                <h5 class="card-title m-0" id="InfoTitle">Card title</h5>
+                <p class="card-text" id="InfoInfo">Some quick example text</p>
             </div>
         </div>
     </div>
@@ -505,10 +568,12 @@
 @* ChangeParameter, ChangeSubParameter, ChangePeriod, ChangeRCP, ChangeDecade *@
 <script>
     var Parameter = 'tas',
-        SubParameter = 'max',
+        SubParameter = 'tasmax_pd_avg',
         Period = 'y',
         RCP = 'rcp45',
-        Decade = '10';
+        Decade = '10',
+        Season = '',
+        Month = '';
     //var //firstTemperature = true,
     //    firstPrecipitation = true,
     //    firstEvapotranspiration = true;
@@ -519,18 +584,20 @@
             $('.Precipitation').hide();
             $('.Evapotranspiration').hide();
             Parameter = 'tas';
-            SubParameter = 'max';
+            SubParameter = 'tasmax_pd_avg';
+            ChangeSubParameter(SubParameter, 'Temperature1');
         }
         if ($('#Precipitation').is(':checked')) {
             $('.Temperature').hide();
             $('.Precipitation').show();
             $('.Evapotranspiration').hide();
-            Parameter = 'pr_pd';
+            Parameter = 'pr';
             //if (firstPrecipitation) {
             //    SubParameter = 'avg';
             //    firstPrecipitation = false;
             //}
-            SubParameter = 'avg';
+            SubParameter = 'pr_pd_avg';
+            ChangeSubParameter(SubParameter, 'Precipitation1');
         }
         if ($('#Evapotranspiration').is(':checked')) {
             $('.Temperature').hide();
@@ -541,36 +608,23 @@
             //    SubParameter = '?';
             //    firstEvapotranspiration = false;
             //}
-            SubParameter = '?';
+            SubParameter = 'et_pd_avg';
+            ChangeSubParameter(SubParameter, 'Evapotranspiration1');
         }
         ChangeLayerClimate();
     }
 
-    function ChangeSubParameter(Sub_parameter) {
+    function ChangeSubParameter(Sub_parameter, element) {
         SubParameter = Sub_parameter;
-        ChangeLayerClimate();
-    }
-
-    function ChangePeriod() {
-        if ($('#Year').is(':checked')) {
-            Period = 'y';
-        }
-        if ($('#Season').is(':checked')) {
-            Period = 's';
-        }
-        if ($('#Month').is(':checked')) {
-            Period = 'm';
-        }
-        ChangeLayerClimate();
-    }
-
-    function ChangeRCP() {
-        if ($('#RCP45').is(':checked')) {
-            RCP = 'rcp45';
-        }
-        if ($('#RCP85').is(':checked')) {
-            RCP = 'rcp85';
-        }
+        $('#Temperature1').removeClass('active');
+        $('#Temperature2').removeClass('active');
+        $('#Temperature3').removeClass('active');
+        $('#Precipitation1').removeClass('active');
+        $('#Precipitation2').removeClass('active');
+        $('#Precipitation3').removeClass('active');
+        $('#Evapotranspiration1').removeClass('active');
+        $('#Evapotranspiration2').removeClass('active');
+        $('#' + element).addClass('active');
         ChangeLayerClimate();
     }
 
@@ -586,16 +640,120 @@
         }
         ChangeLayerClimate();
     }
+
+    function ChangeRCP() {
+        if ($('#RCP45').is(':checked')) {
+            RCP = 'rcp45';
+        }
+        if ($('#RCP85').is(':checked')) {
+            RCP = 'rcp85';
+        }
+        ChangeLayerClimate();
+    }
+
+    function ChangePeriod() {
+        $('.Seasons').hide();
+        $('.Months').hide();
+        if ($('#Year').is(':checked')) {
+            Period = 'y';
+        }
+        if ($('#Season').is(':checked')) {
+            Period = 's';
+            $('.Seasons').show();
+        }
+        if ($('#Month').is(':checked')) {
+            Period = 'm';
+            $('.Months').show();
+        }
+        ChangeLayerClimate();
+    }
+
+    function ChangeSeason() {
+        if ($('#Season1').is(':checked')) {
+            Season = '1';
+        }
+        if ($('#Season2').is(':checked')) {
+            Season = '2';
+        }
+        if ($('#Season3').is(':checked')) {
+            Season = '3';
+        }
+        if ($('#Season4').is(':checked')) {
+            Season = '4';
+        }
+    }
+
+    function ChangeMonth() {
+        if ($('#Month1').is(':checked')) {
+            Month = '01';
+        }
+        if ($('#Month2').is(':checked')) {
+            Month = '02';
+        }
+        if ($('#Month3').is(':checked')) {
+            Month = '03';
+        }
+        if ($('#Month4').is(':checked')) {
+            Month = '04';
+        }
+        if ($('#Month5').is(':checked')) {
+            Month = '05';
+        }
+        if ($('#Month6').is(':checked')) {
+            Month = '06';
+        }
+        if ($('#Month7').is(':checked')) {
+            Month = '07';
+        }
+        if ($('#Month8').is(':checked')) {
+            Month = '08';
+        }
+        if ($('#Month9').is(':checked')) {
+            Month = '09';
+        }
+        if ($('#Month10').is(':checked')) {
+            Month = '10';
+        }
+        if ($('#Month11').is(':checked')) {
+            Month = '11';
+        }
+        if ($('#Month12').is(':checked')) {
+            Month = '12';
+        }
+    }
 </script>
 
-@* ChangeLayerClimate *@
+@* ChangeLayerClimate, ChangeDate *@
 <script>
+    var dates = null;
     function ChangeLayerClimate() {
-        var layerClimate = Parameter + '_' + SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
-        console.log(layerClimate);
+        var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
 
+        // Get mosaic layer dates (times)
+        $.ajax({
+            url: '@Url.Action("GetLayerDates")',
+            data: {
+                workspace: geoserver_workspace_name,
+                layer: layerClimate
+            },
+            type: 'POST',
+            success: function (data) {
+                dates = data.dates;
+                $('#date').attr('max', dates.length - 1);
+                ChangeDate();
+            },
+            error: function () {
+            }
+        })
+    };
+
+    function ChangeDate() {
+        var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        var date = dates[$('#date').val()];
+        date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
+        $('#DateLabel').text(date);
         var Source_Climate_New = new ol.source.TileWMS({
-            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabelpr_pd_avg_m_rcp45_10').html() + '&',
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabel').html() + '&',
             params: {
                 'FORMAT': 'image/png',
                 'VERSION': '1.1.1',
@@ -610,19 +768,22 @@
     }
 </script>
 
+
+
+
 @* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, map.on('singleclick'), Charts *@
 <script>
     var datespr_pd_avg_m_rcp45_10 = new Array();
     $('#datespr_pd_avg_m_rcp45_10 option').each(function () {
         datespr_pd_avg_m_rcp45_10.push($(this).val());
     });
-    var inputpr_pd_avg_m_rcp45_10 = document.getElementById('datepr_pd_avg_m_rcp45_10'),
-        outputpr_pd_avg_m_rcp45_10 = document.getElementById('DateLabelpr_pd_avg_m_rcp45_10');
-    inputpr_pd_avg_m_rcp45_10.oninput = function () {
-        outputpr_pd_avg_m_rcp45_10.innerHTML = datespr_pd_avg_m_rcp45_10[this.value];
-        ChangeLayerpr_pd_avg_m_rcp45_10();
-    };
-    inputpr_pd_avg_m_rcp45_10.oninput();
+    //var inputpr_pd_avg_m_rcp45_10 = document.getElementById('datepr_pd_avg_m_rcp45_10'),
+    //    outputpr_pd_avg_m_rcp45_10 = document.getElementById('DateLabelpr_pd_avg_m_rcp45_10');
+    //inputpr_pd_avg_m_rcp45_10.oninput = function () {
+    //    outputpr_pd_avg_m_rcp45_10.innerHTML = datespr_pd_avg_m_rcp45_10[this.value];
+    //    ChangeLayerpr_pd_avg_m_rcp45_10();
+    //};
+    //inputpr_pd_avg_m_rcp45_10.oninput();
     function ChangeLayerpr_pd_avg_m_rcp45_10() {
         var Source_pr_pd_avg_m_rcp45_10_New = new ol.source.TileWMS({
             url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabelpr_pd_avg_m_rcp45_10').html() + '&',
@@ -750,6 +911,7 @@
 <script>
     $(document).ready(function () {
         ChangeParameter();
+        ChangePeriod();
         //ChangeLayersClimate();
     });
 </script>

@@ -84,46 +84,39 @@
                     </label>
                 </div>
                 <ul class="navbar-nav mr-auto" id="subparameterlinks">
-                    <li class="nav-item active Temperature">
-                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('max')">максимальная температура <span class="sr-only">(current)</span></a>
+                    <li id="Temperature1" class="nav-item active Temperature">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('tasmax_pd_avg', 'Temperature1')">максимальная температура <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item Temperature">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('pd')">средняя температура</a>
+                    <li id="Temperature2" class="nav-item Temperature">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tas_pd_avg', 'Temperature2')">средняя температура</a>
                     </li>
-                    <li class="nav-item Temperature">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('min')">минимальная температура</a>
+                    <li id="Temperature3" class="nav-item Temperature">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tasmin_pd_avg', 'Temperature3')">минимальная температура</a>
                     </li>
-                    @*<li class="nav-item Temperature">
-                        <a class="nav-link" href="#">Отклонения максимальной температуры от значений базового периода</a>
+                    @*  *@
+                    <li id="Precipitation1" class="nav-item active Precipitation">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('pr_pd_avg', 'Precipitation1')">Осадки <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item Temperature">
-                        <a class="nav-link" href="#">Отклонения средней температуры</a>
+                    <li id="Precipitation2" class="nav-item Precipitation">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?', 'Precipitation2')">Отклонения средней суммы осадков от значений базового периода в мм</a>
                     </li>
-                    <li class="nav-item Temperature">
-                        <a class="nav-link" href="#">Отклонения минимальной температуры</a>
-                    </li>*@
-                    <li class="nav-item active Precipitation">
-                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('avg')">Осадки <span class="sr-only">(current)</span></a>
+                    <li id="Precipitation3" class="nav-item Precipitation">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?', 'Precipitation3')">Отклонения средней суммы осадков от значений базового периода в %</a>
                     </li>
-                    <li class="nav-item Precipitation">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения средней суммы осадков от значений базового периода в мм</a>
+                    @*  *@
+                    <li id="Evapotranspiration1" class="nav-item active Evapotranspiration">
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('et_pd_avg', 'Evapotranspiration1')">Эвапотранспирация <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item Precipitation">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения средней суммы осадков от значений базового периода в %</a>
-                    </li>
-                    <li class="nav-item active Evapotranspiration">
-                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('?')">Эвапотранспирация <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item Evapotranspiration">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?')">Отклонения эвапотранспирации от значений базового периода</a>
+                    <li id="Evapotranspiration2" class="nav-item Evapotranspiration">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?', 'Evapotranspiration2')">Отклонения эвапотранспирации от значений базового периода</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Другие</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown07">
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?')">Отклонения максимальной температуры от значений базового периода</a>
-                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения средней температуры</a>
-                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?')">Отклонения минимальной температуры</a>
+                            <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?', '')">Отклонения максимальной температуры от значений базового периода</a>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?', '')">Отклонения средней температуры</a>
+                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?', '')">Отклонения минимальной температуры</a>
                             <a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
                             <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
                         </div>
