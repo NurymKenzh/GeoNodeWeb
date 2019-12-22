@@ -14,6 +14,56 @@
 <link href="~/esnow/css/site.css" rel="stylesheet" />
 <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 
+<style>
+    .ol-popup {
+        position: absolute;
+        background-color: white;
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        bottom: 12px;
+        left: -50px;
+        min-width: 280px;
+    }
+
+        .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+
+        .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+
+    .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+    }
+
+        .ol-popup-closer:after {
+            content: "✖";
+        }
+</style>
+
 <div class="container-fluid p-0">
     <div class="row">
         <main role="main" class="sticky-top">
@@ -314,6 +364,10 @@
             </div>
         </main>
         <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light"></div>
+        <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup-content"></div>
+        </div>
     </div>    
     <div class="row justify-content-end">
         <div id="MapTitle" class="card text-center text-white m-1 border border-light" style="background: #3a465d;">
@@ -542,6 +596,23 @@
     //Layer_WMA.set('name', 'WMA');
     //Layer_WMA.setOpacity(0.80);
 
+    // popup
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
+    var overlay = new ol.Overlay({
+        element: container,
+        autoPan: true,
+        autoPanAnimation: {
+            duration: 250
+        }
+    });
+    closer.onclick = function () {
+        overlay.setPosition(undefined);
+        closer.blur();
+        return false;
+    };
+
     var map = new ol.Map({
         target: 'map',
         layers: [
@@ -550,6 +621,7 @@
             //Layer_pr_pd_avg_m_rcp45_10,
             //Layer_WMA
         ],
+        overlays: [overlay],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 5
@@ -741,6 +813,10 @@
     };
 
     function ChangeDate() {
+        // popup
+        overlay.setPosition(undefined);
+        closer.blur();
+
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         var date = dates[$('#date').val()];
         date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
@@ -761,7 +837,35 @@
     }
 </script>
 
-
+@* map.on('singleclick') *@
+<script>
+    map.on('singleclick', function (evt) {
+        //document.getElementById('info').innerHTML = '';
+        var viewResolution = (map.getView().getResolution());
+        var url = Layer_Climate.getSource().getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {
+                'INFO_FORMAT': 'text/javascript'
+            });
+        if (url) {
+            var parser = new ol.format.GeoJSON();
+            $.ajax({
+                url: url,
+                dataType: 'jsonp',
+                jsonpCallback: 'parseResponse',
+                error: function (xhr, status, error) {
+                }
+            }).then(function (response) {
+                var result = parser.readFeatures(response);
+                if (result.length) {
+                    var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
+                    content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>';
+                    overlay.setPosition(evt.coordinate);
+                }
+            })
+        }
+    });
+</script>
 
 
 @* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, map.on('singleclick'), Charts *@
