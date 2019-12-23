@@ -1122,7 +1122,9 @@
     });
 </script>
 @*Close button to legend*@
-<script>
+
+
+<script type="text/javascript">
     $(function () {
         $("#Legend-2").dialog({
             autoOpen: false,
@@ -1133,7 +1135,9 @@
             }
         });
         $("#LegendHide").click(function () {
-            $("#Legend-2").dialog("open");
+            ($("#Legend-2").dialog("isOpen") == false) ? $(
+                "#Legend-2").dialog("open") : $("#Legend-2").dialog("close");
         });
+        $("#Legend-2").dialog({ autoOpen: false });
     });
 </script>
