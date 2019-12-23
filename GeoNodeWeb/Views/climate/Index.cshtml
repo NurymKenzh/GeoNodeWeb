@@ -273,11 +273,18 @@
                                                 <form>
                                                     <div class="form-row m-0 p-0">
                                                         <div class="col-11">
+                                                            <input type="checkbox" id="layerwma_polygonShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerwma_polygon">
+                                                                ВХУ
+                                                            </label>
+                                                            <input id="layerwma_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
                                                             <input type="checkbox" id="layerClimateShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerClimateShow">
                                                                 Климат
                                                             </label>
                                                             <input id="layerClimateOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
                                                             <select id="layerBaseType" class="form-control form-control-sm" onchange="ChangeLayers()">
                                                                 <option value="BingAerialWithLabels">Bing Aerial</option>
                                                                 <option value="OSM">OpenStreetMap</option>
@@ -608,6 +615,25 @@
     //Layer_WMA.set('name', 'WMA');
     //Layer_WMA.setOpacity(0.80);
 
+    var url_wma_polygon = geoserver_url + 'geonode' + '/wms';
+    var Source_wma_polygon = new ol.source.TileWMS({
+        url: url_wma_polygon,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wma_polygon',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_wma_polygon = new ol.layer.Tile({
+        source: Source_wma_polygon
+    });
+    Layer_wma_polygon.set('name', 'wma_polygon');
+    Layer_wma_polygon.setOpacity(0.80);
+
     // popup
     var container = document.getElementById('popup');
     var content = document.getElementById('popup-content');
@@ -629,7 +655,8 @@
         target: 'map',
         layers: [
             Layer_Base,
-            Layer_Climate
+            Layer_Climate,
+            Layer_wma_polygon
             //Layer_pr_pd_avg_m_rcp45_10,
             //Layer_WMA
         ],
@@ -1035,6 +1062,10 @@
             if (layer.get('name') == 'Climate') {
                 layer.setVisible(document.getElementById("layerClimateShow").checked);
                 layer.setOpacity($('#layerClimateOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'wma_polygon') {
+                layer.setVisible(document.getElementById("layerwma_polygonShow").checked);
+                layer.setOpacity($('#layerwma_polygonOpacity').val() / 100)
             }
             if (layer.get('name') == 'WMA') {
                 var Source_WMA_New = new ol.source.TileWMS({
