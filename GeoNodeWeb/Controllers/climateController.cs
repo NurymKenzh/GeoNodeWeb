@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Npgsql;
 
 namespace GeoNodeWeb.Controllers
@@ -38,60 +44,60 @@ namespace GeoNodeWeb.Controllers
 
         public IActionResult Index()
         {
-            using (var connection = new NpgsqlConnection(geoserverConnection))
-            {
-                connection.Open();
+            //using (var connection = new NpgsqlConnection(geoserverConnection))
+            //{
+            //    connection.Open();
 
-                var datetimepr_pd_avg_m_rcp45_10 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"pr_pd_avg_m_rcp45_10_2011_2090\"");
-                ViewBag.DateTimepr_pd_avg_m_rcp45_10 = datetimepr_pd_avg_m_rcp45_10.OrderBy(d => d).ToArray();
+            //    var datetimepr_pd_avg_m_rcp45_10 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"pr_pd_avg_m_rcp45_10_2011_2090\"");
+            //    ViewBag.DateTimepr_pd_avg_m_rcp45_10 = datetimepr_pd_avg_m_rcp45_10.OrderBy(d => d).ToArray();
 
-                //var datetimepr_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"pr_pd_avg_m_rcp45_20_2011_2090\"");
-                //ViewBag.DateTimepr_pd_avg_m_rcp45_20_2011_2090 = datetimepr_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimepr_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"pr_pd_avg_m_rcp45_20_2011_2090\"");
+            //    //ViewBag.DateTimepr_pd_avg_m_rcp45_20_2011_2090 = datetimepr_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimepr_pd_avg_m_rcp45_30_2011_2070 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"pr_pd_avg_m_rcp45_30_2011_2070\"");
-                //ViewBag.DateTimepr_pd_avg_m_rcp45_30_2011_2070 = datetimepr_pd_avg_m_rcp45_30_2011_2070.OrderBy(d => d).ToArray();
+            //    //var datetimepr_pd_avg_m_rcp45_30_2011_2070 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"pr_pd_avg_m_rcp45_30_2011_2070\"");
+            //    //ViewBag.DateTimepr_pd_avg_m_rcp45_30_2011_2070 = datetimepr_pd_avg_m_rcp45_30_2011_2070.OrderBy(d => d).ToArray();
 
-                //var datetimetas_pd_avg_m_rcp45_10_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tas_pd_avg_m_rcp45_10_2011_2090\"");
-                //ViewBag.DateTimetas_pd_avg_m_rcp45_10_2011_2090 = datetimetas_pd_avg_m_rcp45_10_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimetas_pd_avg_m_rcp45_10_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tas_pd_avg_m_rcp45_10_2011_2090\"");
+            //    //ViewBag.DateTimetas_pd_avg_m_rcp45_10_2011_2090 = datetimetas_pd_avg_m_rcp45_10_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimetas_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tas_pd_avg_m_rcp45_20_2011_2090\"");
-                //ViewBag.DateTimetas_pd_avg_m_rcp45_20_2011_2090 = datetimetas_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimetas_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tas_pd_avg_m_rcp45_20_2011_2090\"");
+            //    //ViewBag.DateTimetas_pd_avg_m_rcp45_20_2011_2090 = datetimetas_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimetas_pd_avg_m_rcp45_30_2011_2070 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tas_pd_avg_m_rcp45_30_2011_2070\"");
-                //ViewBag.DateTimetas_pd_avg_m_rcp45_30_2011_2070 = datetimetas_pd_avg_m_rcp45_30_2011_2070.OrderBy(d => d).ToArray();
+            //    //var datetimetas_pd_avg_m_rcp45_30_2011_2070 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tas_pd_avg_m_rcp45_30_2011_2070\"");
+            //    //ViewBag.DateTimetas_pd_avg_m_rcp45_30_2011_2070 = datetimetas_pd_avg_m_rcp45_30_2011_2070.OrderBy(d => d).ToArray();
 
-                //var datetimetasmax_pd_avg_m_rcp45_10_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmax_pd_avg_m_rcp45_10_2011_2090\"");
-                //ViewBag.DateTimetasmax_pd_avg_m_rcp45_10_2011_2090 = datetimetasmax_pd_avg_m_rcp45_10_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimetasmax_pd_avg_m_rcp45_10_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmax_pd_avg_m_rcp45_10_2011_2090\"");
+            //    //ViewBag.DateTimetasmax_pd_avg_m_rcp45_10_2011_2090 = datetimetasmax_pd_avg_m_rcp45_10_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimetasmax_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmax_pd_avg_m_rcp45_20_2011_2090\"");
-                //ViewBag.DateTimetasmax_pd_avg_m_rcp45_20_2011_2090 = datetimetasmax_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimetasmax_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmax_pd_avg_m_rcp45_20_2011_2090\"");
+            //    //ViewBag.DateTimetasmax_pd_avg_m_rcp45_20_2011_2090 = datetimetasmax_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimetasmax_pd_avg_m_rcp45_30_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmax_pd_avg_m_rcp45_30_2011_2090\"");
-                //ViewBag.DateTimetasmax_pd_avg_m_rcp45_30_2011_2090 = datetimetasmax_pd_avg_m_rcp45_30_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimetasmax_pd_avg_m_rcp45_30_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmax_pd_avg_m_rcp45_30_2011_2090\"");
+            //    //ViewBag.DateTimetasmax_pd_avg_m_rcp45_30_2011_2090 = datetimetasmax_pd_avg_m_rcp45_30_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimetasmin_pd_avg_m_rcp45_10_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmin_pd_avg_m_rcp45_10_2011_2090\"");
-                //ViewBag.DateTimetasmin_pd_avg_m_rcp45_10_2011_2090 = datetimetasmin_pd_avg_m_rcp45_10_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimetasmin_pd_avg_m_rcp45_10_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmin_pd_avg_m_rcp45_10_2011_2090\"");
+            //    //ViewBag.DateTimetasmin_pd_avg_m_rcp45_10_2011_2090 = datetimetasmin_pd_avg_m_rcp45_10_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimetasmin_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmin_pd_avg_m_rcp45_20_2011_2090\"");
-                //ViewBag.DateTimetasmin_pd_avg_m_rcp45_20_2011_2090 = datetimetasmin_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
+            //    //var datetimetasmin_pd_avg_m_rcp45_20_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmin_pd_avg_m_rcp45_20_2011_2090\"");
+            //    //ViewBag.DateTimetasmin_pd_avg_m_rcp45_20_2011_2090 = datetimetasmin_pd_avg_m_rcp45_20_2011_2090.OrderBy(d => d).ToArray();
 
-                //var datetimetasmin_pd_avg_m_rcp45_30_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmin_pd_avg_m_rcp45_30_2011_2090\"");
-                //ViewBag.DateTimetasmin_pd_avg_m_rcp45_30_2011_2090 = datetimetasmin_pd_avg_m_rcp45_30_2011_2090.OrderBy(d => d).ToArray();
-            }
-            using (var connection = new NpgsqlConnection(geoportalConnection))
-            {
-                connection.Open();
-                var GSLayers = connection.Query<GSLayer>($"SELECT resourcebase_ptr_id, title_en, supplemental_information_en FROM public.layers_layer");
-                using (var connection2 = new NpgsqlConnection(postgresConnection))
-                {
-                    connection2.Open();
-                    var esnow_datasetcalculationlayers = connection2.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
-                    ViewBag.GSLayers = GSLayers
-                        .Where(g => esnow_datasetcalculationlayers.Select(l => l.layer_id).Contains(g.resourcebase_ptr_id))
-                        .OrderBy(l => l.resourcebase_ptr_id)
-                        .ToArray();
-                }
-            }
+            //    //var datetimetasmin_pd_avg_m_rcp45_30_2011_2090 = connection.Query<DateTime>($"SELECT ingestion FROM public.\"tasmin_pd_avg_m_rcp45_30_2011_2090\"");
+            //    //ViewBag.DateTimetasmin_pd_avg_m_rcp45_30_2011_2090 = datetimetasmin_pd_avg_m_rcp45_30_2011_2090.OrderBy(d => d).ToArray();
+            //}
+            //using (var connection = new NpgsqlConnection(geoportalConnection))
+            //{
+            //    connection.Open();
+            //    var GSLayers = connection.Query<GSLayer>($"SELECT resourcebase_ptr_id, title_en, supplemental_information_en FROM public.layers_layer");
+            //    using (var connection2 = new NpgsqlConnection(postgresConnection))
+            //    {
+            //        connection2.Open();
+            //        var esnow_datasetcalculationlayers = connection2.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
+            //        ViewBag.GSLayers = GSLayers
+            //            .Where(g => esnow_datasetcalculationlayers.Select(l => l.layer_id).Contains(g.resourcebase_ptr_id))
+            //            .OrderBy(l => l.resourcebase_ptr_id)
+            //            .ToArray();
+            //    }
+            //}
             ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerProdUrlServer"].ToString() : Startup.Configuration["GeoServerProdUrlDebug"].ToString();
             return View();
         }
@@ -5216,20 +5222,98 @@ namespace GeoNodeWeb.Controllers
             }
 
             List<DateTime> datesD = new List<DateTime>();
+
+            // with DB
             using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
-
                 var datetime = connection.Query<DateTime>($"SELECT ingestion FROM public.{layer}");
                 datesD = datetime.OrderBy(d => d).ToList();
             }
 
+            //// withot DB
             //string[] dates = datesL.OrderBy(d => d).ToArray();
+            // with DB
             string[] dates = datesD.Select(d => d.ToString("yyyyMMdd")).ToArray();
             return Json(new
             {
                 dates
             });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetLayerInfo(
+            string workspace,
+            string layer)
+        {
+            string GeoServerUrl = server ? Startup.Configuration["GeoServerProdUrlServer"].ToString() : Startup.Configuration["GeoServerProdUrlDebug"].ToString();
+            string title = "",
+                abstr = "";
+            // 1
+            Process process = new Process();
+            try
+            {
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.FileName = "C:\\Windows\\curl.exe";
+                //process.StartInfo.Arguments = $" -u " +
+                //    $"admin:" +
+                //    $"HdpjwZjfL7MnrK-Kcp!@uaZY" +
+                //    $" -XGET" +
+                //    $" {GeoServerUrl}rest/workspaces/{workspace}/coveragestores/{layer}/coverages/{layer}.xml";
+                process.StartInfo.Arguments = $" -u " +
+                    $"admin:" +
+                    $"geoserver" +
+                    $" -XGET" +
+                    $" http://test.geoportal.ingeo.kz/geoserver/rest/workspaces/esnow/coveragestores/Maximum_Snow_Extent/coverages/SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT.html";
+                process.Start();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.ToString(), exception.InnerException);
+            }
+            string jsonString = process.StandardOutput.ReadToEnd();
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(jsonString);
+            
+            //XmlDocument xmlDoc2 = new XmlDocument();
+            //xmlDoc2.LoadXml(XmlConvert.DecodeName(xmlDoc.OuterXml));
+
+            XmlNodeList ti = xmlDoc.GetElementsByTagName("title");
+            XmlNodeList ab = xmlDoc.GetElementsByTagName("abstract");
+            title = ti[0].InnerText;
+            abstr = ab[0].InnerText;
+
+            //Encoding iso = Encoding.GetEncoding("ISO-8859-1");
+            //Encoding utf8 = Encoding.UTF8;
+            ////byte[] isoBytes = iso.GetBytes(title);
+            ////byte[] utfBytes = Encoding.Convert(iso, utf8, isoBytes);
+            ////string msg = iso.GetString(utfBytes);
+            //byte[] utfBytes = utf8.GetBytes(title);
+            //byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
+            //string msg = iso.GetString(utfBytes);
+
+            // 2
+            //WebRequest request = WebRequest.Create("http://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml");
+            //request.Credentials = new NetworkCredential("admin", "HdpjwZjfL7MnrK-Kcp!@uaZY");
+            ////using (WebResponse response = request.GetResponse())
+            ////{
+            ////    using (XmlReader reader = XmlReader.Create(response.GetResponseStream()))
+            ////    {
+            ////        // Blah blah...
+            ////    }
+            ////}
+            //WebResponse response = request.GetResponse();
+            //XmlReader reader = XmlReader.Create(response.GetResponseStream());
+
+            return Json(new
+            {
+                title,
+                abstr
+            });
+        }
+
+
     }
 }

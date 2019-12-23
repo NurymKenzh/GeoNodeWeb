@@ -349,8 +349,8 @@
                             </div>
                             <div class="col-6">
                                 @*<div class="progress mt-3">
-                                    <div class="progress-bar align-bottom" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="10" aria-valuemax="100">50%</div>
-                                </div>*@
+                                        <div class="progress-bar align-bottom" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="10" aria-valuemax="100">50%</div>
+                                    </div>*@
                                 <label style="color: white;">Год: </label>
                                 <label id="DateLabel" style="color: white;"></label>
                                 <input id="date" type="range" min="0" value="0" max="10" step="1" style="width: 100%;" oninput="ChangeDate()">
@@ -368,7 +368,7 @@
             <a href="#" id="popup-closer" class="ol-popup-closer"></a>
             <div id="popup-content"></div>
         </div>
-    </div>    
+    </div>
     <div class="row justify-content-end">
         <div id="MapTitle" class="card text-center text-white m-1 border border-light" style="background: #3a465d;">
             <div class="card-body m-0 p-3">
@@ -390,7 +390,7 @@
     var HEREappCode = 'D9-h9iVhjgUB_9eUlFETXA';
 
     var Source_OSM = new ol.source.OSM();
-    
+
 
     Source_BingAerialWithLabels = new ol.source.BingMaps({
         key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
@@ -792,6 +792,60 @@
     var dates = null;
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+
+        // Get mosaic layer info from GeoServer
+        // 1
+        //var query = 'https://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml';
+        ////$.getJSON('https://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10' + '.json?callback=?',
+        ////    {
+        ////        format: "jsonp"
+        ////    },
+        ////    function (json) {
+        ////        //$("#vidThumb").attr('src', json[0].thumbnail_small);
+        ////        console.log(json);
+        ////    });
+        //$.ajax({
+        //    url: resturl,
+        //    dataType: 'jsonp',
+        //    success: function (data) {
+        //        console.log(data);
+        //    }
+        //});
+
+        @*// 2
+        $.ajax({
+            url: '@Url.Action("GetLayerInfo")',
+            data: {
+                workspace: geoserver_workspace_name,
+                layer: layerClimate
+            },
+            type: 'POST',
+            success: function (data) {
+                console.log("GetLayerInfo OK");
+            },
+            error: function () {
+            }
+        })*@
+
+        //// 3
+        //$.ajax({
+        //    url: 'http://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml',
+        //    type: 'GET',
+        //    // This is the important part
+        //    xhrFields: {
+        //        withCredentials: true
+        //    },
+        //    // This is the important part
+        //    //data: data,
+        //    success: function (response) {
+        //        console.log(response);
+        //        // handle the response
+        //    },
+        //    error: function (xhr, status) {
+        //        // handle errors
+        //        console.log('error');
+        //    }
+        //});
 
         // Get mosaic layer dates (times)
         $.ajax({
