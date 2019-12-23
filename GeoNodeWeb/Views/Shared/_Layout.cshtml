@@ -73,25 +73,25 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="btn-group btn-group-toggle ml-3 mr-3" data-toggle="buttons">
-                    <label class="btn btn-outline-light btn-sm active">
-                        <input type="radio" name="parameter" id="Temperature" autocomplete="off" checked onchange="ChangeParameter()"> Температура воздуха
+                    <label class="btn btn-outline-light btn-sm active" data-toggle="tooltip" data-placement="bottom" title="Tемпература воздуха">
+                        <input type="radio" name="parameter" id="Temperature" autocomplete="off" checked onchange="ChangeParameter()"> <i class="fa fa-thermometer-2"></i>
                     </label>
-                    <label class="btn btn-outline-light btn-sm">
-                        <input type="radio" name="parameter" id="Precipitation" autocomplete="off" onchange="ChangeParameter()"> Осадки
+                    <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="Осадки">
+                        <input type="radio" name="parameter" id="Precipitation" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-tint"></i>
                     </label>
-                    <label class="btn btn-outline-light btn-sm">
-                        <input type="radio" name="parameter" id="Evapotranspiration" autocomplete="off" onchange="ChangeParameter()"> Эвапотранспирация
+                    <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="Эвапотранспирация">
+                        <input type="radio" name="parameter" id="Evapotranspiration" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-ellipsis-v"></i>
                     </label>
                 </div>
                 <ul class="navbar-nav mr-auto" id="subparameterlinks">
                     <li id="Temperature1" class="nav-item active Temperature">
-                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('tasmax_pd_avg', 'Temperature1')">максимальная температура <span class="sr-only">(current)</span></a>
+                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('tasmax_pd_avg', 'Temperature1')">Максимальная температура <span class="sr-only">(current)</span></a>
                     </li>
                     <li id="Temperature2" class="nav-item Temperature">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tas_pd_avg', 'Temperature2')">средняя температура</a>
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tas_pd_avg', 'Temperature2')">Средняя температура</a>
                     </li>
                     <li id="Temperature3" class="nav-item Temperature">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tasmin_pd_avg', 'Temperature3')">минимальная температура</a>
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tasmin_pd_avg', 'Temperature3')">Минимальная температура</a>
                     </li>
                     @*  *@
                     <li id="Precipitation1" class="nav-item active Precipitation">
@@ -115,8 +115,8 @@
                         <div class="dropdown-menu" aria-labelledby="dropdown07">
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?', '')">Отклонения максимальной температуры от значений базового периода</a>
-                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?', '')">Отклонения средней температуры</a>
-                            <a class="dropdown-item Temperature" onclick="ChangeSubParameter('?', '')">Отклонения минимальной температуры</a>
+                            <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?', '')">Отклонения средней температуры</a>
+                            <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?', '')">Отклонения минимальной температуры</a>
                             <a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
                             <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
                         </div>

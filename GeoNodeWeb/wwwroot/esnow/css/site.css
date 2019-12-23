@@ -307,11 +307,11 @@ article {
 
 .sidebar-wrapper {
     font-size: 0.9rem;
-    width: 260px;
-    height: 80%;
+    width: 240px;
+    height: 75%;
     max-height: 100%;
     position: fixed;
-    top: 70px;
+    top: 63px;
     left: -300px;
     z-index: 999;
 }
@@ -342,7 +342,7 @@ article {
 /*--------------------sidebar-brand----------------------*/
 
 .sidebar-wrapper .sidebar-brand {
-    padding: 10px 20px;
+    padding: 5px 20px;
     display: flex;
     align-items: center;
 }
@@ -417,7 +417,7 @@ article {
     .sidebar-wrapper .sidebar-menu .header-menu span {
         font-weight: bold;
         font-size: 14px;
-        padding: 15px 20px 5px 20px;
+        padding: 3px 20px 3px 20px;
         display: inline-block;
     }
 
@@ -742,9 +742,9 @@ article {
   transition: .3s;
   transform: scale(3.4);
   opacity: 0;
-  margin-top: -7px;
-  width: 12px;
-  height: 12px;
+  margin-top: -5px;
+  width: 10px;
+  height: 10px;
   content: '';
   position: absolute;
   left: 3px;
