@@ -805,6 +805,60 @@
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
 
+        // Get mosaic layer info from GeoServer
+        // 1
+        //var query = 'https://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml';
+        ////$.getJSON('https://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10' + '.json?callback=?',
+        ////    {
+        ////        format: "jsonp"
+        ////    },
+        ////    function (json) {
+        ////        //$("#vidThumb").attr('src', json[0].thumbnail_small);
+        ////        console.log(json);
+        ////    });
+        //$.ajax({
+        //    url: resturl,
+        //    dataType: 'jsonp',
+        //    success: function (data) {
+        //        console.log(data);
+        //    }
+        //});
+
+        @*// 2
+        $.ajax({
+            url: '@Url.Action("GetLayerInfo")',
+            data: {
+                workspace: geoserver_workspace_name,
+                layer: layerClimate
+            },
+            type: 'POST',
+            success: function (data) {
+                console.log("GetLayerInfo OK");
+            },
+            error: function () {
+            }
+        })*@
+
+        //// 3
+        //$.ajax({
+        //    url: 'http://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml',
+        //    type: 'GET',
+        //    // This is the important part
+        //    xhrFields: {
+        //        withCredentials: true
+        //    },
+        //    // This is the important part
+        //    //data: data,
+        //    success: function (response) {
+        //        console.log(response);
+        //        // handle the response
+        //    },
+        //    error: function (xhr, status) {
+        //        // handle errors
+        //        console.log('error');
+        //    }
+        //});
+
         // Get mosaic layer dates (times)
         $.ajax({
             url: '@Url.Action("GetLayerDates")',
