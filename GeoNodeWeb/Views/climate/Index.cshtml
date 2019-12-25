@@ -243,20 +243,20 @@
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="Month" id="Month010" value="10" onchange="ChangeMonth()">
-                                            <label class="form-check-label" for="Month010">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month10" value="10" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month10">
                                                 Октябрь
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="Month" id="Month011" value="11" onchange="ChangeMonth()">
-                                            <label class="form-check-label" for="Month011">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month11" value="11" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month11">
                                                 Ноябрь
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="Month" id="Month012" value="12" onchange="ChangeMonth()">
-                                            <label class="form-check-label" for="Month012">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month12" value="12" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month12">
                                                 Декабрь
                                             </label>
                                         </div>
@@ -273,13 +273,13 @@
                                                 <form>
                                                     <div class="form-row m-0 p-0">
                                                         <div class="col-11">
-                                                            <input type="checkbox" id="layerriversShow" checked="checked" onchange="ChangeLayers()">
+                                                            <input type="checkbox" id="layerriversShow" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerrivers">
                                                                 Реки
                                                             </label>
                                                             <input id="layerriversOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
-                                                            <input type="checkbox" id="layerlakesShow" checked="checked" onchange="ChangeLayers()">
+                                                            <input type="checkbox" id="layerlakesShow" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerlakes">
                                                                 Озера
                                                             </label>
@@ -402,7 +402,7 @@
     <div class="row justify-content-end">
         <div id="MapTitle" class="card text-center text-white m-0 rounded-0 border-top-0 border-light" style="background: #3a465d;">
             <div class="card-body m-0 p-3">
-                <h5 class="card-title m-0" id="InfoTitle" title="">Card title</h5>
+                <h6 class="card-title m-0" id="InfoTitle" title="">Card title</h6>
                 <p class="card-text" id="InfoInfo">Some quick example text</p>
             </div>
         </div>
@@ -687,6 +687,7 @@
         source: Source_lakes
     });
     Layer_lakes.set('name', 'lakes');
+    Layer_lakes.setVisible(false);
     Layer_lakes.setOpacity(0.80);
 
     var url_rivers = geoserver_url + 'geonode' + '/wms';
@@ -706,6 +707,7 @@
         source: Source_rivers
     });
     Layer_rivers.set('name', 'rivers');
+    Layer_rivers.setVisible(false);
     Layer_rivers.setOpacity(0.80);
 
     // popup
@@ -767,7 +769,7 @@
             SubParameter = 'tasmax_pd_avg';
             ChangeSubParameter(SubParameter, 'Temperature1');
         }
-        if ($('#Precipitation').is(':checked')) {
+        else if ($('#Precipitation').is(':checked')) {
             $('.Temperature').hide();
             $('.Precipitation').show();
             $('.Evapotranspiration').hide();
@@ -779,7 +781,7 @@
             SubParameter = 'pr_pd_avg';
             ChangeSubParameter(SubParameter, 'Precipitation1');
         }
-        if ($('#Evapotranspiration').is(':checked')) {
+        else if ($('#Evapotranspiration').is(':checked')) {
             $('.Temperature').hide();
             $('.Precipitation').hide();
             $('.Evapotranspiration').show();
@@ -791,7 +793,8 @@
             SubParameter = 'et_pd_avg';
             ChangeSubParameter(SubParameter, 'Evapotranspiration1');
         }
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        //ChangePeriod();
     }
 
     function ChangeSubParameter(Sub_parameter, element) {
@@ -808,7 +811,9 @@
         $('#Evapotranspiration1').removeClass('active');
         $('#Evapotranspiration2').removeClass('active');
         $('#' + element).addClass('active');
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        //ChangePeriod();
+        ChangeDecade();
     }
 
     function ChangeDecade() {
@@ -821,7 +826,8 @@
         if ($('#decade30').is(':checked')) {
             Decade = '30';
         }
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        ChangeRCP();
     }
 
     function ChangeRCP() {
@@ -831,7 +837,8 @@
         if ($('#RCP85').is(':checked')) {
             RCP = 'rcp85';
         }
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        ChangePeriod();
     }
 
     function ChangePeriod() {
@@ -848,7 +855,7 @@
             Period = 'm';
             $('.Months').show();
         }
-        ChangeLayerClimate();
+        ChangeSeason();
     }
 
     function ChangeSeason() {
@@ -864,34 +871,35 @@
         if ($('#Season4').is(':checked')) {
             Season = '4';
         }
+        ChangeMonth();
     }
 
     function ChangeMonth() {
-        if ($('#Month1').is(':checked')) {
+        if ($('#Month01').is(':checked')) {
             Month = '01';
         }
-        if ($('#Month2').is(':checked')) {
+        if ($('#Month02').is(':checked')) {
             Month = '02';
         }
-        if ($('#Month3').is(':checked')) {
+        if ($('#Month03').is(':checked')) {
             Month = '03';
         }
-        if ($('#Month4').is(':checked')) {
+        if ($('#Month04').is(':checked')) {
             Month = '04';
         }
-        if ($('#Month5').is(':checked')) {
+        if ($('#Month05').is(':checked')) {
             Month = '05';
         }
-        if ($('#Month6').is(':checked')) {
+        if ($('#Month06').is(':checked')) {
             Month = '06';
         }
-        if ($('#Month7').is(':checked')) {
+        if ($('#Month07').is(':checked')) {
             Month = '07';
         }
-        if ($('#Month8').is(':checked')) {
+        if ($('#Month08').is(':checked')) {
             Month = '08';
         }
-        if ($('#Month9').is(':checked')) {
+        if ($('#Month09').is(':checked')) {
             Month = '09';
         }
         if ($('#Month10').is(':checked')) {
@@ -903,6 +911,7 @@
         if ($('#Month12').is(':checked')) {
             Month = '12';
         }
+        ChangeLayerClimate();
     }
 </script>
 
@@ -911,7 +920,7 @@
     var dates = null;
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
-        //console.log(layerClimate);
+        console.log(layerClimate);
 
         $('#InfoTitle').text('');
         $('#InfoTitle').prop('title', '');
@@ -941,7 +950,15 @@
             },
             type: 'POST',
             success: function (data) {
-                dates = data.dates;
+                var years_all = data.dates;
+                for (i = 0; i < years_all.length; i++) {
+                    years_all[i] = years_all[i].substr(0, 4);
+                } 
+                var years = [];
+                $.each(years_all, function (i, el) {
+                    if ($.inArray(el, years) === -1) years.push(el);
+                });
+                dates = years;
                 $('#date').attr('max', dates.length - 1);
                 $('#date').val(0);
                 ChangeDate();
@@ -958,10 +975,25 @@
 
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         var date = dates[$('#date').val()];
-        date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
-        $('#DateLabel').text(date);
+        //date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
+        
+        var date_str = date,
+            date_label = date;
+        if (Period == 'y') {
+            date_str += '-01-01';
+        }
+        if (Period == 's') {
+            date_str += '-0' + Season + '-01';
+        }
+        console.log(Period + ': ' + Month);
+        if (Period == 'm') {
+            date_str += '-' + Month + '-01';
+        }
+        console.log(date_str);
+        date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
+        $('#DateLabel').text(date_label);
         var Source_Climate_New = new ol.source.TileWMS({
-            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabel').html() + '&',
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
             params: {
                 'FORMAT': 'image/png',
                 'VERSION': '1.1.1',
@@ -1163,7 +1195,7 @@
 <script>
     $(document).ready(function () {
         ChangeParameter();
-        ChangePeriod();
+        //ChangePeriod();
         //ChangeLayersClimate();
     });
 </script>
