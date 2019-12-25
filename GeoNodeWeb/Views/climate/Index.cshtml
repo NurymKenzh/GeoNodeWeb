@@ -799,6 +799,9 @@
         $('#Temperature1').removeClass('active');
         $('#Temperature2').removeClass('active');
         $('#Temperature3').removeClass('active');
+        $('#Temperature4').removeClass('active');
+        $('#Temperature5').removeClass('active');
+        $('#Temperature6').removeClass('active');
         $('#Precipitation1').removeClass('active');
         $('#Precipitation2').removeClass('active');
         $('#Precipitation3').removeClass('active');
@@ -908,6 +911,7 @@
     var dates = null;
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        //console.log(layerClimate);
 
         $('#InfoTitle').text('');
         $('#InfoTitle').prop('title', '');
