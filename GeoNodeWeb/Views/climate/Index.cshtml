@@ -273,11 +273,29 @@
                                                 <form>
                                                     <div class="form-row m-0 p-0">
                                                         <div class="col-11">
+                                                            <input type="checkbox" id="layerriversShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerrivers">
+                                                                Реки
+                                                            </label>
+                                                            <input id="layerriversOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                            <input type="checkbox" id="layerlakesShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerlakes">
+                                                                Озера
+                                                            </label>
+                                                            <input id="layerlakesOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
                                                             <input type="checkbox" id="layerwma_polygonShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerwma_polygon">
                                                                 ВХУ
                                                             </label>
                                                             <input id="layerwma_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                            <input type="checkbox" id="layerwmb_polygonShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerwmb_polygon">
+                                                                ВХБ
+                                                            </label>
+                                                            <input id="layerwmb_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
                                                             <input type="checkbox" id="layerClimateShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerClimateShow">
@@ -368,7 +386,6 @@
                                 <input id="date" type="range" min="0" value="0" max="10" step="1" style="width: 100%;" oninput="ChangeDate()">
                             </div>
                             <div class="col">
-
                                 <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
                             </div>
                         </div>
@@ -385,7 +402,7 @@
     <div class="row justify-content-end">
         <div id="MapTitle" class="card text-center text-white m-0 rounded-0 border-top-0 border-light" style="background: #3a465d;">
             <div class="card-body m-0 p-3">
-                <h5 class="card-title m-0" id="InfoTitle">Card title</h5>
+                <h5 class="card-title m-0" id="InfoTitle" title="">Card title</h5>
                 <p class="card-text" id="InfoInfo">Some quick example text</p>
             </div>
         </div>
@@ -615,6 +632,25 @@
     //Layer_WMA.set('name', 'WMA');
     //Layer_WMA.setOpacity(0.80);
 
+    var url_wmb_polygon = geoserver_url + 'geonode' + '/wms';
+    var Source_wmb_polygon = new ol.source.TileWMS({
+        url: url_wmb_polygon,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wmb_polygon',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_wmb_polygon = new ol.layer.Tile({
+        source: Source_wmb_polygon
+    });
+    Layer_wmb_polygon.set('name', 'wmb_polygon');
+    Layer_wmb_polygon.setOpacity(0.80);
+
     var url_wma_polygon = geoserver_url + 'geonode' + '/wms';
     var Source_wma_polygon = new ol.source.TileWMS({
         url: url_wma_polygon,
@@ -633,6 +669,44 @@
     });
     Layer_wma_polygon.set('name', 'wma_polygon');
     Layer_wma_polygon.setOpacity(0.80);
+
+    var url_lakes = geoserver_url + 'geonode' + '/wms';
+    var Source_lakes = new ol.source.TileWMS({
+        url: url_lakes,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:lakes',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_lakes = new ol.layer.Tile({
+        source: Source_lakes
+    });
+    Layer_lakes.set('name', 'lakes');
+    Layer_lakes.setOpacity(0.80);
+
+    var url_rivers = geoserver_url + 'geonode' + '/wms';
+    var Source_rivers = new ol.source.TileWMS({
+        url: url_rivers,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:rivers',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_rivers = new ol.layer.Tile({
+        source: Source_rivers
+    });
+    Layer_rivers.set('name', 'rivers');
+    Layer_rivers.setOpacity(0.80);
 
     // popup
     var container = document.getElementById('popup');
@@ -656,7 +730,10 @@
         layers: [
             Layer_Base,
             Layer_Climate,
-            Layer_wma_polygon
+            Layer_wmb_polygon,
+            Layer_wma_polygon,
+            Layer_lakes,
+            Layer_rivers
             //Layer_pr_pd_avg_m_rcp45_10,
             //Layer_WMA
         ],
@@ -833,6 +910,7 @@
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
 
         $('#InfoTitle').text('');
+        $('#InfoTitle').prop('title', '');
         $('#InfoInfo').text('');
         $.ajax({
             url: '@Url.Action("GetLayerInfo")',
@@ -843,7 +921,8 @@
             type: 'POST',
             success: function (data) {
                 $('#InfoTitle').text(data.title);
-                $('#InfoInfo').text(data.abstr);
+                //$('#InfoInfo').text(data.abstr);
+                $('#InfoTitle').prop('title', data.abstr);
             },
             error: function () {
             }
@@ -1026,9 +1105,21 @@
                 layer.setVisible(document.getElementById("layerClimateShow").checked);
                 layer.setOpacity($('#layerClimateOpacity').val() / 100)
             }
+            if (layer.get('name') == 'wmb_polygon') {
+                layer.setVisible(document.getElementById("layerwmb_polygonShow").checked);
+                layer.setOpacity($('#layerwmb_polygonOpacity').val() / 100)
+            }
             if (layer.get('name') == 'wma_polygon') {
                 layer.setVisible(document.getElementById("layerwma_polygonShow").checked);
                 layer.setOpacity($('#layerwma_polygonOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'lakes') {
+                layer.setVisible(document.getElementById("layerlakesShow").checked);
+                layer.setOpacity($('#layerlakesOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'rivers') {
+                layer.setVisible(document.getElementById("layerriversShow").checked);
+                layer.setOpacity($('#layerriversOpacity').val() / 100)
             }
             if (layer.get('name') == 'WMA') {
                 var Source_WMA_New = new ol.source.TileWMS({
