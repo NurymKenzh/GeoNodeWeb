@@ -2,7 +2,104 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!--Plugin CSS file with desired skin-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css" />
+
+<!--jQuery-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="js/ion.rangeSlider.min.js"></script>
+
+<!--Plugin JavaScript file-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+<link rel="stylesheet" href="./style.css">
+<link href="css/ion.rangeSlider.min.css" rel="stylesheet" type="text/css">
+<style>
+    .range-slider {    position: relative;
+    height: 80px;
+}
+
+
+</style>
+<body>
+    <div class="container">
+        <div class="jumbotron p-1 p-md-5 text-white rounded bg-info mt-3">
+            <div class="col-md-10 px-0">
+                <h1 class="display-4 font-italic">Range slider for Climat</h1>
+            </div>
+        </div>
+    </div>
+    <main role="main" class="container pb-4">
+        <div class="row">
+            <div class="col-md-1">
+                <button id="MinusBtn" class="MinusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-left"></i></button>
+                <button id="PlusBtn" class="PlusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-right"></i></button>
+            </div>
+            <div class="col-md-10">
+                <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
+            </div>        
+            
+        </div><!-- /.row -->
+    </main><!-- /.container -->
+</body>
+
+<script>
+var yearsvalues = [1901, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100];
+var $ClimateTimeline = $(".js-range-slider"),
+    $btn_minus = $(".MinusBtn"),
+    $btn_plus = $(".PlusBtn"),
+    min = 1900,
+    max = 2100,
+    step = 10,
+    from = 2000,
+    to = from+step;
+
+
+$("#ClimateTimeline").ionRangeSlider({
+	grid: true,
+    type: "double",
+    min: min,
+    max: max,
+    step: step,
+    from: from,
+    to: to,
+    drag_interval: true,
+    prettify_enabled: false,
+    onFinish: function(data) {
+        from = data.from,
+        to = data.to;
+    }
+});
+
+$btn_minus.on("click", function() {
+    updateRange(-1);
+});
+
+$btn_plus.on("click", function() {
+    updateRange(1);
+});
+
+var range_instance = $ClimateTimeline.data("ionRangeSlider");
+
+var updateRange = function(direction) {
+    from += step * direction;
+    if (from < min) {
+        from = min;
+    } else if (from > max) {
+        from = max;
+    }
+
+    range_instance.update({
+        from: from
+    });
+    to += step * direction;
+    if (to < min) {
+        to = min;
+    } else if (to > max) {
+        to = max;
+    }
+
+    range_instance.update({
+        to: to
+    });
+};
+</script>
