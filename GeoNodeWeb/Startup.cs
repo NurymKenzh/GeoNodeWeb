@@ -42,6 +42,8 @@ namespace GeoNodeWeb
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddTransient<Controllers.HttpApiClientController, Controllers.HttpApiClientController>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

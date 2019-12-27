@@ -243,20 +243,20 @@
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="Month" id="Month010" value="10" onchange="ChangeMonth()">
-                                            <label class="form-check-label" for="Month010">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month10" value="10" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month10">
                                                 Октябрь
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="Month" id="Month011" value="11" onchange="ChangeMonth()">
-                                            <label class="form-check-label" for="Month011">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month11" value="11" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month11">
                                                 Ноябрь
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="Month" id="Month012" value="12" onchange="ChangeMonth()">
-                                            <label class="form-check-label" for="Month012">
+                                            <input class="form-check-input" type="radio" name="Month" id="Month12" value="12" onchange="ChangeMonth()">
+                                            <label class="form-check-label" for="Month12">
                                                 Декабрь
                                             </label>
                                         </div>
@@ -273,11 +273,36 @@
                                                 <form>
                                                     <div class="form-row m-0 p-0">
                                                         <div class="col-11">
+                                                            <input type="checkbox" id="layerriversShow" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerrivers">
+                                                                Реки
+                                                            </label>
+                                                            <input id="layerriversOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                            <input type="checkbox" id="layerlakesShow" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerlakes">
+                                                                Озера
+                                                            </label>
+                                                            <input id="layerlakesOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                            <input type="checkbox" id="layerwma_polygonShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerwma_polygon">
+                                                                ВХУ
+                                                            </label>
+                                                            <input id="layerwma_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
+                                                            <input type="checkbox" id="layerwmb_polygonShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerwmb_polygon">
+                                                                ВХБ
+                                                            </label>
+                                                            <input id="layerwmb_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
                                                             <input type="checkbox" id="layerClimateShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerClimateShow">
                                                                 Климат
                                                             </label>
                                                             <input id="layerClimateOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
                                                             <select id="layerBaseType" class="form-control form-control-sm" onchange="ChangeLayers()">
                                                                 <option value="BingAerialWithLabels">Bing Aerial</option>
                                                                 <option value="OSM">OpenStreetMap</option>
@@ -361,7 +386,6 @@
                                 <input id="date" type="range" min="0" value="0" max="10" step="1" style="width: 100%;" oninput="ChangeDate()">
                             </div>
                             <div class="col">
-
                                 <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
                             </div>
                         </div>
@@ -378,7 +402,7 @@
     <div class="row justify-content-end">
         <div id="MapTitle" class="card text-center text-white m-0 rounded-0 border-top-0 border-light" style="background: #3a465d;">
             <div class="card-body m-0 p-3">
-                <h5 class="card-title m-0" id="InfoTitle">Card title</h5>
+                <h6 class="card-title m-0" id="InfoTitle" title="">Card title</h6>
                 <p class="card-text" id="InfoInfo">Some quick example text</p>
             </div>
         </div>
@@ -608,6 +632,84 @@
     //Layer_WMA.set('name', 'WMA');
     //Layer_WMA.setOpacity(0.80);
 
+    var url_wmb_polygon = geoserver_url + 'geonode' + '/wms';
+    var Source_wmb_polygon = new ol.source.TileWMS({
+        url: url_wmb_polygon,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wmb_polygon',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_wmb_polygon = new ol.layer.Tile({
+        source: Source_wmb_polygon
+    });
+    Layer_wmb_polygon.set('name', 'wmb_polygon');
+    Layer_wmb_polygon.setOpacity(0.80);
+
+    var url_wma_polygon = geoserver_url + 'geonode' + '/wms';
+    var Source_wma_polygon = new ol.source.TileWMS({
+        url: url_wma_polygon,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wma_polygon',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_wma_polygon = new ol.layer.Tile({
+        source: Source_wma_polygon
+    });
+    Layer_wma_polygon.set('name', 'wma_polygon');
+    Layer_wma_polygon.setOpacity(0.80);
+
+    var url_lakes = geoserver_url + 'geonode' + '/wms';
+    var Source_lakes = new ol.source.TileWMS({
+        url: url_lakes,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:lakes',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_lakes = new ol.layer.Tile({
+        source: Source_lakes
+    });
+    Layer_lakes.set('name', 'lakes');
+    Layer_lakes.setVisible(false);
+    Layer_lakes.setOpacity(0.80);
+
+    var url_rivers = geoserver_url + 'geonode' + '/wms';
+    var Source_rivers = new ol.source.TileWMS({
+        url: url_rivers,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:rivers',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_rivers = new ol.layer.Tile({
+        source: Source_rivers
+    });
+    Layer_rivers.set('name', 'rivers');
+    Layer_rivers.setVisible(false);
+    Layer_rivers.setOpacity(0.80);
+
     // popup
     var container = document.getElementById('popup');
     var content = document.getElementById('popup-content');
@@ -629,7 +731,11 @@
         target: 'map',
         layers: [
             Layer_Base,
-            Layer_Climate
+            Layer_Climate,
+            Layer_wmb_polygon,
+            Layer_wma_polygon,
+            Layer_lakes,
+            Layer_rivers
             //Layer_pr_pd_avg_m_rcp45_10,
             //Layer_WMA
         ],
@@ -663,7 +769,7 @@
             SubParameter = 'tasmax_pd_avg';
             ChangeSubParameter(SubParameter, 'Temperature1');
         }
-        if ($('#Precipitation').is(':checked')) {
+        else if ($('#Precipitation').is(':checked')) {
             $('.Temperature').hide();
             $('.Precipitation').show();
             $('.Evapotranspiration').hide();
@@ -675,7 +781,7 @@
             SubParameter = 'pr_pd_avg';
             ChangeSubParameter(SubParameter, 'Precipitation1');
         }
-        if ($('#Evapotranspiration').is(':checked')) {
+        else if ($('#Evapotranspiration').is(':checked')) {
             $('.Temperature').hide();
             $('.Precipitation').hide();
             $('.Evapotranspiration').show();
@@ -687,7 +793,8 @@
             SubParameter = 'et_pd_avg';
             ChangeSubParameter(SubParameter, 'Evapotranspiration1');
         }
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        //ChangePeriod();
     }
 
     function ChangeSubParameter(Sub_parameter, element) {
@@ -695,13 +802,18 @@
         $('#Temperature1').removeClass('active');
         $('#Temperature2').removeClass('active');
         $('#Temperature3').removeClass('active');
+        $('#Temperature4').removeClass('active');
+        $('#Temperature5').removeClass('active');
+        $('#Temperature6').removeClass('active');
         $('#Precipitation1').removeClass('active');
         $('#Precipitation2').removeClass('active');
         $('#Precipitation3').removeClass('active');
         $('#Evapotranspiration1').removeClass('active');
         $('#Evapotranspiration2').removeClass('active');
         $('#' + element).addClass('active');
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        //ChangePeriod();
+        ChangeDecade();
     }
 
     function ChangeDecade() {
@@ -714,7 +826,8 @@
         if ($('#decade30').is(':checked')) {
             Decade = '30';
         }
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        ChangeRCP();
     }
 
     function ChangeRCP() {
@@ -724,7 +837,8 @@
         if ($('#RCP85').is(':checked')) {
             RCP = 'rcp85';
         }
-        ChangeLayerClimate();
+        //ChangeLayerClimate();
+        ChangePeriod();
     }
 
     function ChangePeriod() {
@@ -741,7 +855,7 @@
             Period = 'm';
             $('.Months').show();
         }
-        ChangeLayerClimate();
+        ChangeSeason();
     }
 
     function ChangeSeason() {
@@ -757,34 +871,35 @@
         if ($('#Season4').is(':checked')) {
             Season = '4';
         }
+        ChangeMonth();
     }
 
     function ChangeMonth() {
-        if ($('#Month1').is(':checked')) {
+        if ($('#Month01').is(':checked')) {
             Month = '01';
         }
-        if ($('#Month2').is(':checked')) {
+        if ($('#Month02').is(':checked')) {
             Month = '02';
         }
-        if ($('#Month3').is(':checked')) {
+        if ($('#Month03').is(':checked')) {
             Month = '03';
         }
-        if ($('#Month4').is(':checked')) {
+        if ($('#Month04').is(':checked')) {
             Month = '04';
         }
-        if ($('#Month5').is(':checked')) {
+        if ($('#Month05').is(':checked')) {
             Month = '05';
         }
-        if ($('#Month6').is(':checked')) {
+        if ($('#Month06').is(':checked')) {
             Month = '06';
         }
-        if ($('#Month7').is(':checked')) {
+        if ($('#Month07').is(':checked')) {
             Month = '07';
         }
-        if ($('#Month8').is(':checked')) {
+        if ($('#Month08').is(':checked')) {
             Month = '08';
         }
-        if ($('#Month9').is(':checked')) {
+        if ($('#Month09').is(':checked')) {
             Month = '09';
         }
         if ($('#Month10').is(':checked')) {
@@ -796,6 +911,7 @@
         if ($('#Month12').is(':checked')) {
             Month = '12';
         }
+        ChangeLayerClimate();
     }
 </script>
 
@@ -804,27 +920,11 @@
     var dates = null;
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        console.log(layerClimate);
 
-        // Get mosaic layer info from GeoServer
-        // 1
-        //var query = 'https://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml';
-        ////$.getJSON('https://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10' + '.json?callback=?',
-        ////    {
-        ////        format: "jsonp"
-        ////    },
-        ////    function (json) {
-        ////        //$("#vidThumb").attr('src', json[0].thumbnail_small);
-        ////        console.log(json);
-        ////    });
-        //$.ajax({
-        //    url: resturl,
-        //    dataType: 'jsonp',
-        //    success: function (data) {
-        //        console.log(data);
-        //    }
-        //});
-
-        @*// 2
+        $('#InfoTitle').text('');
+        $('#InfoTitle').prop('title', '');
+        $('#InfoInfo').text('');
         $.ajax({
             url: '@Url.Action("GetLayerInfo")',
             data: {
@@ -833,31 +933,13 @@
             },
             type: 'POST',
             success: function (data) {
-                console.log("GetLayerInfo OK");
+                $('#InfoTitle').text(data.title);
+                //$('#InfoInfo').text(data.abstr);
+                $('#InfoTitle').prop('title', data.abstr);
             },
             error: function () {
             }
-        })*@
-
-        //// 3
-        //$.ajax({
-        //    url: 'http://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml',
-        //    type: 'GET',
-        //    // This is the important part
-        //    xhrFields: {
-        //        withCredentials: true
-        //    },
-        //    // This is the important part
-        //    //data: data,
-        //    success: function (response) {
-        //        console.log(response);
-        //        // handle the response
-        //    },
-        //    error: function (xhr, status) {
-        //        // handle errors
-        //        console.log('error');
-        //    }
-        //});
+        })
 
         // Get mosaic layer dates (times)
         $.ajax({
@@ -868,7 +950,15 @@
             },
             type: 'POST',
             success: function (data) {
-                dates = data.dates;
+                var years_all = data.dates;
+                for (i = 0; i < years_all.length; i++) {
+                    years_all[i] = years_all[i].substr(0, 4);
+                } 
+                var years = [];
+                $.each(years_all, function (i, el) {
+                    if ($.inArray(el, years) === -1) years.push(el);
+                });
+                dates = years;
                 $('#date').attr('max', dates.length - 1);
                 $('#date').val(0);
                 ChangeDate();
@@ -885,10 +975,25 @@
 
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         var date = dates[$('#date').val()];
-        date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
-        $('#DateLabel').text(date);
+        //date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
+        
+        var date_str = date,
+            date_label = date;
+        if (Period == 'y') {
+            date_str += '-01-01';
+        }
+        if (Period == 's') {
+            date_str += '-0' + Season + '-01';
+        }
+        console.log(Period + ': ' + Month);
+        if (Period == 'm') {
+            date_str += '-' + Month + '-01';
+        }
+        console.log(date_str);
+        date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
+        $('#DateLabel').text(date_label);
         var Source_Climate_New = new ol.source.TileWMS({
-            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + $('#DateLabel').html() + '&',
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
             params: {
                 'FORMAT': 'image/png',
                 'VERSION': '1.1.1',
@@ -934,7 +1039,7 @@
 </script>
 
 
-@* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, map.on('singleclick'), Charts *@
+@* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, Charts *@
 <script>
     var datespr_pd_avg_m_rcp45_10 = new Array();
     $('#datespr_pd_avg_m_rcp45_10 option').each(function () {
@@ -1036,6 +1141,22 @@
                 layer.setVisible(document.getElementById("layerClimateShow").checked);
                 layer.setOpacity($('#layerClimateOpacity').val() / 100)
             }
+            if (layer.get('name') == 'wmb_polygon') {
+                layer.setVisible(document.getElementById("layerwmb_polygonShow").checked);
+                layer.setOpacity($('#layerwmb_polygonOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'wma_polygon') {
+                layer.setVisible(document.getElementById("layerwma_polygonShow").checked);
+                layer.setOpacity($('#layerwma_polygonOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'lakes') {
+                layer.setVisible(document.getElementById("layerlakesShow").checked);
+                layer.setOpacity($('#layerlakesOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'rivers') {
+                layer.setVisible(document.getElementById("layerriversShow").checked);
+                layer.setOpacity($('#layerriversOpacity').val() / 100)
+            }
             if (layer.get('name') == 'WMA') {
                 var Source_WMA_New = new ol.source.TileWMS({
                     url: geoserver_url + 'geonode' + '/wms',
@@ -1074,7 +1195,7 @@
 <script>
     $(document).ready(function () {
         ChangeParameter();
-        ChangePeriod();
+        //ChangePeriod();
         //ChangeLayersClimate();
     });
 </script>

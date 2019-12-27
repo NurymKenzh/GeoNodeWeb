@@ -98,10 +98,10 @@
                         <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('pr_pd_avg', 'Precipitation1')">Осадки <span class="sr-only">(current)</span></a>
                     </li>
                     <li id="Precipitation2" class="nav-item Precipitation">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?', 'Precipitation2')">Отклонения средней суммы осадков от значений базового периода в мм</a>
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('pr_dlt_avg_mm', 'Precipitation2')">Отклонения средней суммы осадков от значений базового периода в мм</a>
                     </li>
                     <li id="Precipitation3" class="nav-item Precipitation">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('?', 'Precipitation3')">Отклонения средней суммы осадков от значений базового периода в %</a>
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('pr_dlt_avg_prc', 'Precipitation3')">Отклонения средней суммы осадков от значений базового периода в %</a>
                     </li>
                     @*  *@
                     <li id="Evapotranspiration1" class="nav-item active Evapotranspiration">
@@ -114,9 +114,9 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Другие</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown07">
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?', '')">Отклонения максимальной температуры от значений базового периода</a>
-                            <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?', '')">Отклонения средней температуры</a>
-                            <a class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('?', '')">Отклонения минимальной температуры</a>
+                            <a id="Temperature4" class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('tasmax_dlt_avg', 'Temperature4')">Отклонения максимальной температуры от значений базового периода</a>
+                            <a id="Temperature5" class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('tas_dlt_avg', 'Temperature5')">Отклонения средней температуры</a>
+                            <a id="Temperature6" class="dropdown-item text-white Temperature" onclick="ChangeSubParameter('tasmin_dlt_avg', 'Temperature6')">Отклонения минимальной температуры</a>
                             <a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
                             <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>
                         </div>
