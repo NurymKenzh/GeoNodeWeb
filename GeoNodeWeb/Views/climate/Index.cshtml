@@ -6,13 +6,15 @@
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 <script src="~/esnow/lib/moment.js/moment.js"></script>
-@*<script src="~/esnow/js/ClimSidebar.js"></script>*@
 <script src="~/esnow/lib/clim-sidebar/ClimSidebar.js"></script>
 <script src="~/esnow/lib/jquery-ui/jquery-ui.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <link href="~/esnow/css/site.css" rel="stylesheet" />
 <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+<link href="~/esnow/lib/rangeSlider/ion.rangeSlider.min.css" rel="stylesheet" />
+<script src="~/esnow/lib/rangeSlider/ion.rangeSlider.min.js"></script>
 
 <style>
     .ol-popup {
@@ -62,7 +64,13 @@
         .ol-popup-closer:after {
             content: "✖";
         }
-        
+</style>
+
+<style>
+    .range-slider {
+        position: relative;
+        height: 80px;
+    }
 </style>
 
 <div class="container-fluid p-0">
@@ -332,7 +340,7 @@
                                                             <input id="layerBaseOpacity" type="range" class="form-control-range" min="0" max="100" value="90" oninput="ChangeLayers()" />
                                                         </div>
                                                     </div>
-                                                </form> 
+                                                </form>
                                             </li>
                                         </ul>
                                     </div>
@@ -378,12 +386,18 @@
                                 </button>
                             </div>
                             <div class="col-6">
-                                @*<div class="progress mt-3">
-                                        <div class="progress-bar align-bottom" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="10" aria-valuemax="100">50%</div>
-                                    </div>*@
-                                <label style="color: white;">Год: </label>
-                                <label id="DateLabel" style="color: white;"></label>
-                                <input id="date" type="range" min="0" value="0" max="10" step="1" style="width: 100%;" oninput="ChangeDate()">
+                                <main role="main" class="container pb-4">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <button id="MinusBtn" class="MinusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-left"></i></button>
+                                            <button id="PlusBtn" class="PlusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-right"></i></button>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
+                                        </div>
+
+                                    </div><!-- /.row -->
+                                </main><!-- /.container -->
                             </div>
                             <div class="col">
                                 <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
@@ -412,8 +426,6 @@
             <img class="card-img-top" src="..." alt="Card image cap">
         </div>
     </div>
-
-
 </div>
 
 
@@ -918,9 +930,17 @@
 @* ChangeLayerClimate, ChangeDate *@
 <script>
     var dates = null;
+    var yearsvalues = []; //[1901, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100];
+    var min = 1900,
+        max = 2100,
+        from = 2001,
+        step = 10,
+        to = from + step;
+    var range_instance = null;
+
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
-        console.log(layerClimate);
+        //console.log(layerClimate);
 
         $('#InfoTitle').text('');
         $('#InfoTitle').prop('title', '');
@@ -953,7 +973,7 @@
                 var years_all = data.dates;
                 for (i = 0; i < years_all.length; i++) {
                     years_all[i] = years_all[i].substr(0, 4);
-                } 
+                }
                 var years = [];
                 $.each(years_all, function (i, el) {
                     if ($.inArray(el, years) === -1) years.push(el);
@@ -961,6 +981,20 @@
                 dates = years;
                 $('#date').attr('max', dates.length - 1);
                 $('#date').val(0);
+
+                yearsvalues = [];
+                $.each(dates, function (i, el) {
+                    yearsvalues.push(parseInt(el));
+                });
+                min = Math.min(...yearsvalues);
+                max = Math.max(...yearsvalues) + parseInt(Decade);
+                //console.log('Math.max(...yearsvalues): ' + Math.max(...yearsvalues) + ', parseInt(Decade): ' + parseInt(Decade));
+                from = min;
+                to = from + parseInt(Decade);
+                //console.log('yearsvalues: ' + yearsvalues);
+                //console.log('min: ' + min + ', max: ' + max + ', Decade: ' + Decade);
+                CreateDateSlider();
+
                 ChangeDate();
             },
             error: function () {
@@ -968,15 +1002,90 @@
         })
     };
 
+    function CreateDateSlider() {
+        var $ClimateTimeline = $(".js-range-slider"),
+        $btn_minus = $(".MinusBtn"),
+        $btn_plus = $(".PlusBtn");
+
+        $("#ClimateTimeline").ionRangeSlider({
+            grid: true,
+            type: "double",
+            min: min,
+            max: max,
+            step: step,
+            from: from,
+            to: to,
+            drag_interval: true,
+            prettify_enabled: false,
+            onFinish: function (data) {
+                from = data.from,
+                    to = data.to;
+            },
+            onChange: function (data) {
+                // Called every time handle position is changed
+                //console.log(data);
+                ChangeDate();
+            }
+        });
+
+        //let my_range = $(".js-range-slider").data("ionRangeSlider");
+
+        
+
+        $btn_minus.on("click", function () {
+            updateRange(-1);
+            ChangeDate();
+        });
+
+        $btn_plus.on("click", function () {
+            updateRange(1);
+            ChangeDate();
+        });
+
+        range_instance = $ClimateTimeline.data("ionRangeSlider");
+
+        range_instance.update({
+            min: min,
+            max: max,
+            step: step,
+            from: from,
+            to: to
+        });
+
+        var updateRange = function (direction) {
+            from += step * direction;
+            if (from < min) {
+                from = min;
+            } else if (from > max) {
+                from = max;
+            }
+
+            range_instance.update({
+                from: from
+            });
+            to += step * direction;
+            if (to < min) {
+                to = min;
+            } else if (to > max) {
+                to = max;
+            }
+
+            range_instance.update({
+                to: to
+            });
+        };
+    }
+
     function ChangeDate() {
         // popup
         overlay.setPosition(undefined);
         closer.blur();
 
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
-        var date = dates[$('#date').val()];
+        //var date = dates[$('#date').val()];
         //date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
-        
+        date = range_instance.result.from;
+
         var date_str = date,
             date_label = date;
         if (Period == 'y') {
@@ -985,13 +1094,13 @@
         if (Period == 's') {
             date_str += '-0' + Season + '-01';
         }
-        console.log(Period + ': ' + Month);
+        //console.log(Period + ': ' + Month);
         if (Period == 'm') {
             date_str += '-' + Month + '-01';
         }
-        console.log(date_str);
+        //console.log(date_str);
         date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
-        $('#DateLabel').text(date_label);
+        //$('#DateLabel').text(date_label);
         var Source_Climate_New = new ol.source.TileWMS({
             url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
             params: {
@@ -1037,6 +1146,7 @@
         }
     });
 </script>
+
 
 
 @* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, Charts *@
@@ -1195,8 +1305,6 @@
 <script>
     $(document).ready(function () {
         ChangeParameter();
-        //ChangePeriod();
-        //ChangeLayersClimate();
     });
 </script>
 
@@ -1252,7 +1360,7 @@
             position: {
                 my: "bottom bottom-50px",
                 at: "right bottom",
-                of: window 
+                of: window
             }
         });
         $("#LegendHide").click(function () {
