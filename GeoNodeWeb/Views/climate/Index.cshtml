@@ -386,12 +386,12 @@
                                     <div class="col">
                                         <button type="button" class="btn btn-outline-warning btn-sm">Difference</button>
                                     </div>
-                                    <div class="col-9 m-1">
+                                    <div class="col-9 m-1 " style="cursor: pointer;">
                                         <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
                                     </div>
                                     <div class="col">
-                                        <button id="MinusBtn" class="MinusBtn btn btn-outline-warning btn-sm align-middle"><i class="fa fa-arrow-circle-left"></i></button>
-                                        <button id="PlusBtn" class="PlusBtn btn btn-outline-warning btn-sm"><i class="fa fa-arrow-circle-right"></i></button>                                        
+                                        <button id="MinusBtn" class="MinusBtn btn btn-outline-danger btn-sm align-middle"><i class="fa fa-arrow-circle-left"></i></button>
+                                        <button id="PlusBtn" class="PlusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-right"></i></button>                                        
                                     </div>
                                 </div>
                             </div>
@@ -1005,7 +1005,7 @@
         $btn_plus = $(".PlusBtn");
 
         $("#ClimateTimeline").ionRangeSlider({
-            skin: "sharp",
+            skin: "flat",
             grid: true,
             grid_num: 15,
             type: "double",
