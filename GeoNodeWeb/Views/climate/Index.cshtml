@@ -399,7 +399,7 @@
                 </footer>
             </div>
         </main>
-        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light"></div>
+        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light" style="height: calc(100% - 127px);"></div>
         <div id="popup" class="ol-popup">
             <a href="#" id="popup-closer" class="ol-popup-closer"></a>
             <div id="popup-content"></div>
@@ -733,6 +733,9 @@
 
     var map = new ol.Map({
         target: 'map',
+        controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
+            new ol.control.ScaleLine()
+        ]),
         layers: [
             Layer_Base,
             Layer_Climate,
