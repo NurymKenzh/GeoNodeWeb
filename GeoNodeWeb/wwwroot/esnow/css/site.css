@@ -768,9 +768,9 @@ input[type=radio]:checked ~ label {
     padding: 10px 0 0;
 }
 
-.area {
+.range_area {
     position: absolute;
     top: 0;
-    height: 10px;
-    background: #f00;
+    height: inherit;
+    background: #0094ff;
 }
