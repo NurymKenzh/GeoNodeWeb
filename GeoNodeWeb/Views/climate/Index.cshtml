@@ -67,10 +67,22 @@
 </style>
 
 <style>
-    .range-slider {
-        position: relative;
-        height: 80px;
-    }
+.range-slider {
+    position: relative;
+    height: 80px;
+}
+.extra-controls {
+    position: relative;
+    border-top: 3px solid #000;
+    padding: 10px 0 0;
+}
+
+.area {
+    position: absolute;
+    top: 0;
+    height: 10px;
+    background: #f00;
+}
 </style>
 
 <div class="container-fluid p-0">
@@ -1016,6 +1028,8 @@
                 from: from,
                 to: to,
                 drag_interval: true,
+                min_interval: 10,
+                max_interval: 10,
                 prettify_enabled: false,
                 onFinish: function (data) {
                     from = data.from,
@@ -1025,6 +1039,9 @@
                     // Called every time handle position is changed
                     //console.log(data);
                     ChangeDate();
+                },
+                onStart: function (data) {
+                    addSpecialAreas(data.slider);
                 }
             });
 
@@ -1136,6 +1153,14 @@
             serverType: 'geoserver'
         });
         Layer_Climate.setSource(Source_Climate_New);
+    }
+    function addSpecialAreas($slider) {
+        var area = [45, 55];
+        var $line = $slider.find(".irs-line");
+        var left_percent = area[0];
+        var right_percent = area[1];
+        var width_percent = right_percent - left_percent;
+        $line.append("<div class='area' style='left: " + left_percent + "%; width: " + width_percent + "%;'></div>")
     }
 </script>
 

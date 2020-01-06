@@ -5232,18 +5232,18 @@ namespace GeoNodeWeb.Controllers
 
             List<DateTime> datesD = new List<DateTime>();
 
-            // with DB
-            using (var connection = new NpgsqlConnection(geodataProdConnection))
-            {
-                connection.Open();
-                var datetime = connection.Query<DateTime>($"SELECT ingestion FROM public.{layer}");
-                datesD = datetime.OrderBy(d => d).ToList();
-            }
+            //// with DB
+            //using (var connection = new NpgsqlConnection(geodataProdConnection))
+            //{
+            //    connection.Open();
+            //    var datetime = connection.Query<DateTime>($"SELECT ingestion FROM public.{layer}");
+            //    datesD = datetime.OrderBy(d => d).ToList();
+            //}
 
-            //// withot DB
-            //string[] dates = datesL.OrderBy(d => d).ToArray();
-            // with DB
-            string[] dates = datesD.Select(d => d.ToString("yyyyMMdd")).ToArray();
+            // withot DB
+            string[] dates = datesL.OrderBy(d => d).ToArray();
+            //// with DB
+            //string[] dates = datesD.Select(d => d.ToString("yyyyMMdd")).ToArray();
             return Json(new
             {
                 dates
