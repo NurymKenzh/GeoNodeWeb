@@ -933,7 +933,11 @@
         from = 2001,
         step = 10,
         to = from + step;
+    var slider_first = true;
     var range_instance = null;
+    var $ClimateTimeline = $(".js-range-slider"),
+        $btn_minus = $(".MinusBtn"),
+        $btn_plus = $(".PlusBtn");
 
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
@@ -1000,46 +1004,44 @@
     };
 
     function CreateDateSlider() {
-        var $ClimateTimeline = $(".js-range-slider"),
-        $btn_minus = $(".MinusBtn"),
-        $btn_plus = $(".PlusBtn");
+        if (slider_first) {
+            $("#ClimateTimeline").ionRangeSlider({
+                skin: "flat",
+                grid: true,
+                grid_num: 15,
+                type: "double",
+                min: min,
+                max: max,
+                step: step,
+                from: from,
+                to: to,
+                drag_interval: true,
+                prettify_enabled: false,
+                onFinish: function (data) {
+                    from = data.from,
+                        to = data.to;
+                },
+                onChange: function (data) {
+                    // Called every time handle position is changed
+                    //console.log(data);
+                    ChangeDate();
+                }
+            });
 
-        $("#ClimateTimeline").ionRangeSlider({
-            skin: "flat",
-            grid: true,
-            grid_num: 15,
-            type: "double",
-            min: min,
-            max: max,
-            step: step,
-            from: from,
-            to: to,
-            drag_interval: true,
-            prettify_enabled: false,
-            onFinish: function (data) {
-                from = data.from,
-                    to = data.to;
-            },
-            onChange: function (data) {
-                // Called every time handle position is changed
-                //console.log(data);
+            //let my_range = $(".js-range-slider").data("ionRangeSlider");
+
+            slider_first = false;
+
+            $btn_minus.on("click", function () {
+                updateRange(-1);
                 ChangeDate();
-            }
-        });
+            });
 
-        //let my_range = $(".js-range-slider").data("ionRangeSlider");
-
-        
-
-        $btn_minus.on("click", function () {
-            updateRange(-1);
-            ChangeDate();
-        });
-
-        $btn_plus.on("click", function () {
-            updateRange(1);
-            ChangeDate();
-        });
+            $btn_plus.on("click", function () {
+                updateRange(1);
+                ChangeDate();
+            });
+        }
 
         range_instance = $ClimateTimeline.data("ionRangeSlider");
 
@@ -1052,24 +1054,47 @@
         });
 
         var updateRange = function (direction) {
-            from += step * direction;
-            if (from < min) {
-                from = min;
-            } else if (from > max) {
-                from = max;
+            //from += step * direction;
+            //if (from < min) {
+            //    from = min;
+            //} else if (from > max) {
+            //    from = max;
+            //}
+
+            //range_instance.update({
+            //    from: from
+            //});
+            //to += step * direction;
+            //if (to < min) {
+            //    to = min;
+            //} else if (to > max) {
+            //    to = max;
+            //}
+
+            //range_instance.update({
+            //    to: to
+            //});
+            console.log('1. from: ' + from + ', to: ' + to);
+            if (direction == 1) {
+                if (to + step * direction <= max) {
+                    from += step * direction;
+                    to += step * direction;
+                }
             }
+            
+            if (direction == -1) {
+                if (from + step * direction >= min) {
+                    from += step * direction;
+                    to += step * direction;
+                }
+            }
+            console.log('2. from: ' + from + ', to: ' + to);
 
             range_instance.update({
-                from: from
-            });
-            to += step * direction;
-            if (to < min) {
-                to = min;
-            } else if (to > max) {
-                to = max;
-            }
-
-            range_instance.update({
+                min: min,
+                max: max,
+                step: step,
+                from: from,
                 to: to
             });
         };
