@@ -66,8 +66,6 @@
         }
 </style>
 
-
-
 <div class="container-fluid p-0">
     <div class="row">
         <main role="main" class="sticky-top">
@@ -350,6 +348,15 @@
                                         <span class="badge badge-pill badge-primary">i</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <input id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()" />
+                                    <select id="type" class="measure">
+                                        <option value="length">Длина (линия)</option>
+                                        <option value="area">Площадь (полигон)</option>
+                                    </select>
+                                    <br />
+                                    <input id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()" />
+                                </li>
                             </ul>
                         </div>
                         <!-- sidebar-menu  -->
@@ -386,7 +393,7 @@
                                     </div>
                                     <div class="col">
                                         <button id="MinusBtn" class="MinusBtn btn btn-outline-danger btn-sm align-middle"><i class="fa fa-arrow-circle-left"></i></button>
-                                        <button id="PlusBtn" class="PlusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-right"></i></button>                                        
+                                        <button id="PlusBtn" class="PlusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-right"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -394,7 +401,7 @@
                                 <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
                             </div>
                         </div>
-                        
+
                     </div>
                 </footer>
             </div>
@@ -425,6 +432,51 @@
 <script type="text/javascript">
     var geoserver_url = "@ViewBag.GeoServerUrl",
         geoserver_workspace_name = "climate";
+
+    // Measure
+    var Source_Measure = new ol.source.Vector();
+    var Layer_Measure = new ol.layer.Vector({
+        source: Source_Measure,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#ffcc33',
+                width: 2
+            }),
+            image: new ol.style.Circle({
+                radius: 7,
+                fill: new ol.style.Fill({
+                    color: '#ffcc33'
+                })
+            })
+        })
+    });
+    var sketch;
+    var helpTooltipElement = null;
+    var helpTooltip = null;
+    var measureTooltipElement;
+    var measureTooltip;
+    var continuePolygonMsg = 'Нажмите, чтобы продолжить рисование многоугольника';
+    var continueLineMsg = 'Нажмите, чтобы продолжить рисование линии';
+    var pointerMoveHandler = function (evt) {
+        if (evt.dragging) {
+            return;
+        }
+        var helpMsg = 'Нажмите, чтобы начать рисование';
+        if (sketch) {
+            var geom = sketch.getGeometry();
+            if (geom instanceof ol.geom.Polygon) {
+                helpMsg = continuePolygonMsg;
+            } else if (geom instanceof ol.geom.LineString) {
+                helpMsg = continueLineMsg;
+            }
+        }
+        helpTooltipElement.innerHTML = helpMsg;
+        helpTooltip.setPosition(evt.coordinate);
+        helpTooltipElement.classList.remove('hidden');
+    };
 
     var HEREappId = 'SLdBasp4s1oq2oUbVGxy';
     var HEREappCode = 'D9-h9iVhjgUB_9eUlFETXA';
@@ -674,6 +726,22 @@
     Layer_wma_polygon.set('name', 'wma_polygon');
     Layer_wma_polygon.setOpacity(0.80);
 
+    var Source_Select = new ol.source.Vector({});
+    var Layer_Select = new ol.layer.Vector({
+        source: Source_Select,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: [0, 0, 255, 1]
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 2
+            })
+        })
+    });
+    Layer_Select.set('name', 'wma_polygon');
+    Layer_wma_polygon.setOpacity(0.80);
+
     var url_lakes = geoserver_url + 'geonode' + '/wms';
     var Source_lakes = new ol.source.TileWMS({
         url: url_lakes,
@@ -741,17 +809,141 @@
             Layer_Climate,
             Layer_wmb_polygon,
             Layer_wma_polygon,
+            Layer_Select,
             Layer_lakes,
-            Layer_rivers
-            //Layer_pr_pd_avg_m_rcp45_10,
-            //Layer_WMA
+            Layer_rivers,
+            Layer_Measure
         ],
-        overlays: [overlay],
+        //overlays: [overlay],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 5
         })
     });
+
+    map.on('pointermove', pointerMoveHandler);
+    map.getViewport().addEventListener('mouseout', function () {
+        helpTooltipElement.classList.add('hidden');
+    });
+    var typeSelect = document.getElementById('type');
+    var draw;
+    var formatLength = function (line) {
+        var length = ol.sphere.getLength(line);
+        var output;
+        if (length > 100) {
+            output = (Math.round(length / 1000 * 100) / 100) +
+                ' ' + 'км';
+        } else {
+            output = (Math.round(length * 100) / 100) +
+                ' ' + 'м';
+        }
+        return output;
+    };
+    var formatArea = function (polygon) {
+        var area = ol.sphere.getArea(polygon);
+        var output;
+        if (area > 10000) {
+            output = (Math.round(area / 1000000 * 100) / 100) +
+                ' ' + 'км<sup>2</sup>';
+        } else {
+            output = (Math.round(area * 100) / 100) +
+                ' ' + 'м<sup>2</sup>';
+        }
+        return output;
+    };
+    function addInteraction() {
+        var type = (typeSelect.value == 'area' ? 'Polygon' : 'LineString');
+        draw = new ol.interaction.Draw({
+            source: Source_Measure,
+            type: type,
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.2)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(0, 0, 0, 0.5)',
+                    lineDash: [10, 10],
+                    width: 2
+                }),
+                image: new ol.style.Circle({
+                    radius: 5,
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0, 0, 0, 0.7)'
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255, 255, 255, 0.2)'
+                    })
+                })
+            })
+        });
+        map.addInteraction(draw);
+
+        createMeasureTooltip();
+        createHelpTooltip();
+
+        var listener;
+        draw.on('drawstart', function (evt) {
+            // set sketch
+            sketch = evt.feature;
+            var tooltipCoord = evt.coordinate;
+
+            listener = sketch.getGeometry().on('change', function (evt) {
+                var geom = evt.target;
+                var output;
+                if (geom instanceof ol.geom.Polygon) {
+                    output = formatArea(geom);
+                    tooltipCoord = geom.getInteriorPoint().getCoordinates();
+                } else if (geom instanceof ol.geom.LineString) {
+                    output = formatLength(geom);
+                    tooltipCoord = geom.getLastCoordinate();
+                }
+                measureTooltipElement.innerHTML = output;
+                measureTooltip.setPosition(tooltipCoord);
+            });
+        });
+
+        draw.on('drawend', function () {
+            measureTooltipElement.className = 'ol-tooltip ol-tooltip-static';
+            measureTooltip.setOffset([0, -7]);
+            // unset sketch
+            sketch = null;
+            // unset tooltip so that a new one can be created
+            measureTooltipElement = null;
+            createMeasureTooltip();
+            ol.Observable.unByKey(listener);
+        });
+    }
+    function createHelpTooltip() {
+        if (helpTooltipElement) {
+            helpTooltipElement.parentNode.removeChild(helpTooltipElement);
+        }
+        helpTooltipElement = document.createElement('div');
+        helpTooltipElement.className = 'ol-tooltip hidden';
+        helpTooltip = new ol.Overlay({
+            element: helpTooltipElement,
+            offset: [15, 0],
+            positioning: 'center-left'
+        });
+        map.addOverlay(helpTooltip);
+    }
+    function createMeasureTooltip() {
+        if (measureTooltipElement) {
+            measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+        }
+        measureTooltipElement = document.createElement('div');
+        measureTooltipElement.className = 'ol-tooltip ol-tooltip-measure';
+        measureTooltip = new ol.Overlay({
+            element: measureTooltipElement,
+            offset: [0, -15],
+            positioning: 'bottom-center'
+        });
+        map.addOverlay(measureTooltip);
+    }
+    typeSelect.onchange = function () {
+        map.removeInteraction(draw);
+        addInteraction();
+    };
+    addInteraction();
 </script>
 
 @* ChangeParameter, ChangeSubParameter, ChangePeriod, ChangeRCP, ChangeDecade *@
@@ -1090,7 +1282,7 @@
                     to += step * direction;
                 }
             }
-            
+
             if (direction == -1) {
                 if (from + step * direction >= min) {
                     from += step * direction;
@@ -1172,7 +1364,9 @@
 @* map.on('singleclick') *@
 <script>
     map.on('singleclick', function (evt) {
-        //document.getElementById('info').innerHTML = '';
+        if (tool != 'select') {
+            return;
+        }
         var viewResolution = (map.getView().getResolution());
         var url = Layer_Climate.getSource().getGetFeatureInfoUrl(
             evt.coordinate, viewResolution, 'EPSG:3857',
@@ -1199,7 +1393,47 @@
     });
 </script>
 
-
+@* SelectTool, MeasureTool *@
+<script>
+    var tool = '';
+    function SelectTool() {
+        if (tool == 'select') {
+            return;
+        }
+        tool = 'select';
+        map.removeInteraction(draw);
+        Source_Measure.clear();
+        //$(".ol-overlay-container").remove();
+        if (helpTooltip != null) {
+            map.removeOverlay(helpTooltip);
+        }
+        if (measureTooltip != null) {
+            map.removeOverlay(measureTooltip);
+        }
+        map.addOverlay(overlay);
+        //$(".ol-tooltip-static").remove();
+        $(".ol-tooltip").remove();
+        $('.measure').hide();
+        $('.select').show();
+        $('#SelectButton').addClass('btn-dark');
+        $('#MeasureButton').removeClass('btn-dark');
+    }
+    function MeasureTool() {
+        if (tool == 'measure') {
+            return;
+        }
+        tool = 'measure';
+        map.removeOverlay(overlay);
+        overlay.setPosition(undefined);
+        closer.blur();
+        addInteraction();
+        $('.measure').show();
+        $('.select').hide();
+        $('#MeasureButton').addClass('btn-dark');
+        $('#SelectButton').removeClass('btn-dark');
+        Source_Select.clear();
+    }
+</script>
 
 @* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, Charts *@
 <script>
@@ -1356,6 +1590,7 @@
 @* $(document).ready *@
 <script>
     $(document).ready(function () {
+        SelectTool();
         ChangeParameter();
     });
 </script>
