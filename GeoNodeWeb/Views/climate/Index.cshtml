@@ -366,7 +366,7 @@
                         <a href="#">
                             <i class="fa fa-file" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
                         </a>
-                        <a href="#">
+                        <a href="#" OnClick="Charts()">
                             <i class="fa fa-bar-chart-o" data-toggle="tooltip" data-placement="top" title="Графики"></i>
                         </a>
                         <a href="#" id="LegendHide">
@@ -1134,7 +1134,6 @@
 
     function ChangeLayerClimate() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
-        //console.log(layerClimate);
 
         $('#InfoTitle').text('');
         $('#InfoTitle').prop('title', '');
@@ -1184,11 +1183,8 @@
                 });
                 min = Math.min(...yearsvalues);
                 max = Math.max(...yearsvalues) + parseInt(Decade);
-                //console.log('Math.max(...yearsvalues): ' + Math.max(...yearsvalues) + ', parseInt(Decade): ' + parseInt(Decade));
                 from = min;
                 to = from + parseInt(Decade);
-                //console.log('yearsvalues: ' + yearsvalues);
-                //console.log('min: ' + min + ', max: ' + max + ', Decade: ' + Decade);
                 CreateDateSlider();
 
                 ChangeDate();
@@ -1220,7 +1216,6 @@
                 },
                 onChange: function (data) {
                     // Called every time handle position is changed
-                    //console.log(data);
                     ChangeDate();
                 },
                 onStart: function (data) {
@@ -1319,11 +1314,9 @@
         if (Period == 's') {
             date_str += '-0' + Season + '-01';
         }
-        //console.log(Period + ': ' + Month);
         if (Period == 'm') {
             date_str += '-' + Month + '-01';
         }
-        //console.log(date_str);
         date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
         //$('#DateLabel').text(date_label);
         var Source_Climate_New = new ol.source.TileWMS({
@@ -1409,27 +1402,16 @@
                 dataType: 'jsonp',
                 error: function (xhr, status, error) {
                     console.log('error');
-                    //$('#featureId').val(-1);
                 },
             }).then(function (response) {
-                //featureId = -1;
+                featureId = -1;
                 var result = parser.readFeatures(response);
                 if (result.length > 0) {
-                    //$('#featureId').val(result[0].get('Id'));
-                    //if ($('#gslayer').find(":selected").val() == 'wma_polygon') {
-                    //    $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' км<sup>2</sup>)');
-                    //}
-                    //else if ($('#gslayer').find(":selected").val() == 'wma_height') {
-                    //    $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('area_km').toFixed(2) + ' км<sup>2</sup>)');
-                    //}
-                    //$('#ChartsButton').show();
-
                     var polyFeature = new ol.Feature({
                         geometry: new ol.geom.MultiPolygon(response.features[0].geometry.coordinates)
                     });
                     Source_Select.addFeature(polyFeature);
                     $('#featureId').val(result[0].get('OBJECTID'));
-                    console.log(result[0].get('OBJECTID'));
                 }
             });
         }
@@ -1618,6 +1600,15 @@
 
         })
     }
+
+    function Charts() {
+        if ($('#featureId').val() != '' && $('#featureId').val() != null && $('#featureId').val() != undefined && $('#featureId').val() > -1) {
+            var urlC = '@Url.Action("Charts", "climate")';
+            var urlC = '/climate/Charts?Id=' + $('#featureId').val();
+            var win = window.open(urlC, '_blank');
+            win.focus();
+        }
+    };
 </script>
 
 @* ChangeLayersClimate *@

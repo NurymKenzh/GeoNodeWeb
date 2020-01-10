@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Графики";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/esnow/lib/сhart.js/dist/Chart.css" rel="stylesheet" />
+<script src="~/esnow/lib/moment.js/moment.js"></script>
+<script src="~/esnow/lib/сhart.js/dist/Chart.js"></script>
+
+<h1>Графики</h1>
+
+<input id="id" value="@ViewBag.Id" type="hidden" />
+
+<h3>Динамика климатического параметра по сезонам (годам)</h3>
+<label>
+    Климатический параметр:
+</label>
+<select id="SubParameters">
+    <option value="tasmax_pd_avg">Максимальная температура</option>
+    <option value="tas_pd_avg">Средняя температура</option>
+    <option value="tasmin_pd_avg">Минимальная температура</option>
+    <option value="pr_pd_avg">Осадки</option>
+    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+    <option value="pr_dlt_avg_prc">Отклонения средней суммы осадков от значений базового периода в %</option>
+    <option value="et_pd_avg">Эвапотранспирация</option>
+    <option value="?">Отклонения эвапотранспирации от значений базового периода</option>
+    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+    <option value="tas_dlt_avg">Отклонения средней температуры</option>
+    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+</select>
+<br>
+<label>
+    Десятилетие:
+</label>
+<input type="checkbox" name="Dates" value="1951">1951
+<input type="checkbox" name="Dates" value="1961">1961
+<input type="checkbox" name="Dates" value="1971">1971
+<input type="checkbox" name="Dates" value="1981">1981
+<input type="checkbox" name="Dates" value="1991">1991
+<input type="checkbox" name="Dates" value="2001">2001
+<input type="checkbox" name="Dates" value="2011">2011
+<input type="checkbox" name="Dates" value="2021">2021
+<input type="checkbox" name="Dates" value="2031">2031
+<input type="checkbox" name="Dates" value="2041">2041
+<input type="checkbox" name="Dates" value="2051">2051
+<input type="checkbox" name="Dates" value="2061">2061
+<input type="checkbox" name="Dates" value="2071">2071
+<input type="checkbox" name="Dates" value="2081">2081
+<input type="checkbox" name="Dates" value="2091">2091
+<br>
+<label>
+    Сезон:
+</label>
+<input type="checkbox" name="Season" value="0">Среднее
+<input type="checkbox" name="Season" value="1">Зима
+<input type="checkbox" name="Season" value="2">Весна
+<input type="checkbox" name="Season" value="3">Лето
+<input type="checkbox" name="Season" value="4">Осень

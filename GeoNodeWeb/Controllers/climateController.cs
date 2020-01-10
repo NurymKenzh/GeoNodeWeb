@@ -5337,6 +5337,38 @@ namespace GeoNodeWeb.Controllers
             });
         }
 
+        public IActionResult Charts(int Id)
+        {
+            ViewBag.Id = Id;
+            //List<layers_layer> layers_layers = new List<layers_layer>();
+            //List<esnow_datasetcalculationlayer> esnow_datasetcalculationlayers = new List<esnow_datasetcalculationlayer>();
+            //using (var connection = new NpgsqlConnection(geoportalConnection))
+            //{
+            //    connection.Open();
+            //    var layers_layers_ = connection.Query<layers_layer>($"SELECT resourcebase_ptr_id, name, supplemental_information_en FROM public.layers_layer;");
+            //    layers_layers = layers_layers_.ToList();
+            //    ViewBag.ShapeName = layers_layers.FirstOrDefault(l => l.name == LayerName)?.supplemental_information_en;
+            //}
+            //using (var connection = new NpgsqlConnection(postgresConnection))
+            //{
+            //    connection.Open();
+            //    var esnow_datasetcalculationlayers_ = connection.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
+            //    esnow_datasetcalculationlayers = esnow_datasetcalculationlayers_.ToList();
+            //}
+            //layers_layer layers_layer = layers_layers.FirstOrDefault(l => l.name == LayerName);
+            //esnow_datasetcalculationlayer esnow_datasetcalculationlayer = esnow_datasetcalculationlayers
+            //    .FirstOrDefault(l => l.layer_id == layers_layer.resourcebase_ptr_id);
 
+            //int layer_id = esnow_datasetcalculationlayer.id;
+            //using (var connection = new NpgsqlConnection(geoserverConnection))
+            //{
+            //    connection.Open();
+            //    var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
+            //    ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
+            //    ViewBag.Mean = $"{datetime.Min().Year.ToString()} - {datetime.Max().Year.ToString()}";
+            //}
+            //ViewBag.LayerId = layer_id;
+            return View();
+        }
     }
 }
