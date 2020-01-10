@@ -427,6 +427,7 @@
     </div>
 </div>
 
+<input type="hidden" id="featureId" />
 
 @* Layers, Measure, map *@
 <script type="text/javascript">
@@ -740,7 +741,7 @@
         })
     });
     Layer_Select.set('name', 'wma_polygon');
-    Layer_wma_polygon.setOpacity(0.80);
+    Layer_Select.setOpacity(0.80);
 
     var url_lakes = geoserver_url + 'geonode' + '/wms';
     var Source_lakes = new ol.source.TileWMS({
@@ -1367,16 +1368,18 @@
         if (tool != 'select') {
             return;
         }
+        Source_Select.clear();
+        $('#featureId').val(null);
         var viewResolution = (map.getView().getResolution());
-        var url = Layer_Climate.getSource().getGetFeatureInfoUrl(
+        var url_Climate = Layer_Climate.getSource().getGetFeatureInfoUrl(
             evt.coordinate, viewResolution, 'EPSG:3857',
             {
                 'INFO_FORMAT': 'text/javascript'
             });
-        if (url) {
+        if (url_Climate) {
             var parser = new ol.format.GeoJSON();
             $.ajax({
-                url: url,
+                url: url_Climate,
                 dataType: 'jsonp',
                 jsonpCallback: 'parseResponse',
                 error: function (xhr, status, error) {
@@ -1389,6 +1392,46 @@
                     overlay.setPosition(evt.coordinate);
                 }
             })
+        }
+        var url_wma_polygon = Layer_wma_polygon.getSource().getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {
+                'INFO_FORMAT': 'text/javascript'
+            });
+        if (url_wma_polygon) {
+            var parser = new ol.format.GeoJSON();
+            $.ajax({
+                jsonp: false,
+                jsonpCallback: 'getJson',
+                type: 'GET',
+                url: url_wma_polygon + "&format_options=callback:getJson",
+                async: false,
+                dataType: 'jsonp',
+                error: function (xhr, status, error) {
+                    console.log('error');
+                    //$('#featureId').val(-1);
+                },
+            }).then(function (response) {
+                //featureId = -1;
+                var result = parser.readFeatures(response);
+                if (result.length > 0) {
+                    //$('#featureId').val(result[0].get('Id'));
+                    //if ($('#gslayer').find(":selected").val() == 'wma_polygon') {
+                    //    $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' км<sup>2</sup>)');
+                    //}
+                    //else if ($('#gslayer').find(":selected").val() == 'wma_height') {
+                    //    $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('area_km').toFixed(2) + ' км<sup>2</sup>)');
+                    //}
+                    //$('#ChartsButton').show();
+
+                    var polyFeature = new ol.Feature({
+                        geometry: new ol.geom.MultiPolygon(response.features[0].geometry.coordinates)
+                    });
+                    Source_Select.addFeature(polyFeature);
+                    $('#featureId').val(result[0].get('OBJECTID'));
+                    console.log(result[0].get('OBJECTID'));
+                }
+            });
         }
     });
 </script>
@@ -1432,6 +1475,7 @@
         $('#MeasureButton').addClass('btn-dark');
         $('#SelectButton').removeClass('btn-dark');
         Source_Select.clear();
+        $('#featureId').val(null);
     }
 </script>
 
@@ -1539,11 +1583,11 @@
             }
             if (layer.get('name') == 'wmb_polygon') {
                 layer.setVisible(document.getElementById("layerwmb_polygonShow").checked);
-                layer.setOpacity($('#layerwmb_polygonOpacity').val() / 100)
+                layer.setOpacity($('#layerwmb_polygonOpacity').val() / 100);
             }
             if (layer.get('name') == 'wma_polygon') {
                 layer.setVisible(document.getElementById("layerwma_polygonShow").checked);
-                layer.setOpacity($('#layerwma_polygonOpacity').val() / 100)
+                layer.setOpacity($('#layerwma_polygonOpacity').val() / 100);
             }
             if (layer.get('name') == 'lakes') {
                 layer.setVisible(document.getElementById("layerlakesShow").checked);
