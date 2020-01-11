@@ -15,7 +15,7 @@
 <label>
     Климатический параметр:
 </label>
-<select id="SubParameters">
+<select id="chart1SubParameter">
     <option value="tasmax_pd_avg">Максимальная температура</option>
     <option value="tas_pd_avg">Средняя температура</option>
     <option value="tasmin_pd_avg">Минимальная температура</option>
@@ -30,29 +30,132 @@
 </select>
 <br>
 <label>
-    Десятилетие:
+    Периодичность:
 </label>
-<input type="checkbox" name="Dates" value="1951">1951
-<input type="checkbox" name="Dates" value="1961">1961
-<input type="checkbox" name="Dates" value="1971">1971
-<input type="checkbox" name="Dates" value="1981">1981
-<input type="checkbox" name="Dates" value="1991">1991
-<input type="checkbox" name="Dates" value="2001">2001
-<input type="checkbox" name="Dates" value="2011">2011
-<input type="checkbox" name="Dates" value="2021">2021
-<input type="checkbox" name="Dates" value="2031">2031
-<input type="checkbox" name="Dates" value="2041">2041
-<input type="checkbox" name="Dates" value="2051">2051
-<input type="checkbox" name="Dates" value="2061">2061
-<input type="checkbox" name="Dates" value="2071">2071
-<input type="checkbox" name="Dates" value="2081">2081
-<input type="checkbox" name="Dates" value="2091">2091
+<select id="chart1Decade" onchange="chart1UpdateDates()">
+    <option value="10">10 лет</option>
+    <option value="20">20 лет</option>
+    <option value="30">30 лет</option>
+</select>
 <br>
 <label>
-    Сезон:
+    RCP:
 </label>
-<input type="checkbox" name="Season" value="0">Среднее
-<input type="checkbox" name="Season" value="1">Зима
-<input type="checkbox" name="Season" value="2">Весна
-<input type="checkbox" name="Season" value="3">Лето
-<input type="checkbox" name="Season" value="4">Осень
+<select id="chart1RCP">
+    <option value="rcp45">rcp 4.5</option>
+    <option value="rcp85">rcp 8.5</option>
+</select>
+<br>
+<label>
+    Десятилетие:
+</label>
+<input type="checkbox" name="chart1Dates" value="1951" checked>1951
+<input type="checkbox" name="chart1Dates" value="1961" checked>1961
+<input type="checkbox" name="chart1Dates" value="1971" checked>1971
+<input type="checkbox" name="chart1Dates" value="1981" checked>1981
+<input type="checkbox" name="chart1Dates" value="1991" checked>1991
+<input type="checkbox" name="chart1Dates" value="2001" disabled>2001
+<input type="checkbox" name="chart1Dates" value="2011" checked>2011
+<input type="checkbox" name="chart1Dates" value="2021" checked>2021
+<input type="checkbox" name="chart1Dates" value="2031" checked>2031
+<input type="checkbox" name="chart1Dates" value="2041" checked>2041
+<input type="checkbox" name="chart1Dates" value="2051" checked>2051
+<input type="checkbox" name="chart1Dates" value="2061" checked>2061
+<input type="checkbox" name="chart1Dates" value="2071" checked>2071
+<input type="checkbox" name="chart1Dates" value="2081" checked>2081
+<input type="checkbox" name="chart1Dates" value="2091" checked>2091
+<br>
+<input type="button" value="Обновить" onclick="Chart1()" />
+<canvas width="956" height="478" class="chartjs-render-monitor" id="canvas1" style="width: 956px; height: 478px; display: block;"></canvas>
+
+<script>
+    var chart1 = null;
+
+    function chart1UpdateDates() {
+        $('input:checkbox[name="chart1Dates"][value="1991"]').removeAttr('disabled');
+        $('input:checkbox[name="chart1Dates"][value="1981"]').removeAttr('disabled');
+        if ($('#chart1Decade').val() == 20) {
+            $('input:checkbox[name="chart1Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="1991"]').prop("disabled", true);
+        }
+        if ($('#chart1Decade').val() == 30) {
+            $('input:checkbox[name="chart1Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="1981"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="1981"]').prop("disabled", true);
+        }
+    }
+
+    function Chart1() {
+        var chart1Dates = [];
+        $("input:checkbox[name=chart1Dates]:checked").each(function(){
+            chart1Dates.push($(this).val());
+        });
+        $.ajax({
+            url: '@Url.Action("GetChart1")',
+            data: {
+                Id: @ViewBag.Id,
+                SubParameter: $('#chart1SubParameter').val(),
+                Decade: $('#chart1Decade').val(),
+                RCP: $('#chart1RCP').val(),
+                Dates: chart1Dates
+            },
+            type: 'POST',
+            success: function (data) {
+                for (var i = 0; i < data.max.length; ++i) {
+                    data.max[i] = parseFloat(data.max[i]).toFixed(2);
+                }
+                for (var i = 0; i < data.min.length; ++i) {
+                    data.min[i] = parseFloat(data.min[i]).toFixed(2);
+                }
+                for (var i = 0; i < data.median.length; ++i) {
+                    data.median[i] = parseFloat(data.median[i]).toFixed(2);
+                }
+                var chart1Data = {
+                    labels: data.years,
+                    datasets: [{
+                        label: 'Максимум',
+                        backgroundColor: '#ff0000',
+                        data: data.max
+                    }, {
+                        label: 'Минимум',
+                        backgroundColor: '#0000ff',
+                        data: data.min
+                    }, {
+                        label: 'Медиана',
+                        backgroundColor: '#00ff00',
+                        data: data.median
+                    }]
+
+                };
+                var ctx1 = document.getElementById('canvas1').getContext('2d');
+                if (chart1 != null) {
+                    chart1.destroy();
+                }
+                chart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: chart1Data,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: data.wmbname + ' (' + data.wmacode + ')'
+                        }
+                    }
+                });
+            },
+            error: function () {
+                console.log('Error 1');
+            }
+        });
+    };
+</script>
+
+<script>
+    $(document).ready(function () {
+        Chart1();
+    });
+</script>

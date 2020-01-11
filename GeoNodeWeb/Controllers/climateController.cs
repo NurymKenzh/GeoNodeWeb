@@ -35,6 +35,12 @@ namespace GeoNodeWeb.Controllers
         public string supplemental_information_en;
     }
 
+    public class climate_rasterstat
+    {
+        public DateTime date;
+        public string data;
+    }
+
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
@@ -44,7 +50,8 @@ namespace GeoNodeWeb.Controllers
             postgresConnection = server ? Startup.Configuration["postgresConnectionServer"].ToString() : Startup.Configuration["postgresConnectionDebug"].ToString(),
             geoportalConnection = server ? Startup.Configuration["geoportalConnectionServer"].ToString() : Startup.Configuration["geoportalConnectionDebug"].ToString(),
 
-            geodataProdConnection = server ? Startup.Configuration["geodataProdConnectionServer"].ToString() : Startup.Configuration["geodataProdConnectionDebug"].ToString();
+            geodataProdConnection = server ? Startup.Configuration["geodataProdConnectionServer"].ToString() : Startup.Configuration["geodataProdConnectionDebug"].ToString(),
+            geoportalProdConnection = server ? Startup.Configuration["geoportalProdConnectionServer"].ToString() : Startup.Configuration["geoportalProdConnectionDebug"].ToString();
 
         public climateController(HttpApiClientController HttpApiClient)
         {
@@ -5369,6 +5376,97 @@ namespace GeoNodeWeb.Controllers
             //}
             //ViewBag.LayerId = layer_id;
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult GetChart1(int Id,
+            string SubParameter,
+            string Decade,
+            string RCP,
+            int[] Dates)
+        {
+            string layer_name = $"{SubParameter}_y_{RCP}_{Decade}";
+
+            List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
+            {
+                connection.Open();
+                string query = $"SELECT date, data" +
+                    $" FROM public.climate_rasterstats" +
+                    $" WHERE layer_name = '{layer_name}'" +
+                    $" AND feature_id = {Id.ToString()}" +
+                    $" ORDER BY date;";
+                var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
+                climate_rasterstats = climate_rasterstats_DB.ToList();
+            }
+
+            string wmbname = "",
+                wmacode = "";
+            using (var connection = new NpgsqlConnection(geoserverConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                wmbname = name.FirstOrDefault();
+                wmacode = code.FirstOrDefault();
+            }
+
+            List<decimal?> max = new List<decimal?>(),
+                min = new List<decimal?>(),
+                median = new List<decimal?>();
+            climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
+            int year_start = climate_rasterstats.Min(c => c.date.Year),
+                year_finish = climate_rasterstats.Max(c => c.date.Year);
+            List<int> years = new List<int>();
+            for (int year = year_start; year <= year_finish; year += 10)
+            {
+                years.Add(year);
+                climate_rasterstat climate_rasterstat = climate_rasterstats.FirstOrDefault(c => c.date.Year == year);
+                if (climate_rasterstat == null)
+                {
+                    max.Add(null);
+                    min.Add(null);
+                    median.Add(null);
+                }
+                else
+                {
+                    var data = JObject.Parse(climate_rasterstat.data);
+                    foreach (JProperty property in data.Properties())
+                    {
+                        if (property.Name == "max")
+                        {
+                            decimal? d = Convert.ToDecimal(property.Value);
+                            max.Add(d);
+                        }
+                        if (property.Name == "min")
+                        {
+                            decimal? d = Convert.ToDecimal(property.Value);
+                            min.Add(d);
+                        }
+                        if (property.Name == "median")
+                        {
+                            decimal? d = Convert.ToDecimal(property.Value);
+                            median.Add(d);
+                        }
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                years,
+                max,
+                min,
+                median,
+                wmbname,
+                wmacode
+            });
         }
     }
 }
