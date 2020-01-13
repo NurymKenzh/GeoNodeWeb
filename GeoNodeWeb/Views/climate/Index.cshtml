@@ -1,7 +1,7 @@
 ﻿@using GeoNodeWeb.Controllers
 @{
     ViewData["Title"] = "Карта";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutClimate.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
@@ -348,15 +348,6 @@
                                         <span class="badge badge-pill badge-primary">i</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <input id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()" />
-                                    <select id="type" class="measure">
-                                        <option value="length">Длина (линия)</option>
-                                        <option value="area">Площадь (полигон)</option>
-                                    </select>
-                                    <br />
-                                    <input id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()" />
-                                </li>
                             </ul>
                         </div>
                         <!-- sidebar-menu  -->
@@ -366,8 +357,8 @@
                         <a href="#">
                             <i class="fa fa-file" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
                         </a>
-                        <a href="#" OnClick="Charts()">
-                            <i class="fa fa-bar-chart-o" data-toggle="tooltip" data-placement="top" title="Графики"></i>
+                        <a href="#" OnClick="Charts()" id="ChartsButton" value="Выделять" onclick="Charts()">
+                            <i class="fa fa-bar-chart-o" data-toggle="tooltip" data-placement="top" title="Для построение Графика, сначало выберите объект на карте (ВХБ или БХУ)"></i>
                         </a>
                         <a href="#" id="LegendHide">
                             <i class="fa fa-list-alt" data-toggle="tooltip" data-placement="top" title="Легенда"></i>
@@ -381,8 +372,22 @@
 
                 <footer class="footer-classic fixed-bottom border-top border-light" style="background: #2d3246;">
                     <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-2">col-8</div>
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <select id="type" class="measure custom-select">
+                                            <option selected>Choose...</option>
+                                            <option value="length">Длина (линия)</option>
+                                            <option value="area">Площадь (полигон)</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()">Измерять</button>
+                                            <button id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()">Выделять</button>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-8">
                                 <div class="row align-items-center">
                                     <div class="col">
@@ -392,13 +397,13 @@
                                         <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
                                     </div>
                                     <div class="col">
-                                        <button id="MinusBtn" class="MinusBtn btn btn-outline-danger btn-sm align-middle"><i class="fa fa-arrow-circle-left"></i></button>
-                                        <button id="PlusBtn" class="PlusBtn btn btn-outline-danger btn-sm"><i class="fa fa-arrow-circle-right"></i></button>
+                                        <button id="MinusBtn" class="MinusBtn btn btn-outline-light btn-sm align-middle"><i class="fa fa-arrow-circle-left"></i></button>
+                                        <button id="PlusBtn" class="PlusBtn btn btn-outline-light btn-sm"><i class="fa fa-arrow-circle-right"></i></button>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-2">
-                                <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
+                                <small class="text-light float-right">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
                             </div>
                         </div>
 
@@ -420,9 +425,9 @@
             </div>
         </div>
     </div>
-    <div id="Legend-2" class="card text-white m-0 rounded-0 border border-light" style="width: 18rem; background: #3a465d;">
+    <div id="Legend-2" class="card text-white m-0 rounded-0 border border-light" style="height: 8rem; background: #3a465d;">
         <div class="card-body">
-            <img class="card-img-top" src="" alt="Card image cap">
+            <img class="card-img-top" src="~/esnow/img/TemperatureSLD.svg" alt="Card image cap">
         </div>
     </div>
 </div>
@@ -1198,7 +1203,7 @@
     function CreateDateSlider() {
         if (slider_first) {
             $("#ClimateTimeline").ionRangeSlider({
-                skin: "flat",
+                skin: "modern",
                 grid: true,
                 grid_num: 15,
                 type: "double",

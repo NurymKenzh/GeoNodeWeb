@@ -6,67 +6,145 @@
 <link href="~/esnow/lib/сhart.js/dist/Chart.css" rel="stylesheet" />
 <script src="~/esnow/lib/moment.js/moment.js"></script>
 <script src="~/esnow/lib/сhart.js/dist/Chart.js"></script>
+<div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <ul class="list-group list-group-flush mt-3">
+            <li class="list-group-item">Chart 1</li>
+            <li class="list-group-item">Chart 2</li>
+            <li class="list-group-item">Chart 3</li>
+            <li class="list-group-item">Chart 4</li>
+        </ul>
+    </nav>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">        
+        <div class="row">
+            <div class="col-md-3 order-md-2 mt-2">
+                <header>                    
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="chart1SubParameter">Климатический параметр:</label>
+                                        <select class="form-control form-control-sm" id="chart1SubParameter">
+                                            <option value="tasmax_pd_avg">Максимальная температура</option>
+                                            <option value="tas_pd_avg">Средняя температура</option>
+                                            <option value="tasmin_pd_avg">Минимальная температура</option>
+                                            <option value="pr_pd_avg">Осадки</option>
+                                            <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                            <option value="pr_dlt_avg_prc">Отклонения средней суммы осадков от значений базового периода в %</option>
+                                            <option value="et_pd_avg">Эвапотранспирация</option>
+                                            <option value="?">Отклонения эвапотранспирации от значений базового периода</option>
+                                            <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                            <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                            <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chart1Decade">Периодичность:</label>
+                                        <select class="form-control form-control-sm" id="chart1Decade" onchange="chart1UpdateDates()">
+                                            <option value="10">10 лет</option>
+                                            <option value="20">20 лет</option>
+                                            <option value="30">30 лет</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chart1Decade">RCP:</label>
+                                        <select class="form-control form-control-sm" id="chart1RCP">
+                                            <option value="rcp45">rcp 4.5</option>
+                                            <option value="rcp85">rcp 8.5</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="1961" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">1961</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="1971" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">1971</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="1981" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">1981</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="1991" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">1991</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2001" disabled>
+                                            <label class="form-check-label" for="inlineCheckbox1">2001</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2011" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2011</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2021" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2021</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2031" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2031</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2041" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2041</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2051" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2051</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2061" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2061</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2071" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2071</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2081" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2081</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="chart1Dates" value="2091" checked>
+                                            <label class="form-check-label" for="inlineCheckbox1">2091</label>
+                                        </div>
+                                    </div>
 
-<h1>Графики</h1>
+                                </form>
+                                <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart1()" />
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
+                    <h1 class="h4">Динамика климатического параметра по сезонам (годам)</h1>
+                    <div class="btn-toolbar">
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        </div>
+                    </div>
+                </div>
+                <canvas class="my-4 w-100 chartjs-render-monitor" id="canvas1" width="900" height="380"></canvas>
+                <input id="id" value="@ViewBag.Id" type="hidden" />
+            </div>
+        </div>         
 
-<input id="id" value="@ViewBag.Id" type="hidden" />
+        <h4>Section title</h4>
 
-<h3>Динамика климатического параметра по сезонам (годам)</h3>
-<label>
-    Климатический параметр:
-</label>
-<select id="chart1SubParameter">
-    <option value="tasmax_pd_avg">Максимальная температура</option>
-    <option value="tas_pd_avg">Средняя температура</option>
-    <option value="tasmin_pd_avg">Минимальная температура</option>
-    <option value="pr_pd_avg">Осадки</option>
-    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-    <option value="pr_dlt_avg_prc">Отклонения средней суммы осадков от значений базового периода в %</option>
-    <option value="et_pd_avg">Эвапотранспирация</option>
-    <option value="?">Отклонения эвапотранспирации от значений базового периода</option>
-    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-    <option value="tas_dlt_avg">Отклонения средней температуры</option>
-    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-</select>
-<br>
-<label>
-    Периодичность:
-</label>
-<select id="chart1Decade" onchange="chart1UpdateDates()">
-    <option value="10">10 лет</option>
-    <option value="20">20 лет</option>
-    <option value="30">30 лет</option>
-</select>
-<br>
-<label>
-    RCP:
-</label>
-<select id="chart1RCP">
-    <option value="rcp45">rcp 4.5</option>
-    <option value="rcp85">rcp 8.5</option>
-</select>
-<br>
-<label>
-    Десятилетие:
-</label>
-<input type="checkbox" name="chart1Dates" value="1951" checked>1951
-<input type="checkbox" name="chart1Dates" value="1961" checked>1961
-<input type="checkbox" name="chart1Dates" value="1971" checked>1971
-<input type="checkbox" name="chart1Dates" value="1981" checked>1981
-<input type="checkbox" name="chart1Dates" value="1991" checked>1991
-<input type="checkbox" name="chart1Dates" value="2001" disabled>2001
-<input type="checkbox" name="chart1Dates" value="2011" checked>2011
-<input type="checkbox" name="chart1Dates" value="2021" checked>2021
-<input type="checkbox" name="chart1Dates" value="2031" checked>2031
-<input type="checkbox" name="chart1Dates" value="2041" checked>2041
-<input type="checkbox" name="chart1Dates" value="2051" checked>2051
-<input type="checkbox" name="chart1Dates" value="2061" checked>2061
-<input type="checkbox" name="chart1Dates" value="2071" checked>2071
-<input type="checkbox" name="chart1Dates" value="2081" checked>2081
-<input type="checkbox" name="chart1Dates" value="2091" checked>2091
-<br>
-<input type="button" value="Обновить" onclick="Chart1()" />
-<canvas width="956" height="478" class="chartjs-render-monitor" id="canvas1" style="width: 956px; height: 478px; display: block;"></canvas>
+    </main>
+</div>
+
+
+
+
 
 <script>
     var chart1 = null;
@@ -115,15 +193,21 @@
                     labels: data.years,
                     datasets: [{
                         label: 'Максимум',
-                        backgroundColor: '#ff0000',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255,99,132,1)',
+                        borderWidth: 1,
                         data: data.max
                     }, {
                         label: 'Минимум',
-                        backgroundColor: '#0000ff',
+                        backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                        borderColor: 'rgba(153, 102, 255,1)',
+                        borderWidth: 1,
                         data: data.min
                     }, {
                         label: 'Медиана',
-                        backgroundColor: '#00ff00',
+                        backgroundColor: "rgba(75, 192, 192, 0.5)",
+                        borderColor: "rgba(75, 192, 192,1)",
+                        borderWidth: 1,
                         data: data.median
                     }]
 
@@ -138,10 +222,12 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'top',
+                            position: 'bottom',
                         },
                         title: {
                             display: true,
+                            fontSize: 20,
+                            fontColor: '#000',
                             text: data.wmbname + ' (' + data.wmacode + ')'
                         }
                     }
