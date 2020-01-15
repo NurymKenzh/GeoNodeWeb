@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- Creator: Esri ArcMap 10.5.0.6491 -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="410.99528pt" height="57.00472pt" viewBox="0 0 410.99528 57.00472" enable-background="new 0 0 410.99528 57.00472"
+	version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+	<g id="Other">
+		<clipPath id="SVG_CP_1">
+			<path d="M0,57.00472L0,0L410.99528,0L410.99528,57.00472L0,57.00472z"/>
+		</clipPath>
+		<path clip-path="url(#SVG_CP_1)" fill="#8FE873" fill-rule="evenodd" stroke="none" d="M11.52274,33.25654L11.52274,8.6132L
+			26.88639,8.6132L26.88639,33.25654L11.52274,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_1)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 8.64205 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">-</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.32544 ">2</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_1)" fill="#A3FF73" fill-rule="evenodd" stroke="none" d="M26.88639,33.25654L26.88639,8.6132L
+			42.00998,8.6132L42.00998,33.25654L26.88639,33.25654z"/>
+		<path clip-path="url(#SVG_CP_1)" fill="#D3FFBE" fill-rule="evenodd" stroke="none" d="M42.00998,33.25654L42.00998,8.6132L
+			57.13357,8.6132L57.13357,33.25654L42.00998,33.25654z"/>
+		<clipPath id="SVG_CP_2">
+			<path d="M0,57.00472L0,0L410.99528,0L410.99528,57.00472L0,57.00472z"/>
+		</clipPath>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 38.88924 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">-</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.32544 ">1</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#FFFFBE" fill-rule="evenodd" stroke="none" d="M57.13357,33.25654L57.13357,8.6132L
+			72.25716,8.6132L72.25716,33.25654L57.13357,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#FCE365" fill-rule="evenodd" stroke="none" d="M72.25716,33.25654L72.25716,8.6132L
+			87.38075,8.6132L87.38075,33.25654L72.25716,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 73.21739 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">0</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#FCDE5C" fill-rule="evenodd" stroke="none" d="M87.38075,33.25654L87.38075,8.6132L
+			102.50434,8.6132L102.50434,33.25654L87.38075,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#FAD457" fill-rule="evenodd" stroke="none" d="M102.50434,33.25654L102.50434,8.6132
+			L117.62794,8.6132L117.62794,33.25654L102.50434,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 103.46457 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">1</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#FACD50" fill-rule="evenodd" stroke="none" d="M117.62794,33.25654L117.62794,8.6132
+			L132.75153,8.6132L132.75153,33.25654L117.62794,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#FAC74A" fill-rule="evenodd" stroke="none" d="M132.75153,33.25654L132.75153,8.6132
+			L147.87512,8.6132L147.87512,33.25654L132.75153,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 133.95181 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">2</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#F7BE43" fill-rule="evenodd" stroke="none" d="M147.87512,33.25654L147.87512,8.6132
+			L163.23877,8.6132L163.23877,33.25654L147.87512,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#F7BA3E" fill-rule="evenodd" stroke="none" d="M163.23877,33.25654L163.23877,8.6132
+			L178.36236,8.6132L178.36236,33.25654L163.23877,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 164.199 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">3</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#F5B338" fill-rule="evenodd" stroke="none" d="M178.36236,33.25654L178.36236,8.6132
+			L193.48595,8.6132L193.48595,33.25654L178.36236,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#F2AB30" fill-rule="evenodd" stroke="none" d="M193.48595,33.25654L193.48595,8.6132
+			L208.60954,8.6132L208.60954,33.25654L193.48595,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 194.44618 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">4</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#EDA02D" fill-rule="evenodd" stroke="none" d="M208.60954,33.25654L208.60954,8.6132
+			L223.73314,8.6132L223.73314,33.25654L208.60954,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#E39427" fill-rule="evenodd" stroke="none" d="M223.73314,33.25654L223.73314,8.6132
+			L238.85673,8.6132L238.85673,33.25654L223.73314,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 224.69336 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">5</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#D68522" fill-rule="evenodd" stroke="none" d="M238.85673,33.25654L238.85673,8.6132
+			L253.98032,8.6132L253.98032,33.25654L238.85673,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#CC781B" fill-rule="evenodd" stroke="none" d="M253.98032,33.25654L253.98032,8.6132
+			L269.10391,8.6132L269.10391,33.25654L253.98032,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 254.94055 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">6</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#BF6A1B" fill-rule="evenodd" stroke="none" d="M269.10391,33.25654L269.10391,8.6132
+			L284.2275,8.6132L284.2275,33.25654L269.10391,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#B55D16" fill-rule="evenodd" stroke="none" d="M284.2275,33.25654L284.2275,8.6132L
+			299.59115,8.6132L299.59115,33.25654L284.2275,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 285.42779 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">7</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#AB5013" fill-rule="evenodd" stroke="none" d="M299.59115,33.25654L299.59115,8.6132
+			L314.71474,8.6132L314.71474,33.25654L299.59115,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#9E4410" fill-rule="evenodd" stroke="none" d="M314.71474,33.25654L314.71474,8.6132
+			L329.83834,8.6132L329.83834,33.25654L314.71474,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 315.67497 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">8</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#94390C" fill-rule="evenodd" stroke="none" d="M329.83834,33.25654L329.83834,8.6132
+			L344.96193,8.6132L344.96193,33.25654L329.83834,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#8A2D08" fill-rule="evenodd" stroke="none" d="M344.96193,33.25654L344.96193,8.6132
+			L360.08552,8.6132L360.08552,33.25654L344.96193,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 345.92216 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">9</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#802106" fill-rule="evenodd" stroke="none" d="M360.08552,33.25654L360.08552,8.6132
+			L375.20911,8.6132L375.20911,33.25654L360.08552,33.25654z"/>
+		<path clip-path="url(#SVG_CP_2)" fill="#751504" fill-rule="evenodd" stroke="none" d="M375.20911,33.25654L375.20911,8.6132
+			L390.3327,8.6132L390.3327,33.25654L375.20911,33.25654z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(11.76279 0 0 11.72353 369.6878 47.13337)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">1</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.54918 ">0</tspan>
+			</text>
+		</g>
+		<path clip-path="url(#SVG_CP_2)" fill="#6B0601" fill-rule="evenodd" stroke="none" d="M390.3327,33.25654L390.3327,8.6132L
+			405.45629,8.6132L405.45629,33.25654L390.3327,33.25654z"/>
+	</g>
+</svg>
