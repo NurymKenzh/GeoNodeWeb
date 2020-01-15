@@ -422,6 +422,7 @@
             <div class="card-body m-0 p-3">
                 <h6 class="card-title m-0" id="InfoTitle" title="">Card title</h6>
                 <p class="card-text" id="InfoInfo">Some quick example text</p>
+                <p class="card-text" id="InfoYears">1951 - 21001</p>
             </div>
         </div>
     </div>
@@ -1143,7 +1144,16 @@
 
         $('#InfoTitle').text('');
         $('#InfoTitle').prop('title', '');
-        $('#InfoInfo').text('');
+        var InfoInfo = '';
+        if ($('#RCP45').is(':checked')) {
+            InfoInfo = 'RCP 45';
+        }
+        if ($('#RCP85').is(':checked')) {
+            InfoInfo = 'RCP 85';
+        }
+        $('#InfoInfo').text(InfoInfo);
+        $('#InfoYears').text('');
+
         $.ajax({
             url: '@Url.Action("GetLayerInfo")',
             data: {
@@ -1192,6 +1202,8 @@
                 from = min;
                 to = from + parseInt(Decade);
                 CreateDateSlider();
+                
+                $('#InfoYears').text(min + ' - ' + max);
 
                 ChangeDate();
             },
