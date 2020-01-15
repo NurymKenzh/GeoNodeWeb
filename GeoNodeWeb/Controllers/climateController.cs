@@ -41,6 +41,20 @@ namespace GeoNodeWeb.Controllers
         public string data;
     }
 
+    public class climate_mosaicinfo
+    {
+        public string name;
+        public string title_en;
+        public string title_ru;
+        public string title_kk;
+        public string description_en;
+        public string description_ru;
+        public string description_kk;
+        public string extended_title_en;
+        public string extended_title_kk;
+        public string extended_title_ru;
+    }
+
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
@@ -5262,80 +5276,37 @@ namespace GeoNodeWeb.Controllers
             string workspace,
             string layer)
         {
-            string GeoServerUrl = server ? Startup.Configuration["GeoServerProdUrlServer"].ToString() : Startup.Configuration["GeoServerProdUrlDebug"].ToString();
-            string title = "",
-                abstr = "";
-            // 1
-            //Process process = new Process();
-            //try
+            //// GeoServer
+            //string GeoServerUrl = server ? Startup.Configuration["GeoServerProdUrlServer"].ToString() : Startup.Configuration["GeoServerProdUrlDebug"].ToString();
+            //string title = "",
+            //    abstr = "";
+            //HttpResponseMessage response = await _HttpApiClient.GetAsync($"rest/workspaces/{workspace}/coveragestores/{layer}/coverages/{layer}.xml");
+            //string xml = "";
+            //if (response.IsSuccessStatusCode)
             //{
-            //    process.StartInfo.UseShellExecute = false;
-            //    process.StartInfo.RedirectStandardOutput = true;
-            //    process.StartInfo.RedirectStandardError = true;
-            //    process.StartInfo.FileName = "C:\\Windows\\curl.exe";
-            //    //process.StartInfo.Arguments = $" -u " +
-            //    //    $"admin:" +
-            //    //    $"HdpjwZjfL7MnrK-Kcp!@uaZY" +
-            //    //    $" -XGET" +
-            //    //    $" {GeoServerUrl}rest/workspaces/{workspace}/coveragestores/{layer}/coverages/{layer}.xml";
-            //    process.StartInfo.Arguments = $" -u " +
-            //        $"admin:" +
-            //        $"HdpjwZjfL7MnrK-Kcp!@uaZY" +
-            //        $" -XGET" +
-            //        $" http://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml";
-            //    process.Start();
+            //    xml = await response.Content.ReadAsStringAsync();
             //}
-            //catch (Exception exception)
-            //{
-            //    throw new Exception(exception.ToString(), exception.InnerException);
-            //}
-            //string jsonString = process.StandardOutput.ReadToEnd();
             //XmlDocument xmlDoc = new XmlDocument();
-            //xmlDoc.LoadXml(jsonString);
-
-            ////XmlDocument xmlDoc2 = new XmlDocument();
-            ////xmlDoc2.LoadXml(XmlConvert.DecodeName(xmlDoc.OuterXml));
-
+            //xmlDoc.LoadXml(xml);
             //XmlNodeList ti = xmlDoc.GetElementsByTagName("title");
             //XmlNodeList ab = xmlDoc.GetElementsByTagName("abstract");
             //title = ti[0].InnerText;
             //abstr = ab[0].InnerText;
 
-            ////Encoding iso = Encoding.GetEncoding("ISO-8859-1");
-            ////Encoding utf8 = Encoding.UTF8;
-            //////byte[] isoBytes = iso.GetBytes(title);
-            //////byte[] utfBytes = Encoding.Convert(iso, utf8, isoBytes);
-            //////string msg = iso.GetString(utfBytes);
-            ////byte[] utfBytes = utf8.GetBytes(title);
-            ////byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
-            ////string msg = iso.GetString(utfBytes);
-
-            // 2
-            //WebRequest request = WebRequest.Create("http://geoportal.ingeo.kz/geoserver/rest/workspaces/climate/coveragestores/pr_pd_avg_m_rcp45_10/coverages/pr_pd_avg_m_rcp45_10.xml");
-            //request.Credentials = new NetworkCredential("admin", "HdpjwZjfL7MnrK-Kcp!@uaZY");
-            //using (WebResponse response = request.GetResponse())
-            //{
-            //    using (XmlReader reader = XmlReader.Create(response.GetResponseStream()))
-            //    {
-            //        string s = reader.ReadContentAsString();
-            //    }
-            //}
-            ////WebResponse response = request.GetResponse();
-            ////XmlReader reader = XmlReader.Create(response.GetResponseStream());
-
-            // 3
-            HttpResponseMessage response = await _HttpApiClient.GetAsync($"rest/workspaces/{workspace}/coveragestores/{layer}/coverages/{layer}.xml");
-            string xml = "";
-            if (response.IsSuccessStatusCode)
+            // DB
+            string title = "",
+                abstr = "";
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
             {
-                xml = await response.Content.ReadAsStringAsync();
+                connection.Open();
+                string query = $"SELECT name, title_en, title_ru, title_kk, description_en, description_ru, description_kk, extended_title_en, extended_title_kk, extended_title_ru" +
+                    $" FROM public.climate_mosaicinfo" +
+                    $" WHERE name LIKE '{layer}';";
+                var climate_mosaicinfos = connection.Query<climate_mosaicinfo>(query);
+                climate_mosaicinfo climate_Mosaicinfo = climate_mosaicinfos.FirstOrDefault();
+                title = climate_Mosaicinfo?.title_ru;
+                abstr = climate_Mosaicinfo?.extended_title_ru;
             }
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xml);
-            XmlNodeList ti = xmlDoc.GetElementsByTagName("title");
-            XmlNodeList ab = xmlDoc.GetElementsByTagName("abstract");
-            title = ti[0].InnerText;
-            abstr = ab[0].InnerText;
 
             return Json(new
             {
