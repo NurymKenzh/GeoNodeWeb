@@ -34,7 +34,7 @@
                                             <option value="pr_pd_avg">Осадки</option>
                                             <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
                                             <option value="et_pd_avg">Эвапотранспирация</option>
-                                            <option value="?">Отклонения эвапотранспирации от значений базового периода</option>
+                                            <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                                             <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
                                             <option value="tas_dlt_avg">Отклонения средней температуры</option>
                                             <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
@@ -135,7 +135,7 @@
                                             <option value="pr_pd_avg">Осадки</option>
                                             <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
                                             <option value="et_pd_avg">Эвапотранспирация</option>
-                                            <option value="?">Отклонения эвапотранспирации от значений базового периода</option>
+                                            <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                                             <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
                                             <option value="tas_dlt_avg">Отклонения средней температуры</option>
                                             <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
@@ -240,6 +240,157 @@
                                 </form>
                                 <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart2()" />
                             </div>
+
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="chart3SubParameter">Климатический параметр:</label>
+                                        <select class="form-control form-control-sm" id="chart3SubParameter">
+                                            <option value="tasmax_pd_avg">Максимальная температура</option>
+                                            <option value="tas_pd_avg">Средняя температура</option>
+                                            <option value="tasmin_pd_avg">Минимальная температура</option>
+                                            <option value="pr_pd_avg">Осадки</option>
+                                            <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                            <option value="et_pd_avg">Эвапотранспирация</option>
+                                            <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                                            <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                            <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                            <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chart3Decade">Периодичность:</label>
+                                        <select class="form-control form-control-sm" id="chart3Decade" onchange="chart3UpdateDates()">
+                                            <option value="10">10 лет</option>
+                                            <option value="20">20 лет</option>
+                                            <option value="30">30 лет</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chart3Decade">RCP:</label>
+                                        <select class="form-control form-control-sm" id="chart3RCP">
+                                            <option value="rcp45">rcp 4.5</option>
+                                            <option value="rcp85">rcp 8.5</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1951" name="chart3Dates" value="1951" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox1951">1951</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1961" name="chart3Dates" value="1961" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox1961">1961</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1971" name="chart3Dates" value="1971" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox1971">1971</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1981" name="chart3Dates" value="1981" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox1981">1981</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1991" name="chart3Dates" value="1991" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox1991">1991</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2001" name="chart3Dates" value="2001" disabled>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2001">2001</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2011" name="chart3Dates" value="2011" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2011">2011</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2021" name="chart3Dates" value="2021" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2021">2021</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2031" name="chart3Dates" value="2031" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2031">2031</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2041" name="chart3Dates" value="2041" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2041">2041</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2051" name="chart3Dates" value="2051" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2051">2051</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2061" name="chart3Dates" value="2061" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2061">2061</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2071" name="chart3Dates" value="2071" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2071">2071</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2081" name="chart3Dates" value="2081" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2081">2081</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2091" name="chart3Dates" value="2091" checked>
+                                            <label class="form-check-label" for="chart3inlineCheckbox2091">2091</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month1" name="chart3Months" value="1" checked>
+                                            <label class="form-check-label" for="chart3Month1">Январь</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month2" name="chart3Months" value="2" checked>
+                                            <label class="form-check-label" for="chart3Month2">Февраль</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month3" name="chart3Months" value="3" checked>
+                                            <label class="form-check-label" for="chart3Month3">Март</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month4" name="chart3Months" value="4" checked>
+                                            <label class="form-check-label" for="chart3Month4">Апрель</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month5" name="chart3Months" value="5" checked>
+                                            <label class="form-check-label" for="chart3Month5">Май</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month6" name="chart3Months" value="6" checked>
+                                            <label class="form-check-label" for="chart3Month6">Июнь</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month7" name="chart3Months" value="7" checked>
+                                            <label class="form-check-label" for="chart3Month7">Июль</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month8" name="chart3Months" value="8" checked>
+                                            <label class="form-check-label" for="chart3Month8">Август</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month9" name="chart3Months" value="9" checked>
+                                            <label class="form-check-label" for="chart3Month9">Сентябрь</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month10" name="chart3Months" value="10" checked>
+                                            <label class="form-check-label" for="chart3Month10">Октябрь</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month11" name="chart3Months" value="11" checked>
+                                            <label class="form-check-label" for="chart3Month11">Ноябрь</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="chart3Month12" name="chart3Months" value="12" checked>
+                                            <label class="form-check-label" for="chart3Month12">Декабрь</label>
+                                        </div>
+                                    </div>
+
+                                </form>
+                                <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart3()" />
+                            </div>
                         </div>
                     </div>
                 </header>
@@ -255,7 +406,6 @@
                     </div>
                 </div>
                 <canvas class="my-4 w-100 chartjs-render-monitor" id="chart1Canvas" width="900" height="380"></canvas>
-                <input id="id" value="@ViewBag.Id" type="hidden" />
 
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
                     <h1 class="h4">Динамика климатического параметра по сезонам</h1>
@@ -267,6 +417,18 @@
                     </div>
                 </div>
                 <canvas class="my-4 w-100 chartjs-render-monitor" id="chart2Canvas" width="900" height="380"></canvas>
+
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
+                    <h1 class="h4">Динамика климатического параметра по месяцам</h1>
+                    <div class="btn-toolbar">
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        </div>
+                    </div>
+                </div>
+                <canvas class="my-4 w-100 chartjs-render-monitor" id="chart3Canvas" width="900" height="380"></canvas>
+
                 <input id="id" value="@ViewBag.Id" type="hidden" />
             </div>
         </div>         
@@ -278,7 +440,8 @@
 
 <script>
     var chart1 = null,
-        chart2 = null;
+        chart2 = null,
+        chart3 = null;
 
     function chart1UpdateDates() {
         $('input:checkbox[name="chart1Dates"][value="1991"]').removeAttr('disabled');
@@ -307,6 +470,21 @@
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop("disabled", true);
             $('input:checkbox[name="chart2Dates"][value="1981"]').prop('checked', false);
             $('input:checkbox[name="chart2Dates"][value="1981"]').prop("disabled", true);
+        }
+    }
+
+    function chart3UpdateDates() {
+        $('input:checkbox[name="chart3Dates"][value="1991"]').removeAttr('disabled');
+        $('input:checkbox[name="chart3Dates"][value="1981"]').removeAttr('disabled');
+        if ($('#chart3Decade').val() == 20) {
+            $('input:checkbox[name="chart3Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart3Dates"][value="1991"]').prop("disabled", true);
+        }
+        if ($('#chart3Decade').val() == 30) {
+            $('input:checkbox[name="chart3Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart3Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart3Dates"][value="1981"]').prop('checked', false);
+            $('input:checkbox[name="chart3Dates"][value="1981"]').prop("disabled", true);
         }
     }
 
@@ -413,9 +591,6 @@
             type: 'POST',
             success: function (data) {
                 // 0 - spring
-                //console.log(data.max);
-                //console.log(data.min);
-                //console.log(data.median);
                 for (var i = 0; i < data.max.length; ++i) {
                     for (var j = 0; j < data.max[i].length; ++j) {
                         data.max[i][j] = parseFloat(data.max[i][j]).toFixed(2);
@@ -436,34 +611,40 @@
                     datasets: []
                 };
                 for (var i = 0; i < data.max.length; ++i) {
-                    chart2Data.datasets.push({
-                        label: 'Максимум (' + seasonNames[i] + ')',
-                        backgroundColor: seasonColors[i],
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                        stack: 'max',
-                        data: data.max[i]
-                    });
+                    if (chart2Seasons.includes(i+1)) {
+                        chart2Data.datasets.push({
+                            label: 'Максимум (' + seasonNames[i] + ')',
+                            backgroundColor: seasonColors[i],
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            stack: 'max',
+                            data: data.max[i]
+                        });
+                    }
                 }
                 for (var i = 0; i < data.max.length; ++i) {
-                    chart2Data.datasets.push({
-                        label: 'Минимум (' + seasonNames[i] + ')',
-                        backgroundColor: seasonColors[i],
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                        stack: 'min',
-                        data: data.min[i]
-                    });
+                    if (chart2Seasons.includes(i+1)) {
+                        chart2Data.datasets.push({
+                            label: 'Минимум (' + seasonNames[i] + ')',
+                            backgroundColor: seasonColors[i],
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            stack: 'min',
+                            data: data.min[i]
+                        });
+                    }
                 }
                 for (var i = 0; i < data.max.length; ++i) {
-                    chart2Data.datasets.push({
-                        label: 'Медиана (' + seasonNames[i] + ')',
-                        backgroundColor: seasonColors[i],
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                        stack: 'median',
-                        data: data.median[i]
-                    });
+                    if (chart2Seasons.includes(i+1)) {
+                        chart2Data.datasets.push({
+                            label: 'Медиана (' + seasonNames[i] + ')',
+                            backgroundColor: seasonColors[i],
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            stack: 'median',
+                            data: data.median[i]
+                        });
+                    }
                 }
                 var ctx2 = document.getElementById('chart2Canvas').getContext('2d');
                 if (chart2 != null) {
@@ -494,11 +675,132 @@
             }
         });
     };
+
+    function Chart3() {
+        var monthNames = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
+            monthColors =[
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(150, 153, 75, 0.5)',
+                'rgba(205, 130, 20, 0.5)',
+                'rgba(63, 70, 250, 0.5)',
+                'rgba(87, 50, 200, 0.5)',
+                'rgba(169, 190, 75, 0.5)',
+                'rgba(175, 240, 20, 0.5)',
+                'rgba(25, 250, 150, 0.5)',
+                'rgba(200, 20, 75, 0.5)',
+                'rgba(175, 150, 100, 0.5)'];
+        var chart3Dates = [];
+        $("input:checkbox[name=chart3Dates]:checked").each(function () {
+            chart3Dates.push(parseInt($(this).val()));
+        });
+        var chart3Months = [];
+        $("input:checkbox[name=chart3Months]:checked").each(function(){
+            chart3Months.push(parseInt($(this).val()));
+        });
+        $.ajax({
+            url: '@Url.Action("GetChart3")',
+            data: {
+                Id: @ViewBag.Id,
+                SubParameter: $('#chart3SubParameter').val(),
+                Decade: $('#chart3Decade').val(),
+                RCP: $('#chart3RCP').val(),
+                Dates: chart3Dates,
+                Months: chart3Months
+            },
+            type: 'POST',
+            success: function (data) {
+                for (var i = 0; i < data.max.length; ++i) {
+                    for (var j = 0; j < data.max[i].length; ++j) {
+                        data.max[i][j] = parseFloat(data.max[i][j]).toFixed(2);
+                    }
+                }
+                for (var i = 0; i < data.min.length; ++i) {
+                    for (var j = 0; j < data.min[i].length; ++j) {
+                        data.min[i][j] = parseFloat(data.min[i][j]).toFixed(2);
+                    }
+                }
+                for (var i = 0; i < data.median.length; ++i) {
+                    for (var j = 0; j < data.median[i].length; ++j) {
+                        data.median[i][j] = parseFloat(data.median[i][j]).toFixed(2);
+                    }
+                }
+                var chart3Data = {
+                    labels: data.years,
+                    datasets: []
+                };
+                for (var i = 0; i < data.max.length; ++i) {
+                    if (chart3Months.includes(i + 1)) {
+                        chart3Data.datasets.push({
+                            label: 'Максимум (' + monthNames[i] + ')',
+                            backgroundColor: monthColors[i],
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            stack: 'max',
+                            data: data.max[i]
+                        });
+                    }
+                }
+                for (var i = 0; i < data.max.length; ++i) {
+                    if (chart3Months.includes(i + 1)) {
+                        chart3Data.datasets.push({
+                            label: 'Минимум (' + monthNames[i] + ')',
+                            backgroundColor: monthColors[i],
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            stack: 'min',
+                            data: data.min[i]
+                        });
+                    }
+                }
+                for (var i = 0; i < data.max.length; ++i) {
+                    if (chart3Months.includes(i + 1)) {
+                        chart3Data.datasets.push({
+                            label: 'Медиана (' + monthNames[i] + ')',
+                            backgroundColor: monthColors[i],
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            stack: 'median',
+                            data: data.median[i]
+                        });
+                    }
+                }
+                var ctx2 = document.getElementById('chart3Canvas').getContext('2d');
+                if (chart3 != null) {
+                    chart3.destroy();
+                }
+                chart3 = new Chart(ctx2, {
+                    type: 'bar',
+                    data: chart3Data,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            fontSize: 20,
+                            fontColor: '#000',
+                            text: data.wmbname + ' (' + data.wmacode + ')'
+                        },
+                        tooltips: {
+						    mode: 'index',
+						    intersect: false
+					    }
+                    }
+                });
+            },
+            error: function () {
+            }
+        });
+    };
 </script>
 
 <script>
     $(document).ready(function () {
         Chart1();
         Chart2();
+        Chart3();
     });
 </script>
