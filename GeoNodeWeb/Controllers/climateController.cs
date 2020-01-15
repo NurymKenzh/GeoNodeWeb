@@ -5358,6 +5358,13 @@ namespace GeoNodeWeb.Controllers
         {
             string layer_name = $"{SubParameter}_y_{RCP}_{Decade}";
 
+            // Отклонения осадков в мм
+            if (SubParameter == "pr_dlt_avg_mm")
+            {
+                string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
+                layer_name = $"{SubParameter_}_y_{RCP}_{Decade}_mm";
+            }
+
             List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
             using (var connection = new NpgsqlConnection(geoportalProdConnection))
             {

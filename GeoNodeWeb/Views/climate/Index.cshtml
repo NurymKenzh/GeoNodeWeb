@@ -1118,6 +1118,7 @@
         if ($('#Month12').is(':checked')) {
             Month = '12';
         }
+
         ChangeLayerClimate();
     }
 </script>
@@ -1140,7 +1141,16 @@
         InfoTitletitle = '';
 
     function ChangeLayerClimate() {
-        var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        var layerClimate = '';
+
+        // Отклонения осадков в мм
+        if (SubParameter == 'pr_dlt_avg_mm') {
+            var SubParameter_ = SubParameter.substr(0, SubParameter.length - 3);
+            layerClimate = SubParameter_ + '_' + Period + '_' + RCP + '_' + Decade + '_' + 'mm';
+        }
+        else {
+            layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
 
         $('#InfoTitle').text('');
         $('#InfoTitle').prop('title', '');
@@ -1320,6 +1330,16 @@
         closer.blur();
 
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        // Отклонения осадков в мм
+        if (SubParameter == 'pr_dlt_avg_mm') {
+            var SubParameter_ = SubParameter.substr(0, SubParameter.length - 3),
+                SubParameter_;
+            layerClimate = SubParameter_ + '_' + Period + '_' + RCP + '_' + Decade + '_' + 'mm';
+        }
+        else {
+            layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
+
         //var date = dates[$('#date').val()];
         //date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
         date = range_instance.result.from;
