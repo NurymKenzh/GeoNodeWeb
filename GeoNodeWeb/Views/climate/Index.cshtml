@@ -419,8 +419,8 @@
     </div>
     <div class="row justify-content-end">
         <div id="MapTitle" class="card text-center text-white m-2 rounded-0 border-light" style="background: #3a465d;">
-            <div class="card-body m-0 p-2" data-toggle="tooltip" data-placement="right" title="Full name">
-                <h6 class="card-title  m-0" id="InfoTitle" title="">Card title</h6>
+            <div id="divInfo" class="card-body m-0 p-2" data-toggle="tooltip" data-placement="right" title="Full name">
+                <h6 class="card-title  m-0" id="InfoTitle">Card title</h6>
                 <p class="card-text m-0" id="InfoInfo">Some quick example text</p>
                 <h5 class="card-text" id="InfoYears">1951 - 1961</h5>
             </div>
@@ -1153,7 +1153,7 @@
         }
 
         $('#InfoTitle').text('');
-        $('#InfoTitle').prop('title', '');
+        $('#divInfo').attr('data-original-title', '');
         var InfoInfo = '';
         if ($('#RCP45').is(':checked')) {
             InfoInfo = 'RCP 45';
@@ -1174,7 +1174,7 @@
             success: function (data) {
                 $('#InfoTitle').text(data.title);
                 //$('#InfoInfo').text(data.abstr);
-                $('#InfoTitle').prop('title', data.abstr);
+                $('#divInfo').attr('data-original-title', data.abstr);
                 InfoTitle = data.title;
                 InfoTitletitle = data.abstr;
             },
@@ -1375,12 +1375,12 @@
             || (Decade == '20' && (range_instance.result.from == 1991 || range_instance.result.from == 2001))
             || (Decade == '30' && (range_instance.result.from == 1981 || range_instance.result.from == 1991 || range_instance.result.from == 2001))) {
             $('#InfoTitle').text('При построении карт используются архивные данные состоящие из ретроспективных проекций за период с 1950 г. по 2005 г. и проекций на будущее, которые представлены за период 2006-2100 гг. для двух сценариев репрезентативных траекторий концентрации парниковых газов: RCP4.5 и RCP8.5. В связи с перекрытием ретроспективных данных и проекций на будущее в период с 2001-2010 гг. ограничивают возможность проведения корректных расчетов и построения карт за определенные периоды: 10 лет – 2001-2010 гг., за 20 лет – 1991-2010, 2001-2020 гг., за 30 лет – 1981-2010, 1991-2020, 2001-2030 гг.');
-            $('#InfoTitle').prop('title', '');
+            $('#divInfo').attr('data-original-title', '');
         }
         else {
             $('#InfoTitle').text(InfoTitle);
             //$('#InfoInfo').text(data.abstr);
-            $('#InfoTitle').prop('title', InfoTitletitle);
+            $('#divInfo').attr('data-original-title', InfoTitletitle);
         }
     }
     function addSpecialAreas($slider) {
