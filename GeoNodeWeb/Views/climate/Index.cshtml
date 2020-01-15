@@ -391,7 +391,7 @@
                             <div class="col-8">
                                 <div class="row align-items-center">
                                     <div class="col">
-                                        <button type="button" class="btn btn-outline-warning btn-sm">Difference</button>
+                                        <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">Отклонение</button>
                                     </div>
                                     <div class="col-9 m-1 " style="cursor: pointer;">
                                         <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
@@ -954,7 +954,7 @@
     addInteraction();
 </script>
 
-@* ChangeParameter, ChangeSubParameter, ChangePeriod, ChangeRCP, ChangeDecade *@
+@* ChangeParameter, ChangeSubParameter, ChangePeriod, ChangeRCP, ChangeDecade, Difference *@
 <script>
     var Parameter = 'tas',
         SubParameter = 'tasmax_pd_avg',
@@ -1020,6 +1020,14 @@
         $('#' + element).addClass('active');
         //ChangeLayerClimate();
         //ChangePeriod();
+        if (['tasmax_pd_avg', 'tas_pd_avg', 'tasmin_pd_avg', 'pr_pd_avg', 'et_pd_avg'].includes(SubParameter)) {
+            diff = false;
+            $('#Difference').removeClass('btn-primary');
+        }
+        if (['tasmax_dlt_avg', 'tas_dlt_avg', 'tasmin_dlt_avg', 'pr_dlt_avg_mm', 'et_dlt_avg'].includes(SubParameter)) {
+            diff = true;
+            $('#Difference').addClass('btn-primary');
+        }
         ChangeDecade();
     }
 
@@ -1120,6 +1128,58 @@
         }
 
         ChangeLayerClimate();
+    }
+
+    var diff = false;
+    function Difference() {
+        if (!diff) {
+            $('#Difference').addClass('btn-primary');
+            diff = true;
+            if (SubParameter == 'tasmax_pd_avg') {
+                $('#Temperature1').removeClass('active');
+                ChangeSubParameter('tasmax_dlt_avg', 'Temperature4');
+            }
+            if (SubParameter == 'tas_pd_avg') {
+                $('#Temperature2').removeClass('active');
+                ChangeSubParameter('tas_dlt_avg', 'Temperature5');
+            }
+            if (SubParameter == 'tasmin_pd_avg') {
+                $('#Temperature3').removeClass('active');
+                ChangeSubParameter('tasmin_dlt_avg', 'Temperature6');
+            }
+            if (SubParameter == 'pr_pd_avg') {
+                $('#Precipitation1').removeClass('active');
+                ChangeSubParameter('pr_dlt_avg_mm', 'Precipitation2');
+            }
+            if (SubParameter == 'et_pd_avg') {
+                $('#Evapotranspiration1').removeClass('active');
+                ChangeSubParameter('et_dlt_avg', 'Evapotranspiration2');
+            }
+        }
+        else {
+            $('#Difference').removeClass('btn-primary');
+            diff = false;
+            if (SubParameter == 'tasmax_dlt_avg') {
+                $('#Temperature4').removeClass('active');
+                ChangeSubParameter('tasmax_pd_avg', 'Temperature1');
+            }
+            if (SubParameter == 'tas_dlt_avg') {
+                $('#Temperature5').removeClass('active');
+                ChangeSubParameter('tas_pd_avg', 'Temperature2');
+            }
+            if (SubParameter == 'tasmin_dlt_avg') {
+                $('#Temperature6').removeClass('active');
+                ChangeSubParameter('tasmin_pd_avg', 'Temperature3');
+            }
+            if (SubParameter == 'pr_dlt_avg_mm') {
+                $('#Precipitation2').removeClass('active');
+                ChangeSubParameter('pr_pd_avg', 'Precipitation1');
+            }
+            if (SubParameter == 'et_dlt_avg') {
+                $('#Evapotranspiration2').removeClass('active');
+                ChangeSubParameter('et_pd_avg', 'Evapotranspiration1');
+            }
+        }
     }
 </script>
 
