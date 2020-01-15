@@ -1156,13 +1156,12 @@
         $('#divInfo').attr('data-original-title', '');
         var InfoInfo = '';
         if ($('#RCP45').is(':checked')) {
-            InfoInfo = 'RCP 45';
+            InfoInfo = 'RCP 4.5';
         }
         if ($('#RCP85').is(':checked')) {
-            InfoInfo = 'RCP 85';
+            InfoInfo = 'RCP 8.5';
         }
         $('#InfoInfo').text(InfoInfo);
-        $('#InfoYears').text('');
 
         $.ajax({
             url: '@Url.Action("GetLayerInfo")',
@@ -1212,8 +1211,6 @@
                 from = min;
                 to = from + parseInt(Decade);
                 CreateDateSlider();
-                
-                $('#InfoYears').text(min + ' - ' + max);
 
                 ChangeDate();
             },
@@ -1382,7 +1379,10 @@
             //$('#InfoInfo').text(data.abstr);
             $('#divInfo').attr('data-original-title', InfoTitletitle);
         }
+
+        $('#InfoYears').text(range_instance.result.from.toString() + ' - ' + range_instance.result.to.toString());
     }
+
     function addSpecialAreas($slider) {
         var area = [45, 55];
         var $line = $slider.find(".irs-line");
