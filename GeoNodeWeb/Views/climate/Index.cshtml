@@ -305,14 +305,14 @@
                                                             <input id="layerClimateOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
                                                             <select id="layerBaseType" class="form-control form-control-sm" onchange="ChangeLayers()">
-                                                                <option value="BingAerialWithLabels">Bing Aerial</option>
                                                                 <option value="OSM">OpenStreetMap</option>
+                                                                <option value="BingAerialWithLabels">Bing Aerial</option>
                                                                 <option value="BingRoadStatic">Bing Road (static)</option>
                                                                 <option value="BingRoadDynamic">Bing Road (dynamic)</option>
                                                                 <option value="HERENormalDay">HERE Normal Day</option>
                                                                 <option value="HERENormalDayTransit">HERE Normal Day Transit</option>
                                                                 <option value="HERETerrainDay">HERE Terrain Day</option>
-                                                                <option value="HEREHybridDay">HERE Hybrid Day</option>
+                                                                <option value="HEREHybridDay" selected>HERE Hybrid Day</option>
                                                                 <option value="StamenWatercolor">Stamen Watercolor</option>
                                                                 <option value="StamenTerrain">Stamen Terrain</option>
                                                                 <option value="StamenToner">Stamen Toner</option>
@@ -497,12 +497,6 @@
         imagerySet: 'AerialWithLabels',
     });
 
-    var Layer_Base = new ol.layer.Tile({
-        source: Source_BingAerialWithLabels
-    });
-    Layer_Base.set('name', 'Base');
-    Layer_Base.setOpacity(0.80);
-
     Source_BingRoadStatic = new ol.source.BingMaps({
         key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
         imagerySet: 'Road',
@@ -638,6 +632,12 @@
         url: 'https://{a-c}.tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png' +
             '?apikey=6746f4299ea3479aba8726b09f049c1b'
     });
+
+    var Layer_Base = new ol.layer.Tile({
+        source: Source_HEREHybridDay
+    });
+    Layer_Base.set('name', 'Base');
+    Layer_Base.setOpacity(0.80);
 
     var url_pr_pd_avg_m_rcp45_10 = geoserver_url + geoserver_workspace_name + '/wms';
     var Source_pr_pd_avg_m_rcp45_10 = new ol.source.TileWMS({
