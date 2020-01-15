@@ -5446,5 +5446,111 @@ namespace GeoNodeWeb.Controllers
                 wmacode
             });
         }
+
+        [HttpPost]
+        public ActionResult GetChart2(int Id,
+            string SubParameter,
+            string Decade,
+            string RCP,
+            int[] Seasons,
+            int[] Dates)
+        {
+            string layer_name = $"{SubParameter}_s_{RCP}_{Decade}";
+
+            // Отклонения осадков в мм
+            if (SubParameter == "pr_dlt_avg_mm")
+            {
+                string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
+                layer_name = $"{SubParameter_}_s_{RCP}_{Decade}_mm";
+            }
+
+            List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
+            {
+                connection.Open();
+                string query = $"SELECT date, data" +
+                    $" FROM public.climate_rasterstats" +
+                    $" WHERE layer_name = '{layer_name}'" +
+                    $" AND feature_id = {Id.ToString()}" +
+                    $" ORDER BY date;";
+                var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
+                climate_rasterstats = climate_rasterstats_DB
+                    .Where(c => Seasons.Contains(c.date.Month))
+                    .ToList();
+            }
+
+            string wmbname = "",
+                wmacode = "";
+            using (var connection = new NpgsqlConnection(geoserverConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE fid = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                wmbname = name.FirstOrDefault();
+                wmacode = code.FirstOrDefault();
+            }
+
+            climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
+            int year_start = climate_rasterstats.Min(c => c.date.Year),
+                year_finish = climate_rasterstats.Max(c => c.date.Year);
+            List<int> years = new List<int>();
+            int yearsCount = (year_finish - year_start) / 10 + 1;
+            decimal?[,] max = new decimal?[4, yearsCount],
+                min = new decimal?[4, yearsCount],
+                median = new decimal?[4, yearsCount];
+            for (int year = year_start, i = 0; year <= year_finish; year += 10, i++)
+            {
+                years.Add(year);
+                for (int season = 0; season <= 3; season++)
+                {
+                    climate_rasterstat climate_rasterstat = climate_rasterstats
+                        .FirstOrDefault(c => c.date.Year == year && c.date.Month == season + 1);
+                    if (climate_rasterstat == null)
+                    {
+                        max[season, i] = null;
+                        min[season, i] = null;
+                        median[season, i] = null;
+                    }
+                    else
+                    {
+                        var data = JObject.Parse(climate_rasterstat.data);
+                        foreach (JProperty property in data.Properties())
+                        {
+                            if (property.Name == "max")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                max[season, i] = d;
+                            }
+                            if (property.Name == "min")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                min[season, i] = d;
+                            }
+                            if (property.Name == "median")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                median[season, i] = d;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                years,
+                max,
+                min,
+                median,
+                wmbname,
+                wmacode
+            });
+        }
     }
 }
