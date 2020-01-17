@@ -5380,7 +5380,7 @@ namespace GeoNodeWeb.Controllers
 
             string wmbname = "",
                 wmacode = "";
-            using (var connection = new NpgsqlConnection(geoserverConnection))
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
                 var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
@@ -5481,7 +5481,7 @@ namespace GeoNodeWeb.Controllers
 
             string wmbname = "",
                 wmacode = "";
-            using (var connection = new NpgsqlConnection(geoserverConnection))
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
                 var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
@@ -5587,7 +5587,7 @@ namespace GeoNodeWeb.Controllers
 
             string wmbname = "",
                 wmacode = "";
-            using (var connection = new NpgsqlConnection(geoserverConnection))
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
                 var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
