@@ -418,13 +418,41 @@
         </div>
     </div>
     <div class="row justify-content-end">
-        <div id="MapTitle" class="card text-center text-white m-2 rounded-0 border-light" style="background: #3a465d;">
-            <div id="divInfo" class="card-body m-0 p-2" data-toggle="tooltip" data-placement="right" title="Full name">
-                <h6 class="card-title  m-0" id="InfoTitle">Card title</h6>
-                <p class="card-text m-0" id="InfoInfo">Some quick example text</p>
-                <h5 class="card-text" id="InfoYears">1951 - 1961</h5>
+        <div class="col-md-auto p-0 m-2" style="max-width: 70%;">
+            <div id="MapTitle" class="maptitlbod maptitlbod-default text-light">
+                <div class="shape">
+                    <div class="shape-text">
+                        <a href="#">
+                            <i class="fa fa-info" data-toggle="modal" data-target="#exampleModal"></i>
+                        </a>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divInfo" class="maptitlbod-content text-center" data-toggle="tooltip" data-placement="right" title="Full name">
+                    <h6 class="card-title  m-1" id="InfoTitle">Card title</h6>
+                    <p class="card-text m-0" id="InfoInfo">Some quick example text</p>
+                    <h5 class="card-text" id="InfoYears">1951 - 1961</h5>
+                </div>
             </div>
-        </div>
+        </div>        
+
     </div>
     <div id="Legend-2" class="card text-white m-0 rounded-0 border border-light" style="background: #3a465d;">
         <div class="card-body p-0">

@@ -6,435 +6,481 @@
 <link href="~/esnow/lib/сhart.js/dist/Chart.css" rel="stylesheet" />
 <script src="~/esnow/lib/moment.js/moment.js"></script>
 <script src="~/esnow/lib/сhart.js/dist/Chart.js"></script>
+
 <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-        <ul class="list-group list-group-flush mt-3">
-            <li class="list-group-item">Chart 1</li>
-            <li class="list-group-item">Chart 2</li>
-            <li class="list-group-item">Chart 3</li>
-            <li class="list-group-item">Chart 4</li>
-        </ul>
+    <nav class="col-md-3 d-none d-md-block bg-light sidebar">   
+        <div class="card-body">
+            <h5 class="card-title">ВХБ</h5>
+            <p class="card-text">ВХУ:   <b>Name</b></p>
+
+        </div>
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border pl-2 pr-2"> Configure All Plot </legend>
+            <form>
+                <div class="form-group">
+                    <label for="chart1SubParameter">Климатический параметр:</label>
+                    <select class="form-control form-control-sm" id="chart1SubParameter">
+                        <option value="tasmax_pd_avg">Максимальная температура</option>
+                        <option value="tas_pd_avg">Средняя температура</option>
+                        <option value="tasmin_pd_avg">Минимальная температура</option>
+                        <option value="pr_pd_avg">Осадки</option>
+                        <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                        <option value="et_pd_avg">Эвапотранспирация</option>
+                        <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                        <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                        <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                        <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="chart1Decade">Периодичность:</label>
+                    <select class="form-control form-control-sm" id="chart1Decade" onchange="chart1UpdateDates()">
+                        <option value="10">10 лет</option>
+                        <option value="20">20 лет</option>
+                        <option value="30">30 лет</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="chart1Decade">RCP:</label>
+                    <select class="form-control form-control-sm" id="chart1RCP">
+                        <option value="rcp45">rcp 4.5</option>
+                        <option value="rcp85">rcp 8.5</option>
+                    </select>
+                </div>
+            </form>
+            <input type="button" class="btn btn-primary float-right" value="Обновить" onclick="Chart1()" />
+        </fieldset>
+
     </nav>
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">        
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-9 px-4">
         <div class="row">
-            <div class="col-md-3 order-md-2 mt-2">
-                <header>                    
-                    <div class="row">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="chart1SubParameter">Климатический параметр:</label>
-                                        <select class="form-control form-control-sm" id="chart1SubParameter">
-                                            <option value="tasmax_pd_avg">Максимальная температура</option>
-                                            <option value="tas_pd_avg">Средняя температура</option>
-                                            <option value="tasmin_pd_avg">Минимальная температура</option>
-                                            <option value="pr_pd_avg">Осадки</option>
-                                            <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                            <option value="et_pd_avg">Эвапотранспирация</option>
-                                            <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                            <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                            <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                            <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="chart1Decade">Периодичность:</label>
-                                        <select class="form-control form-control-sm" id="chart1Decade" onchange="chart1UpdateDates()">
-                                            <option value="10">10 лет</option>
-                                            <option value="20">20 лет</option>
-                                            <option value="30">30 лет</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="chart1Decade">RCP:</label>
-                                        <select class="form-control form-control-sm" id="chart1RCP">
-                                            <option value="rcp45">rcp 4.5</option>
-                                            <option value="rcp85">rcp 8.5</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1951" name="chart1Dates" value="1951" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox1951">1951</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1961" name="chart1Dates" value="1961" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox1961">1961</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1971" name="chart1Dates" value="1971" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox1971">1971</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1981" name="chart1Dates" value="1981" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox1981">1981</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1991" name="chart1Dates" value="1991" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox1991">1991</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2001" name="chart1Dates" value="2001" disabled>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2001">2001</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2011" name="chart1Dates" value="2011" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2011">2011</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2021" name="chart1Dates" value="2021" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2021">2021</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2031" name="chart1Dates" value="2031" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2031">2031</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2041" name="chart1Dates" value="2041" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2041">2041</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2051" name="chart1Dates" value="2051" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2051">2051</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2061" name="chart1Dates" value="2061" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2061">2061</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2071" name="chart1Dates" value="2071" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2071">2071</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2081" name="chart1Dates" value="2081" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2081">2081</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2091" name="chart1Dates" value="2091" checked>
-                                            <label class="form-check-label" for="chart1inlineCheckbox2091">2091</label>
-                                        </div>
-                                    </div>
-
-                                </form>
-                                <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart1()" />
+            <div class="col">
+                <div class="card shadow mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                            <h1 class="h4">Динамика климатического параметра по годам</h1>
+                            <div class="btn-toolbar">
+                                <div class="btn-group mr-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                                </div>
                             </div>
-
-                            <div class="card-body">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 order-md-2 mt-2">
                                 <h5 class="card-title">Special title treatment</h5>
                                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="chart2SubParameter">Климатический параметр:</label>
-                                        <select class="form-control form-control-sm" id="chart2SubParameter">
-                                            <option value="tasmax_pd_avg">Максимальная температура</option>
-                                            <option value="tas_pd_avg">Средняя температура</option>
-                                            <option value="tasmin_pd_avg">Минимальная температура</option>
-                                            <option value="pr_pd_avg">Осадки</option>
-                                            <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                            <option value="et_pd_avg">Эвапотранспирация</option>
-                                            <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                            <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                            <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                            <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="chart2Decade">Периодичность:</label>
-                                        <select class="form-control form-control-sm" id="chart2Decade" onchange="chart2UpdateDates()">
-                                            <option value="10">10 лет</option>
-                                            <option value="20">20 лет</option>
-                                            <option value="30">30 лет</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="chart2Decade">RCP:</label>
-                                        <select class="form-control form-control-sm" id="chart2RCP">
-                                            <option value="rcp45">rcp 4.5</option>
-                                            <option value="rcp85">rcp 8.5</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1951" name="chart2Dates" value="1951" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox1951">1951</label>
+                                <fieldset class="scheduler-border">
+                                    <legend class="scheduler-border"> Configure Plot 1 </legend>
+                                    <form>
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1951" name="chart1Dates" value="1951" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox1951">1951</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1961" name="chart1Dates" value="1961" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox1961">1961</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1971" name="chart1Dates" value="1971" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox1971">1971</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1981" name="chart1Dates" value="1981" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox1981">1981</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox1991" name="chart1Dates" value="1991" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox1991">1991</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2001" name="chart1Dates" value="2001" disabled>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2001">2001</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2011" name="chart1Dates" value="2011" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2011">2011</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2021" name="chart1Dates" value="2021" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2021">2021</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2031" name="chart1Dates" value="2031" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2031">2031</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2041" name="chart1Dates" value="2041" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2041">2041</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2051" name="chart1Dates" value="2051" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2051">2051</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2061" name="chart1Dates" value="2061" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2061">2061</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2071" name="chart1Dates" value="2071" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2071">2071</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2081" name="chart1Dates" value="2081" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2081">2081</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="chart1inlineCheckbox2091" name="chart1Dates" value="2091" checked>
+                                                <label class="form-check-label" for="chart1inlineCheckbox2091">2091</label>
+                                            </div>
                                         </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1961" name="chart2Dates" value="1961" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox1961">1961</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1971" name="chart2Dates" value="1971" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox1971">1971</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1981" name="chart2Dates" value="1981" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox1981">1981</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1991" name="chart2Dates" value="1991" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox1991">1991</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2001" name="chart2Dates" value="2001" disabled>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2001">2001</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2011" name="chart2Dates" value="2011" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2011">2011</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2021" name="chart2Dates" value="2021" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2021">2021</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2031" name="chart2Dates" value="2031" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2031">2031</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2041" name="chart2Dates" value="2041" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2041">2041</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2051" name="chart2Dates" value="2051" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2051">2051</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2061" name="chart2Dates" value="2061" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2061">2061</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2071" name="chart2Dates" value="2071" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2071">2071</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2081" name="chart2Dates" value="2081" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2081">2081</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2091" name="chart2Dates" value="2091" checked>
-                                            <label class="form-check-label" for="chart2inlineCheckbox2091">2091</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2Season1" name="chart2Seasons" value="1" checked>
-                                            <label class="form-check-label" for="chart2Season1">Весна</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2Season2" name="chart2Seasons" value="2" checked>
-                                            <label class="form-check-label" for="chart2Season2">Лето</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2Season3" name="chart2Seasons" value="3" checked>
-                                            <label class="form-check-label" for="chart2Season3">Осень</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart2Season4" name="chart2Seasons" value="4" checked>
-                                            <label class="form-check-label" for="chart2Season4">Зима</label>
-                                        </div>
-                                    </div>
+                                    </form>
+                                    <input type="button" class="btn btn-outline-primary btn-sm" value="Обновить" onclick="Chart1()" />
+                                </fieldset>
 
-                                </form>
-                                <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart2()" />
                             </div>
+                            <div class="col-md-9">
+                                <canvas class="my-1 w-100 chartjs-render-monitor" id="chart1Canvas" width="900" height="380"></canvas>
+                            </div>
+                        </div>
 
-                            <div class="card-body">
+
+                    </div>
+                </div>
+                <div class="card shadow mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                            <h1 class="h4">Динамика климатического параметра по сезонам</h1>
+                            <div class="btn-toolbar">
+                                <div class="btn-group mr-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 order-md-2 mt-2">
                                 <h5 class="card-title">Special title treatment</h5>
                                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="chart3SubParameter">Климатический параметр:</label>
-                                        <select class="form-control form-control-sm" id="chart3SubParameter">
-                                            <option value="tasmax_pd_avg">Максимальная температура</option>
-                                            <option value="tas_pd_avg">Средняя температура</option>
-                                            <option value="tasmin_pd_avg">Минимальная температура</option>
-                                            <option value="pr_pd_avg">Осадки</option>
-                                            <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                            <option value="et_pd_avg">Эвапотранспирация</option>
-                                            <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                            <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                            <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                            <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="chart3Decade">Периодичность:</label>
-                                        <select class="form-control form-control-sm" id="chart3Decade" onchange="chart3UpdateDates()">
-                                            <option value="10">10 лет</option>
-                                            <option value="20">20 лет</option>
-                                            <option value="30">30 лет</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="chart3Decade">RCP:</label>
-                                        <select class="form-control form-control-sm" id="chart3RCP">
-                                            <option value="rcp45">rcp 4.5</option>
-                                            <option value="rcp85">rcp 8.5</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1951" name="chart3Dates" value="1951" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox1951">1951</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1961" name="chart3Dates" value="1961" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox1961">1961</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1971" name="chart3Dates" value="1971" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox1971">1971</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1981" name="chart3Dates" value="1981" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox1981">1981</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1991" name="chart3Dates" value="1991" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox1991">1991</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2001" name="chart3Dates" value="2001" disabled>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2001">2001</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2011" name="chart3Dates" value="2011" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2011">2011</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2021" name="chart3Dates" value="2021" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2021">2021</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2031" name="chart3Dates" value="2031" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2031">2031</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2041" name="chart3Dates" value="2041" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2041">2041</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2051" name="chart3Dates" value="2051" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2051">2051</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2061" name="chart3Dates" value="2061" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2061">2061</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2071" name="chart3Dates" value="2071" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2071">2071</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2081" name="chart3Dates" value="2081" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2081">2081</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2091" name="chart3Dates" value="2091" checked>
-                                            <label class="form-check-label" for="chart3inlineCheckbox2091">2091</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month1" name="chart3Months" value="1" checked>
-                                            <label class="form-check-label" for="chart3Month1">Январь</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month2" name="chart3Months" value="2" checked>
-                                            <label class="form-check-label" for="chart3Month2">Февраль</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month3" name="chart3Months" value="3" checked>
-                                            <label class="form-check-label" for="chart3Month3">Март</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month4" name="chart3Months" value="4" checked>
-                                            <label class="form-check-label" for="chart3Month4">Апрель</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month5" name="chart3Months" value="5" checked>
-                                            <label class="form-check-label" for="chart3Month5">Май</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month6" name="chart3Months" value="6" checked>
-                                            <label class="form-check-label" for="chart3Month6">Июнь</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month7" name="chart3Months" value="7" checked>
-                                            <label class="form-check-label" for="chart3Month7">Июль</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month8" name="chart3Months" value="8" checked>
-                                            <label class="form-check-label" for="chart3Month8">Август</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month9" name="chart3Months" value="9" checked>
-                                            <label class="form-check-label" for="chart3Month9">Сентябрь</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month10" name="chart3Months" value="10" checked>
-                                            <label class="form-check-label" for="chart3Month10">Октябрь</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month11" name="chart3Months" value="11" checked>
-                                            <label class="form-check-label" for="chart3Month11">Ноябрь</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chart3Month12" name="chart3Months" value="12" checked>
-                                            <label class="form-check-label" for="chart3Month12">Декабрь</label>
-                                        </div>
-                                    </div>
+                                <fieldset class="scheduler-border">
+                                    <legend class="scheduler-border"> Configure Plot 2 </legend>
 
-                                </form>
-                                <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart3()" />
+                                    <input type="button" class="btn btn-outline-primary btn-sm" value="Обновить" />
+                                </fieldset>
+                            </div>
+                            <div class="col-md-9">
+                                <canvas class="my-1 w-100 chartjs-render-monitor" id="chart2Canvas" width="900" height="380"></canvas>
                             </div>
                         </div>
                     </div>
-                </header>
-            </div>
-            <div class="col-md-9">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
-                    <h1 class="h4">Динамика климатического параметра по годам</h1>
-                    <div class="btn-toolbar">
-                        <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                        </div>
-                    </div>
                 </div>
-                <canvas class="my-4 w-100 chartjs-render-monitor" id="chart1Canvas" width="900" height="380"></canvas>
 
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
-                    <h1 class="h4">Динамика климатического параметра по сезонам</h1>
-                    <div class="btn-toolbar">
-                        <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                <div class="card shadow mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                            <h1 class="h4">Динамика климатического параметра по месяцам</h1>
+                            <div class="btn-toolbar">
+                                <div class="btn-group mr-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <canvas class="my-4 w-100 chartjs-render-monitor" id="chart2Canvas" width="900" height="380"></canvas>
+                        <div class="row mb-3">
+                            <div class="col-md-3 order-md-2 mt-2">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <fieldset class="scheduler-border">
+                                    <legend class="scheduler-border"> Configure Plot 3 </legend>
 
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2">
-                    <h1 class="h4">Динамика климатического параметра по месяцам</h1>
-                    <div class="btn-toolbar">
-                        <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                                    <input type="button" class="btn btn-outline-primary btn-sm" value="Обновить" />
+                                </fieldset>
+
+                            </div>
+                            <div class="col-md-9">
+                                <canvas class="my-4 w-100 chartjs-render-monitor" id="chart3Canvas" width="900" height="380"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <canvas class="my-4 w-100 chartjs-render-monitor" id="chart3Canvas" width="900" height="380"></canvas>
 
                 <input id="id" value="@ViewBag.Id" type="hidden" />
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <form>
+                            <div class="form-group">
+                                <label for="chart2SubParameter">Климатический параметр:</label>
+                                <select class="form-control form-control-sm" id="chart2SubParameter">
+                                    <option value="tasmax_pd_avg">Максимальная температура</option>
+                                    <option value="tas_pd_avg">Средняя температура</option>
+                                    <option value="tasmin_pd_avg">Минимальная температура</option>
+                                    <option value="pr_pd_avg">Осадки</option>
+                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                    <option value="et_pd_avg">Эвапотранспирация</option>
+                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="chart2Decade">Периодичность:</label>
+                                <select class="form-control form-control-sm" id="chart2Decade" onchange="chart2UpdateDates()">
+                                    <option value="10">10 лет</option>
+                                    <option value="20">20 лет</option>
+                                    <option value="30">30 лет</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="chart2Decade">RCP:</label>
+                                <select class="form-control form-control-sm" id="chart2RCP">
+                                    <option value="rcp45">rcp 4.5</option>
+                                    <option value="rcp85">rcp 8.5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1951" name="chart2Dates" value="1951" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox1951">1951</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1961" name="chart2Dates" value="1961" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox1961">1961</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1971" name="chart2Dates" value="1971" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox1971">1971</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1981" name="chart2Dates" value="1981" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox1981">1981</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox1991" name="chart2Dates" value="1991" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox1991">1991</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2001" name="chart2Dates" value="2001" disabled>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2001">2001</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2011" name="chart2Dates" value="2011" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2011">2011</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2021" name="chart2Dates" value="2021" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2021">2021</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2031" name="chart2Dates" value="2031" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2031">2031</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2041" name="chart2Dates" value="2041" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2041">2041</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2051" name="chart2Dates" value="2051" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2051">2051</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2061" name="chart2Dates" value="2061" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2061">2061</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2071" name="chart2Dates" value="2071" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2071">2071</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2081" name="chart2Dates" value="2081" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2081">2081</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2inlineCheckbox2091" name="chart2Dates" value="2091" checked>
+                                    <label class="form-check-label" for="chart2inlineCheckbox2091">2091</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2Season1" name="chart2Seasons" value="1" checked>
+                                    <label class="form-check-label" for="chart2Season1">Весна</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2Season2" name="chart2Seasons" value="2" checked>
+                                    <label class="form-check-label" for="chart2Season2">Лето</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2Season3" name="chart2Seasons" value="3" checked>
+                                    <label class="form-check-label" for="chart2Season3">Осень</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart2Season4" name="chart2Seasons" value="4" checked>
+                                    <label class="form-check-label" for="chart2Season4">Зима</label>
+                                </div>
+                            </div>
+
+                        </form>
+                        <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart2()" />
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <form>
+                            <div class="form-group">
+                                <label for="chart3SubParameter">Климатический параметр:</label>
+                                <select class="form-control form-control-sm" id="chart3SubParameter">
+                                    <option value="tasmax_pd_avg">Максимальная температура</option>
+                                    <option value="tas_pd_avg">Средняя температура</option>
+                                    <option value="tasmin_pd_avg">Минимальная температура</option>
+                                    <option value="pr_pd_avg">Осадки</option>
+                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                    <option value="et_pd_avg">Эвапотранспирация</option>
+                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="chart3Decade">Периодичность:</label>
+                                <select class="form-control form-control-sm" id="chart3Decade" onchange="chart3UpdateDates()">
+                                    <option value="10">10 лет</option>
+                                    <option value="20">20 лет</option>
+                                    <option value="30">30 лет</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="chart3Decade">RCP:</label>
+                                <select class="form-control form-control-sm" id="chart3RCP">
+                                    <option value="rcp45">rcp 4.5</option>
+                                    <option value="rcp85">rcp 8.5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1951" name="chart3Dates" value="1951" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox1951">1951</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1961" name="chart3Dates" value="1961" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox1961">1961</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1971" name="chart3Dates" value="1971" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox1971">1971</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1981" name="chart3Dates" value="1981" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox1981">1981</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox1991" name="chart3Dates" value="1991" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox1991">1991</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2001" name="chart3Dates" value="2001" disabled>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2001">2001</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2011" name="chart3Dates" value="2011" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2011">2011</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2021" name="chart3Dates" value="2021" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2021">2021</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2031" name="chart3Dates" value="2031" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2031">2031</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2041" name="chart3Dates" value="2041" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2041">2041</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2051" name="chart3Dates" value="2051" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2051">2051</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2061" name="chart3Dates" value="2061" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2061">2061</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2071" name="chart3Dates" value="2071" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2071">2071</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2081" name="chart3Dates" value="2081" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2081">2081</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3inlineCheckbox2091" name="chart3Dates" value="2091" checked>
+                                    <label class="form-check-label" for="chart3inlineCheckbox2091">2091</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month1" name="chart3Months" value="1" checked>
+                                    <label class="form-check-label" for="chart3Month1">Январь</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month2" name="chart3Months" value="2" checked>
+                                    <label class="form-check-label" for="chart3Month2">Февраль</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month3" name="chart3Months" value="3" checked>
+                                    <label class="form-check-label" for="chart3Month3">Март</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month4" name="chart3Months" value="4" checked>
+                                    <label class="form-check-label" for="chart3Month4">Апрель</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month5" name="chart3Months" value="5" checked>
+                                    <label class="form-check-label" for="chart3Month5">Май</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month6" name="chart3Months" value="6" checked>
+                                    <label class="form-check-label" for="chart3Month6">Июнь</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month7" name="chart3Months" value="7" checked>
+                                    <label class="form-check-label" for="chart3Month7">Июль</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month8" name="chart3Months" value="8" checked>
+                                    <label class="form-check-label" for="chart3Month8">Август</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month9" name="chart3Months" value="9" checked>
+                                    <label class="form-check-label" for="chart3Month9">Сентябрь</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month10" name="chart3Months" value="10" checked>
+                                    <label class="form-check-label" for="chart3Month10">Октябрь</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month11" name="chart3Months" value="11" checked>
+                                    <label class="form-check-label" for="chart3Month11">Ноябрь</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="chart3Month12" name="chart3Months" value="12" checked>
+                                    <label class="form-check-label" for="chart3Month12">Декабрь</label>
+                                </div>
+                            </div>
+
+                        </form>
+                        <input type="button" class="btn btn-primary" value="Обновить" onclick="Chart3()" />
+                    </div>
+                </div>
             </div>
-        </div>         
+        </div>
 
-        <h4>Section title</h4>
-
+        <h4>Section title</h4>        
     </main>
 </div>
 
@@ -546,7 +592,7 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'bottom',
+                            position: 'right',
                         },
                         title: {
                             display: true,
@@ -656,7 +702,7 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'bottom',
+                            position: 'right',
                         },
                         title: {
                             display: true,
@@ -776,7 +822,7 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'bottom',
+                            position: 'right',
                         },
                         title: {
                             display: true,

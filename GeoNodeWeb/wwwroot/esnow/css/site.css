@@ -774,3 +774,62 @@ input[type=radio]:checked ~ label {
     height: inherit;
     background: #0094ff;
 }
+
+
+fieldset.scheduler-border {
+    border: 1px groove #085ca5 !important;
+    padding: 0 1em 1em 1em !important;
+    margin: 0 0 1em 0 !important;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+}
+
+legend.scheduler-border {
+    font-size: 1em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0 1px;
+    border-bottom: none;
+}
+/*----------------------------- Maptitle -------------------------------------------------*/
+.shape {
+    border-style: solid;
+    border-width: 0 30px 30px 0;
+    float: right;
+    height: 0px;
+    width: 0px;
+}
+
+.maptitlbod {
+    background: #3a465d;
+    border: 1px solid #fff;
+    overflow: hidden;
+}
+
+.maptitlbod-radius {
+    border-radius: 7px;
+}
+
+.maptitlbod-default {
+    border-color: #fff;
+}
+
+    .maptitlbod-default .shape {
+        border-color: transparent #fff transparent transparent;
+        border-color: rgba(255,255,255,0) #f0ad4e rgba(255,255,255,0) rgba(255,255,255,0);
+    }
+
+.shape-text {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    position: relative;
+    right: -20px;
+    top: 2px;
+    white-space: nowrap;
+}
+
+.maptitlbod-content {
+    padding: 0 20px 10px;
+}
