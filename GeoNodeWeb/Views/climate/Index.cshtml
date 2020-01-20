@@ -886,7 +886,10 @@
         //overlays: [overlay],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
-            zoom: 5
+            zoom: 5,
+            minZoom: 5,
+            extent: [5586630.52495,5748923.5063125898316503,
+                9519931.6479619853198528,7000665.8237907998263836]
         })
     });
 
