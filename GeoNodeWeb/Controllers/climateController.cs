@@ -5486,11 +5486,11 @@ namespace GeoNodeWeb.Controllers
                 connection.Open();
                 var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
                     $"FROM public.wma_polygon " +
-                    $"WHERE fid = {Id.ToString()} " +
+                    $"WHERE \"OBJECTID_1\" = {Id.ToString()} " +
                     $"LIMIT 1;");
                 var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
                     $"FROM public.wma_polygon " +
-                    $"WHERE fid = {Id.ToString()} " +
+                    $"WHERE \"OBJECTID_1\" = {Id.ToString()} " +
                     $"LIMIT 1;");
                 wmbname = name.FirstOrDefault();
                 wmacode = code.FirstOrDefault();
