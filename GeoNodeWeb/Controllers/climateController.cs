@@ -5295,7 +5295,8 @@ namespace GeoNodeWeb.Controllers
 
             // DB
             string title = "",
-                abstr = "";
+                description = "",
+                extended_title = "";
             using (var connection = new NpgsqlConnection(geoportalProdConnection))
             {
                 connection.Open();
@@ -5305,13 +5306,15 @@ namespace GeoNodeWeb.Controllers
                 var climate_mosaicinfos = connection.Query<climate_mosaicinfo>(query);
                 climate_mosaicinfo climate_Mosaicinfo = climate_mosaicinfos.FirstOrDefault();
                 title = climate_Mosaicinfo?.title_ru;
-                abstr = climate_Mosaicinfo?.extended_title_ru;
+                description = climate_Mosaicinfo?.description_ru;
+                extended_title = climate_Mosaicinfo?.extended_title_ru;
             }
 
             return Json(new
             {
                 title,
-                abstr
+                description,
+                extended_title
             });
         }
 
