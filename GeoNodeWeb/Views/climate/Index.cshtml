@@ -392,7 +392,7 @@
                         </a>
                         <a href="#" OnClick="Charts()" id="ChartsButton" value="Выделять" onclick="Charts()">
                             <i class="fa fa-bar-chart-o" data-toggle="tooltip" data-placement="top" title="Для построение Графика, сначало выберите объект на карте (ВХБ или БХУ)"></i>
-                            <span class="badge badge-pill badge-info notification">0</span>
+                            <span id="chartSpan" class="badge badge-pill badge-info notification">0</span>
                         </a>
                         <a href="#" id="LegendHide">
                             <i class="fa fa-list-alt" data-toggle="tooltip" data-placement="top" title="Легенда"></i>
@@ -490,7 +490,7 @@
     </div>
     <div id="Legend-2" class="card text-white m-0 rounded-0 border border-light" style="background: #3a465d;">
         <div class="card-body p-0">
-            <img class="card-img-top" src="~/esnow/img/legend/Temperature.svg" alt="Temperature">
+            <img id="legend" class="card-img-top" src="~/esnow/img/legend/Temperature.svg">
         </div>
     </div>
 </div>
@@ -1365,6 +1365,32 @@
             error: function () {
             }
         })
+
+        // change legend
+        if (SubParameter == 'tasmax_pd_avg' || SubParameter == 'tas_pd_avg' || SubParameter == 'tasmin_pd_avg') {
+            $("#legend").attr("src","/esnow/img/legend/Temperature.svg");
+        }
+        else if (SubParameter == 'tasmax_dlt_avg' || SubParameter == 'tas_dlt_avg' || SubParameter == 'tasmin_dlt_avg') {
+            $("#legend").attr("src","/esnow/img/legend/Delt_Temperature.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 'y') {
+            $("#legend").attr("src", "/esnow/img/legend/Precipation_Year.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 's') {
+            $("#legend").attr("src", "/esnow/img/legend/Precipation_Season.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 'm') {
+            $("#legend").attr("src", "/esnow/img/legend/Precipation_Month.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 'y') {
+            $("#legend").attr("src", "/esnow/img/legend/Delt_Precipation_Year.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 's') {
+            $("#legend").attr("src", "/esnow/img/legend/Delt_Precipation_Season.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 'm') {
+            $("#legend").attr("src", "/esnow/img/legend/Delt_Precipation_Month.svg");
+        }
     };
 
     function CreateDateSlider() {
@@ -1419,7 +1445,6 @@
 
         range_instance = $ClimateTimeline.data("ionRangeSlider");
 
-        console.log(to);
         range_instance.update({
             min: min,
             max: max,
@@ -1531,6 +1556,7 @@
 @* map.on('singleclick') *@
 <script>
     map.on('singleclick', function (evt) {
+        $('#chartSpan').text('0');
         if (tool != 'select') {
             return;
         }
@@ -1584,8 +1610,11 @@
                         geometry: new ol.geom.MultiPolygon(response.features[0].geometry.coordinates)
                     });
                     Source_Select.addFeature(polyFeature);
+                    featureId = result[0].get('OBJECTID');
                     $('#featureId').val(result[0].get('OBJECTID'));
-                    console.log(result[0]);
+                }
+                if (featureId >= 0) {
+                    $('#chartSpan').text('1');
                 }
             });
         }
