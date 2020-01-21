@@ -1544,12 +1544,35 @@
     }
 
     function addSpecialAreas($slider) {
-        var area = [45, 55];
+        removeSpecialAreas();
+        if (!diff) {
+            return;
+        }
+        var start = 0,
+            finish = 0;
+        finish = (2010 - min) / (max - min) * 100;
+        if (Decade == '10') {
+            // 2001-2010
+            start = (2001 - min) / (max - min) * 100;
+        }
+        if (Decade == '20') {
+            // 1991-2010
+            start = (1991 - min) / (max - min) * 100;
+        }
+        if (Decade == '30') {
+            // 1981-2010
+            start = (1981 - min) / (max - min) * 100;
+        }
+        var area = [start, finish];
         var $line = $slider.find(".irs-line");
         var left_percent = area[0];
         var right_percent = area[1];
         var width_percent = right_percent - left_percent;
-        $line.append("<div class='range_area' style='left: " + left_percent + "%; width: " + width_percent + "%;'></div>")
+        $line.append("<div id='specialarea' class='range_area' style='left: " + left_percent + "%; width: " + width_percent + "%;'></div>")
+    }
+
+    function removeSpecialAreas() {
+        $('#specialarea').remove();
     }
 </script>
 
