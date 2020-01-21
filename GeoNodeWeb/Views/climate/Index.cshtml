@@ -1275,7 +1275,7 @@
         max = 2100,
         from = 2001,
         step = 10,
-        to = from + step;
+        to = from + step - 1;
     var slider_first = true;
     var range_instance = null;
     var $ClimateTimeline = $(".js-range-slider"),
@@ -1355,9 +1355,9 @@
                     yearsvalues.push(parseInt(el));
                 });
                 min = Math.min(...yearsvalues);
-                max = Math.max(...yearsvalues) + parseInt(Decade);
+                max = Math.max(...yearsvalues) + parseInt(Decade) - 1;
                 from = min;
-                to = from + parseInt(Decade);
+                to = from + parseInt(Decade) - 1;
                 CreateDateSlider();
 
                 ChangeDate();
@@ -1380,12 +1380,17 @@
                 from: from,
                 to: to,
                 drag_interval: true,
-                min_interval: 10,
-                max_interval: 10,
+                min_interval: parseInt(Decade) - 1,
+                max_interval: parseInt(Decade) - 1,
                 prettify_enabled: false,
                 onFinish: function (data) {
-                    from = data.from,
-                        to = data.to;
+                    from = data.from;
+                    to = data.to - 1;
+                    range_instance.update({
+                        step: step,
+                        from: from,
+                        to: to
+                    });
                 },
                 onChange: function (data) {
                     // Called every time handle position is changed
@@ -1398,8 +1403,6 @@
                     addSpecialAreas(data.slider);
                 }
             });
-
-            //let my_range = $(".js-range-slider").data("ionRangeSlider");
 
             slider_first = false;
 
@@ -1416,35 +1419,18 @@
 
         range_instance = $ClimateTimeline.data("ionRangeSlider");
 
+        console.log(to);
         range_instance.update({
             min: min,
             max: max,
             step: step,
             from: from,
-            to: to
+            to: to,
+            min_interval: parseInt(Decade) - 1,
+            max_interval: parseInt(Decade) - 1,
         });
 
         var updateRange = function (direction) {
-            //from += step * direction;
-            //if (from < min) {
-            //    from = min;
-            //} else if (from > max) {
-            //    from = max;
-            //}
-
-            //range_instance.update({
-            //    from: from
-            //});
-            //to += step * direction;
-            //if (to < min) {
-            //    to = min;
-            //} else if (to > max) {
-            //    to = max;
-            //}
-
-            //range_instance.update({
-            //    to: to
-            //});
             if (direction == 1) {
                 if (to + step * direction <= max) {
                     from += step * direction;
