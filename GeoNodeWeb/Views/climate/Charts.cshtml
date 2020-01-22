@@ -605,7 +605,10 @@
 
     function Chart2() {
         var seasonNames = ['весна', 'лето', 'осень', 'зима'],
-            seasonColors = ['rgba(255, 99, 132, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(35, 153, 75, 0.5)'];
+            seasonColors = ['rgba(255, 99, 132, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(35, 153, 75, 0.5)'],
+            seasonMaxColors = ['rgba(255, 99, 132, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(35, 153, 75, 0.5)'],
+            seasonMinColors = ['rgba(75, 35, 210, 0.5)', 'rgba(20, 150, 100, 0.5)', 'rgba(210, 190, 50, 0.5)', 'rgba(240, 140, 30, 0.5)'],
+            seasonMedianColors = ['rgba(40, 170, 80, 0.5)', 'rgba(90, 70, 220, 0.5)', 'rgba(70, 210, 20, 0.5)', 'rgba(250, 10, 50, 0.5)'];
         var chart2Dates = [];
         $("input:checkbox[name=chart2Dates]:checked").each(function () {
             chart2Dates.push(parseInt($(this).val()));
@@ -647,10 +650,10 @@
                     datasets: []
                 };
                 for (var i = 0; i < data.max.length; ++i) {
-                    if (chart2Seasons.includes(i+1)) {
+                    if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
                             label: 'Максимум (' + seasonNames[i] + ')',
-                            backgroundColor: seasonColors[i],
+                            backgroundColor: seasonMaxColors[i],
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1,
                             stack: 'max',
@@ -659,10 +662,10 @@
                     }
                 }
                 for (var i = 0; i < data.max.length; ++i) {
-                    if (chart2Seasons.includes(i+1)) {
+                    if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
                             label: 'Минимум (' + seasonNames[i] + ')',
-                            backgroundColor: seasonColors[i],
+                            backgroundColor: seasonMinColors[i],
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1,
                             stack: 'min',
@@ -671,10 +674,10 @@
                     }
                 }
                 for (var i = 0; i < data.max.length; ++i) {
-                    if (chart2Seasons.includes(i+1)) {
+                    if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
                             label: 'Медиана (' + seasonNames[i] + ')',
-                            backgroundColor: seasonColors[i],
+                            backgroundColor: seasonMedianColors[i],
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1,
                             stack: 'median',
@@ -701,9 +704,9 @@
                             text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
                         },
                         tooltips: {
-						    mode: 'index',
-						    intersect: false
-					    }
+                            mode: 'index',
+                            intersect: false
+                        }
                     }
                 });
             },
@@ -726,7 +729,46 @@
                 'rgba(175, 240, 20, 0.5)',
                 'rgba(25, 250, 150, 0.5)',
                 'rgba(200, 20, 75, 0.5)',
-                'rgba(175, 150, 100, 0.5)'];
+                'rgba(175, 150, 100, 0.5)'],
+            monthMaxColors =[
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(150, 153, 75, 0.5)',
+                'rgba(205, 130, 20, 0.5)',
+                'rgba(63, 70, 250, 0.5)',
+                'rgba(87, 50, 200, 0.5)',
+                'rgba(169, 190, 75, 0.5)',
+                'rgba(175, 240, 20, 0.5)',
+                'rgba(25, 250, 150, 0.5)',
+                'rgba(200, 20, 75, 0.5)',
+                'rgba(175, 150, 100, 0.5)'],
+            monthMinColors =[
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(40, 140, 240, 0.5)',
+                'rgba(75, 50, 170, 0.5)',
+                'rgba(70, 20, 75, 0.5)',
+                'rgba(240, 100, 20, 0.5)',
+                'rgba(70, 180, 250, 0.5)',
+                'rgba(40, 90, 150, 0.5)',
+                'rgba(100, 190, 10, 0.5)',
+                'rgba(40, 240, 20, 0.5)',
+                'rgba(25, 55, 150, 0.5)',
+                'rgba(200, 20, 75, 0.5)',
+                'rgba(175, 150, 100, 0.5)'],
+            monthMedianColors =[
+                'rgba(40, 180, 132, 0.5)',
+                'rgba(153, 47, 255, 0.5)',
+                'rgba(75, 60, 192, 0.5)',
+                'rgba(70, 60, 75, 0.5)',
+                'rgba(205, 130, 180, 0.5)',
+                'rgba(63, 20, 250, 0.5)',
+                'rgba(87, 180, 200, 0.5)',
+                'rgba(169, 40, 170, 0.5)',
+                'rgba(20, 170, 20, 0.5)',
+                'rgba(25, 70, 170, 0.5)',
+                'rgba(20, 200, 75, 0.5)',
+                'rgba(175, 55, 100, 0.5)'];
         var chart3Dates = [];
         $("input:checkbox[name=chart3Dates]:checked").each(function () {
             chart3Dates.push(parseInt($(this).val()));
@@ -770,7 +812,7 @@
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
                             label: 'Максимум (' + monthNames[i] + ')',
-                            backgroundColor: monthColors[i],
+                            backgroundColor: monthMaxColors[i],
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1,
                             stack: 'max',
@@ -782,7 +824,7 @@
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
                             label: 'Минимум (' + monthNames[i] + ')',
-                            backgroundColor: monthColors[i],
+                            backgroundColor: monthMinColors[i],
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1,
                             stack: 'min',
@@ -794,7 +836,7 @@
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
                             label: 'Медиана (' + monthNames[i] + ')',
-                            backgroundColor: monthColors[i],
+                            backgroundColor: monthMedianColors[i],
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1,
                             stack: 'median',
