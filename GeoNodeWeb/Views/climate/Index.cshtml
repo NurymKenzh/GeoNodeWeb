@@ -1284,6 +1284,7 @@
     var InfoTitle = '',
         InfoTitletitle = '',
         Layerdescription = '';
+        var InfoInfo = '';
 
     function ChangeLayerClimate() {
         var layerClimate = '';
@@ -1301,7 +1302,6 @@
         $('#Layerdescription').text('');
         $('#divInfo').attr('data-original-title', '');
         $('#divInfo').text('');
-        var InfoInfo = '';
         if ($('#RCP45').is(':checked')) {
             InfoInfo = 'RCP 4.5';
         }
@@ -1320,7 +1320,7 @@
             success: function (data) {
                 $('#InfoTitle').text(data.title);
                 $('#Layerdescription').text(data.description);
-                $('#InfoInfo').text(data.extended_title);
+                //$('#InfoInfo').text(data.extended_title);
                 $('#divInfo').text(data.extended_title);
                 InfoTitle = data.title;
                 InfoTitletitle = data.extended_title;
@@ -1915,7 +1915,7 @@
                         x: -10,
                         y: 70
                     },
-                    content: '<div id="FullMapInfo1" class="text-center" ><h6 class="text-white  m-1" id="InfoTitle"></h6><p class="text-white m-0" id="InfoInfo">' + InfoTitletitle + '</p><h5 class="text-white m-0" id="InfoYears">1951 - 1961</h5></div >',
+                    content: '<div id="FullMapInfo1" class="text-center" ><h6 class="text-white  m-1" id="InfoTitle"></h6><p class="text-white m-0" id="InfoInfo">' + InfoInfo + '</p><h5 class="text-white m-0" id="InfoYears">1951 - 1961</h5></div >',
                     onCreated: function () {
                         // Add tooltip
                         this.tooltip = new jBox('Tooltip', {
@@ -1960,7 +1960,7 @@
 
                 $('#InfoTitle').text(data.title);
                 $('#Layerdescription').text(data.description);
-                $('#InfoInfo').text(data.extended_title);
+                //$('#InfoInfo').text(data.extended_title);
                 $('#divInfo').text(data.extended_title);
                 InfoTitle = data.title;
                 InfoTitletitle = data.extended_title;
