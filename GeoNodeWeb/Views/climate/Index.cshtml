@@ -7,11 +7,11 @@
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 <script src="~/esnow/lib/moment.js/moment.js"></script>
 <script src="~/esnow/lib/clim-sidebar/ClimSidebar.js"></script>
-<script src="~/esnow/lib/jquery-ui/jquery-ui.js"></script>
+@*<script src="~/esnow/lib/jquery-ui/jquery-ui.js"></script>*@
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<link href="~/esnow/css/site.css" rel="stylesheet" />
-<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+<link href="~/esnow/lib/vendor/jBox/dist/jBox.all.css" rel="stylesheet" />
+<script src="~/esnow/lib/vendor/jBox/dist/jBox.all.js"></script>
+
 
 <link href="~/esnow/lib/rangeSlider/ion.rangeSlider.min.css" rel="stylesheet" />
 <script src="~/esnow/lib/rangeSlider/ion.rangeSlider.min.js"></script>
@@ -26,30 +26,35 @@
         opacity: 0.7;
         white-space: nowrap;
         font-size: 12px;
-      }
-      .ol-tooltip-measure {
+    }
+
+    .ol-tooltip-measure {
         opacity: 1;
         font-weight: bold;
-      }
-      .ol-tooltip-static {
+    }
+
+    .ol-tooltip-static {
         background-color: #ffcc33;
         color: black;
         border: 1px solid white;
-      }
-      .ol-tooltip-measure:before,
-      .ol-tooltip-static:before {
-        border-top: 6px solid rgba(0, 0, 0, 0.5);
-        border-right: 6px solid transparent;
-        border-left: 6px solid transparent;
-        content: "";
-        position: absolute;
-        bottom: -6px;
-        margin-left: -7px;
-        left: 50%;
-      }
-      .ol-tooltip-static:before {
-        border-top-color: #ffcc33;
-      }
+    }
+
+        .ol-tooltip-measure:before,
+        .ol-tooltip-static:before {
+            border-top: 6px solid rgba(0, 0, 0, 0.5);
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            margin-left: -7px;
+            left: 50%;
+        }
+
+        .ol-tooltip-static:before {
+            border-top-color: #ffcc33;
+        }
+
     .ol-popup {
         position: absolute;
         background-color: white;
@@ -394,10 +399,10 @@
                             <i class="fa fa-bar-chart-o" data-toggle="tooltip" data-placement="top" title="Для построение Графика, сначало выберите объект на карте (ВХБ или БХУ)"></i>
                             <span id="chartSpan" class="badge badge-pill badge-info notification">0</span>
                         </a>
-                        <a href="#" id="LegendHide">
+                        <a href="#" id="LegendBtn" class="target-click">
                             <i class="fa fa-list-alt" data-toggle="tooltip" data-placement="top" title="Легенда"></i>
                         </a>
-                        <a href="#" id="TitleHide" class="ui-state-default ui-corner-all">
+                        <a href="#" id="MapTitleBtn" class="target-click">
                             <i class="fa fa-bookmark" data-toggle="tooltip" data-placement="top" title="Информация о слое"></i>
                         </a>
                     </div>
@@ -417,7 +422,7 @@
                                         </select>
                                         <div class="input-group-append">
                                             <button id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()">Измерять</button>
-                                            <button id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()">Выделять</button>                                            
+                                            <button id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()">Выделять</button>
                                         </div>
                                     </div>
                                 </div>
@@ -452,46 +457,41 @@
         </div>
     </div>
     <div class="row justify-content-end">
-        <div class="col-md-auto p-0 m-2" style="max-width: 40%;">
-            <div id="MapTitle" class="maptitlbod maptitlbod-default text-light">
-                <div class="shape">
-                    <div class="shape-text">
-                        <a href="#" data-toggle="tooltip" data-placement="right" title="Подробнее">
-                            <i class="fa fa-info" data-toggle="modal" data-target="#exampleModal"></i>
-                        </a>
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Описание слоя</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body" id="Layerdescription">
+        <div id="MapTitle" class="col-md-auto p-0 mr-5" style="max-width: 40%;">
+            @*<div id="MapTitle" class="maptitlbod maptitlbod-default text-light">
+                    <div class="shape">
+                        <div class="shape-text">
+                            <a href="#" data-toggle="tooltip" data-placement="right" title="Подробнее">
+                                <i class="fa fa-info" data-toggle="modal" data-target="#exampleModal"></i>
+                            </a>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Описание слоя</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="Layerdescription">
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div id="divInfo" class="maptitlbod-content text-center" data-toggle="tooltip" data-placement="right" title="Full name">
-                    <h6 class="card-title  m-1" id="InfoTitle">Card title</h6>
-                    <p class="card-text m-0" id="InfoInfo">Some quick example text</p>
-                    <h5 class="card-text" id="InfoYears">1951 - 1961</h5>
-                </div>
-            </div>
-        </div>        
-
-    </div>
-    <div id="Legend-2" class="card text-white m-0 rounded-0 border border-light" style="background: #3a465d;">
-        <div class="card-body p-0">
-            <img id="legend" class="card-img-top" src="~/esnow/img/legend/Temperature.svg">
+                    <div id="divInfo" class="maptitlbod-content text-center" data-toggle="tooltip" data-placement="right" title="Full name">
+                        <h6 class="card-title  m-1" id="InfoTitle">Card title</h6>
+                        <p class="card-text m-0" id="InfoInfo">Some quick example text</p>
+                        <h5 class="card-text" id="InfoYears">1951 - 1961</h5>
+                    </div>
+                </div>*@
         </div>
+
     </div>
 </div>
 
@@ -1319,8 +1319,8 @@
             success: function (data) {
                 $('#InfoTitle').text(data.title);
                 $('#Layerdescription').text(data.description);
-                $('#InfoInfo').text(data.title);
-                $('#divInfo').attr('data-original-title', data.extended_title);
+                $('#InfoInfo').text(InfoInfo);
+                $('#divInfo').text(data.extended_title);;
                 InfoTitle = data.title;
                 InfoTitletitle = data.extended_title;
                 Layerdescription = data.description;
@@ -1859,70 +1859,81 @@
     });
 </script>
 
-@*Tooltips*@
+
+@*tooltips, modal windows*@
+
 <script>
-    $(function () {
-        if (typeof document.body.attachShadow === 'function') {
-            var shadowRoot = $('#shadow')[0].attachShadow({ mode: 'open' })
-            shadowRoot.innerHTML =
-                '<button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top in a shadow dom">' +
-                '  Tooltip on top in a shadow dom' +
-                '</button>' +
-                '<button id="secondTooltip" type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top in a shadow dom with container option">' +
-                '  Tooltip on top in a shadow dom' +
-                '</button>'
-
-            $(shadowRoot.firstChild).tooltip()
-            $(shadowRoot.getElementById('secondTooltip')).tooltip({
-                container: shadowRoot
-            })
-        }
-        $('[data-toggle="tooltip"]').tooltip()
-        $('#tooltipElement').tooltip({
-            container: $('#customContainer')[0]
-        })
-        $('#target').tooltip({
-            placement: 'top',
-            trigger: 'manual'
-        }).tooltip('show')
-    })
-</script>
-
-@*Close button to card*@
-<script>
-    $(function () {
-        // run the currently selected effect
-        function runEffect() {
-            // Run the effect
-            $("#MapTitle").toggle("clip");
-        };
-
-        $("#TitleHide").on("click", function () {
-            runEffect();
-        });
-    });
-</script>
-
-@*Close button to legend*@
-<script type="text/javascript">
-    $(function () {
-        $("#Legend-2").dialog({
-            autoOpen: false,
-            hide: "clip",
-            show: "clip",
-            height: 90,
-            minWidth: 400,
+    $(document).ready(function () {
+        new jBox('Tooltip', {
+            attach: '#MapTitleInfo',
+            theme: 'TooltipBorderThick',
+            width: 200,
             position: {
-                my: "bottom bottom-50px",
-                at: "right bottom",
-                of: window
-            }
+                x: 'left',
+                y: 'center'
+            },
+            outside: 'x',
+            pointer: 'top:15',
+            content: 'You have many options to position and animate your jBoxes',
+            animation: 'move'
         });
-        $("#LegendHide").click(function () {
-            ($("#Legend-2").dialog("isOpen") == false) ? $(
-                "#Legend-2").dialog("open") : $("#Legend-2").dialog("close");
-        });
-        $("#Legend-2").dialog({ autoOpen: false });
-        $("#Legend-2").parent().children().children('.ui-dialog-titlebar-close').hide();
+        // Map Title
+        new jBox('Modal', {
+            attach: '#MapTitleBtn',
+            theme: 'TooltipBorder',
+            width: 260,
+            blockScroll: false,
+            animation: 'flip',
+            closeButton: false,
+            position: {
+                x: 'right',
+                y: 'top'
+            },
+            offset: {
+                x: -10,
+                y: 70
+            },
+            content: '<div id="FullMapInfo1" class="text-center" ><h6 class="text-white  m-1" id="InfoTitle"></h6><p class="text-white m-0" id="InfoInfo">Some quick example text</p><h5 class="text-white m-0" id="InfoYears">1951 - 1961</h5></div >',
+            onCreated: function () {
+                // Add tooltip
+                this.tooltip = new jBox('Tooltip', {
+                    theme: 'TooltipDark',
+                    color: 'green',
+                    attach: '#FullMapInfo1',
+                    content: '<div class="text-center" ><p class="text-white m-0" id="divInfo">Some quick example text</p></div >',
+                    zIndex: 'auto',
+                    position: {
+                        x: 'left',
+                    },
+                    pointTo: 'right',
+                    outside: 'x'
+                });
+            },
+            overlay: false,
+            reposition: true,
+            repositionOnOpen: false
+        }).open();
+        // Map Legend
+        new jBox('Modal', {
+            autoOpen: true,
+            attach: '#LegendBtn',
+            theme: 'TooltipBorder',
+            width: 350,
+            blockScroll: false,
+            animation: 'flip',
+            closeButton: true,
+            position: {
+                x: 'right',
+                y: 'bottom'
+            },
+            offset: {
+                x: -10,
+                y: -90
+            },
+            content: '<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg"></div>',
+            overlay: false,
+            reposition: true,
+            repositionOnOpen: false
+        }).open();
     });
 </script>
