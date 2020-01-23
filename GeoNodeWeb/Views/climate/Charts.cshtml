@@ -157,6 +157,7 @@
 
                             </div>
                             <div class="col-md-9">
+                                <button id="changeToLine">Line Chart</button>
                                 <canvas class="my-1 w-100 chartjs-render-monitor" id="chart1Canvas" width="900" height="380"></canvas>
                             </div>
                         </div>
@@ -177,7 +178,7 @@
                             <div class="col-md-3 order-md-2 mt-2">
                                 <fieldset class="scheduler-border">
                                     <legend class="scheduler-border"> Configure Plot 2 </legend>
-                                    <form>
+                                    <form>                                        
                                         <div class="form-group">
                                             <label for="chart2SubParameter">Климатический параметр:</label>
                                             <select class="form-control form-control-sm" id="chart2SubParameter">
@@ -293,6 +294,14 @@
                                 </fieldset>
                             </div>
                             <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="chartType" class="mr-2">Тип диаграммы:</label>
+                                    <select name="chartType" id="chartType" onchange="updateChartType()">
+                                        <option value="line">Линии</option>
+                                        <option value="bar">Столбцы</option>
+                                        <option value="radar">Радар</option>
+                                    </select>
+                                </div>
                                 <canvas class="my-1 w-100 chartjs-render-monitor" id="chart2Canvas" width="900" height="380"></canvas>
                             </div>
                         </div>
@@ -596,6 +605,29 @@
 					    }
                     }
                 });
+                document.getElementById('changeToLine').onclick = function () {
+                    chart1.destroy();
+                    chart1 = new Chart(ctx1, {
+                        type: 'line',
+                        data: chart1Data,
+                        options: {
+                        responsive: true,
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            fontSize: 20,
+                            fontColor: '#000',
+                            text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                        },
+                        tooltips: {
+						    mode: 'index',
+						    intersect: false
+					    }
+                    }
+                    });
+                };
             },
             error: function () {
                 console.log('Error 1');
@@ -605,10 +637,10 @@
 
     function Chart2() {
         var seasonNames = ['весна', 'лето', 'осень', 'зима'],
-            seasonColors = ['rgba(0, 128, 0, 0.9)', 'rgba(230, 0, 0, 0.9)', 'rgba(35, 153, 75, 0.5)', 'rgba(34, 26, 194, 0.9)'],
-            seasonMaxColors = ['rgba(0, 128, 0, 0.9)', 'rgba(230, 0, 0, 0.9)', 'rgba(219, 205, 0, 0.9)', 'rgba(34, 26, 194, 0.9)'],
+            seasonColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
+            seasonMaxColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
             seasonMinColors = ['rgba(102, 203, 102, 0.4)', 'rgba(255, 102, 102, 0.4)', 'rgba(255, 255, 113, 0.4)', 'rgba(161, 153, 255, 0.4)'],
-            seasonMedianColors = ['rgba(51, 179, 51, 0.7)', 'rgba(255, 51, 51, 0.7)', 'rgba(255, 255, 51, 0.7)', 'rgba(59, 51, 219, 0.7)'];
+            seasonMedianColors = ['rgba(51, 179, 51, 0.6)', 'rgba(255, 51, 51, 0.6)', 'rgba(255, 255, 51, 0.6)', 'rgba(59, 51, 219, 0.6)'];
         var chart2Dates = [];
         $("input:checkbox[name=chart2Dates]:checked").each(function () {
             chart2Dates.push(parseInt($(this).val()));
@@ -686,11 +718,12 @@
                     }
                 }
                 var ctx2 = document.getElementById('chart2Canvas').getContext('2d');
+                var type = document.getElementById("chartType").value;
                 if (chart2 != null) {
                     chart2.destroy();
                 }
                 chart2 = new Chart(ctx2, {
-                    type: 'bar',
+                    type: type,
                     data: chart2Data,
                     options: {
                         responsive: true,
@@ -709,6 +742,7 @@
                         }
                     }
                 });
+                
             },
             error: function () {
             }
