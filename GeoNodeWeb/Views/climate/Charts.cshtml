@@ -738,10 +738,10 @@
                 'rgba(170, 255, 0, 0.5)',
                 'rgba(255, 255, 0, 0.5)',
                 'rgba(255, 170, 0, 0.5)',
-                'rgba(169, 190, 75, 0.5)',
-                'rgba(175, 240, 20, 0.5)',
-                'rgba(25, 250, 150, 0.5)',
-                'rgba(200, 20, 75, 0.5)',
+                'rgba(255, 85, 0, 0.5)',
+                'rgba(255, 0, 0, 0.5)',
+                'rgba(168, 0, 0, 0.5)',
+                'rgba(255, 0, 197, 0.5)',
                 'rgba(197, 0, 255, 0.5)'],
             monthMinColors =[
                 'rgba(191, 255, 255, 0.5)',                
@@ -751,23 +751,23 @@
                 'rgba(255, 255, 153, 0.5)',
                 'rgba(255, 255, 229, 0.5)',
                 'rgba(255, 255, 110, 0.5)',
-                'rgba(100, 190, 10, 0.5)',
-                'rgba(40, 240, 20, 0.5)',
-                'rgba(25, 55, 150, 0.5)',
-                'rgba(200, 20, 75, 0.5)',
+                'rgba(255, 255, 204, 0.5)',
+                'rgba(255, 229, 229, 0.5)',
+                'rgba(255, 204, 211, 0.5)',
+                'rgba(255, 204, 255, 0.5)',
                 'rgba(255, 191, 255, 0.5)'],
             monthMedianColors =[
-                'rgba(38, 150, 255, 0.5)',
-                'rgba(38, 235, 255, 0.5)',
+                'rgba(77, 189, 255, 0.5)',
+                'rgba(102, 214, 255, 0.5)',
                 'rgba(85, 255, 235, 0.5)',
                 'rgba(162, 255, 77, 0.5)',
                 'rgba(208, 255, 38, 0.5)',
                 'rgba(255, 255, 115, 0.5)',
                 'rgba(255, 208, 38, 0.5)',
-                'rgba(169, 40, 170, 0.5)',
-                'rgba(20, 170, 20, 0.5)',
-                'rgba(25, 70, 170, 0.5)',
-                'rgba(20, 200, 75, 0.5)',
+                'rgba(255, 162, 77, 0.5)',
+                'rgba(255, 77, 77, 0.5)',
+                'rgba(245, 51, 58, 0.5)',
+                'rgba(255, 102, 255, 0.5)',
                 'rgba(255, 77, 255, 0.7)'];
         var chart3Dates = [];
         $("input:checkbox[name=chart3Dates]:checked").each(function () {
@@ -813,7 +813,7 @@
                         chart3Data.datasets.push({
                             label: 'Максимум (' + monthNames[i] + ')',
                             backgroundColor: monthMaxColors[i],
-                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
                             stack: 'max',
                             data: data.max[i]
@@ -825,7 +825,7 @@
                         chart3Data.datasets.push({
                             label: 'Минимум (' + monthNames[i] + ')',
                             backgroundColor: monthMinColors[i],
-                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
                             stack: 'min',
                             data: data.min[i]
@@ -837,7 +837,7 @@
                         chart3Data.datasets.push({
                             label: 'Медиана (' + monthNames[i] + ')',
                             backgroundColor: monthMedianColors[i],
-                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
                             stack: 'median',
                             data: data.median[i]
