@@ -3,6 +3,10 @@
     ViewData["Title"] = "Карта";
     Layout = "~/Views/Shared/_LayoutClimate.cshtml";
 }
+<link href="~/esnow/lib/сhart.js/dist/Chart.css" rel="stylesheet" />
+<script src="~/esnow/lib/moment.js/moment.js"></script>
+<script src="~/esnow/lib/сhart.js/dist/Chart.js"></script>
+
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
@@ -1623,7 +1627,8 @@
                             + '<input value="График" type="button" onclick="ChartRasters(\''
                             + layerClimate + '\', '
                             + ol.proj.toLonLat(evt.coordinate)[0] + ', '
-                            + ol.proj.toLonLat(evt.coordinate)[1] + ')" />';
+                            + ol.proj.toLonLat(evt.coordinate)[1] + ')" /></br>'
+                            + '<canvas class="my-1 w-100 chartjs-render-monitor" id="chartRaster" width="900" height="380"></canvas>';
                         overlay.setPosition(evt.coordinate);
                     }
                 })
@@ -1861,6 +1866,7 @@
         }
     };
 
+    var chartRaster = null;
     function ChartRasters(raster, x, y) {
         $.ajax({
             url: '@Url.Action("ChartRasters")',
@@ -1870,9 +1876,47 @@
             },
             type: 'POST',
             success: function (data) {
+                var chartdata = [],
+                    labels = [];
                 for (i = 0; i < data.climate_xs.length; i++) {
                     console.log(data.climate_xs[i].dt + ': ' + data.climate_xs[i].value.toFixed(2));
+                    chartdata.push(data.climate_xs[i].value.toFixed(2));
+                    labels.push(data.climate_xs[i].dt);
                 }
+                var chart1Data = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Значения',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255,99,132,1)',
+                        borderWidth: 1,
+                        data: chartdata
+                    }]
+                };
+                var ctx1 = document.getElementById('chartRaster').getContext('2d');
+                if (chartRaster != null) {
+                    chartRaster.destroy();
+                }
+                chartRaster = new Chart(ctx1, {
+                    type: 'bar',
+                    data: chart1Data,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            fontSize: 20,
+                            fontColor: '#000',
+                            text: '' //'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    }
+                });
             },
             error: function () {
                 console.log('Error');
