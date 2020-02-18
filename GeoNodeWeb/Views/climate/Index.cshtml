@@ -409,7 +409,6 @@
                     </div>
                 </nav>
                 <!-- sidebar-wrapper  -->
-
                 <footer class="footer-classic fixed-bottom border-top border-light" style="background: #16344e;">
                     <div class="container-fluid">
                         <div class="row align-items-center">
@@ -424,6 +423,7 @@
                                         <div class="input-group-append">
                                             <button id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()">Измерять</button>
                                             <button id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()">Выделять</button>
+                                            <button id="InfoButton" type="button" value="Информация" class="btn btn-primary btn-sm" onclick="InfoTool()">Информация</button>
                                         </div>
                                     </div>
                                 </div>
@@ -446,7 +446,6 @@
                                 <small class="text-light float-right">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
                             </div>
                         </div>
-
                     </div>
                 </footer>
             </div>
@@ -457,7 +456,6 @@
             <div id="popup-content"></div>
         </div>
     </div>
-    
 </div>
 
 <input type="hidden" id="featureId" />
@@ -1548,71 +1546,76 @@
 <script>
     map.on('singleclick', function (evt) {
         $('#chartSpan').text('0');
-        if (tool != 'select') {
-            return;
+        if (tool == 'select') {
+            Source_Select.clear();
+            $('#featureId').val(null);
+            var viewResolution = (map.getView().getResolution());
+            var url_wma_polygon = Layer_wma_polygon.getSource().getGetFeatureInfoUrl(
+                evt.coordinate, viewResolution, 'EPSG:3857',
+                {
+                    'INFO_FORMAT': 'text/javascript'
+                });
+            if (url_wma_polygon) {
+                var parser = new ol.format.GeoJSON();
+                $.ajax({
+                    jsonp: false,
+                    jsonpCallback: 'getJson',
+                    type: 'GET',
+                    url: url_wma_polygon + "&format_options=callback:getJson",
+                    async: false,
+                    dataType: 'jsonp',
+                    error: function (xhr, status, error) {
+                        console.log('error');
+                    },
+                }).then(function (response) {
+                    featureId = -1;
+                    var result = parser.readFeatures(response);
+                    if (result.length > 0) {
+                        var polyFeature = new ol.Feature({
+                            geometry: new ol.geom.MultiPolygon(response.features[0].geometry.coordinates)
+                        });
+                        Source_Select.addFeature(polyFeature);
+                        featureId = result[0].get('OBJECTID');
+                        $('#featureId').val(result[0].get('OBJECTID'));
+                    }
+                    if (featureId >= 0) {
+                        $('#chartSpan').text('1');
+                        //var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
+                        content.innerHTML = '<p>ВХБ - ' + result[0].get('NameWMB_Ru') + '</p><code>ВХУ - ' + result[0].get('CodeWMA') + '</code>';
+                        overlay.setPosition(evt.coordinate);
+                    }
+                });
+            }
         }
-        Source_Select.clear();
-        $('#featureId').val(null);
-        var viewResolution = (map.getView().getResolution());
-        var url_Climate = Layer_Climate.getSource().getGetFeatureInfoUrl(
-            evt.coordinate, viewResolution, 'EPSG:3857',
-            {
-                'INFO_FORMAT': 'text/javascript'
-            });
-        if (url_Climate) {
-            var parser = new ol.format.GeoJSON();
-            $.ajax({
-                url: url_Climate,
-                dataType: 'jsonp',
-                jsonpCallback: 'parseResponse',
-                error: function (xhr, status, error) {
-                }
-            }).then(function (response) {
-                var result = parser.readFeatures(response);
-                if (result.length) {
-                    var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
-                    content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>';
-                    overlay.setPosition(evt.coordinate);
-                }
-            })
-        }
-        var url_wma_polygon = Layer_wma_polygon.getSource().getGetFeatureInfoUrl(
-            evt.coordinate, viewResolution, 'EPSG:3857',
-            {
-                'INFO_FORMAT': 'text/javascript'
-            });
-        if (url_wma_polygon) {
-            var parser = new ol.format.GeoJSON();
-            $.ajax({
-                jsonp: false,
-                jsonpCallback: 'getJson',
-                type: 'GET',
-                url: url_wma_polygon + "&format_options=callback:getJson",
-                async: false,
-                dataType: 'jsonp',
-                error: function (xhr, status, error) {
-                    console.log('error');
-                },
-            }).then(function (response) {
-                featureId = -1;
-                var result = parser.readFeatures(response);
-                if (result.length > 0) {
-                    var polyFeature = new ol.Feature({
-                        geometry: new ol.geom.MultiPolygon(response.features[0].geometry.coordinates)
-                    });
-                    Source_Select.addFeature(polyFeature);
-                    featureId = result[0].get('OBJECTID');
-                    $('#featureId').val(result[0].get('OBJECTID'));
-                }
-                if (featureId >= 0) {
-                    $('#chartSpan').text('1');
-                }
-            });
+        if (tool == 'info') {
+            var viewResolution = (map.getView().getResolution());
+            var url_Climate = Layer_Climate.getSource().getGetFeatureInfoUrl(
+                evt.coordinate, viewResolution, 'EPSG:3857',
+                {
+                    'INFO_FORMAT': 'text/javascript'
+                });
+            if (url_Climate) {
+                var parser = new ol.format.GeoJSON();
+                $.ajax({
+                    url: url_Climate,
+                    dataType: 'jsonp',
+                    jsonpCallback: 'parseResponse',
+                    error: function (xhr, status, error) {
+                    }
+                }).then(function (response) {
+                    var result = parser.readFeatures(response);
+                    if (result.length) {
+                        var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
+                        content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>';
+                        overlay.setPosition(evt.coordinate);
+                    }
+                })
+            }
         }
     });
 </script>
 
-@* SelectTool, MeasureTool *@
+@* SelectTool, MeasureTool, InfoTool *@
 <script>
     var tool = '';
     function SelectTool() {
@@ -1636,6 +1639,7 @@
         $('.select').show();
         $('#SelectButton').addClass('btn-dark');
         $('#MeasureButton').removeClass('btn-dark');
+        $('#InfoButton').removeClass('btn-dark');
     }
     function MeasureTool() {
         if (tool == 'measure') {
@@ -1650,8 +1654,42 @@
         $('.select').hide();
         $('#MeasureButton').addClass('btn-dark');
         $('#SelectButton').removeClass('btn-dark');
+        $('#InfoButton').removeClass('btn-dark');
         Source_Select.clear();
         $('#featureId').val(null);
+    }
+    function InfoTool() {
+        if (tool == 'info') {
+            return;
+        }
+        tool = 'info';
+
+        map.removeInteraction(draw);
+        Source_Measure.clear();
+        if (helpTooltip != null) {
+            map.removeOverlay(helpTooltip);
+        }
+        if (measureTooltip != null) {
+            map.removeOverlay(measureTooltip);
+        }
+        map.addOverlay(overlay);
+        $(".ol-tooltip").remove();
+        $('.measure').hide();
+        $('.select').show();
+        $('#SelectButton').removeClass('btn-dark');
+        $('#MeasureButton').removeClass('btn-dark');
+
+        //map.removeOverlay(overlay);
+        //overlay.setPosition(undefined);
+        closer.blur();
+        //$('.measure').hide();
+        //$('.select').hide();
+        $('#MeasureButton').removeClass('btn-dark');
+        $('#SelectButton').removeClass('btn-dark');
+        Source_Select.clear();
+        $('#featureId').val(null);
+        
+        $('#InfoButton').addClass('btn-dark');
     }
 </script>
 
