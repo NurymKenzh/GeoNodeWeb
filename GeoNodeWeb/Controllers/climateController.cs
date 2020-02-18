@@ -55,6 +55,12 @@ namespace GeoNodeWeb.Controllers
         public string extended_title_ru;
     }
 
+    public class climate_x
+    {
+        public DateTime dt;
+        public decimal value;
+    }
+
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
@@ -65,7 +71,9 @@ namespace GeoNodeWeb.Controllers
             geoportalConnection = server ? Startup.Configuration["geoportalConnectionServer"].ToString() : Startup.Configuration["geoportalConnectionDebug"].ToString(),
 
             geodataProdConnection = server ? Startup.Configuration["geodataProdConnectionServer"].ToString() : Startup.Configuration["geodataProdConnectionDebug"].ToString(),
-            geoportalProdConnection = server ? Startup.Configuration["geoportalProdConnectionServer"].ToString() : Startup.Configuration["geoportalProdConnectionDebug"].ToString();
+            geoportalProdConnection = server ? Startup.Configuration["geoportalProdConnectionServer"].ToString() : Startup.Configuration["geoportalProdConnectionDebug"].ToString(),
+
+            geodataanalyticsProdConnection = server ? Startup.Configuration["geodataanalyticsProdConnectionServer"].ToString() : Startup.Configuration["geodataanalyticsProdConnectionDebug"].ToString();
 
         public climateController(HttpApiClientController HttpApiClient)
         {
@@ -5318,7 +5326,9 @@ namespace GeoNodeWeb.Controllers
             });
         }
 
-        public IActionResult Charts(int Id)
+        public IActionResult Charts(int Id,
+            string rname,
+            decimal[] point)
         {
             ViewBag.Id = Id;
             //List<layers_layer> layers_layers = new List<layers_layer>();
@@ -5349,7 +5359,61 @@ namespace GeoNodeWeb.Controllers
             //    ViewBag.Mean = $"{datetime.Min().Year.ToString()} - {datetime.Max().Year.ToString()}";
             //}
             //ViewBag.LayerId = layer_id;
+
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult ChartRasters(
+            string rname,
+            decimal[] point)
+        {
+            string rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
+            List<climate_x> climate_xs = new List<climate_x>();
+            using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
+            {
+                string table = "";
+                switch (rname.Split('_')[0] + "_" + rname.Split('_')[1])
+                {
+                    case "tasmax_pd":
+                        table = "climate_tasmax";
+                        break;
+                    case "tasmax_dlt":
+                        table = "climate_tasmax_dlt";
+                        break;
+                    case "tas_pd":
+                        table = "climate_tas";
+                        break;
+                    case "tas_dlt":
+                        table = "climate_tas_dlt";
+                        break;
+                    case "tasmin_pd":
+                        table = "climate_tasmin";
+                        break;
+                    case "tasmin_dlt":
+                        table = "climate_tasmin_dlt";
+                        break;
+                    case "pr_pd":
+                        table = "climate_pr";
+                        break;
+                    case "pr_dlt":
+                        table = "climate_pr_dlt";
+                        break;
+                }
+                connection.Open();
+                var climate_xsQ = connection.Query<climate_x>($"SELECT dt, value" +
+                    $" FROM public.{table}" +
+                    $" WHERE name LIKE '%{rnameDB}%'" +
+                    $" AND ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({point[0].ToString()} {point[1].ToString()})')) =" +
+                    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({point[0].ToString()} {point[1].ToString()})')))" +
+                    $" FROM public.{table});", commandTimeout: 600);
+                climate_xs = climate_xsQ.OrderBy(c => c.dt).ToList();
+            }
+
+            return Json(new
+            {
+                climate_xs
+            });
         }
 
         [HttpPost]

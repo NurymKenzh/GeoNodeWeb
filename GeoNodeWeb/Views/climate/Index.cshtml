@@ -423,7 +423,7 @@
                                         <div class="input-group-append">
                                             <button id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()">Измерять</button>
                                             <button id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()">Выделять</button>
-                                            <button id="InfoButton" type="button" value="Информация" class="btn btn-primary btn-sm" onclick="InfoTool()">Информация</button>
+                                            @*<button id="InfoButton" type="button" value="Информация" class="btn btn-primary btn-sm" onclick="InfoTool()">Информация</button>*@
                                         </div>
                                     </div>
                                 </div>
@@ -1605,8 +1605,25 @@
                 }).then(function (response) {
                     var result = parser.readFeatures(response);
                     if (result.length) {
+                        //$('#point').val(ol.proj.toLonLat(evt.coordinate));
                         var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
-                        content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>';
+                        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                        var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+                        // Отклонения осадков в мм
+                        if (SubParameter == 'pr_dlt_avg_mm') {
+                            var SubParameter_ = SubParameter.substr(0, SubParameter.length - 3),
+                                SubParameter_;
+                            layerClimate = SubParameter_ + '_' + Period + '_' + RCP + '_' + Decade + '_' + 'mm';
+                        }
+                        else {
+                            layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+                        }
+                        //<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                        content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>'
+                            + '<input value="График" type="button" onclick="ChartRasters(\''
+                            + layerClimate + '\', '
+                            + ol.proj.toLonLat(evt.coordinate)[0] + ', '
+                            + ol.proj.toLonLat(evt.coordinate)[1] + ')" />';
                         overlay.setPosition(evt.coordinate);
                     }
                 })
@@ -1620,6 +1637,7 @@
     var tool = '';
     function SelectTool() {
         if (tool == 'select') {
+            InfoTool();
             return;
         }
         tool = 'select';
@@ -1643,6 +1661,7 @@
     }
     function MeasureTool() {
         if (tool == 'measure') {
+            InfoTool();
             return;
         }
         tool = 'measure';
@@ -1688,12 +1707,10 @@
         $('#SelectButton').removeClass('btn-dark');
         Source_Select.clear();
         $('#featureId').val(null);
-        
-        $('#InfoButton').addClass('btn-dark');
     }
 </script>
 
-@* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, Charts *@
+@* ChangeLayerXXX, ChangeLayers, ChangeWMALayer, Charts, ChartRasters *@
 <script>
     var datespr_pd_avg_m_rcp45_10 = new Array();
     $('#datespr_pd_avg_m_rcp45_10 option').each(function () {
@@ -1832,7 +1849,6 @@
                 layer.setVisible(document.getElementById("layerWMAShow").checked);
                 layer.setOpacity($('#layerWMAOpacity').val() / 100);
             }
-
         })
     }
 
@@ -1844,6 +1860,25 @@
             win.focus();
         }
     };
+
+    function ChartRasters(raster, x, y) {
+        $.ajax({
+            url: '@Url.Action("ChartRasters")',
+            data: {
+                rname: raster,
+                point: [x, y]
+            },
+            type: 'POST',
+            success: function (data) {
+                for (i = 0; i < data.climate_xs.length; i++) {
+                    console.log(data.climate_xs[i].dt + ': ' + data.climate_xs[i].value.toFixed(2));
+                }
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+    }
 </script>
 
 @* ChangeLayersClimate *@
@@ -1860,11 +1895,10 @@
 @* $(document).ready *@
 <script>
     $(document).ready(function () {
-        SelectTool();
+        InfoTool();
         ChangeParameter();
     });
 </script>
-
 
 @*tooltips, modal windows*@
 <script>
