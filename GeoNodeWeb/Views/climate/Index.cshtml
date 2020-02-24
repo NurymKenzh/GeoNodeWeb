@@ -455,7 +455,7 @@
             </div>
         </main>
         <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light" style="height: calc(100% - 120px);"></div>
-        <div id="popup" class="ol-popup">
+        <div id="popup" class="ol-popup" style="min-width: 500px; min-height: 400px;">
             <a href="#" id="popup-closer" class="ol-popup-closer"></a>
             <div id="popup-content"></div>
         </div>
@@ -1613,6 +1613,7 @@
                         var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
                         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+
                         // Отклонения осадков в мм
                         if (SubParameter == 'pr_dlt_avg_mm') {
                             var SubParameter_ = SubParameter.substr(0, SubParameter.length - 3),
@@ -1622,10 +1623,18 @@
                         else {
                             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
                         }
+                        var seasonmonth = "";
+                        if (Period == 's') {
+                            seasonmonth += Season;
+                        }
+                        if (Period == 'm') {
+                            seasonmonth += Month;
+                        }
                         //<<<<<<<<<<<<<<<<<<<<<<<<<<<
                         content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>'
                             + '<input value="График" type="button" onclick="ChartRasters(\''
-                            + layerClimate + '\', '
+                            + layerClimate + '\', \''
+                            + seasonmonth + '\', '
                             + ol.proj.toLonLat(evt.coordinate)[0] + ', '
                             + ol.proj.toLonLat(evt.coordinate)[1] + ')" /></br>'
                             + '<canvas class="my-1 w-100 chartjs-render-monitor" id="chartRaster" width="900" height="380"></canvas>';
@@ -1867,11 +1876,12 @@
     };
 
     var chartRaster = null;
-    function ChartRasters(raster, x, y) {
+    function ChartRasters(raster, seasonmonth, x, y) {
         $.ajax({
             url: '@Url.Action("ChartRasters")',
             data: {
                 rname: raster,
+                seasonmonth: seasonmonth,
                 point: [x, y]
             },
             type: 'POST',
@@ -1879,9 +1889,8 @@
                 var chartdata = [],
                     labels = [];
                 for (i = 0; i < data.climate_xs.length; i++) {
-                    console.log(data.climate_xs[i].dt + ': ' + data.climate_xs[i].value.toFixed(2));
-                    chartdata.push(data.climate_xs[i].value.toFixed(2));
-                    labels.push(data.climate_xs[i].dt);
+                    chartdata.push(parseFloat(data.climate_xs[i].value).toFixed(2));
+                    labels.push(data.climate_xs[i].year);
                 }
                 var chart1Data = {
                     labels: labels,

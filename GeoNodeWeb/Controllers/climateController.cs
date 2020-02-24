@@ -58,7 +58,8 @@ namespace GeoNodeWeb.Controllers
     public class climate_x
     {
         public DateTime dt;
-        public decimal value;
+        public decimal? value;
+        public int year;
     }
 
     public class climateController : Controller
@@ -5366,9 +5367,14 @@ namespace GeoNodeWeb.Controllers
         [HttpPost]
         public ActionResult ChartRasters(
             string rname,
+            string seasonmonth,
             decimal[] point)
         {
             string rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
+            if(!string.IsNullOrEmpty(seasonmonth))
+            {
+                rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5]+ "_" + seasonmonth + "_h_" + rname.Split('_')[4];
+            }
             List<climate_x> climate_xs = new List<climate_x>();
             using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
             {
@@ -5403,12 +5409,34 @@ namespace GeoNodeWeb.Controllers
                 connection.Open();
                 var climate_xsQ = connection.Query<climate_x>($"SELECT dt, value" +
                     $" FROM public.{table}" +
-                    $" WHERE name LIKE '%{rnameDB}%'" +
-                    $" AND ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({point[0].ToString()} {point[1].ToString()})')) =" +
+                    $" WHERE name = '{rnameDB}'" +
+                    $" AND point =" +
+                    $" (SELECT point" +
+                    $" FROM public.climate_coords" +
+                    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({point[0].ToString()} {point[1].ToString()})')) =" +
                     $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({point[0].ToString()} {point[1].ToString()})')))" +
-                    $" FROM public.{table});", commandTimeout: 600);
+                    $" FROM public.climate_coords) LIMIT 1);", commandTimeout: 600);
                 climate_xs = climate_xsQ.OrderBy(c => c.dt).ToList();
             }
+            for (int i = 0; i < climate_xs.Count(); i++)
+            {
+                climate_xs[i].year = climate_xs[i].dt.Year;
+            }
+            if (climate_xs.Count() > 0)
+            {
+                for (int y = climate_xs.Min(c => c.year); y <= climate_xs.Max(c => c.year); y += 10)
+                {
+                    if (climate_xs.Count(c => c.year == y) == 0)
+                    {
+                        climate_xs.Add(new climate_x()
+                        {
+                            value = null,
+                            year = y
+                        });
+                    }
+                }
+            }
+            climate_xs = climate_xs.OrderBy(c => c.year).ToList();
 
             return Json(new
             {
