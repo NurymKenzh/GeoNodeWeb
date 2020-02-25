@@ -1637,7 +1637,7 @@
                             + seasonmonth + '\', '
                             + ol.proj.toLonLat(evt.coordinate)[0] + ', '
                             + ol.proj.toLonLat(evt.coordinate)[1] + ')" /></br>'
-                            + '<canvas class="my-1 w-100 chartjs-render-monitor" id="chartRaster" width="900" height="380"></canvas>';
+                            + '<canvas class="chartjs-render-monitor" id="chartRaster" width="500" height="380"></canvas>';
                         overlay.setPosition(evt.coordinate);
                     }
                 })
@@ -1912,7 +1912,7 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'right',
+                            position: 'bottom',
                         },
                         title: {
                             display: true,
