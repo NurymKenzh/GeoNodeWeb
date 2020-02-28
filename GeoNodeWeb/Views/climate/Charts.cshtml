@@ -46,7 +46,7 @@
                 <div class="card shadow mt-3" id="section1">
                     <div class="card-body">
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                            <h1 class="h4">Динамика климатического параметра по годам</h1>
+                            <h5 class="card-title  text-muted">Динамика климатического параметра по годам</h5>                            
                             <div class="btn-toolbar">
                                 <div class="btn-group mr-2">
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
@@ -157,7 +157,8 @@
 
                             </div>
                             <div class="col-md-9">
-                                <button id="changeToLine">Line Chart</button>
+                                <button id="changeToLine" onclick="Chart1()">Line Chart</button>
+                                <button id="changeToBar" onclick="Chart1()">Bar Chart</button>
                                 <canvas class="my-1 w-100 chartjs-render-monitor" id="chart1Canvas" width="900" height="380"></canvas>
                             </div>
                         </div>
@@ -597,7 +598,7 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            text: ['ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')', $("#chart1SubParameter option:selected ").text() +' ('+ $("#chart1Decade option:selected").text()+'/'+ $("#chart1RCP option:selected").text()+')']
                         },
                         tooltips: {
 						    mode: 'index',
