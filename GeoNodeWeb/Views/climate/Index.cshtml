@@ -455,7 +455,7 @@
             </div>
         </main>
         <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light" style="height: calc(100% - 120px);"></div>
-        <div id="popup" class="ol-popup" style="min-width: 500px; min-height: 400px;">
+        <div id="popup" class="ol-popup">
             <a href="#" id="popup-closer" class="ol-popup-closer"></a>
             <div id="popup-content"></div>
         </div>
@@ -1632,13 +1632,9 @@
                         }
                         //<<<<<<<<<<<<<<<<<<<<<<<<<<<
                         content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>'
-                            + '<input value="График" type="button" onclick="ChartRasters(\''
-                            + layerClimate + '\', \''
-                            + seasonmonth + '\', '
-                            + ol.proj.toLonLat(evt.coordinate)[0] + ', '
-                            + ol.proj.toLonLat(evt.coordinate)[1] + ')" /></br>'
                             + '<canvas class="chartjs-render-monitor" id="chartRaster" width="500" height="380"></canvas>';
                         overlay.setPosition(evt.coordinate);
+                        ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1]);
                     }
                 })
             }
