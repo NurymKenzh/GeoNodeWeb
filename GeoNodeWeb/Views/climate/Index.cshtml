@@ -1635,6 +1635,8 @@
                         content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>'
                             + '<canvas class="chartjs-render-monitor" id="chartRaster" width="500" height="380"></canvas>';
                         overlay.setPosition(evt.coordinate);
+                        console.log(evt.coordinate);
+                        console.log(ol.proj.toLonLat(evt.coordinate));
                         ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1]);
                     }
                 })
@@ -1877,12 +1879,14 @@
 
     var chartRaster = null;
     function ChartRasters(raster, seasonmonth, x, y) {
+        console.log('x: ' + x + '; y: ' + y);
         $.ajax({
             url: '@Url.Action("ChartRasters")',
             data: {
                 rname: raster,
                 seasonmonth: seasonmonth,
-                point: [x, y]
+                pointx: x,
+                pointy: y
             },
             type: 'POST',
             success: function (data) {
