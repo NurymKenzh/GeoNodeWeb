@@ -58,34 +58,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-.dropdown {
-    border-radius: 0;
-    border: 0;
-}
 
-.dropdown-menu {
-    background: #16344e;
-    border: 0;
-    top: 80%;
-    border-radius: 0px 0px 5px 5px;
-}
-
-.dropdown-item:hover {
-    background: #085ca5;
-    color: #fff;
-}
-
-.dropdown-menu a {
-    color: #fff;
-}
-
-.dropdown-item.active, .dropdown-item:active {
-    color: #212529;
-}
-
-.dropdown-item:focus, .dropdown-item:hover {
-    background: #fec400;
-}
 .nav-item::after {
     content: '';
     display: block;

@@ -12,21 +12,22 @@
             <h5 class="card-title">ВХБ</h5>
             <p class="card-text">ВХУ:   <b>Name</b></p>
         </div>
-        <fieldset class="scheduler-border m-0">
-            <legend class="scheduler-border pl-2 pr-2"> Configure All Plot </legend>
+        <fieldset class="scheduler-border m-0">            
             <form>
                 <div class="form-group">
                     <label for="inputVHB">ВХБ:</label>
-                    <select id="inputVHB" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>...</option>
+                    <select class="selectpicker form-control is-valid" multiple data-live-search="true">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="inputVHU">ВХУ:</label>
-                    <select id="inputVHU" class="form-control">
-                        <option selected>Choose...</option>
-                        <option>...</option>
+                    <select class="selectpicker form-control is-invalid" multiple data-live-search="true">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
                     </select>
                 </div>
             </form>
@@ -934,6 +935,8 @@
         Chart2();
         Chart3();
     });
-
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
 </script>
 
