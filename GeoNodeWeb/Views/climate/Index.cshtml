@@ -1464,6 +1464,8 @@
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
 
+        
+
         //var date = dates[$('#date').val()];
         //date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
         date = range_instance.result.from;
@@ -1474,7 +1476,24 @@
             date_str += '-01-01';
         }
         if (Period == 's') {
-            date_str += '-0' + Season + '-01';
+            // эвапотранспорация
+            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg') {
+                if (Season == 4) {
+                    date_str += '-01-01';
+                }
+                else if (Season == 1) {
+                    date_str += '-03-01';
+                }
+                else if (Season == 2) {
+                    date_str += '-06-01';
+                }
+                else if (Season == 3) {
+                    date_str += '-09-01';
+                }
+            }
+            else {
+                date_str += '-0' + Season + '-01';
+            }
         }
         if (Period == 'm') {
             date_str += '-' + Month + '-01';

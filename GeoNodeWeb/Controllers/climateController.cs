@@ -62,6 +62,14 @@ namespace GeoNodeWeb.Controllers
         public int year;
     }
 
+    public class wm
+    {
+        public int? objectid;
+        public int? codewmb;
+        public string namewmb_ru;
+        public string codewma;
+    }
+
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
@@ -5360,6 +5368,15 @@ namespace GeoNodeWeb.Controllers
             //    ViewBag.Mean = $"{datetime.Min().Year.ToString()} - {datetime.Max().Year.ToString()}";
             //}
             //ViewBag.LayerId = layer_id;
+
+
+            //List<wm> wms = new List<wm>();
+            //using (var connection = new NpgsqlConnection(geodataProdConnection))
+            //{
+            //    connection.Open();
+            //    var wmsDB = connection.Query<wm>($"SELECT \"OBJECTID\" as objectid, \"NameWMB_Ru\" as namewmb_ru, \"CodeWMA\" as codewma, \"CodeWMB\" as codewmb FROM public.wma_polygon;");
+            //    wms = wmsDB.ToList().OrderBy(w => w);
+            //}
 
             return View();
         }
