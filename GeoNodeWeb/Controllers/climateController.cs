@@ -5368,7 +5368,8 @@ namespace GeoNodeWeb.Controllers
         public ActionResult ChartRasters(
             string rname,
             string seasonmonth,
-            decimal[] point)
+            decimal pointx,
+            decimal pointy)
         {
             string rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
             if(!string.IsNullOrEmpty(seasonmonth))
@@ -5413,8 +5414,8 @@ namespace GeoNodeWeb.Controllers
                     $" AND point =" +
                     $" (SELECT point" +
                     $" FROM public.climate_coords" +
-                    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({point[0].ToString()} {point[1].ToString()})')) =" +
-                    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({point[0].ToString()} {point[1].ToString()})')))" +
+                    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
+                    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
                     $" FROM public.climate_coords) LIMIT 1);", commandTimeout: 600);
                 climate_xs = climate_xsQ.OrderBy(c => c.dt).ToList();
             }
