@@ -19,18 +19,14 @@
                     @*<select id="wmb" class="selectpicker form-control is-valid" data-live-search="true" onchange="ChangeWMB()">
                         <option></option>
                     </select>*@
-                    <select id="wmb" onchange="ChangeWMB()">
-                        <option></option>
-                    </select>
+                    <select id="wmb" onchange="ChangeWMB()"></select>
                 </div>
                 <div class="form-group">
                     <label for="inputVHU">ВХУ:</label>
                     @*<select id="wma" class="selectpicker form-control is-invalid" data-live-search="true">
                         <option></option>
                     </select>*@
-                    <select id="wma">
-                        <option></option>
-                    </select>
+                    <select id="wma"></select>
                 </div>
             </form>
             <input type="button" class="btn btn-primary btn-block" value="Обновить" onclick="RefreshWMS()" />
@@ -954,7 +950,10 @@
         }
     }
     $.each(wms, function () {
-        if ($("#wmb option[value='" + this.codewmb + "']").length == 0) {
+        if (this.objectid == @ViewBag.Id) {
+            $("#wmb").append($("<option selected />").val(this.codewmb).text(this.namewmb_ru));
+        }
+        else if ($("#wmb option[value='" + this.codewmb + "']").length == 0) {
             if (this.namewmb_ru.length > 0) {
                 $("#wmb").append($("<option />").val(this.codewmb).text(this.namewmb_ru));
             }
@@ -962,6 +961,9 @@
     });
 
     $.each(wms, function () {
+        if (this.objectid == @ViewBag.Id) {
+            $("#wma").append($("<option selected />").val(this.objectid).text(this.codewma));
+        }
         if ($("#wma option[value='" + this.codewma + "']").length == 0) {
             if (this.codewma.length > 0) {
                 if (this.codewmb == $('#wmb').val()) {
