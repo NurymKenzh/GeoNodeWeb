@@ -1,4 +1,4 @@
-﻿
+﻿@using GeoNodeWeb.Controllers
 @{
     ViewData["Title"] = "Графики";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,22 +16,24 @@
             <form>
                 <div class="form-group">
                     <label for="inputVHB">ВХБ:</label>
-                    <select class="selectpicker form-control is-valid" multiple data-live-search="true">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
+                    @*<select id="wmb" class="selectpicker form-control is-valid" data-live-search="true" onchange="ChangeWMB()">
+                        <option></option>
+                    </select>*@
+                    <select id="wmb" onchange="ChangeWMB()">
+                        <option></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="inputVHU">ВХУ:</label>
-                    <select class="selectpicker form-control is-invalid" multiple data-live-search="true">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
+                    @*<select id="wma" class="selectpicker form-control is-invalid" data-live-search="true">
+                        <option></option>
+                    </select>*@
+                    <select id="wma">
+                        <option></option>
                     </select>
                 </div>
             </form>
-            <input type="button" class="btn btn-primary btn-block" value="Обновить" />
+            <input type="button" class="btn btn-primary btn-block" value="Обновить" onclick="RefreshWMS()" />
         </fieldset>
         <div id="list-example" class="list-group">
             <a class="list-group-item list-group-item-action" href="#section1">Динамика по годам</a>
@@ -534,7 +536,11 @@
         }
     }
 
-    function Chart1() {
+    function Chart1(objectid) {
+        var Id = objectid;
+        if (objectid == null) {
+            Id = @ViewBag.Id;
+        }
         var chart1Dates = [];
         $("input:checkbox[name=chart1Dates]:checked").each(function(){
             chart1Dates.push($(this).val());
@@ -542,7 +548,7 @@
         $.ajax({
             url: '@Url.Action("GetChart1")',
             data: {
-                Id: @ViewBag.Id,
+                Id: Id,
                 SubParameter: $('#chart1SubParameter').val(),
                 Decade: $('#chart1Decade').val(),
                 RCP: $('#chart1RCP').val(),
@@ -636,7 +642,11 @@
         });
     };
 
-    function Chart2() {
+    function Chart2(objectid) {
+        var Id = objectid;
+        if (objectid == null) {
+            Id = @ViewBag.Id;
+        }
         var seasonNames = ['весна', 'лето', 'осень', 'зима'],
             seasonColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
             seasonMaxColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
@@ -653,7 +663,7 @@
         $.ajax({
             url: '@Url.Action("GetChart2")',
             data: {
-                Id: @ViewBag.Id,
+                Id: Id,
                 SubParameter: $('#chart2SubParameter').val(),
                 Decade: $('#chart2Decade').val(),
                 RCP: $('#chart2RCP').val(),
@@ -750,7 +760,11 @@
         });
     };
 
-    function Chart3() {
+    function Chart3(objectid) {
+        var Id = objectid;
+        if (objectid == null) {
+            Id = @ViewBag.Id;
+        }
         var monthNames = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
             monthColors =[
                 'rgba(255, 99, 132, 0.5)',
@@ -815,7 +829,7 @@
         $.ajax({
             url: '@Url.Action("GetChart3")',
             data: {
-                Id: @ViewBag.Id,
+                Id: Id,
                 SubParameter: $('#chart3SubParameter').val(),
                 Decade: $('#chart3Decade').val(),
                 RCP: $('#chart3RCP').val(),
@@ -924,7 +938,58 @@
     }
 </script>
 
+@* wms *@
+<script>
+    var wms = new Array();
+    @{
+        List<wm> wms = ViewBag.wms;
+        foreach(wm wm_ in wms)
+        {
+            @:var wms_new = {};
+            @:wms_new["objectid"] = '@Html.Raw(wm_.objectid)';
+            @:wms_new["codewmb"] = '@Html.Raw(wm_.codewmb)';
+            @:wms_new["namewmb_ru"] = '@Html.Raw(wm_.namewmb_ru)';
+            @:wms_new["codewma"] = '@Html.Raw(wm_.codewma)';
+            @:wms.push(wms_new);
+        }
+    }
+    $.each(wms, function () {
+        if ($("#wmb option[value='" + this.codewmb + "']").length == 0) {
+            if (this.namewmb_ru.length > 0) {
+                $("#wmb").append($("<option />").val(this.codewmb).text(this.namewmb_ru));
+            }
+        }
+    });
 
+    $.each(wms, function () {
+        if ($("#wma option[value='" + this.codewma + "']").length == 0) {
+            if (this.codewma.length > 0) {
+                if (this.codewmb == $('#wmb').val()) {
+                    $("#wma").append($("<option />").val(this.objectid).text(this.codewma));
+                }
+            }
+        }
+    });
+
+    function ChangeWMB() {
+        $('#wma').html('');
+        $.each(wms, function () {
+            if ($("#wma option[value='" + this.codewma + "']").length == 0) {
+                if (this.codewma.length > 0) {
+                    if (this.codewmb == $('#wmb').val()) {
+                        $("#wma").append($("<option />").val(this.objectid).text(this.codewma));
+                    }
+                }
+            }
+        });
+    }
+
+    function RefreshWMS() {
+        Chart1($("#wma").val());
+        Chart2($("#wma").val());
+        Chart3($("#wma").val());
+    }
+</script>
 
 <script>
     $(function () {
@@ -935,8 +1000,8 @@
         Chart2();
         Chart3();
     });
-    $(function () {
-        $('.selectpicker').selectpicker();
-    });
+    //$(function () {
+    //    $('.selectpicker').selectpicker();
+    //});
 </script>
 

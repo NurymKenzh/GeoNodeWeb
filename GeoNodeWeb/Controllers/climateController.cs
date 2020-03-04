@@ -5335,9 +5335,7 @@ namespace GeoNodeWeb.Controllers
             });
         }
 
-        public IActionResult Charts(int Id,
-            string rname,
-            decimal[] point)
+        public IActionResult Charts(int Id)
         {
             ViewBag.Id = Id;
             //List<layers_layer> layers_layers = new List<layers_layer>();
@@ -5370,13 +5368,14 @@ namespace GeoNodeWeb.Controllers
             //ViewBag.LayerId = layer_id;
 
 
-            //List<wm> wms = new List<wm>();
-            //using (var connection = new NpgsqlConnection(geodataProdConnection))
-            //{
-            //    connection.Open();
-            //    var wmsDB = connection.Query<wm>($"SELECT \"OBJECTID\" as objectid, \"NameWMB_Ru\" as namewmb_ru, \"CodeWMA\" as codewma, \"CodeWMB\" as codewmb FROM public.wma_polygon;");
-            //    wms = wmsDB.ToList().OrderBy(w => w);
-            //}
+            List<wm> wms = new List<wm>();
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
+            {
+                connection.Open();
+                var wmsDB = connection.Query<wm>($"SELECT \"OBJECTID\" as objectid, \"NameWMB_Ru\" as namewmb_ru, \"CodeWMA\" as codewma, \"CodeWMB\" as codewmb FROM public.wma_polygon;");
+                wms = wmsDB.ToList().OrderBy(w => w.namewmb_ru).ThenBy(w => w.codewma).ToList();
+            }
+            ViewBag.wms = wms;
 
             return View();
         }
