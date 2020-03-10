@@ -427,6 +427,7 @@
                                         <div class="input-group-append">
                                             <button id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()">Измерять</button>
                                             <button id="SelectButton" type="button" value="Выделить" class="btn btn-primary btn-sm" onclick="SelectTool()">Выделить</button>
+                                            <button id="DownloadButton" type="button" value="Скачать" class="btn btn-primary btn-sm" onclick="DownloadDialog()">Скачать</button>
                                             @*<button id="InfoButton" type="button" value="Информация" class="btn btn-primary btn-sm" onclick="InfoTool()">Информация</button>*@
                                         </div>
                                     </div>
@@ -838,6 +839,22 @@
     Layer_kaspii_aral_3857.setVisible(true);
     Layer_kaspii_aral_3857.setOpacity(1);
 
+    var Source_Rectangle = new ol.source.Vector({});
+    var Layer_Rectangle = new ol.layer.Vector({
+        source: Source_Rectangle,
+        style: new ol.style.Style({
+            //fill: new ol.style.Fill({
+            //    color: [0, 0, 255, 1]
+            //}),
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 2
+            })
+        })
+    });
+    Layer_Rectangle.set('name', 'Rectangle');
+    Layer_Rectangle.setOpacity(0.80);
+
     // popup
     var container = document.getElementById('popup');
     var content = document.getElementById('popup-content');
@@ -869,6 +886,7 @@
             Layer_Select,
             Layer_lakes,
             Layer_rivers,
+            Layer_Rectangle,
             Layer_Measure
         ],
         //overlays: [overlay],
@@ -1003,6 +1021,21 @@
         addInteraction();
     };
     addInteraction();
+
+    // a DragBox interaction used to select features by drawing boxes
+    var dragBox = new ol.interaction.DragBox({
+        condition: ol.events.condition.platformModifierKeyOnly
+    });
+    map.addInteraction(dragBox);
+
+    dragBox.on('boxend', function () {
+        Source_Rectangle.clear();
+        var rectangle = dragBox.getGeometry().getExtent();
+        let boundingExtent = ol.extent.boundingExtent([[rectangle[0], rectangle[1]], [rectangle[2], rectangle[3]]]),
+            polygon = ol.geom.Polygon.fromExtent(boundingExtent),
+            feature = new ol.Feature(polygon);
+        Source_Rectangle.addFeature(feature);
+    });
 </script>
 
 @* ChangeParameter, ChangeSubParameter, ChangePeriod, ChangeRCP, ChangeDecade, Difference *@
@@ -1464,7 +1497,7 @@
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
 
-        
+
 
         //var date = dates[$('#date').val()];
         //date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
@@ -1965,6 +1998,38 @@
         $('#layerpr_pd_avg_m_rcp45_10Show').prop("checked", false);
         $('#layer' + $('#layerClimate').val() + 'Show').prop("checked", true);
         ChangeLayers();
+    }
+</script>
+
+@* Download *@
+<script>
+    function DownloadDialog() {
+        if (Source_Rectangle.getFeatures().length > 0) {
+            //var left =      Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][0],
+            //    bottom =    Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][1],
+            //    right =     Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][2],
+            //    top =       Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][3];
+            var left =      ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326')[0],
+                bottom =    ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326')[1],
+                right =     ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][2], 'EPSG:3857', 'EPSG:4326')[0],
+                top =       ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][2], 'EPSG:3857', 'EPSG:4326')[1];
+            $.ajax({
+                url: '@Url.Action("Download")',
+                data: {
+                    left: left,
+                    bottom: bottom,
+                    right: right,
+                    top: top
+                },
+                type: 'POST',
+                success: function (data) {
+                    
+                },
+                error: function () {
+                    console.log('Error');
+                }
+            });
+        }
     }
 </script>
 

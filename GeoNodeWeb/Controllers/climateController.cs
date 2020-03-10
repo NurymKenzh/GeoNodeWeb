@@ -5770,5 +5770,17 @@ namespace GeoNodeWeb.Controllers
                 wmacode
             });
         }
+
+        [HttpPost]
+        public void Download(decimal left,
+            decimal bottom,
+            decimal right,
+            decimal top)
+        {
+            using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
+            {
+
+            }
+        }
     }
 }
