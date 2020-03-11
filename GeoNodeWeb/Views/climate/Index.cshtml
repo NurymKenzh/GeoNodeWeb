@@ -2004,6 +2004,18 @@
 @* Download *@
 <script>
     function DownloadDialog() {
+        var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+
+        // Отклонения осадков в мм
+        if (SubParameter == 'pr_dlt_avg_mm') {
+            var SubParameter_ = SubParameter.substr(0, SubParameter.length - 3),
+                SubParameter_;
+            layerClimate = SubParameter_ + '_' + Period + '_' + RCP + '_' + Decade + '_' + 'mm';
+        }
+        else {
+            layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
+
         if (Source_Rectangle.getFeatures().length > 0) {
             //var left =      Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][0],
             //    bottom =    Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][1],
@@ -2019,7 +2031,8 @@
                     left: left,
                     bottom: bottom,
                     right: right,
-                    top: top
+                    top: top,
+                    table: layerClimate
                 },
                 type: 'POST',
                 success: function (data) {

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Dapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -57,7 +61,9 @@ namespace GeoNodeWeb.Controllers
 
     public class climate_x
     {
+        public string name;
         public DateTime dt;
+        public string point;
         public decimal? value;
         public int year;
     }
@@ -73,6 +79,7 @@ namespace GeoNodeWeb.Controllers
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
         private string geoserverConnection = server ? Startup.Configuration["geoserverConnectionServer"].ToString() : Startup.Configuration["geoserverConnectionDebug"].ToString(),
@@ -84,9 +91,11 @@ namespace GeoNodeWeb.Controllers
 
             geodataanalyticsProdConnection = server ? Startup.Configuration["geodataanalyticsProdConnectionServer"].ToString() : Startup.Configuration["geodataanalyticsProdConnectionDebug"].ToString();
 
-        public climateController(HttpApiClientController HttpApiClient)
+        public climateController(HttpApiClientController HttpApiClient,
+            IHostingEnvironment hostingEnvironment)
         {
             _HttpApiClient = HttpApiClient;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -5276,6 +5285,7 @@ namespace GeoNodeWeb.Controllers
                 connection.Open();
                 var datetime = connection.Query<DateTime>($"SELECT ingestion FROM public.{layer}");
                 datesD = datetime.OrderBy(d => d).ToList();
+                connection.Close();
             }
 
             //// withot DB
@@ -5325,6 +5335,7 @@ namespace GeoNodeWeb.Controllers
                 title = climate_Mosaicinfo?.title_ru;
                 description = climate_Mosaicinfo?.description_ru;
                 extended_title = climate_Mosaicinfo?.extended_title_ru;
+                connection.Close();
             }
 
             return Json(new
@@ -5374,6 +5385,7 @@ namespace GeoNodeWeb.Controllers
                 connection.Open();
                 var wmsDB = connection.Query<wm>($"SELECT \"OBJECTID\" as objectid, \"NameWMB_Ru\" as namewmb_ru, \"CodeWMA\" as codewma, \"CodeWMB\" as codewmb FROM public.wma_polygon;");
                 wms = wmsDB.ToList().OrderBy(w => w.namewmb_ru).ThenBy(w => w.codewma).ToList();
+                connection.Close();
             }
             ViewBag.wms = wms;
 
@@ -5434,6 +5446,7 @@ namespace GeoNodeWeb.Controllers
                     $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
                     $" FROM public.climate_coords) LIMIT 1);", commandTimeout: 600);
                 climate_xs = climate_xsQ.OrderBy(c => c.dt).ToList();
+                connection.Close();
             }
             for (int i = 0; i < climate_xs.Count(); i++)
             {
@@ -5488,6 +5501,7 @@ namespace GeoNodeWeb.Controllers
                     $" ORDER BY date;";
                 var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
                 climate_rasterstats = climate_rasterstats_DB.ToList();
+                connection.Close();
             }
 
             string wmbname = "",
@@ -5505,6 +5519,7 @@ namespace GeoNodeWeb.Controllers
                     $"LIMIT 1;");
                 wmbname = name.FirstOrDefault();
                 wmacode = code.FirstOrDefault();
+                connection.Close();
             }
 
             List<decimal?> max = new List<decimal?>(),
@@ -5589,6 +5604,7 @@ namespace GeoNodeWeb.Controllers
                 climate_rasterstats = climate_rasterstats_DB
                     .Where(c => Seasons.Contains(c.date.Month))
                     .ToList();
+                connection.Close();
             }
 
             string wmbname = "",
@@ -5606,6 +5622,7 @@ namespace GeoNodeWeb.Controllers
                     $"LIMIT 1;");
                 wmbname = name.FirstOrDefault();
                 wmacode = code.FirstOrDefault();
+                connection.Close();
             }
 
             climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
@@ -5695,6 +5712,7 @@ namespace GeoNodeWeb.Controllers
                 climate_rasterstats = climate_rasterstats_DB
                     .Where(c => Months.Contains(c.date.Month))
                     .ToList();
+                connection.Close();
             }
 
             string wmbname = "",
@@ -5712,6 +5730,7 @@ namespace GeoNodeWeb.Controllers
                     $"LIMIT 1;");
                 wmbname = name.FirstOrDefault();
                 wmacode = code.FirstOrDefault();
+                connection.Close();
             }
 
             climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
@@ -5775,12 +5794,117 @@ namespace GeoNodeWeb.Controllers
         public void Download(decimal left,
             decimal bottom,
             decimal right,
-            decimal top)
+            decimal top,
+            string table)
         {
+            // remove/change ------------------------------------------------------------------
+            string email = "nak290284@gmail.com";
+
+            string rname = table;
+            switch (rname.Split('_')[0] + "_" + rname.Split('_')[1])
+            {
+                case "tasmax_pd":
+                    table = "climate_tasmax";
+                    break;
+                case "tasmax_dlt":
+                    table = "climate_tasmax_dlt";
+                    break;
+                case "tas_pd":
+                    table = "climate_tas";
+                    break;
+                case "tas_dlt":
+                    table = "climate_tas_dlt";
+                    break;
+                case "tasmin_pd":
+                    table = "climate_tasmin";
+                    break;
+                case "tasmin_dlt":
+                    table = "climate_tasmin_dlt";
+                    break;
+                case "pr_pd":
+                    table = "climate_pr";
+                    break;
+                case "pr_dlt":
+                    table = "climate_pr_dlt";
+                    break;
+            }
+
+            List<string> points = new List<string>();
+            List<climate_x> climate_xs = new List<climate_x>();
             using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
             {
+                connection.Open();
+                var pointsDB = connection.Query<string>($"SELECT ST_AsText(point)" +
+                    $" FROM public.climate_coords" +
+                    $" WHERE ST_Contains(ST_GeometryFromText('POLYGON(({left.ToString()} {bottom.ToString()},{right.ToString()} {bottom.ToString()},{right.ToString()} {top.ToString()},{left.ToString()} {top.ToString()},{left.ToString()} {bottom.ToString()}))')," +
+                    $" ST_GeometryFromText(ST_AsText(point)));", commandTimeout: 600);
+                points = pointsDB.ToList();
 
+                foreach (string point in points)
+                {
+                    var climate_xsDB = connection.Query<climate_x>($"SELECT name, dt, ST_AsText(point) as point, value" +
+                        $" FROM public.{table}" +
+                        $" WHERE point = ST_GeomFromEWKT('{point}')" +
+                        $" ORDER BY name, dt", commandTimeout: 600);
+                    climate_xs.AddRange(climate_xsDB.ToList());
+                }
+                connection.Close();
             }
+
+            // delete old files
+            foreach (string file in Directory.EnumerateFiles(Path.Combine(_hostingEnvironment.ContentRootPath, "Download")))
+            {
+                string date = file.Split("__")[1];
+                int year = Convert.ToInt32(date.Substring(0, 4)),
+                    month = Convert.ToInt32(date.Substring(4, 2)),
+                    day = Convert.ToInt32(date.Substring(6, 2));
+                DateTime dt = new DateTime(year, month, day);
+                if(DateTime.Today - dt > new TimeSpan(2, 0, 0, 0))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                    catch
+                    { }
+                }
+            }
+
+            // create csv file
+            string fileName = $"{table}__{DateTime.Now.ToString("yyyyMMdd__HHmmss")}.csv",
+                fileZipName = Path.ChangeExtension(fileName, "zip"),
+                filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileName),
+                fileZipPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileZipName);
+            using (var writer = new StreamWriter(filePath))
+            {
+                writer.WriteLine("name\tdate\tpoint\tvalue");
+                foreach (climate_x climate_X in climate_xs)
+                {
+                    writer.WriteLine($"{climate_X.name}\t{climate_X.dt.ToString("yyyy.MM.dd")}\t{climate_X.point}\t{climate_X.value?.ToString()}");
+                }
+            }
+
+            // zip file
+            //ZipFile.CreateFromDirectory(filePath, fileZipPath);
+            using (ZipArchive zip = ZipFile.Open(fileZipPath, ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(filePath, fileName);
+            }
+
+            // send email
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+            mail.From = new MailAddress("ingeokz@gmail.com");
+            mail.To.Add(email);
+            mail.Subject = "Climate data";
+            Attachment attachment;
+            attachment = new System.Net.Mail.Attachment(fileZipPath);
+            mail.Attachments.Add(attachment);
+            SmtpServer.UseDefaultCredentials = false;
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@gmail.com", "Qwerty!@#");
+            SmtpServer.EnableSsl = true;
+            SmtpServer.Send(mail);
         }
     }
 }

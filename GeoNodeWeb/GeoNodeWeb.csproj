@@ -25,4 +25,9 @@
     </Content>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Download\" />
+  </ItemGroup>
+
 </Project>
