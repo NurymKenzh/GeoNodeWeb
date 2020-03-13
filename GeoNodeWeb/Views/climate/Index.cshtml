@@ -2285,10 +2285,10 @@
                 },
                 type: 'POST',
                 success: function (data) {
-
+                    console.log(data.message);
                 },
                 error: function () {
-                    console.log('Error');
+                    console.log('Error: ' + data.message);
                 }
             });
         }
