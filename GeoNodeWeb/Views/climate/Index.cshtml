@@ -2272,14 +2272,15 @@
                 bottom =    ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326')[1],
                 right =     ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][2], 'EPSG:3857', 'EPSG:4326')[0],
                 top = ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][2], 'EPSG:3857', 'EPSG:4326')[1];
-            console.log($('#colFormLabelSm').val());
+            //console.log($('#colFormLabelSm').val());
+            console.log('left: ' + left + ', bottom: ' + bottom + ', right: ' + right + ', top: ' + top);
             $.ajax({
                 url: '@Url.Action("Download")',
                 data: {
-                    left: left,
-                    bottom: bottom,
-                    right: right,
-                    top: top,
+                    lefts: left,
+                    bottoms: bottom,
+                    rights: right,
+                    tops: top,
                     table: layerClimate,
                     email: $('#colFormLabelSm').val()
                 },

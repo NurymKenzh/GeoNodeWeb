@@ -5816,16 +5816,35 @@ namespace GeoNodeWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Download(decimal left,
-            decimal bottom,
-            decimal right,
-            decimal top,
+        public ActionResult Download(
+            string lefts,
+            string bottoms,
+            string rights,
+            string tops,
             string table,
             string email)
         {
             // remove/change ------------------------------------------------------------------
             //string email = "nak290284@gmail.com";
             string message = "email sent";
+            decimal left = 0,
+                bottom = 0,
+                right = 0,
+                top = 0;
+            try
+            {
+                left = Convert.ToDecimal(lefts);
+                bottom = Convert.ToDecimal(bottoms);
+                right = Convert.ToDecimal(rights);
+                top = Convert.ToDecimal(tops);
+            }
+            catch
+            {
+                left = Convert.ToDecimal(lefts.Replace('.', ','));
+                bottom = Convert.ToDecimal(bottoms.Replace('.', ','));
+                right = Convert.ToDecimal(rights.Replace('.', ','));
+                top = Convert.ToDecimal(tops.Replace('.', ','));
+            }
             try
             {
                 string rname = table;
@@ -5862,10 +5881,11 @@ namespace GeoNodeWeb.Controllers
                 using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
                 {
                     connection.Open();
-                    var pointsDB = connection.Query<string>($"SELECT ST_AsText(point)" +
+                    string query = $"SELECT ST_AsText(point)" +
                         $" FROM public.climate_coords" +
                         $" WHERE ST_Contains(ST_GeometryFromText('POLYGON(({left.ToString()} {bottom.ToString()},{right.ToString()} {bottom.ToString()},{right.ToString()} {top.ToString()},{left.ToString()} {top.ToString()},{left.ToString()} {bottom.ToString()}))')," +
-                        $" ST_GeometryFromText(ST_AsText(point)));", commandTimeout: 600);
+                        $" ST_GeometryFromText(ST_AsText(point)));";
+                    var pointsDB = connection.Query<string>(query, commandTimeout: 600);
                     points = pointsDB.ToList();
 
                     foreach (string point in points)

@@ -6,6 +6,11 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Chart.js" Version="2.8.0" />
