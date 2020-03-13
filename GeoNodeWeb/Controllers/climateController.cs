@@ -5881,13 +5881,24 @@ namespace GeoNodeWeb.Controllers
                 using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
                 {
                     connection.Open();
-                    string query = $"SELECT ST_AsText(point)" +
+                    try
+                    {
+                        string query = $"SELECT ST_AsText(point)" +
                         $" FROM public.climate_coords" +
                         $" WHERE ST_Contains(ST_GeometryFromText('POLYGON(({left.ToString()} {bottom.ToString()},{right.ToString()} {bottom.ToString()},{right.ToString()} {top.ToString()},{left.ToString()} {top.ToString()},{left.ToString()} {bottom.ToString()}))')," +
                         $" ST_GeometryFromText(ST_AsText(point)));";
-                    var pointsDB = connection.Query<string>(query, commandTimeout: 600);
-                    points = pointsDB.ToList();
-
+                        var pointsDB = connection.Query<string>(query, commandTimeout: 600);
+                        points = pointsDB.ToList();
+                    }
+                    catch
+                    {
+                        string query = $"SELECT ST_AsText(point)" +
+                        $" FROM public.climate_coords" +
+                        $" WHERE ST_Contains(ST_GeometryFromText('POLYGON(({left.ToString().Replace(',', '.')} {bottom.ToString().Replace(',', '.')},{right.ToString().Replace(',', '.')} {bottom.ToString().Replace(',', '.')},{right.ToString().Replace(',', '.')} {top.ToString().Replace(',', '.')},{left.ToString().Replace(',', '.')} {top.ToString().Replace(',', '.')},{left.ToString().Replace(',', '.')} {bottom.ToString().Replace(',', '.')}))')," +
+                        $" ST_GeometryFromText(ST_AsText(point)));";
+                        var pointsDB = connection.Query<string>(query, commandTimeout: 600);
+                        points = pointsDB.ToList();
+                    }
                     foreach (string point in points)
                     {
                         var climate_xsDB = connection.Query<climate_x>($"SELECT name, dt, ST_AsText(point) as point, value" +
