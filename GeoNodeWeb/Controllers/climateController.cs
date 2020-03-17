@@ -5823,7 +5823,7 @@ namespace GeoNodeWeb.Controllers
             string tops,
             string table,
             string email,
-            string parameter,
+            //string parameter,
             int yearstart,
             int yearfinish
             )
@@ -5906,6 +5906,8 @@ namespace GeoNodeWeb.Controllers
                         var climate_xsDB = connection.Query<climate_x>($"SELECT name, dt, ST_AsText(point) as point, value" +
                             $" FROM public.{table}" +
                             $" WHERE point = ST_GeomFromEWKT('{point}')" +
+                            $" AND date_part('year', dt) <= '{yearfinish.ToString()}'" +
+                            $" AND date_part('year', dt) >= '{yearstart.ToString()}'" +
                             $" ORDER BY name, dt", commandTimeout: 600);
                         climate_xs.AddRange(climate_xsDB.ToList());
                     }
@@ -5938,10 +5940,23 @@ namespace GeoNodeWeb.Controllers
                     fileZipPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileZipName);
                 using (var writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("name\tdate\tpoint\tvalue");
+                    //writer.WriteLine("name\tdate\tpoint\tvalue");
+                    //foreach (climate_x climate_X in climate_xs)
+                    //{
+                    //    writer.WriteLine($"{climate_X.name}\t{climate_X.dt.ToString("yyyy.MM.dd")}\t{climate_X.point}\t{climate_X.value?.ToString()}");
+                    //}
+                    writer.WriteLine("Параметр\tПериод\tRCP\tПериодичность\tСезон/месяц\tДата\tШирота\tДолгота\tЗначение");
                     foreach (climate_x climate_X in climate_xs)
                     {
-                        writer.WriteLine($"{climate_X.name}\t{climate_X.dt.ToString("yyyy.MM.dd")}\t{climate_X.point}\t{climate_X.value?.ToString()}");
+                        string[] ss = climate_X.name.Split('_');
+                        string parameter_ = $"{ss[0]}_{ss[1]}_{ss[2]}",
+                            period_ = $"{ss[3]}",
+                            rcp_ = $"{ss[4]}",
+                            periodiocity_ = $"{ss[5]}",
+                            seasonmonth_ = ss.Length == 7 ? $"{ss[6]}" : "",
+                            long_ = climate_X.point.Replace("POINT(", "").Split(' ')[0],
+                            lat_ = climate_X.point.Replace("POINT(", "").Split(' ')[1].Replace(")", "");
+                        writer.WriteLine($"{parameter_}\t{period_}\t{rcp_}\t{periodiocity_}\t{seasonmonth_}\t{climate_X.dt.ToString("yyyy.MM.dd")}\t{lat_}\t{long_}\t{climate_X.value?.ToString()}");
                     }
                 }
 
