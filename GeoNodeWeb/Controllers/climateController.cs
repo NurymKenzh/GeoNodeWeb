@@ -5822,10 +5822,12 @@ namespace GeoNodeWeb.Controllers
             string rights,
             string tops,
             string table,
-            string email)
+            string email,
+            string parameter,
+            int yearstart,
+            int yearfinish
+            )
         {
-            // remove/change ------------------------------------------------------------------
-            //string email = "nak290284@gmail.com";
             string message = "email sent";
             decimal left = 0,
                 bottom = 0,
@@ -5848,33 +5850,33 @@ namespace GeoNodeWeb.Controllers
             try
             {
                 string rname = table;
-                switch (rname.Split('_')[0] + "_" + rname.Split('_')[1])
-                {
-                    case "tasmax_pd":
-                        table = "climate_tasmax";
-                        break;
-                    case "tasmax_dlt":
-                        table = "climate_tasmax_dlt";
-                        break;
-                    case "tas_pd":
-                        table = "climate_tas";
-                        break;
-                    case "tas_dlt":
-                        table = "climate_tas_dlt";
-                        break;
-                    case "tasmin_pd":
-                        table = "climate_tasmin";
-                        break;
-                    case "tasmin_dlt":
-                        table = "climate_tasmin_dlt";
-                        break;
-                    case "pr_pd":
-                        table = "climate_pr";
-                        break;
-                    case "pr_dlt":
-                        table = "climate_pr_dlt";
-                        break;
-                }
+                //switch (rname.Split('_')[0] + "_" + rname.Split('_')[1])
+                //{
+                //    case "tasmax_pd":
+                //        table = "climate_tasmax";
+                //        break;
+                //    case "tasmax_dlt":
+                //        table = "climate_tasmax_dlt";
+                //        break;
+                //    case "tas_pd":
+                //        table = "climate_tas";
+                //        break;
+                //    case "tas_dlt":
+                //        table = "climate_tas_dlt";
+                //        break;
+                //    case "tasmin_pd":
+                //        table = "climate_tasmin";
+                //        break;
+                //    case "tasmin_dlt":
+                //        table = "climate_tasmin_dlt";
+                //        break;
+                //    case "pr_pd":
+                //        table = "climate_pr";
+                //        break;
+                //    case "pr_dlt":
+                //        table = "climate_pr_dlt";
+                //        break;
+                //}
 
                 List<string> points = new List<string>();
                 List<climate_x> climate_xs = new List<climate_x>();
@@ -5950,10 +5952,26 @@ namespace GeoNodeWeb.Controllers
                     zip.CreateEntryFromFile(filePath, fileName);
                 }
 
-                // send email
+                //send email
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress("ingeokz@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = "Climate data";
+                //Attachment attachment;
+                //attachment = new System.Net.Mail.Attachment(fileZipPath);
+                //mail.Attachments.Add(attachment);
+                mail.IsBodyHtml = true;
+                mail.Body = $"Скачать данные <a href=\"{this.Request.Host}\\climate\\DownloadDataFile?file={fileZipName}\">здесь</a>";
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@gmail.com", "Qwerty!@#");
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+
                 //MailMessage mail = new MailMessage();
-                //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-                //mail.From = new MailAddress("ingeokz@gmail.com");
+                //SmtpClient SmtpServer = new SmtpClient("smtp.mail.ru");
+                //mail.From = new MailAddress("ingeokz@mail.ru");
                 //mail.To.Add(email);
                 //mail.Subject = "Climate data";
                 //Attachment attachment;
@@ -5961,24 +5979,10 @@ namespace GeoNodeWeb.Controllers
                 //mail.Attachments.Add(attachment);
                 //SmtpServer.UseDefaultCredentials = false;
                 //SmtpServer.Port = 587;
-                //SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@gmail.com", "Qwerty!@#");
+                //SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@mail.ru", "geoportal2020");
                 //SmtpServer.EnableSsl = true;
+                //SmtpServer.Timeout = int.MaxValue;
                 //SmtpServer.Send(mail);
-
-                MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient("smtp.mail.ru");
-                mail.From = new MailAddress("ingeokz@mail.ru");
-                mail.To.Add(email);
-                mail.Subject = "Climate data";
-                Attachment attachment;
-                attachment = new System.Net.Mail.Attachment(fileZipPath);
-                mail.Attachments.Add(attachment);
-                SmtpServer.UseDefaultCredentials = false;
-                SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@mail.ru", "geoportal2020");
-                SmtpServer.EnableSsl = true;
-                SmtpServer.Timeout = int.MaxValue;
-                SmtpServer.Send(mail);
             }
             catch (Exception ex)
             {
@@ -5988,6 +5992,15 @@ namespace GeoNodeWeb.Controllers
             {
                 message
             });
+        }
+
+        public IActionResult DownloadDataFile(string file)
+        {
+            string filePath = filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", file);
+            string fileName = file;
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "application/force-download", fileName);
+
         }
     }
 }
