@@ -14,7 +14,6 @@
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 <script src="~/esnow/lib/moment.js/moment.js"></script>
 <script src="~/esnow/lib/clim-sidebar/ClimSidebar.js"></script>
-@*<script src="~/esnow/lib/jquery-ui/jquery-ui.js"></script>*@
 
 <link href="~/esnow/lib/vendor/jBox/dist/jBox.all.css" rel="stylesheet" />
 <script src="~/esnow/lib/vendor/jBox/dist/jBox.all.js"></script>
@@ -559,18 +558,21 @@
                             </div>
                         </div>
                         <div class="col-md-12" style="display: none" id="DownloadFormCont">
-                            <form>
+                            <form class="was-validated">
                                 <h6>Используйте Ctrl + Drag (Command + Drag на Mac), чтобы выделить прямоугольник.</h6>
-                                <div class="form-group row">
-                                    <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Email</label>
-                                    <div class="col-sm-9">
-                                        <input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="name@example.com">
+                                
+                                <div class="form-group">
+                                    <div class="downloadmail">
+                                        <label for="colFormLabelSm" class="col-form-label col-form-label-sm">Email</label>
+                                        <input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="name@example.com" required>
+                                        <div class="invalid-feedback">
+                                            Укажите почтовый ящик
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="colFormLabeltas" class="col-sm-3 col-form-label col-form-label-sm">Параметр</label>
-                                    <div class="col-sm-9 download-tas">
-                                        <select id="downloadtas" class="form-control form-control-sm">
+                                    <div class="download-tas">
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">Параметр</label>
+                                        <select id="downloadtas" class="form-control form-control-sm" required>
+                                            <option value="">Выберите...</option>
                                             <option value="climate_tasmax">Максимальная температура</option>
                                             <option value="climate_tas">Средняя температура</option>
                                             <option value="climate_tasmin">Минимальная температура</option>
@@ -578,23 +580,29 @@
                                             <option value="climate_tas_dlt">Отклонения средней температуры</option>
                                             <option value="climate_tasmin_dlt">Отклонения минимальной температуры</option>
                                         </select>
+                                        <div class="invalid-feedback">Выберите параметры</div>
                                     </div>
-                                    <div class="col-sm-9 download-pr">
-                                        <select id="downloadpr" class="form-control form-control-sm">
+                                    <div class="download-pr">
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">Параметр</label>
+                                        <select id="downloadpr" class="form-control form-control-sm" required>
+                                            <option value="">Выберите...</option>
                                             <option value="climate_pr">Осадки</option>
                                             <option value="climate_pr_dlt">Отклонения средней суммы осадков от значений базового периода в мм</option>
                                         </select>
+                                        <div class="invalid-feedback">Выберите параметры</div>
                                     </div>
-                                    <div class="col-sm-9 download-et">
-                                        <select id="downloadet" class="form-control form-control-sm">
+                                    <div class="download-et">
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">Параметр</label>
+                                        <select id="downloadet" class="form-control form-control-sm" required>
+                                            <option value="">Выберите...</option>
                                             <option value="climate_et">Эвапотранспирация</option>
                                             <option value="climate_et_dlt">Отклонения эвапотранспирации от значений базового периода</option>
                                         </select>
+                                        <div class="invalid-feedback">Выберите параметры</div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="colFormLabelPeriod" class="col-sm-3 col-form-label col-form-label-sm">Годы</label>
-                                    <div class="col-sm-9">
+                                <div class="form-row">
+                                    <div class="col-sm-auto">
                                         <select id="downloadyearstart" class="form-control form-control-sm">
                                             <option value="1951">1951</option>
                                             <option value="1961">1961</option>
@@ -611,7 +619,10 @@
                                             <option value="2071">2071</option>
                                             <option value="2081">2081</option>
                                             <option value="2091">2091</option>
-                                        </select>-
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-auto">---</div>
+                                    <div class="col-sm-auto">
                                         <select id="downloadyearfinish" class="form-control form-control-sm">
                                             <option value="1951">1951</option>
                                             <option value="1961">1961</option>
@@ -630,9 +641,9 @@
                                             <option value="2091" selected>2091</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div>                                
                             </form>
-                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm target-notice" onclick="Download()">Скачать</button>
+                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm mt-2 target-notice" onclick="Download()">Скачать</button>
                         </div>
                     </div>
                     <!-- sidebar-content  -->
