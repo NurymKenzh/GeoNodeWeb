@@ -560,6 +560,7 @@
                         </div>
                         <div class="col-md-12" style="display: none" id="DownloadFormCont">
                             <form>
+                                <h6>Используйте Ctrl + Drag (Command + Drag на Mac), чтобы выделить прямоугольник.</h6>
                                 <div class="form-group row">
                                     <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Email</label>
                                     <div class="col-sm-9">
@@ -567,27 +568,71 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label col-form-label-sm">Type</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control form-control-sm" id="exampleFormControlSelect1">
-                                            <option>Макс. температура</option>
-                                            <option>Сред. температура</option>
-                                            <option>Осадки</option>
+                                    <label for="colFormLabeltas" class="col-sm-3 col-form-label col-form-label-sm">Параметр</label>
+                                    <div class="col-sm-9 download-tas">
+                                        <select id="downloadtas" class="form-control form-control-sm">
+                                            <option value="climate_tasmax">Максимальная температура</option>
+                                            <option value="climate_tas">Средняя температура</option>
+                                            <option value="climate_tasmin">Минимальная температура</option>
+                                            <option value="climate_tasmax_dlt">Отклонения максимальной температуры от значений базового периода</option>
+                                            <option value="climate_tas_dlt">Отклонения средней температуры</option>
+                                            <option value="climate_tasmin_dlt">Отклонения минимальной температуры</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-9 download-pr">
+                                        <select id="downloadpr" class="form-control form-control-sm">
+                                            <option value="climate_pr">Осадки</option>
+                                            <option value="climate_pr_dlt">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-9 download-et">
+                                        <select id="downloadet" class="form-control form-control-sm">
+                                            <option value="climate_et">Эвапотранспирация</option>
+                                            <option value="climate_et_dlt">Отклонения эвапотранспирации от значений базового периода</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="exampleFormControlSelect2" class="col-sm-3 col-form-label col-form-label-sm">RCP</label>
+                                    <label for="colFormLabelPeriod" class="col-sm-3 col-form-label col-form-label-sm">Годы</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control form-control-sm" id="exampleFormControlSelect2">
-                                            <option>10</option>
-                                            <option>20</option>
-                                            <option>30</option>
+                                        <select id="downloadyearstart" class="form-control form-control-sm">
+                                            <option value="1951">1951</option>
+                                            <option value="1961">1961</option>
+                                            <option value="1971">1971</option>
+                                            <option value="1981">1981</option>
+                                            <option value="1991">1991</option>
+                                            <option value="2001">2001</option>
+                                            <option value="2011">2011</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2031">2031</option>
+                                            <option value="2041">2041</option>
+                                            <option value="2051">2051</option>
+                                            <option value="2061">2061</option>
+                                            <option value="2071">2071</option>
+                                            <option value="2081">2081</option>
+                                            <option value="2091">2091</option>
+                                        </select>-
+                                        <select id="downloadyearfinish" class="form-control form-control-sm">
+                                            <option value="1951">1951</option>
+                                            <option value="1961">1961</option>
+                                            <option value="1971">1971</option>
+                                            <option value="1981">1981</option>
+                                            <option value="1991">1991</option>
+                                            <option value="2001">2001</option>
+                                            <option value="2011">2011</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2031">2031</option>
+                                            <option value="2041">2041</option>
+                                            <option value="2051">2051</option>
+                                            <option value="2061">2061</option>
+                                            <option value="2071">2071</option>
+                                            <option value="2081">2081</option>
+                                            <option value="2091" selected>2091</option>
                                         </select>
                                     </div>
                                 </div>
                             </form>
-                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm target-notice">Submit</button>
+                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm target-notice" onclick="Download()">Скачать</button>
                         </div>
                     </div>
                     <!-- sidebar-content  -->
@@ -621,7 +666,6 @@
                                         <div class="input-group-prepend">
                                             <button id="MeasureButton" type="button" value="Измерять" class="btn btn-outline-light btn-sm" onclick="MeasureTool()"><i class="fa fa-ruler SomeInfo" InfoTitle="Измерить расстояние или площадь на Карте"></i></button>
                                             <button id="SelectButton" type="button" value="Выделить" class="btn btn-outline-light btn-sm" onclick="SelectTool()"><i class="fa fa-map-marked SomeInfo" InfoTitle="Выделение объекта на карте"></i></button>
-                                            <button id="DownloadButton" type="button" value="Скачать" class="btn btn-outline-light btn-sm" onclick="DownloadDialog()"><i class="fa fa-download SomeInfo" InfoTitle="Скачать данные"></i></button>
                                             <button id="FilterDownloadBtn" type="button" value="Скачать" class="btn btn-outline-light btn-sm"><i class="fa fa-download SomeInfo" InfoTitle="Скачать данные"></i></button>
                                         </div>
                                     </div>
@@ -642,7 +686,7 @@
                                 </div>
                             </div>
                             <div class="col-2">
-                                <small class="text-light float-right">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
+                                <small class="text-light float-right">&copy; @DateTime.Now.Year.ToString() - GeoNode - <a href="mailto:ingeokz@gmail.com">ingeokz@gmail.com</a></small>
                             </div>
                         </div>
                     </div>
@@ -1246,6 +1290,9 @@
     //    firstEvapotranspiration = true;
 
     function ChangeParameter() {
+        $('.download-tas').hide();
+        $('.download-pr').hide();
+        $('.download-et').hide();
         if ($('#Temperature').is(':checked')) {
             $('.Temperature').show();
             $('.Precipitation').hide();
@@ -1253,6 +1300,7 @@
             Parameter = 'tas';
             SubParameter = 'tasmax_pd_avg';
             ChangeSubParameter(SubParameter, 'Temperature1');
+            $('.download-tas').show();
         }
         else if ($('#Precipitation').is(':checked')) {
             $('.Temperature').hide();
@@ -1265,6 +1313,7 @@
             //}
             SubParameter = 'pr_pd_avg';
             ChangeSubParameter(SubParameter, 'Precipitation1');
+            $('.download-pr').show();
         }
         else if ($('#Evapotranspiration').is(':checked')) {
             $('.Temperature').hide();
@@ -1277,6 +1326,7 @@
             //}
             SubParameter = 'et_pd_avg';
             ChangeSubParameter(SubParameter, 'Evapotranspiration1');
+            $('.download-et').show();
         }
         //ChangeLayerClimate();
         //ChangePeriod();
@@ -1901,9 +1951,38 @@
                         //<<<<<<<<<<<<<<<<<<<<<<<<<<<
                         content.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>';
                         overlay.setPosition(evt.coordinate);
-                        console.log(evt.coordinate);
-                        console.log(ol.proj.toLonLat(evt.coordinate));
-                        ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1]);
+                        //console.log(evt.coordinate);
+                        //console.log(ol.proj.toLonLat(evt.coordinate));
+
+                        var viewResolution = (map.getView().getResolution());
+                        var url_wma_polygon = Layer_wma_polygon.getSource().getGetFeatureInfoUrl(
+                            evt.coordinate, viewResolution, 'EPSG:3857',
+                            {
+                                'INFO_FORMAT': 'text/javascript'
+                            });
+                        if (url_wma_polygon) {
+                            var parser2 = new ol.format.GeoJSON();
+                            $.ajax({
+                                jsonp: false,
+                                jsonpCallback: 'getJson',
+                                type: 'GET',
+                                url: url_wma_polygon + "&format_options=callback:getJson",
+                                async: false,
+                                dataType: 'jsonp',
+                                error: function (xhr, status, error) {
+                                    console.log('error');
+                                },
+                            }).then(function (response) {
+                                featureId = -1;
+                                var result = parser2.readFeatures(response);
+                                if (result.length > 0) {
+                                    ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1], result[0].get('OBJECTID'));
+                                }
+                                else {
+                                    ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1], -1);
+                                }
+                            });
+                        }
                     }
                 })
             }
@@ -2152,7 +2231,7 @@
     };
 
     var chartRaster = null;
-    function ChartRasters(raster, seasonmonth, x, y) {
+    function ChartRasters(raster, seasonmonth, x, y, objectid) {
         console.log('x: ' + x + '; y: ' + y);
         $.ajax({
             url: '@Url.Action("ChartRasters")',
@@ -2160,7 +2239,8 @@
                 rname: raster,
                 seasonmonth: seasonmonth,
                 pointx: x,
-                pointy: y
+                pointy: y,
+                objectid: objectid
             },
             type: 'POST',
             success: function (data) {
@@ -2196,7 +2276,7 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: '' //'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
                         },
                         tooltips: {
                             mode: 'index',
@@ -2225,7 +2305,7 @@
 
 @* Download *@
 <script>
-    function DownloadDialog() {
+    function Download() {
         var layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
 
         // Отклонения осадков в мм
@@ -2238,30 +2318,39 @@
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
 
+        var table = $('#downloadtas').val();
+        if ($('#Precipitation').is(':checked')) {
+            table = $('#downloadpr').val();
+        }
+        if ($('#Evapotranspiration').is(':checked')) {
+            table = $('#downloadet').val();
+        }
+        console.log('layerClimate: ' + layerClimate);
+        console.log('table: ' + table);
         if (Source_Rectangle.getFeatures().length > 0) {
-            //var left =      Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][0],
-            //    bottom =    Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][1],
-            //    right =     Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][2],
-            //    top =       Source_Rectangle.getFeatures()[0].getGeometry().transform('EPSG:3857', 'EPSG:4326').getCoordinates()[0][3];
             var left =      ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326')[0],
                 bottom =    ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326')[1],
                 right =     ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][2], 'EPSG:3857', 'EPSG:4326')[0],
-                top =       ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][2], 'EPSG:3857', 'EPSG:4326')[1];
+                top = ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][2], 'EPSG:3857', 'EPSG:4326')[1];
             $.ajax({
                 url: '@Url.Action("Download")',
                 data: {
-                    left: left,
-                    bottom: bottom,
-                    right: right,
-                    top: top,
-                    table: layerClimate
+                    lefts: left,
+                    bottoms: bottom,
+                    rights: right,
+                    tops: top,
+                    table: table,
+                    email: $('#colFormLabelSm').val(),
+                    //parameter: layerClimate,
+                    yearstart: $('#downloadyearstart').val(),
+                    yearfinish: $('#downloadyearfinish').val()
                 },
                 type: 'POST',
                 success: function (data) {
-
+                    console.log(data.message);
                 },
                 error: function () {
-                    console.log('Error');
+                    console.log('Error: ' + data.message);
                 }
             });
         }
@@ -2382,7 +2471,7 @@
             id: 'modal-white',
             attach: '#FilterDownloadBtn',
             width: 300,
-            height: 200,
+            height: 330,
             blockScroll: false,
             animation: 'zoomIn',
             draggable: 'title',
@@ -2396,13 +2485,15 @@
         });
         // Confirm
         $('#DownloadBtn').click(function () {
-            new jBox('Notice', {
-                animation: 'flip',
-                content: 'We send submission directly to an email address',
-                color: 'yellow',
-                delayOnHover: true,
-                showCountdown: true
-            });
+            if (Source_Rectangle.getFeatures().length > 0) {
+                new jBox('Notice', {
+                    animation: 'flip',
+                    content: 'Данные формируются и будут отправлены на указанный email',
+                    color: 'yellow',
+                    delayOnHover: true,
+                    showCountdown: true
+                });
+            }
         });
     });
 

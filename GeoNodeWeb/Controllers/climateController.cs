@@ -5397,7 +5397,8 @@ namespace GeoNodeWeb.Controllers
             string rname,
             string seasonmonth,
             decimal pointx,
-            decimal pointy)
+            decimal pointy,
+            int objectid)
         {
             string rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
             if(!string.IsNullOrEmpty(seasonmonth))
@@ -5436,7 +5437,7 @@ namespace GeoNodeWeb.Controllers
                         break;
                 }
                 connection.Open();
-                var climate_xsQ = connection.Query<climate_x>($"SELECT dt, value" +
+                string query = $"SELECT dt, value" +
                     $" FROM public.{table}" +
                     $" WHERE name = '{rnameDB}'" +
                     $" AND point =" +
@@ -5444,7 +5445,8 @@ namespace GeoNodeWeb.Controllers
                     $" FROM public.climate_coords" +
                     $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
                     $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
-                    $" FROM public.climate_coords) LIMIT 1);", commandTimeout: 600);
+                    $" FROM public.climate_coords) LIMIT 1);";
+                var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
                 climate_xs = climate_xsQ.OrderBy(c => c.dt).ToList();
                 connection.Close();
             }
@@ -5468,9 +5470,32 @@ namespace GeoNodeWeb.Controllers
             }
             climate_xs = climate_xs.OrderBy(c => c.year).ToList();
 
+            string wmbname = "",
+                wmacode = "";
+            if(objectid>=0)
+            {
+                using (var connection = new NpgsqlConnection(geodataProdConnection))
+                {
+                    connection.Open();
+                    var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                        $"FROM public.wma_polygon " +
+                        $"WHERE \"OBJECTID\" = {objectid.ToString()} " +
+                        $"LIMIT 1;");
+                    var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                        $"FROM public.wma_polygon " +
+                        $"WHERE \"OBJECTID\" = {objectid.ToString()} " +
+                        $"LIMIT 1;");
+                    wmbname = name.FirstOrDefault();
+                    wmacode = code.FirstOrDefault();
+                    connection.Close();
+                }
+            }
+
             return Json(new
             {
-                climate_xs
+                climate_xs,
+                wmbname,
+                wmacode
             });
         }
 
@@ -5791,136 +5816,206 @@ namespace GeoNodeWeb.Controllers
         }
 
         [HttpPost]
-        public void Download(decimal left,
-            decimal bottom,
-            decimal right,
-            decimal top,
-            string table)
+        public ActionResult Download(
+            string lefts,
+            string bottoms,
+            string rights,
+            string tops,
+            string table,
+            string email,
+            //string parameter,
+            int yearstart,
+            int yearfinish
+            )
         {
-            // remove/change ------------------------------------------------------------------
-            string email = "nak290284@gmail.com";
+            string message = "email sent";
+            decimal left = 0,
+                bottom = 0,
+                right = 0,
+                top = 0;
+            try
+            {
+                left = Convert.ToDecimal(lefts);
+                bottom = Convert.ToDecimal(bottoms);
+                right = Convert.ToDecimal(rights);
+                top = Convert.ToDecimal(tops);
+            }
+            catch
+            {
+                left = Convert.ToDecimal(lefts.Replace('.', ','));
+                bottom = Convert.ToDecimal(bottoms.Replace('.', ','));
+                right = Convert.ToDecimal(rights.Replace('.', ','));
+                top = Convert.ToDecimal(tops.Replace('.', ','));
+            }
+            try
+            {
+                string rname = table;
+                //switch (rname.Split('_')[0] + "_" + rname.Split('_')[1])
+                //{
+                //    case "tasmax_pd":
+                //        table = "climate_tasmax";
+                //        break;
+                //    case "tasmax_dlt":
+                //        table = "climate_tasmax_dlt";
+                //        break;
+                //    case "tas_pd":
+                //        table = "climate_tas";
+                //        break;
+                //    case "tas_dlt":
+                //        table = "climate_tas_dlt";
+                //        break;
+                //    case "tasmin_pd":
+                //        table = "climate_tasmin";
+                //        break;
+                //    case "tasmin_dlt":
+                //        table = "climate_tasmin_dlt";
+                //        break;
+                //    case "pr_pd":
+                //        table = "climate_pr";
+                //        break;
+                //    case "pr_dlt":
+                //        table = "climate_pr_dlt";
+                //        break;
+                //}
 
-            //string rname = table;
-            //switch (rname.Split('_')[0] + "_" + rname.Split('_')[1])
-            //{
-            //    case "tasmax_pd":
-            //        table = "climate_tasmax";
-            //        break;
-            //    case "tasmax_dlt":
-            //        table = "climate_tasmax_dlt";
-            //        break;
-            //    case "tas_pd":
-            //        table = "climate_tas";
-            //        break;
-            //    case "tas_dlt":
-            //        table = "climate_tas_dlt";
-            //        break;
-            //    case "tasmin_pd":
-            //        table = "climate_tasmin";
-            //        break;
-            //    case "tasmin_dlt":
-            //        table = "climate_tasmin_dlt";
-            //        break;
-            //    case "pr_pd":
-            //        table = "climate_pr";
-            //        break;
-            //    case "pr_dlt":
-            //        table = "climate_pr_dlt";
-            //        break;
-            //}
+                List<string> points = new List<string>();
+                List<climate_x> climate_xs = new List<climate_x>();
+                using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
+                {
+                    connection.Open();
+                    try
+                    {
+                        string query = $"SELECT ST_AsText(point)" +
+                        $" FROM public.climate_coords" +
+                        $" WHERE ST_Contains(ST_GeometryFromText('POLYGON(({left.ToString()} {bottom.ToString()},{right.ToString()} {bottom.ToString()},{right.ToString()} {top.ToString()},{left.ToString()} {top.ToString()},{left.ToString()} {bottom.ToString()}))')," +
+                        $" ST_GeometryFromText(ST_AsText(point)));";
+                        var pointsDB = connection.Query<string>(query, commandTimeout: 600);
+                        points = pointsDB.ToList();
+                    }
+                    catch
+                    {
+                        string query = $"SELECT ST_AsText(point)" +
+                        $" FROM public.climate_coords" +
+                        $" WHERE ST_Contains(ST_GeometryFromText('POLYGON(({left.ToString().Replace(',', '.')} {bottom.ToString().Replace(',', '.')},{right.ToString().Replace(',', '.')} {bottom.ToString().Replace(',', '.')},{right.ToString().Replace(',', '.')} {top.ToString().Replace(',', '.')},{left.ToString().Replace(',', '.')} {top.ToString().Replace(',', '.')},{left.ToString().Replace(',', '.')} {bottom.ToString().Replace(',', '.')}))')," +
+                        $" ST_GeometryFromText(ST_AsText(point)));";
+                        var pointsDB = connection.Query<string>(query, commandTimeout: 600);
+                        points = pointsDB.ToList();
+                    }
+                    foreach (string point in points)
+                    {
+                        var climate_xsDB = connection.Query<climate_x>($"SELECT name, dt, ST_AsText(point) as point, value" +
+                            $" FROM public.{table}" +
+                            $" WHERE point = ST_GeomFromEWKT('{point}')" +
+                            $" AND date_part('year', dt) <= '{yearfinish.ToString()}'" +
+                            $" AND date_part('year', dt) >= '{yearstart.ToString()}'" +
+                            $" ORDER BY name, dt", commandTimeout: 600);
+                        climate_xs.AddRange(climate_xsDB.ToList());
+                    }
+                    connection.Close();
+                }
 
-            //List<string> points = new List<string>();
-            //List<climate_x> climate_xs = new List<climate_x>();
-            //using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
-            //{
-            //    connection.Open();
-            //    var pointsDB = connection.Query<string>($"SELECT ST_AsText(point)" +
-            //        $" FROM public.climate_coords" +
-            //        $" WHERE ST_Contains(ST_GeometryFromText('POLYGON(({left.ToString()} {bottom.ToString()},{right.ToString()} {bottom.ToString()},{right.ToString()} {top.ToString()},{left.ToString()} {top.ToString()},{left.ToString()} {bottom.ToString()}))')," +
-            //        $" ST_GeometryFromText(ST_AsText(point)));", commandTimeout: 600);
-            //    points = pointsDB.ToList();
+                // delete old files
+                foreach (string file in Directory.EnumerateFiles(Path.Combine(_hostingEnvironment.ContentRootPath, "Download")))
+                {
+                    string date = file.Split("__")[1];
+                    int year = Convert.ToInt32(date.Substring(0, 4)),
+                        month = Convert.ToInt32(date.Substring(4, 2)),
+                        day = Convert.ToInt32(date.Substring(6, 2));
+                    DateTime dt = new DateTime(year, month, day);
+                    if (DateTime.Today - dt > new TimeSpan(2, 0, 0, 0))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(file);
+                        }
+                        catch
+                        { }
+                    }
+                }
 
-            //    foreach (string point in points)
-            //    {
-            //        var climate_xsDB = connection.Query<climate_x>($"SELECT name, dt, ST_AsText(point) as point, value" +
-            //            $" FROM public.{table}" +
-            //            $" WHERE point = ST_GeomFromEWKT('{point}')" +
-            //            $" ORDER BY name, dt", commandTimeout: 600);
-            //        climate_xs.AddRange(climate_xsDB.ToList());
-            //    }
-            //    connection.Close();
-            //}
+                // create csv file
+                string fileName = $"{table}__{DateTime.Now.ToString("yyyyMMdd__HHmmss")}.csv",
+                    fileZipName = Path.ChangeExtension(fileName, "zip"),
+                    filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileName),
+                    fileZipPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileZipName);
+                using (var writer = new StreamWriter(filePath))
+                {
+                    //writer.WriteLine("name\tdate\tpoint\tvalue");
+                    //foreach (climate_x climate_X in climate_xs)
+                    //{
+                    //    writer.WriteLine($"{climate_X.name}\t{climate_X.dt.ToString("yyyy.MM.dd")}\t{climate_X.point}\t{climate_X.value?.ToString()}");
+                    //}
+                    writer.WriteLine("Параметр\tПериод\tRCP\tПериодичность\tСезон/месяц\tДата\tШирота\tДолгота\tЗначение");
+                    foreach (climate_x climate_X in climate_xs)
+                    {
+                        string[] ss = climate_X.name.Split('_');
+                        string parameter_ = $"{ss[0]}_{ss[1]}_{ss[2]}",
+                            period_ = $"{ss[3]}",
+                            rcp_ = $"{ss[4]}",
+                            periodiocity_ = $"{ss[5]}",
+                            seasonmonth_ = ss.Length == 7 ? $"{ss[6]}" : "",
+                            long_ = climate_X.point.Replace("POINT(", "").Split(' ')[0],
+                            lat_ = climate_X.point.Replace("POINT(", "").Split(' ')[1].Replace(")", "");
+                        writer.WriteLine($"{parameter_}\t{period_}\t{rcp_}\t{periodiocity_}\t{seasonmonth_}\t{climate_X.dt.ToString("yyyy.MM.dd")}\t{lat_}\t{long_}\t{climate_X.value?.ToString()}");
+                    }
+                }
 
-            //// delete old files
-            //foreach (string file in Directory.EnumerateFiles(Path.Combine(_hostingEnvironment.ContentRootPath, "Download")))
-            //{
-            //    string date = file.Split("__")[1];
-            //    int year = Convert.ToInt32(date.Substring(0, 4)),
-            //        month = Convert.ToInt32(date.Substring(4, 2)),
-            //        day = Convert.ToInt32(date.Substring(6, 2));
-            //    DateTime dt = new DateTime(year, month, day);
-            //    if(DateTime.Today - dt > new TimeSpan(2, 0, 0, 0))
-            //    {
-            //        try
-            //        {
-            //            System.IO.File.Delete(file);
-            //        }
-            //        catch
-            //        { }
-            //    }
-            //}
+                // zip file
+                //ZipFile.CreateFromDirectory(filePath, fileZipPath);
+                using (ZipArchive zip = ZipFile.Open(fileZipPath, ZipArchiveMode.Create))
+                {
+                    zip.CreateEntryFromFile(filePath, fileName);
+                }
 
-            //// create csv file
-            //string fileName = $"{table}__{DateTime.Now.ToString("yyyyMMdd__HHmmss")}.csv",
-            //    fileZipName = Path.ChangeExtension(fileName, "zip"),
-            //    filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileName),
-            //    fileZipPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileZipName);
-            //using (var writer = new StreamWriter(filePath))
-            //{
-            //    writer.WriteLine("name\tdate\tpoint\tvalue");
-            //    foreach (climate_x climate_X in climate_xs)
-            //    {
-            //        writer.WriteLine($"{climate_X.name}\t{climate_X.dt.ToString("yyyy.MM.dd")}\t{climate_X.point}\t{climate_X.value?.ToString()}");
-            //    }
-            //}
+                //send email
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress("ingeokz@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = "Climate data";
+                //Attachment attachment;
+                //attachment = new System.Net.Mail.Attachment(fileZipPath);
+                //mail.Attachments.Add(attachment);
+                mail.IsBodyHtml = true;
+                mail.Body = $"Скачать данные <a href=\"{this.Request.Host}\\climate\\DownloadDataFile?file={fileZipName}\">здесь</a>";
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@gmail.com", "Qwerty!@#");
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
 
-            //// zip file
-            ////ZipFile.CreateFromDirectory(filePath, fileZipPath);
-            //using (ZipArchive zip = ZipFile.Open(fileZipPath, ZipArchiveMode.Create))
-            //{
-            //    zip.CreateEntryFromFile(filePath, fileName);
-            //}
+                //MailMessage mail = new MailMessage();
+                //SmtpClient SmtpServer = new SmtpClient("smtp.mail.ru");
+                //mail.From = new MailAddress("ingeokz@mail.ru");
+                //mail.To.Add(email);
+                //mail.Subject = "Climate data";
+                //Attachment attachment;
+                //attachment = new System.Net.Mail.Attachment(fileZipPath);
+                //mail.Attachments.Add(attachment);
+                //SmtpServer.UseDefaultCredentials = false;
+                //SmtpServer.Port = 587;
+                //SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@mail.ru", "geoportal2020");
+                //SmtpServer.EnableSsl = true;
+                //SmtpServer.Timeout = int.MaxValue;
+                //SmtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message + ". " + ex.InnerException?.Message;
+            }
+            return Json(new
+            {
+                message
+            });
+        }
 
-            string fileZipPath = @"C:\Users\N\source\repos\GeoNodeWeb\GeoNodeWeb\Download\climate_tasmax__20200311__111501.zip";
-            // send email
-            //MailMessage mail = new MailMessage();
-            //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-            //mail.From = new MailAddress("ingeokz@gmail.com");
-            //mail.To.Add(email);
-            //mail.Subject = "Climate data";
-            //Attachment attachment;
-            //attachment = new System.Net.Mail.Attachment(fileZipPath);
-            //mail.Attachments.Add(attachment);
-            //SmtpServer.UseDefaultCredentials = false;
-            //SmtpServer.Port = 587;
-            //SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@gmail.com", "Qwerty!@#");
-            //SmtpServer.EnableSsl = true;
-            //SmtpServer.Send(mail);
-            
-            MailMessage mail = new MailMessage();
-            SmtpClient SmtpServer = new SmtpClient("smtp.mail.ru");
-            mail.From = new MailAddress("ingeokz@mail.ru");
-            mail.To.Add(email);
-            mail.Subject = "Climate data";
-            Attachment attachment;
-            attachment = new System.Net.Mail.Attachment(fileZipPath);
-            mail.Attachments.Add(attachment);
-            SmtpServer.UseDefaultCredentials = false;
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@mail.ru", "geoportal2020");
-            SmtpServer.EnableSsl = true;
-            SmtpServer.Timeout = int.MaxValue;
-            SmtpServer.Send(mail);
+        public IActionResult DownloadDataFile(string file)
+        {
+            string filePath = filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", file);
+            string fileName = file;
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "application/force-download", fileName);
+
         }
     }
 }
