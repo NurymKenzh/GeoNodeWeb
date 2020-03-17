@@ -397,8 +397,10 @@
                         </div>
                         <!-- sidebar-menu  -->
                     </div>
+
                     <div class="card-body">
-                        <div class="modal-white table-responsive-sm" style="display: none" id="InfoMapContent">
+
+                        <div class="table-responsive-sm" style="display: none" id="InfoMapContent">
                             <ul class="nav nav-pills" id="InfoMapTab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active text-white" id="pills-home-tab" data-toggle="pill" href="#pills-chart" role="tab" aria-controls="pills-chart" aria-selected="true">Chart</a>
@@ -613,7 +615,6 @@
                                 <div class="col">
                                     <div class="input-group">
                                         <select id="type" class="measure input-group-sm">
-                                            <option selected>Choose...</option>
                                             <option value="length">Длина (линия)</option>
                                             <option value="area">Площадь (полигон)</option>
                                         </select>
@@ -1796,7 +1797,7 @@
     var InfoMapModal;
     $(document).ready(function () {
         InfoMapModal = new jBox('Modal', {
-            id: 'modal-white',
+            id: 'modal-info',
             minWidth: 600,
             maxHeight: 500,
             adjustTracker: 'scroll',
@@ -2329,7 +2330,6 @@
                         });
                     },
                     overlay: false,
-                    reposition: true,
                     repositionOnOpen: false
                 }).open();
                 // Map Legend
@@ -2351,7 +2351,6 @@
                     },
                     content: '<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg"></div>',
                     overlay: false,
-                    reposition: true,
                     repositionOnOpen: false
                 })
 
