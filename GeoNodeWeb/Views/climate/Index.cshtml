@@ -23,6 +23,23 @@
 <script src="~/esnow/lib/rangeSlider/ion.rangeSlider.min.js"></script>
 
 <style>
+    .inception-overlay {
+        background-color: rgba(0, 0, 0, .35);
+    }
+
+    .inception-modal button {
+        cursor: pointer;
+        border: 0;
+        margin: 0;
+        display: block;
+        width: 100%;
+        color: #fff;
+        background: #000;
+        height: 40px;
+        text-align: center;
+        border-radius: 4px;
+    }
+
     .ol-tooltip {
         position: relative;
         background: rgba(0, 0, 0, 0.5);
@@ -347,34 +364,40 @@
                                                                 Климат
                                                             </label>
                                                             <input id="layerClimateOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
-
-                                                            <select id="layerBaseType" class="form-control form-control-sm" onchange="ChangeLayers()">
-                                                                <option value="OSM">OpenStreetMap</option>
-                                                                <option value="BingAerialWithLabels">Bing Aerial</option>
-                                                                <option value="BingRoadStatic">Bing Road (static)</option>
-                                                                <option value="BingRoadDynamic">Bing Road (dynamic)</option>
-                                                                <option value="HERENormalDay">HERE Normal Day</option>
-                                                                <option value="HERENormalDayTransit">HERE Normal Day Transit</option>
-                                                                <option value="HERETerrainDay">HERE Terrain Day</option>
-                                                                <option value="HEREHybridDay" selected>HERE Hybrid Day</option>
-                                                                <option value="StamenWatercolor">Stamen Watercolor</option>
-                                                                <option value="StamenTerrain">Stamen Terrain</option>
-                                                                <option value="StamenToner">Stamen Toner</option>
-                                                                <option value="ArcGIS">ArcGIS</option>
-                                                                <option value="ThunderforestOpenCycleMap">Thunderforest OpenCycleMap</option>
-                                                                <option value="ThunderforestTransport">Thunderforest Transport</option>
-                                                                <option value="ThunderforestLandscape">Thunderforest Landscape</option>
-                                                                <option value="ThunderforestOutdoors">Thunderforest Outdoors</option>
-                                                                <option value="ThunderforestSpinalMap">Thunderforest Spinal Map</option>
-                                                                <option value="ThunderforestPioneer">Thunderforest Pioneer</option>
-                                                                <option value="ThunderforestMobileAtlas">Thunderforest Mobile Atlas</option>
-                                                                <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
-                                                            </select>
-                                                            <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerBaseShow">
                                                                 Базовые слои
                                                             </label>
+                                                            <div class="input-group input-group-sm">
+                                                                <select class="custom-select" id="layerBaseType" onchange="ChangeLayers()">
+                                                                    <option value="OSM">OpenStreetMap</option>
+                                                                    <option value="BingAerialWithLabels">Bing Aerial</option>
+                                                                    <option value="BingRoadStatic">Bing Road (static)</option>
+                                                                    <option value="BingRoadDynamic">Bing Road (dynamic)</option>
+                                                                    <option value="HERENormalDay">HERE Normal Day</option>
+                                                                    <option value="HERENormalDayTransit">HERE Normal Day Transit</option>
+                                                                    <option value="HERETerrainDay">HERE Terrain Day</option>
+                                                                    <option value="HEREHybridDay" selected>HERE Hybrid Day</option>
+                                                                    <option value="StamenWatercolor">Stamen Watercolor</option>
+                                                                    <option value="StamenTerrain">Stamen Terrain</option>
+                                                                    <option value="StamenToner">Stamen Toner</option>
+                                                                    <option value="ArcGIS">ArcGIS</option>
+                                                                    <option value="ThunderforestOpenCycleMap">Thunderforest OpenCycleMap</option>
+                                                                    <option value="ThunderforestTransport">Thunderforest Transport</option>
+                                                                    <option value="ThunderforestLandscape">Thunderforest Landscape</option>
+                                                                    <option value="ThunderforestOutdoors">Thunderforest Outdoors</option>
+                                                                    <option value="ThunderforestSpinalMap">Thunderforest Spinal Map</option>
+                                                                    <option value="ThunderforestPioneer">Thunderforest Pioneer</option>
+                                                                    <option value="ThunderforestMobileAtlas">Thunderforest Mobile Atlas</option>
+                                                                    <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
+                                                                </select>
+                                                                <div class="input-group-append">
+                                                                    <div class="input-group-text">
+                                                                        <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <input id="layerBaseOpacity" type="range" class="form-control-range" min="0" max="100" value="90" oninput="ChangeLayers()" />
+
                                                         </div>
                                                     </div>
                                                 </form>
@@ -559,8 +582,6 @@
                         </div>
                         <div class="col-md-12" style="display: none" id="DownloadFormCont">
                             <form class="was-validated">
-                                <h6>Используйте Ctrl + Drag (Command + Drag на Mac), чтобы выделить прямоугольник.</h6>
-                                
                                 <div class="form-group">
                                     <div class="downloadmail">
                                         <label for="colFormLabelSm" class="col-form-label col-form-label-sm">Email</label>
@@ -621,7 +642,7 @@
                                             <option value="2091">2091</option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-auto">---</div>
+                                    <div class="col-sm-auto">-</div>
                                     <div class="col-sm-auto">
                                         <select id="downloadyearfinish" class="form-control form-control-sm">
                                             <option value="1951">1951</option>
@@ -641,9 +662,10 @@
                                             <option value="2091" selected>2091</option>
                                         </select>
                                     </div>
-                                </div>                                
+                                </div>
                             </form>
-                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm mt-2 target-notice" onclick="Download()">Скачать</button>
+                            <button id="CropBtn" class="btn btn-outline-danger btn-block btn-sm mt-2"><i class="fa fa-crop"></i> Выбрать область на карте</button>
+                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm target-notice" onclick="Download()">Скачать</button>
                         </div>
                     </div>
                     <!-- sidebar-content  -->
@@ -2481,18 +2503,51 @@
         new jBox('Modal', {
             id: 'modal-white',
             attach: '#FilterDownloadBtn',
-            width: 300,
+            width: 280,
             height: 330,
             blockScroll: false,
             animation: 'zoomIn',
             draggable: 'title',
             closeButton: 'title',
+            offset: {
+                x: 330,
+            },
+            position: {
+                        x: 'left',
+                        y: 'center'
+                    },
             overlay: false,
             onOpen: function () {
                 // Add t
                 this.setContent($('#DownloadFormCont'));
                 this.setTitle('<div class="ajax-complete">Скачать данные</div>');
             },
+            onCreated: function () {
+                // Add tooltip
+                this.tooltip = new jBox('Tooltip', {
+                    attach: '#CropBtn',
+                    theme: 'TooltipDark',
+                    zIndex: 'auto',
+                    trigger: 'click',
+                    width: 250,
+                    adjustTracker: true,
+                    closeOnClick: 'body',
+                    animation: 'move',
+                    position: {
+                        x: 'right',
+                        y: 'center'
+                    },
+                    outside: 'x',
+                    content: 'Нажмите и удерживайте клавишу <span class="badge badge-warning text-wrap">Ctrl</span>, чтобы нарисовать область интереса <br>  Для ОС macOS Command + Drag',
+                    onOpen: function () {
+                        this.source.addClass('active').html('Нарисуйте на карте');
+                    },
+                    onClose: function () {
+                        this.source.removeClass('active').html('Выбрать область на карте');
+                    }
+                });
+            },
+
         });
         // Confirm
         $('#DownloadBtn').click(function () {
