@@ -5915,7 +5915,7 @@ namespace GeoNodeWeb.Controllers
                 }
 
                 // delete old files
-                foreach (string file in Directory.EnumerateFiles(Path.Combine(_hostingEnvironment.ContentRootPath, "Download")))
+                foreach (string file in Directory.EnumerateFiles(Path.Combine(_hostingEnvironment.WebRootPath, "Download")))
                 {
                     string date = file.Split("__")[1];
                     int year = Convert.ToInt32(date.Substring(0, 4)),
@@ -5936,8 +5936,8 @@ namespace GeoNodeWeb.Controllers
                 // create csv file
                 string fileName = $"{table}__{DateTime.Now.ToString("yyyyMMdd__HHmmss")}.csv",
                     fileZipName = Path.ChangeExtension(fileName, "zip"),
-                    filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileName),
-                    fileZipPath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", fileZipName);
+                    filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Download", fileName),
+                    fileZipPath = Path.Combine(_hostingEnvironment.WebRootPath, "Download", fileZipName);
                 using (var writer = new StreamWriter(filePath))
                 {
                     //writer.WriteLine("name\tdate\tpoint\tvalue");
@@ -6011,7 +6011,7 @@ namespace GeoNodeWeb.Controllers
 
         public IActionResult DownloadDataFile(string file)
         {
-            string filePath = filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "Download", file);
+            string filePath = filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Download", file);
             string fileName = file;
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, "application/force-download", fileName);

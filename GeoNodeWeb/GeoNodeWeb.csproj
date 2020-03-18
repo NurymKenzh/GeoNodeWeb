@@ -11,6 +11,13 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Download\**" />
+    <Content Remove="Download\**" />
+    <EmbeddedResource Remove="Download\**" />
+    <None Remove="Download\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Chart.js" Version="2.8.0" />
@@ -32,7 +39,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Download\" />
+    <Folder Include="wwwroot\Download\" />
   </ItemGroup>
 
 </Project>
