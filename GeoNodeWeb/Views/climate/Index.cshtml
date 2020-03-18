@@ -2543,7 +2543,8 @@
                         this.source.addClass('active').html('Нарисуйте на карте');
                     },
                     onClose: function () {
-                        this.source.removeClass('active').html('Выбрать область на карте');
+                        this.source.removeClass('btn btn-outline-danger btn-block btn-sm mt-2');
+                        this.source.addClass('btn btn-outline-success btn-block btn-sm mt-2').html('Выбрать область на карте');
                     }
                 });
             },
