@@ -2014,6 +2014,7 @@
                                 else {
                                     ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1], -1);
                                 }
+                                TableRasters(ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1], range_instance.result.from);
                             });
                         }
                     }
@@ -2320,6 +2321,24 @@
             },
             error: function () {
                 console.log('Error');
+            }
+        });
+    }
+
+    function TableRasters(x, y, year) {
+        $.ajax({
+            url: '@Url.Action("TableRasters")',
+            data: {
+                pointx: x,
+                pointy: y,
+                year: year
+            },
+            type: 'POST',
+            success: function (data) {
+                console.log('Success TableRasters');
+            },
+            error: function () {
+                console.log('Error TableRasters');
             }
         });
     }

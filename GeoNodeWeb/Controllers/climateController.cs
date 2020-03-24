@@ -76,6 +76,14 @@ namespace GeoNodeWeb.Controllers
         public string codewma;
     }
 
+    public class raster_table
+    {
+        public string column;
+        public int column_index;
+        public string row;
+        public decimal? value;
+    }
+
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
@@ -5400,11 +5408,12 @@ namespace GeoNodeWeb.Controllers
             decimal pointy,
             int objectid)
         {
-            string rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
-            if(!string.IsNullOrEmpty(seasonmonth))
-            {
-                rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5]+ "_" + seasonmonth + "_h_" + rname.Split('_')[4];
-            }
+            //string rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
+            //if(!string.IsNullOrEmpty(seasonmonth))
+            //{
+            //    rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5]+ "_" + seasonmonth + "_h_" + rname.Split('_')[4];
+            //}
+            string rnameDB = rname;
             List<climate_x> climate_xs = new List<climate_x>();
             using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
             {
@@ -5497,6 +5506,343 @@ namespace GeoNodeWeb.Controllers
                 wmbname,
                 wmacode
             });
+        }
+
+        [HttpPost]
+        public ActionResult TableRasters(
+            decimal pointx,
+            decimal pointy,
+            int year)
+        {
+            List<string> tables = new List<string>();
+            tables.Add("climate_tasmax");
+            //tables.Add("climate_tas");
+            //tables.Add("climate_tasmin");
+            //tables.Add("climate_tasmax_dlt");
+            //tables.Add("climate_tas_dlt");
+            //tables.Add("climate_tasmin_dlt");
+            //tables.Add("climate_pr");
+            //tables.Add("climate_pr_dlt");
+            //tables.Add("climate_et");
+            //tables.Add("climate_et_dlt");
+            List<string> parameters = new List<string>();
+            try
+            {
+                parameters.Add("avg_m_rcp45_10_01");
+                parameters.Add("avg_m_rcp45_10_02");
+                parameters.Add("avg_m_rcp45_10_03");
+                parameters.Add("avg_m_rcp45_10_04");
+                parameters.Add("avg_m_rcp45_10_05");
+                parameters.Add("avg_m_rcp45_10_06");
+                parameters.Add("avg_m_rcp45_10_07");
+                parameters.Add("avg_m_rcp45_10_08");
+                parameters.Add("avg_m_rcp45_10_09");
+                parameters.Add("avg_m_rcp45_10_10");
+                parameters.Add("avg_m_rcp45_10_11");
+                parameters.Add("avg_m_rcp45_10_12");
+                parameters.Add("avg_m_rcp45_20_01");
+                parameters.Add("avg_m_rcp45_20_02");
+                parameters.Add("avg_m_rcp45_20_03");
+                parameters.Add("avg_m_rcp45_20_04");
+                parameters.Add("avg_m_rcp45_20_05");
+                parameters.Add("avg_m_rcp45_20_06");
+                parameters.Add("avg_m_rcp45_20_07");
+                parameters.Add("avg_m_rcp45_20_08");
+                parameters.Add("avg_m_rcp45_20_09");
+                parameters.Add("avg_m_rcp45_20_10");
+                parameters.Add("avg_m_rcp45_20_11");
+                parameters.Add("avg_m_rcp45_20_12");
+                parameters.Add("avg_m_rcp45_30_01");
+                parameters.Add("avg_m_rcp45_30_02");
+                parameters.Add("avg_m_rcp45_30_03");
+                parameters.Add("avg_m_rcp45_30_04");
+                parameters.Add("avg_m_rcp45_30_05");
+                parameters.Add("avg_m_rcp45_30_06");
+                parameters.Add("avg_m_rcp45_30_07");
+                parameters.Add("avg_m_rcp45_30_08");
+                parameters.Add("avg_m_rcp45_30_09");
+                parameters.Add("avg_m_rcp45_30_10");
+                parameters.Add("avg_m_rcp45_30_11");
+                parameters.Add("avg_m_rcp45_30_12");
+                parameters.Add("avg_m_rcp85_10_01");
+                parameters.Add("avg_m_rcp85_10_02");
+                parameters.Add("avg_m_rcp85_10_03");
+                parameters.Add("avg_m_rcp85_10_04");
+                parameters.Add("avg_m_rcp85_10_05");
+                parameters.Add("avg_m_rcp85_10_06");
+                parameters.Add("avg_m_rcp85_10_07");
+                parameters.Add("avg_m_rcp85_10_08");
+                parameters.Add("avg_m_rcp85_10_09");
+                parameters.Add("avg_m_rcp85_10_10");
+                parameters.Add("avg_m_rcp85_10_11");
+                parameters.Add("avg_m_rcp85_10_12");
+                parameters.Add("avg_m_rcp85_20_01");
+                parameters.Add("avg_m_rcp85_20_02");
+                parameters.Add("avg_m_rcp85_20_03");
+                parameters.Add("avg_m_rcp85_20_04");
+                parameters.Add("avg_m_rcp85_20_05");
+                parameters.Add("avg_m_rcp85_20_06");
+                parameters.Add("avg_m_rcp85_20_07");
+                parameters.Add("avg_m_rcp85_20_08");
+                parameters.Add("avg_m_rcp85_20_09");
+                parameters.Add("avg_m_rcp85_20_10");
+                parameters.Add("avg_m_rcp85_20_11");
+                parameters.Add("avg_m_rcp85_20_12");
+                parameters.Add("avg_m_rcp85_30_01");
+                parameters.Add("avg_m_rcp85_30_02");
+                parameters.Add("avg_m_rcp85_30_03");
+                parameters.Add("avg_m_rcp85_30_04");
+                parameters.Add("avg_m_rcp85_30_05");
+                parameters.Add("avg_m_rcp85_30_06");
+                parameters.Add("avg_m_rcp85_30_07");
+                parameters.Add("avg_m_rcp85_30_08");
+                parameters.Add("avg_m_rcp85_30_09");
+                parameters.Add("avg_m_rcp85_30_10");
+                parameters.Add("avg_m_rcp85_30_11");
+                parameters.Add("avg_m_rcp85_30_12");
+                parameters.Add("avg_s_rcp45_10_1");
+                parameters.Add("avg_s_rcp45_10_2");
+                parameters.Add("avg_s_rcp45_10_3");
+                parameters.Add("avg_s_rcp45_10_4");
+                parameters.Add("avg_s_rcp45_20_1");
+                parameters.Add("avg_s_rcp45_20_2");
+                parameters.Add("avg_s_rcp45_20_3");
+                parameters.Add("avg_s_rcp45_20_4");
+                parameters.Add("avg_s_rcp45_30_1");
+                parameters.Add("avg_s_rcp45_30_2");
+                parameters.Add("avg_s_rcp45_30_3");
+                parameters.Add("avg_s_rcp45_30_4");
+                parameters.Add("avg_s_rcp85_10_1");
+                parameters.Add("avg_s_rcp85_10_2");
+                parameters.Add("avg_s_rcp85_10_3");
+                parameters.Add("avg_s_rcp85_10_4");
+                parameters.Add("avg_s_rcp85_20_1");
+                parameters.Add("avg_s_rcp85_20_2");
+                parameters.Add("avg_s_rcp85_20_3");
+                parameters.Add("avg_s_rcp85_20_4");
+                parameters.Add("avg_s_rcp85_30_1");
+                parameters.Add("avg_s_rcp85_30_2");
+                parameters.Add("avg_s_rcp85_30_3");
+                parameters.Add("avg_s_rcp85_30_4");
+                parameters.Add("avg_y_rcp45_10");
+                parameters.Add("avg_y_rcp45_20");
+                parameters.Add("avg_y_rcp45_30");
+                parameters.Add("avg_y_rcp85_10");
+                parameters.Add("avg_y_rcp85_20");
+                parameters.Add("avg_y_rcp85_30");
+            }
+            catch { }
+            List<raster_table> raster_table = new List<raster_table>();
+            using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
+            {
+                connection.Open();
+                foreach (string table in tables)
+                {
+                    string query = $"SELECT dt, name, value" +
+                        $" FROM public.{table}" +
+                        $" WHERE point =" +
+                        $" (SELECT point" +
+                        $" FROM public.climate_coords" +
+                        $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
+                        $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
+                        $" FROM public.climate_coords) LIMIT 1);";
+                    var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
+                    foreach (string parameter in parameters)
+                    {
+                        string parameter_ = "";
+                        if (table.Contains("dlt"))
+                        {
+                            parameter_ = $"{table.Replace("climate_", "")}_dlt_{parameter}";
+                        }
+                        else
+                        {
+                            parameter_ = $"{table.Replace("climate_", "")}_pd_{parameter}";
+                        }
+
+                        decimal? value = climate_xsQ.FirstOrDefault(c => c.dt.Year == year && c.name == parameter_).value;
+                        raster_table.Add(new raster_table()
+                        {
+                            column = GetColumn(parameter),
+                            column_index = GetColumnIndex(parameter),
+                            row = GetRow(table, parameter),
+                            value = value
+                        });
+                    }
+                }
+                connection.Close();
+            }
+            raster_table = raster_table.OrderBy(r => r.row).ThenBy(r => r.column_index).ToList();
+            return Json(new
+            {
+                raster_table
+            });
+        }
+
+        private string GetColumn(string parameter)
+        {
+            if(parameter.Contains("_y_"))
+            {
+                return "Год";
+            }
+            else if(parameter.Contains("_s_"))
+            {
+                switch (parameter.Split('_')[4])
+                {
+                    case "1":
+                        return "Весна";
+                    case "2":
+                        return "Лето";
+                    case "3":
+                        return "Осень";
+                    case "4":
+                        return "Зима";
+                }
+            }
+            else if (parameter.Contains("_m_"))
+            {
+                switch (parameter.Split('_')[4])
+                {
+                    case "01":
+                        return "Январь";
+                    case "02":
+                        return "Февраль";
+                    case "03":
+                        return "Март";
+                    case "04":
+                        return "Апрель";
+                    case "05":
+                        return "Май";
+                    case "06":
+                        return "Июнь";
+                    case "07":
+                        return "Июль";
+                    case "08":
+                        return "Август";
+                    case "09":
+                        return "Сентябрь";
+                    case "10":
+                        return "Октябрь";
+                    case "11":
+                        return "Ноябрь";
+                    case "12":
+                        return "Декабрь";
+                }
+            }
+            return "";
+        }
+
+        private int GetColumnIndex(string parameter)
+        {
+            if(parameter.Contains("_y_"))
+            {
+                return 1;
+            }
+            else if(parameter.Contains("_s_"))
+            {
+                switch (parameter.Split('_')[4])
+                {
+                    case "1":
+                        return 2;
+                    case "2":
+                        return 3;
+                    case "3":
+                        return 4;
+                    case "4":
+                        return 5;
+                }
+            }
+            else if (parameter.Contains("_m_"))
+            {
+                switch (parameter.Split('_')[4])
+                {
+                    case "01":
+                        return 6;
+                    case "02":
+                        return 7;
+                    case "03":
+                        return 8;
+                    case "04":
+                        return 9;
+                    case "05":
+                        return 10;
+                    case "06":
+                        return 11;
+                    case "07":
+                        return 12;
+                    case "08":
+                        return 13;
+                    case "09":
+                        return 14;
+                    case "10":
+                        return 15;
+                    case "11":
+                        return 16;
+                    case "12":
+                        return 17;
+                }
+            }
+            return 0;
+        }
+
+        private string GetRow(string table, string parameter)
+        {
+            string r = "";
+            switch (table)
+            {
+                case "climate_tasmax":
+                    r = "Максимальная температура";
+                    break;
+                case "climate_tas":
+                    r = "Средняя температура";
+                    break;
+                case "climate_tasmin":
+                    r = "Минимальная температура";
+                    break;
+                case "climate_tasmax_dlt":
+                    r = "Отклонения максимальной температуры";
+                    break;
+                case "climate_tas_dlt":
+                    r = "Отклонения средней температуры";
+                    break;
+                case "climate_tasmin_dlt":
+                    r = "Отклонения минимальной температуры";
+                    break;
+                case "climate_pr":
+                    r = "Осадки";
+                    break;
+                case "climate_pr_dlt":
+                    r = "Отклонения средней суммы осадков";
+                    break;
+                case "climate_et":
+                    r = "Эвапотранспирация";
+                    break;
+                case "climate_et_dlt":
+                    r = "Отклонения эвапотранспирации";
+                    break;
+            }
+            switch (parameter.Split('_')[2])
+            {
+                case "rcp45":
+                    r += ", RCP 4.5";
+                    break;
+                case "rcp85":
+                    r += ", RCP 8.5";
+                    break;
+            }
+            switch (parameter.Split('_')[3])
+            {
+                case "10":
+                    r += ", 10 лет";
+                    break;
+                case "20":
+                    r += ", 20 лет";
+                    break;
+                case "30":
+                    r += ", 30 лет";
+                    break;
+            }
+
+            return r;
         }
 
         [HttpPost]
