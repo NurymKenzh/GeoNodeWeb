@@ -2221,7 +2221,23 @@
             },
             type: 'POST',
             success: function (data) {
-                console.log('Success TableRasters');
+                console.log('-----------------------------------------------------------------------------------');
+                var unique = data.raster_table.filter(function (itm, i, a) {
+                    return i == a.indexOf(itm);
+                });
+                const unique_columns = [...new Set(data.raster_table.map(item => item.column))];
+                console.log('\t' + unique_columns.join('\t'));
+                const unique_rows = [...new Set(data.raster_table.map(item => item.row))];
+                for (i = 0; i < unique_rows.length; i++) {
+                    var row = unique_rows[i] + '\t';
+                    for (j = 0; j < unique_columns.length; j++) {
+                        row += parseFloat(data.raster_table.find(r => r.column === unique_columns[j] && r.row == unique_rows[i]).value).toFixed(4);
+                        if (j < unique_columns.length - 1) {
+                            row += '\t';
+                        }
+                    }
+                    console.log(row);
+                }
             },
             error: function () {
                 console.log('Error TableRasters');
