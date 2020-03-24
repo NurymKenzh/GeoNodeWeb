@@ -5,7 +5,52 @@
 }
 
 @await Html.PartialAsync("_StylesTabChart")
-
+    <script src="https://cdn.rawgit.com/DmitryBaranovskiy/raphael/v2.1.4/raphael-min.js"></script>
+    <script src="https://cdn.rawgit.com/neveldo/jQuery-Mapael/1.1.0/js/jquery.mapael.js"></script>
+    <script src="~/esnow/js/map.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.12/jquery.mousewheel.min.js"></script>
+<style>
+    .mapTooltip {
+		    position : fixed;
+		    background-color : #fff;
+		    moz-opacity:0.70;
+		    opacity: 0.70;
+		    filter:alpha(opacity=70);
+		    border-radius:10px;
+		    padding : 10px;
+		    z-index: 1000;
+		    max-width: 200px;
+		    display:none;
+		    color:#343434;
+		}
+		.zoomIn, .zoomOut {
+		    background-color:#fff;
+		    border:1px solid #ccc;
+		    color:#000;
+		    width:15px;
+		    height:15px;
+		    line-height: 15px;
+		    text-align:center;
+		    border-radius:3px;
+		    cursor:pointer;
+		    position:absolute;
+		    top : 10px;
+		    font-weight:bold;
+		    left : 10px;
+		    -webkit-user-select: none;
+		    // For Webkit -khtml-user-select: none;
+		    -moz-user-select: none;
+		    // For Mozilla -o-user-select: none;
+		    user-select: none;
+		    // Default
+		}
+		.zoomOut {
+		    top:30px;
+		}
+		.map {
+		    position:relative;
+		}
+</style>
 <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <fieldset class="scheduler-border">
@@ -20,14 +65,26 @@
                     <select class="form-control" id="wma"></select>
                 </div>
             </form>
+            <div id="clicked-state"></div>
+            <h5 class="card-title">Map Select</h5>
+            <div class="mapcontainer">
+                <div class="map">
+                    <span>Alternative content for the map</span>
+
+                </div>
+            </div>
             <input type="button" class="btn btn-primary btn-block" value="Обновить" onclick="RefreshWMS()" />
         </fieldset>
-        
+
         <div id="list-example" class="list-group">
             <a class="list-group-item list-group-item-action" href="#section1">Динамика по годам</a>
             <a class="list-group-item list-group-item-action" href="#section2">Динамика по сезонам</a>
             <a class="list-group-item list-group-item-action" href="#section3">Динамика по месяцам</a>
         </div>
+        <div class="card-body">
+            
+        </div>
+        
     </nav>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="margin-top: 50px;">
         <div class="row d-flex">
@@ -469,8 +526,7 @@
                 <input id="id" value="@ViewBag.Id" type="hidden" />
             </div>
         </div>
-        <h4>Section title</h4>
-
+        <h4>Section title</h4>        
     </main>
 </div>
 
@@ -999,3 +1055,84 @@
     //});
 </script>
 
+<script>
+    $(function () {
+
+        $(".mapcontainer").mapael({
+            map: {
+                name: "adm2pol19"
+                // Enable zoom on the map
+                ,
+                zoom: {
+                    enabled: true
+                }
+                // Set default plots and areas style,
+                ,
+                defaultArea: {
+                    attrs: {
+                        fill: "#daaa58",
+                        stroke: "#ced8d0",
+                        cursor: "pointer"
+                    },
+                    attrsHover: {
+                        fill: "#68BCFF"
+                    },
+                    eventHandlers: {
+                        click: function (e, id, mapElem) {
+                            var newData = {
+                                'areas': {}
+                            };
+                            if (mapElem.originalAttrs.fill == "#daaa58" && "id[^='department']") {
+                                newData.areas[id] = {
+                                    attrs: {
+                                        fill: "#0088db"
+                                    }
+                                };
+                                $('#' + id).css("visibility", "visible")
+                            }
+                            else if (mapElem.originalAttrs.fill == "#0088db" && "id[^='department']") {
+                                newData.areas[id] = {
+                                    attrs: {
+                                        fill: "#daaa58"
+                                    }
+                                };
+                                $("#" + id).css("visibility", "hidden")
+                            }
+
+                            $(".mapcontainer").trigger('update', [newData]);
+
+                        }
+                    },
+
+                }
+            },
+
+
+            // Customize some areas of the map
+            areas: {
+                "department-1936": {
+                    tooltip: {
+                        content: "Балкашский район"
+                    },
+
+                },
+                "department-1942": {
+                    value: "2268265",
+                    tooltip: {
+                        content: "Жамбылский район"
+                    }
+
+                },
+            },
+        });
+
+    });
+    $('#map').usmap({
+        // The click action
+        click: function (event, data) {
+            $('#clicked-state')
+                .text('You clicked: ' + data.name)
+                .parent().effect('highlight', { color: '#C7F464' }, 2000);
+        }
+    });
+</script>
