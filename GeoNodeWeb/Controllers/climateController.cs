@@ -82,6 +82,7 @@ namespace GeoNodeWeb.Controllers
         public int column_index;
         public string row;
         public decimal? value;
+        public string id;
     }
 
     public class climateController : Controller
@@ -5665,7 +5666,8 @@ namespace GeoNodeWeb.Controllers
                             column = GetColumn(parameter),
                             column_index = GetColumnIndex(parameter),
                             row = GetRow(table, parameter),
-                            value = value
+                            value = value,
+                            id = $"{table}_{parameter}"
                         });
                     }
                 }
