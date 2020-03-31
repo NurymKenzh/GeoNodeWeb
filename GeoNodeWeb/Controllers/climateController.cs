@@ -85,6 +85,28 @@ namespace GeoNodeWeb.Controllers
         public string id;
     }
 
+    public class raster_table_b
+    {
+        public string parameter;
+        public decimal? year;
+        public decimal? s1;
+        public decimal? s2;
+        public decimal? s3;
+        public decimal? s4;
+        public decimal? m1;
+        public decimal? m2;
+        public decimal? m3;
+        public decimal? m4;
+        public decimal? m5;
+        public decimal? m6;
+        public decimal? m7;
+        public decimal? m8;
+        public decimal? m9;
+        public decimal? m10;
+        public decimal? m11;
+        public decimal? m12;
+    }
+
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
@@ -5634,6 +5656,7 @@ namespace GeoNodeWeb.Controllers
             }
             catch { }
             List<raster_table> raster_table = new List<raster_table>();
+            List<raster_table_b> raster_table_bs = new List<raster_table_b>();
             using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
             {
                 connection.Open();
@@ -5674,9 +5697,90 @@ namespace GeoNodeWeb.Controllers
                 connection.Close();
             }
             raster_table = raster_table.OrderBy(r => r.row).ThenBy(r => r.column_index).ToList();
+
+            string[] rows = raster_table.Select(r => r.row).Distinct().ToArray();
+            int[] columns = raster_table.Select(r => r.column_index).Distinct().ToArray();
+            for (int i = 0; i < rows.Count(); i++)
+            {
+                raster_table_b raster_table_b_new = new raster_table_b() {
+                    parameter = rows[i]
+                };
+                for (int j = 0; j < columns.Count(); j++)
+                {
+                    switch (columns[j])
+                    {
+                        case 1:
+                            raster_table_b_new.year = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 2:
+                            raster_table_b_new.s1 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 3:
+                            raster_table_b_new.s2 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 4:
+                            raster_table_b_new.s3 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 5:
+                            raster_table_b_new.s4 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 6:
+                            raster_table_b_new.m1 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 7:
+                            raster_table_b_new.m2 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 8:
+                            raster_table_b_new.m3 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 9:
+                            raster_table_b_new.m4 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 10:
+                            raster_table_b_new.m5 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 11:
+                            raster_table_b_new.m6 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 12:
+                            raster_table_b_new.m7 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 13:
+                            raster_table_b_new.m8 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 14:
+                            raster_table_b_new.m9 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 15:
+                            raster_table_b_new.m10 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 16:
+                            raster_table_b_new.m11 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                        case 17:
+                            raster_table_b_new.m12 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                            break;
+                    }
+                }
+                raster_table_bs.Add(raster_table_b_new);
+            }
+            //raster_table_bs.Add(new raster_table_b()
+            //{
+            //    id = "0",
+            //    name = "everver",
+            //    price = "123"
+            //});
+            //raster_table_bs.Add(new raster_table_b()
+            //{
+            //    id = "1",
+            //    name = "yutb",
+            //    price = "43"
+            //});
+
             return Json(new
             {
-                raster_table
+                raster_table,
+                raster_table_bs
             });
         }
 

@@ -438,8 +438,8 @@
                                 </div>
                                 <div class="tab-pane fade" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">
                                     <p class="card-text text-secondary">Averages for the decade 1981–2010</p>
-                                    <div class="table-responsive">                                        
-                                        <table class="table table-sm small" id="rasterdata"
+                                    <div class="table-responsive">
+                                        <table class="table table-sm small" id="rasterdata_old"
                                                data-toggle="table"
                                                data-search="true"
                                                data-detail-view="true"
@@ -452,7 +452,13 @@
                                                data-show-export="true">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th id=""data-field="climate_tasmax_avg_m_rcp45_10" data-detail-formatter="idDetailMonth" data-switchable="false"><i class="fa fa-plus"></i> Параметрs</th>
+                                                    <th id=""
+                                                        data-field="climate_tasmax_avg_m_rcp45_10"
+                                                        data-detail-formatter="idDetailMonth"
+                                                        data-switchable="false">
+                                                        <i class="fa fa-plus">
+                                                        </i> Параметрs
+                                                    </th>
                                                     <th>Год</th>
                                                     <th>Весна</th>
                                                     <th>Лето</th>
@@ -487,7 +493,36 @@
                                                 </tr>
 
                                             </tbody>
-                                        </table>                                        
+                                        </table>
+
+                                        <table id="rasterdata" class="table table-sm small"
+                                               data-toggle="table"
+                                               data-search="true"
+                                               data-detail-view="true"
+                                               data-detail-view-by-click="true"
+                                               data-detail-view-icon="false"
+                                               data-show-fullscreen="true"
+                                               data-show-refresh="true"
+                                               data-show-columns="true"
+                                               data-show-print="true"
+                                               data-show-export="true">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th data-field="parameter"
+                                                        data-detail-formatter="idDetailMonth">Параметр</th>
+                                                    <th data-field="year"
+                                                        data-detail-formatter="idDetailMonth">Год</th>
+                                                    <th data-field="s1"
+                                                        data-detail-formatter="idDetailMonth">Весна</th>
+                                                    <th data-field="s2"
+                                                        data-detail-formatter="idDetailMonth">Лето</th>
+                                                    <th data-field="s3"
+                                                        data-detail-formatter="idDetailMonth">Осень</th>
+                                                    <th data-field="s4"
+                                                        data-detail-formatter="idDetailMonth">Зима</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -3284,16 +3319,24 @@
                     }
                     console.log(row);
                 }
-
-                for (i = 0; i < data.raster_table.length; i++) {
-                    $('#' + data.raster_table[i].id).text(parseFloat(data.raster_table[i].value).toFixed(4));
-                }
+                //for (i = 0; i < data.raster_table.length; i++) {
+                //    $('#' + data.raster_table[i].id).text(parseFloat(data.raster_table[i].value).toFixed(4));
+                //}
+                raster_data = data.raster_table_bs;
+                $(function () {
+                    $('#rasterdata').bootstrapTable({ data: data.raster_table_bs });
+                    $('#rasterdata').bootstrapTable('load', data.raster_table_bs);
+                })
             },
             error: function () {
                 console.log('Error TableRasters');
             }
         });
     }
+</script>
+
+<script>
+    
 </script>
 
 @* ChangeLayersClimate *@
@@ -3542,12 +3585,25 @@
 @*test for ModalTable*@
 
 <script>
-    var $table = $('#rasterdata')
+    var raster_data = null;
+
+    var $table = $('#rasterdata_old')
 
     $(function () {
         $table.bootstrapTable()
     })
     function idDetailMonth(index) {
-        return index + ' All month: '
+        return 'январь: ' + raster_data[index].m1
+            + ', февраль: ' + raster_data[index].m2
+            + ', март: ' + raster_data[index].m3
+            + ', апрель: ' + raster_data[index].m4
+            + ', май: ' + raster_data[index].m5
+            + ', июнь: ' + raster_data[index].m6
+            + ', июль: ' + raster_data[index].m7
+            + ', август: ' + raster_data[index].m8
+            + ', сентябрь: ' + raster_data[index].m9
+            + ', октябрь: ' + raster_data[index].m10
+            + ', ноябрь: ' + raster_data[index].m11
+            + ', декабрь: ' + raster_data[index].m12;
     }
 </script>
