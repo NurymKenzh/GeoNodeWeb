@@ -5535,19 +5535,30 @@ namespace GeoNodeWeb.Controllers
         public ActionResult TableRasters(
             decimal pointx,
             decimal pointy,
-            int year)
+            int year,
+            string rcp,
+            string decade)
         {
+            //if(period == "y")
+            //{
+            //    season = null;
+            //    month = null;
+            //}
+            //if (period == "s")
+            //{
+            //    month = null;
+            //}
             List<string> tables = new List<string>();
             tables.Add("climate_tasmax");
-            //tables.Add("climate_tas");
-            //tables.Add("climate_tasmin");
-            //tables.Add("climate_tasmax_dlt");
-            //tables.Add("climate_tas_dlt");
-            //tables.Add("climate_tasmin_dlt");
-            //tables.Add("climate_pr");
-            //tables.Add("climate_pr_dlt");
-            //tables.Add("climate_et");
-            //tables.Add("climate_et_dlt");
+            tables.Add("climate_tas");
+            tables.Add("climate_tasmin");
+            tables.Add("climate_tasmax_dlt");
+            tables.Add("climate_tas_dlt");
+            tables.Add("climate_tasmin_dlt");
+            tables.Add("climate_pr");
+            tables.Add("climate_pr_dlt");
+            tables.Add("climate_et");
+            tables.Add("climate_et_dlt");
             List<string> parameters = new List<string>();
             try
             {
@@ -5655,6 +5666,10 @@ namespace GeoNodeWeb.Controllers
                 parameters.Add("avg_y_rcp85_30");
             }
             catch { }
+            parameters = parameters
+                .Where(p => p.Contains(rcp))
+                .Where(p => p.Split('_')[3] == decade)
+                .ToList();
             List<raster_table> raster_table = new List<raster_table>();
             List<raster_table_b> raster_table_bs = new List<raster_table_b>();
             using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
@@ -5676,20 +5691,29 @@ namespace GeoNodeWeb.Controllers
                         string parameter_ = "";
                         if (table.Contains("dlt"))
                         {
-                            parameter_ = $"{table.Replace("climate_", "")}_dlt_{parameter}";
+                            parameter_ = $"{table.Replace("climate_", "")}_{parameter}";
+                            if(table == "climate_pr_dlt")
+                            {
+                                string[] ps = parameter.Split('_');
+                                parameter_ = $"{table.Replace("climate_", "")}_{ps[0]}_{ps[1]}_{ps[2]}_{ps[3]}_mm";
+                                if(ps.Length == 5)
+                                {
+                                    parameter_ += $"_{ps[4]}";
+                                }
+                            }
                         }
                         else
                         {
                             parameter_ = $"{table.Replace("climate_", "")}_pd_{parameter}";
                         }
 
-                        decimal? value = climate_xsQ.FirstOrDefault(c => c.dt.Year == year && c.name == parameter_).value;
+                        decimal? value = climate_xsQ.FirstOrDefault(c => c.dt.Year == year && c.name == parameter_)?.value;
                         raster_table.Add(new raster_table()
                         {
                             column = GetColumn(parameter),
                             column_index = GetColumnIndex(parameter),
                             row = GetRow(table, parameter),
-                            value = value,
+                            value = value == null ? null : (decimal?)Math.Round((decimal)value, 2),
                             id = $"{table}_{parameter}"
                         });
                     }
@@ -5926,27 +5950,91 @@ namespace GeoNodeWeb.Controllers
                     r = "Отклонения эвапотранспирации";
                     break;
             }
-            switch (parameter.Split('_')[2])
-            {
-                case "rcp45":
-                    r += ", RCP 4.5";
-                    break;
-                case "rcp85":
-                    r += ", RCP 8.5";
-                    break;
-            }
-            switch (parameter.Split('_')[3])
-            {
-                case "10":
-                    r += ", 10 лет";
-                    break;
-                case "20":
-                    r += ", 20 лет";
-                    break;
-                case "30":
-                    r += ", 30 лет";
-                    break;
-            }
+            //switch (parameter.Split('_')[3])
+            //{
+            //    case "10":
+            //        r += ", 10 лет";
+            //        break;
+            //    case "20":
+            //        r += ", 20 лет";
+            //        break;
+            //    case "30":
+            //        r += ", 30 лет";
+            //        break;
+            //}
+            //switch (parameter.Split('_')[2])
+            //{
+            //    case "rcp45":
+            //        r += ", RCP 4.5";
+            //        break;
+            //    case "rcp85":
+            //        r += ", RCP 8.5";
+            //        break;
+            //}
+            //switch (parameter.Split('_')[1])
+            //{
+            //    case "y":
+            //        r += ", год";
+            //        break;
+            //    case "s":
+            //        switch (parameter.Split('_')[1])
+            //        {
+            //            case "1":
+            //                r += ", весна";
+            //                break;
+            //            case "2":
+            //                r += ", лето";
+            //                break;
+            //            case "3":
+            //                r += ", осень";
+            //                break;
+            //            case "4":
+            //                r += ", зима";
+            //                break;
+            //        }
+            //        break;
+            //    case "m":
+            //        switch (parameter.Split('_')[1])
+            //        {
+            //            case "01":
+            //                r += ", январь";
+            //                break;
+            //            case "02":
+            //                r += ", февраль";
+            //                break;
+            //            case "03":
+            //                r += ", март";
+            //                break;
+            //            case "04":
+            //                r += ", апрель";
+            //                break;
+            //            case "05":
+            //                r += ", май";
+            //                break;
+            //            case "06":
+            //                r += ", июнь";
+            //                break;
+            //            case "07":
+            //                r += ", июль";
+            //                break;
+            //            case "08":
+            //                r += ", август";
+            //                break;
+            //            case "09":
+            //                r += ", сентябрь";
+            //                break;
+            //            case "10":
+            //                r += ", октябрь";
+            //                break;
+            //            case "11":
+            //                r += ", ноябрь";
+            //                break;
+            //            case "12":
+            //                r += ", декабрь";
+            //                break;
+            //        }
+            //        break;
+            //}
 
             return r;
         }
