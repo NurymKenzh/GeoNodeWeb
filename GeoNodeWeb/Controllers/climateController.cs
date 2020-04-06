@@ -66,6 +66,8 @@ namespace GeoNodeWeb.Controllers
         public string point;
         public decimal? value;
         public int year;
+        public decimal lon;
+        public decimal lat;
     }
 
     public class wm
@@ -5549,16 +5551,16 @@ namespace GeoNodeWeb.Controllers
             //    month = null;
             //}
             List<string> tables = new List<string>();
-            tables.Add("climate_tasmax");
-            tables.Add("climate_tas");
-            tables.Add("climate_tasmin");
-            tables.Add("climate_tasmax_dlt");
-            tables.Add("climate_tas_dlt");
-            tables.Add("climate_tasmin_dlt");
-            tables.Add("climate_pr");
-            tables.Add("climate_pr_dlt");
+            //tables.Add("climate_tasmax");
+            //tables.Add("climate_tas");
+            //tables.Add("climate_tasmin");
+            //tables.Add("climate_tasmax_dlt");
+            //tables.Add("climate_tas_dlt");
+            //tables.Add("climate_tasmin_dlt");
+            //tables.Add("climate_pr");
+            //tables.Add("climate_pr_dlt");
             tables.Add("climate_et");
-            tables.Add("climate_et_dlt");
+            //tables.Add("climate_et_dlt");
             List<string> parameters = new List<string>();
             try
             {
@@ -5675,16 +5677,26 @@ namespace GeoNodeWeb.Controllers
             using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
             {
                 connection.Open();
+                string query_point = $"SELECT ST_AsEWKT(point) as point" +
+                    $" FROM public.climate_coords" +
+                    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx} {pointy})')) =" +
+                    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx} {pointy})')))" +
+                    $" FROM public.climate_coords) LIMIT 1;";
+                var points = connection.Query<string>(query_point, commandTimeout: 600);
+                string point = points.FirstOrDefault();
                 foreach (string table in tables)
                 {
+                    //string query = $"SELECT dt, name, value" +
+                    //    $" FROM public.{table}" +
+                    //    $" WHERE point =" +
+                    //    $" (SELECT point" +
+                    //    $" FROM public.climate_coords" +
+                    //    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
+                    //    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
+                    //    $" FROM public.climate_coords) LIMIT 1);";
                     string query = $"SELECT dt, name, value" +
                         $" FROM public.{table}" +
-                        $" WHERE point =" +
-                        $" (SELECT point" +
-                        $" FROM public.climate_coords" +
-                        $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
-                        $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
-                        $" FROM public.climate_coords) LIMIT 1);";
+                        $" WHERE point = ST_GeomFromEWKT('{point}');";
                     var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
                     foreach (string parameter in parameters)
                     {
@@ -5788,18 +5800,6 @@ namespace GeoNodeWeb.Controllers
                 }
                 raster_table_bs.Add(raster_table_b_new);
             }
-            //raster_table_bs.Add(new raster_table_b()
-            //{
-            //    id = "0",
-            //    name = "everver",
-            //    price = "123"
-            //});
-            //raster_table_bs.Add(new raster_table_b()
-            //{
-            //    id = "1",
-            //    name = "yutb",
-            //    price = "43"
-            //});
 
             return Json(new
             {
@@ -6556,6 +6556,62 @@ namespace GeoNodeWeb.Controllers
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, "application/force-download", fileName);
 
+        }
+
+        public IActionResult NewTableAnalytics()
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
+                {
+                    connection.Open();
+                    List<string> tables = new List<string>();
+                    //tables.Add("climate_tasmax");
+                    //tables.Add("climate_tas");
+                    //tables.Add("climate_tasmin");
+                    //tables.Add("climate_tasmax_dlt");
+                    //tables.Add("climate_tas_dlt");
+                    //tables.Add("climate_tasmin_dlt");
+                    //tables.Add("climate_pr");
+                    //tables.Add("climate_pr_dlt");
+                    tables.Add("climate_et");
+                    //tables.Add("climate_et_dlt");
+                    foreach (string table in tables)
+                    {
+                        string query = $"SELECT name, dt, ST_AsEWKT(point) as point, value FROM public.{table};";
+                        var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 6000);
+                        string query_insert = $"INSERT INTO public.climate_et2(name, dt, value, lon, lat) VALUES";
+                        // '2016-06-22 19:10:25-07'
+                        List<climate_x> climate_xs = climate_xsQ.ToList();
+                        List<string> list = new List<string>();
+                        //foreach (climate_x climate_x in climate_xsQ)
+                        for(int i=0;i< climate_xs.Count();i++)
+                        {
+                            // SRID=4326;POINT(45.125 34.125)
+                            climate_xs[i].lon = Convert.ToDecimal(climate_xs[i].point.Split('(')[1].Split(' ')[0]);
+                            climate_xs[i].lat = Convert.ToDecimal(climate_xs[i].point.Split('(')[1].Split(' ')[1].Split(')')[0]);
+                            //query_insert += $" ('{climate_xs[i].name}'," +
+                            //    $" '{climate_xs[i].dt.ToString("yyyy-MM-dd HH:mm:ss")}+06:30'," +
+                            //    $" {climate_xs[i].value.ToString()}," +
+                            //    $" {climate_xs[i].lon.ToString()}," +
+                            //    $" {climate_xs[i].lat.ToString()})";
+                            list.Add($"{climate_xs[i].name}\t" +
+                                $"{climate_xs[i].dt.ToString("yyyy-MM-dd HH:mm:ss")}+06:30\t" +
+                                $"{climate_xs[i].value.ToString()}\t" +
+                                $"{climate_xs[i].lon.ToString()}\t" +
+                                $"{climate_xs[i].lat.ToString()}");
+                        }
+                        System.IO.File.WriteAllLines("D:/SavedLists.txt", list);
+                        //connection.Query(query_insert, commandTimeout: 6000);
+                    }
+                    connection.Close();
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return View();
         }
     }
 }
