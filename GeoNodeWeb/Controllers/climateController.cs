@@ -5552,16 +5552,16 @@ namespace GeoNodeWeb.Controllers
             //    month = null;
             //}
             List<string> tables = new List<string>();
-            //tables.Add("climate_tasmax");
-            //tables.Add("climate_tas");
-            //tables.Add("climate_tasmin");
-            //tables.Add("climate_tasmax_dlt");
-            //tables.Add("climate_tas_dlt");
-            //tables.Add("climate_tasmin_dlt");
-            //tables.Add("climate_pr");
-            //tables.Add("climate_pr_dlt");
+            tables.Add("climate_tasmax");
+            tables.Add("climate_tas");
+            tables.Add("climate_tasmin");
+            tables.Add("climate_tasmax_dlt");
+            tables.Add("climate_tas_dlt");
+            tables.Add("climate_tasmin_dlt");
+            tables.Add("climate_pr");
+            tables.Add("climate_pr_dlt");
             tables.Add("climate_et");
-            //tables.Add("climate_et_dlt");
+            tables.Add("climate_et_dlt");
             List<string> parameters = new List<string>();
             try
             {
