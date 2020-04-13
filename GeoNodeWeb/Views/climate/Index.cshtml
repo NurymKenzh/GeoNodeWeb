@@ -1839,6 +1839,10 @@
             }
         }
         if (tool == 'info') {
+            clickX = ol.proj.toLonLat(evt.coordinate)[0];
+            clickY = ol.proj.toLonLat(evt.coordinate)[1];
+            TableRasters(clickX, clickY, range_instance.result.from);
+
             var viewResolution = (map.getView().getResolution());
             var url_Climate = Layer_Climate.getSource().getGetFeatureInfoUrl(
                 evt.coordinate, viewResolution, 'EPSG:3857',
@@ -1911,9 +1915,6 @@
                                 else {
                                     ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1], -1);
                                 }
-                                clickX = ol.proj.toLonLat(evt.coordinate)[0];
-                                clickY = ol.proj.toLonLat(evt.coordinate)[1];
-                                TableRasters(clickX, clickY, range_instance.result.from);
                             });
                         }
                     }
@@ -2225,11 +2226,15 @@
     }
 
     function TableRasters(x, y, year) {
+        if (x == 0 || y == 0) {
+            return;
+        }
+        console.log('x: ' + x + ', y: ' + y);
         $.ajax({
             url: '@Url.Action("TableRasters")',
             data: {
-                pointx: x,
-                pointy: y,
+                pointxs: x,
+                pointys: y,
                 year: year,
                 rcp: RCP,
                 decade: Decade
@@ -2257,6 +2262,9 @@
                 //for (i = 0; i < data.raster_table.length; i++) {
                 //    $('#' + data.raster_table[i].id).text(parseFloat(data.raster_table[i].value).toFixed(4));
                 //}
+                console.log(data.messsage);
+                console.log('q1: ' + data.q1);
+                console.log('q2: ' + data.q2);
                 raster_data = data.raster_table_bs;
                 $(function () {
                     $('#rasterdata').bootstrapTable({ data: data.raster_table_bs, iconSize: "sm" });
@@ -2558,6 +2566,6 @@
             + '<td>' + parseFloat(raster_data[index].m11).toFixed(2) + '</td>'
             + '<td>' + parseFloat(raster_data[index].m12).toFixed(2) + '</td>'
             + '</tr>';
-        content += '</tr>' + '</table>' + '</div>';
+        //content += '</tr>' + '</table>' + '</div>';
     }
 </script>
