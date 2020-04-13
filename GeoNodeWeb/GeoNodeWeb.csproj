@@ -37,9 +37,4 @@
     </Content>
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="wwwroot\Download\" />
-  </ItemGroup>
-
 </Project>
