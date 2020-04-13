@@ -5410,6 +5410,7 @@ namespace GeoNodeWeb.Controllers
             //    ViewBag.Mean = $"{datetime.Min().Year.ToString()} - {datetime.Max().Year.ToString()}";
             //}
             //ViewBag.LayerId = layer_id;
+            ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerProdUrlServer"].ToString() : Startup.Configuration["GeoServerProdUrlDebug"].ToString();
 
 
             List<wm> wms = new List<wm>();

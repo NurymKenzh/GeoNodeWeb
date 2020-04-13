@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" />
 <link href="~/esnow/lib/rangeSlider/ion.rangeSlider.min.css" rel="stylesheet" />
 <script src="~/esnow/lib/rangeSlider/ion.rangeSlider.min.js"></script>
+<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 <style>
     .mapTooltip {
         position: fixed;
@@ -85,40 +87,75 @@
         <div class="row d-flex">
             <div class="col-md-6">
                 <div class="card mb-4 shadow-sm">
-                    <img class="card-img-top" src="http://placehold.it/640x400" alt="ALT NAME">
+                    @*<img class="card-img-top" src="http://placehold.it/640x400" alt="ALT NAME">*@
+                    <div id="map1"></div>
                     <div class="card-img-overlay">
                         <div class="d-flex justify-content-between align-items-center">
-                            <select class="form-control alert-warning w-50" id="SelectRCP">
-                                <option>Максимальная температура</option>
-                                <option>Средняя температура</option>
+                            <select class="form-control alert-warning w-50" id="SubParameter1" onchange="ChangeLayerClimate1()">
+                                <option value="tasmax_pd_avg">Максимальная температура</option>
+                                <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                <option value="tas_pd_avg">Средняя температура</option>
+                                <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                <option value="tasmin_pd_avg">Минимальная температура</option>
+                                <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                <option value="pr_pd_avg">Осадки</option>
+                                <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                <option value="et_pd_avg">Эвапотранспирация</option>
+                                <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
-                            <small class="text-muted">1951 - 1960</small>
+                            <small class="text-muted" id="mapinfo1">1951 - 1960</small>
                         </div>
                     </div>
                     <div class="card-body">
                         <form>
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
-                                    <label for="Periodicity">Периодичность</label>
-                                    <select class="form-control form-control-sm" id="SelectPeriodicity">
-                                        <option>10 лет</option>
-                                        <option>20 лет</option>
-                                        <option>30 лет</option>
+                                    <label for="Decade1">Периодичность</label>
+                                    <select class="form-control form-control-sm" id="Decade1" onchange="ChangeLayerClimate1()">
+                                        <option value="10">10 лет</option>
+                                        <option value="20">20 лет</option>
+                                        <option value="30">30 лет</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="RCP">RCP</label>
-                                    <select class="form-control form-control-sm" id="SelectRCP">
-                                        <option>rcp 4.5</option>
-                                        <option>rcp 8.5</option>
+                                    <label for="RCP1">RCP</label>
+                                    <select class="form-control form-control-sm" id="RCP1" onchange="ChangeLayerClimate1()">
+                                        <option value="rcp45">rcp 4.5</option>
+                                        <option value="rcp85">rcp 8.5</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="Period">Период</label>
-                                    <select class="form-control form-control-sm" id="SelectPeriod">
-                                        <option>Год</option>
-                                        <option>Сезон</option>
-                                        <option>Месяц</option>
+                                    <label for="Period1">Период</label>
+                                    <select class="form-control form-control-sm" id="Period1" onchange="ChangeLayerClimate1()">
+                                        <option value="y">Год</option>
+                                        <option value="s">Сезон</option>
+                                        <option value="m">Месяц</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3 seasons1">
+                                    <label for="Season1">Сезон</label>
+                                    <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
+                                        <option value="4">Зима</option>
+                                        <option value="1">Весна</option>
+                                        <option value="2">Лето</option>
+                                        <option value="3">Осень</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3 months1">
+                                    <label for="Month1">Месяц</label>
+                                    <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
+                                        <option value="01">Январь</option>
+                                        <option value="02">Февраль</option>
+                                        <option value="03">Март</option>
+                                        <option value="04">Апрель</option>
+                                        <option value="05">Май</option>
+                                        <option value="06">Июнь</option>
+                                        <option value="07">Июль</option>
+                                        <option value="08">Август</option>
+                                        <option value="09">Сентябрь</option>
+                                        <option value="10">Октябрь</option>
+                                        <option value="11">Ноябрь</option>
+                                        <option value="12">Декабрь</option>
                                     </select>
                                 </div>
                             </div>
@@ -128,40 +165,75 @@
             </div>
             <div class="col-md-6">
                 <div class="card mb-4 shadow-sm">
-                    <img class="card-img-top" src="http://placehold.it/640x400" alt="ALT NAME">
+                    @*<img class="card-img-top" src="http://placehold.it/640x400" alt="ALT NAME">*@
+                    <div id="map2"></div>
                     <div class="card-img-overlay">
                         <div class="d-flex justify-content-between align-items-center">
-                            <select class="form-control alert-warning w-50" id="SelectRCP">
-                                <option>Количество осадков</option>
-                                <option>Средняя температура</option>
+                            <select class="form-control alert-warning w-50" id="SubParameter2" onchange="ChangeLayerClimate2()">
+                                <option value="tasmax_pd_avg">Максимальная температура</option>
+                                <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                <option value="tas_pd_avg">Средняя температура</option>
+                                <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                <option value="tasmin_pd_avg">Минимальная температура</option>
+                                <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                <option value="pr_pd_avg">Осадки</option>
+                                <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                <option value="et_pd_avg">Эвапотранспирация</option>
+                                <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
-                            <small class="text-muted">1951 - 1960</small>
+                            <small class="text-muted" id="mapinfo2">1951 - 1960</small>
                         </div>
                     </div>
                     <div class="card-body">
                         <form>
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
-                                    <label for="Periodicity">Периодичность</label>
-                                    <select class="form-control form-control-sm" id="SelectPeriodicity">
-                                        <option>10 лет</option>
-                                        <option>20 лет</option>
-                                        <option>30 лет</option>
+                                    <label for="Decade1">Периодичность</label>
+                                    <select class="form-control form-control-sm" id="Decade2" onchange="ChangeLayerClimate2()">
+                                        <option value="10">10 лет</option>
+                                        <option value="20">20 лет</option>
+                                        <option value="30">30 лет</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="RCP">RCP</label>
-                                    <select class="form-control form-control-sm" id="SelectRCP">
-                                        <option>rcp 4.5</option>
-                                        <option>rcp 8.5</option>
+                                    <label for="RCP1">RCP</label>
+                                    <select class="form-control form-control-sm" id="RCP2" onchange="ChangeLayerClimate2()">
+                                        <option value="rcp45">rcp 4.5</option>
+                                        <option value="rcp85">rcp 8.5</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="Period">Период</label>
-                                    <select class="form-control form-control-sm" id="SelectPeriod">
-                                        <option>Год</option>
-                                        <option>Сезон</option>
-                                        <option>Месяц</option>
+                                    <label for="Period1">Период</label>
+                                    <select class="form-control form-control-sm" id="Period2" onchange="ChangeLayerClimate2()">
+                                        <option value="y">Год</option>
+                                        <option value="s">Сезон</option>
+                                        <option value="m">Месяц</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3 seasons2">
+                                    <label for="Season1">Сезон</label>
+                                    <select class="form-control form-control-sm" id="Season2" onchange="ChangeLayerClimate2()">
+                                        <option value="4">Зима</option>
+                                        <option value="1">Весна</option>
+                                        <option value="2">Лето</option>
+                                        <option value="3">Осень</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3 months2">
+                                    <label for="Month1">Месяц</label>
+                                    <select class="form-control form-control-sm" id="Month2" onchange="ChangeLayerClimate2()">
+                                        <option value="01">Январь</option>
+                                        <option value="02">Февраль</option>
+                                        <option value="03">Март</option>
+                                        <option value="04">Апрель</option>
+                                        <option value="05">Май</option>
+                                        <option value="06">Июнь</option>
+                                        <option value="07">Июль</option>
+                                        <option value="08">Август</option>
+                                        <option value="09">Сентябрь</option>
+                                        <option value="10">Октябрь</option>
+                                        <option value="11">Ноябрь</option>
+                                        <option value="12">Декабрь</option>
                                     </select>
                                 </div>
                             </div>
@@ -185,7 +257,7 @@
                 </div>
             </div>
             <div class="col" style="cursor: pointer;">
-                <input id="years10" class="js-range-slider" name="my_range" value="" />
+                <input id="years10" class="js-range-slider" name="my_range" value="" onchange="ChangeLayerClimate1(); ChangeLayerClimate2();" />
             </div>
             <div class="card shadow-sm mt-3" id="section0">
                 <div class="card-body">
@@ -1286,6 +1358,231 @@
     //});
 </script>
 
+@* maps *@
+<script>
+    var geoserver_url = "@ViewBag.GeoServerUrl",
+        geoserver_workspace_name = "climate";
+
+    var urlTpl = 'https://{1-4}.{base}.maps.cit.api.here.com' +
+        '/{type}/2.1/maptile/newest/{scheme}/{z}/{x}/{y}/256/png' +
+        '?app_id={app_id}&app_code={app_code}';
+    function HEREcreateUrl(tpl, HERElayerDesc) {
+        return tpl
+            .replace('{base}', HERElayerDesc.base)
+            .replace('{type}', HERElayerDesc.type)
+            .replace('{scheme}', HERElayerDesc.scheme)
+            .replace('{app_id}', HERElayerDesc.app_id)
+            .replace('{app_code}', HERElayerDesc.app_code);
+    };
+    var HEREappId = 'SLdBasp4s1oq2oUbVGxy';
+    var HEREappCode = 'D9-h9iVhjgUB_9eUlFETXA';
+    var HERElayerDescHybridDay = {
+        base: 'aerial',
+        type: 'maptile',
+        scheme: 'hybrid.day',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HEREHybridDay = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescHybridDay),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' + '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var Layer_Base = new ol.layer.Tile({
+        source: Source_HEREHybridDay
+    });
+    Layer_Base.set('name', 'Base');
+    Layer_Base.setOpacity(0.80);
+
+    var Layer_Climate1 = new ol.layer.Tile({
+        source: null
+    });
+    Layer_Climate1.set('name', 'Climate');
+    Layer_Climate1.setOpacity(0.80);
+
+    var Layer_Climate2 = new ol.layer.Tile({
+        source: null
+    });
+    Layer_Climate2.set('name', 'Climate');
+    Layer_Climate2.setOpacity(0.80);
+
+    var map1 = new ol.Map({
+        target: 'map1',
+        controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
+            new ol.control.ScaleLine()
+        ]),
+        layers: [
+            Layer_Base,
+            Layer_Climate1
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([66.902, 48.714]),
+            zoom: 4,
+            minZoom: 4,
+            extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
+        })
+    });
+
+    var map2 = new ol.Map({
+        target: 'map2',
+        controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
+            new ol.control.ScaleLine()
+        ]),
+        layers: [
+            Layer_Base,
+            Layer_Climate2
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([66.902, 48.714]),
+            zoom: 4,
+            minZoom: 4,
+            extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
+        })
+    });
+</script>
+
+@* ChangeLayerClimate *@
+<script>
+    function ChangeLayerClimate1() {
+        var SubParameter = $('#SubParameter1').val(),
+            Period = $('#Period1').val(),
+            RCP = $('#RCP1').val(),
+            Decade = $('#Decade1').val(),
+            Season = $('#Season1').val(),
+            Month = $('#Month1').val();
+
+        var layerClimate = '';
+
+        // Отклонения осадков в мм
+        if (SubParameter == 'pr_dlt_avg_mm') {
+            var SubParameter_ = SubParameter.substr(0, SubParameter.length - 3);
+            layerClimate = SubParameter_ + '_' + Period + '_' + RCP + '_' + Decade + '_' + 'mm';
+        }
+        else {
+            layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
+
+        $('#mapinfo1').text($('#years10').val().split(';')[0] + ' - ' + (parseInt($('#years10').val().split(';')[0]) + parseInt(Decade) - 1));
+
+        var date_str = $('#years10').val().split(';')[0];
+        if (Period == 'y') {
+            date_str += '-01-01';
+            $('.seasons1').hide();
+            $('.months1').hide();
+        }
+        if (Period == 's') {
+            $('.seasons1').show();
+            $('.months1').hide();
+            // эвапотранспорация
+            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg') {
+                if (Season == 4) {
+                    date_str += '-01-01';
+                }
+                else if (Season == 1) {
+                    date_str += '-03-01';
+                }
+                else if (Season == 2) {
+                    date_str += '-06-01';
+                }
+                else if (Season == 3) {
+                    date_str += '-09-01';
+                }
+            }
+            else {
+                date_str += '-0' + Season + '-01';
+            }
+        }
+        if (Period == 'm') {
+            $('.seasons1').hide();
+            $('.months1').show();
+            date_str += '-' + Month + '-01';
+        }
+
+        var Source_Climate_New = new ol.source.TileWMS({
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
+            params: {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                tiled: true,
+                "LAYERS": geoserver_workspace_name + ':' + layerClimate,
+                "exceptions": 'application/vnd.ogc.se_inimage',
+                tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+            },
+            serverType: 'geoserver'
+        });
+        Layer_Climate1.setSource(Source_Climate_New);
+    }
+
+    function ChangeLayerClimate2() {
+        var SubParameter = $('#SubParameter2').val(),
+            Period = $('#Period2').val(),
+            RCP = $('#RCP2').val(),
+            Decade = $('#Decade2').val(),
+            Season = $('#Season2').val(),
+            Month = $('#Month2').val();
+
+        var layerClimate = '';
+
+        // Отклонения осадков в мм
+        if (SubParameter == 'pr_dlt_avg_mm') {
+            var SubParameter_ = SubParameter.substr(0, SubParameter.length - 3);
+            layerClimate = SubParameter_ + '_' + Period + '_' + RCP + '_' + Decade + '_' + 'mm';
+        }
+        else {
+            layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
+
+        $('#mapinfo2').text($('#years10').val().split(';')[0] + ' - ' + (parseInt($('#years10').val().split(';')[0]) + parseInt(Decade) - 1));
+
+        var date_str = $('#years10').val().split(';')[0];
+        if (Period == 'y') {
+            date_str += '-01-01';
+            $('.seasons2').hide();
+            $('.months2').hide();
+        }
+        if (Period == 's') {
+            $('.seasons2').show();
+            $('.months2').hide();
+            // эвапотранспорация
+            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg') {
+                if (Season == 4) {
+                    date_str += '-01-01';
+                }
+                else if (Season == 1) {
+                    date_str += '-03-01';
+                }
+                else if (Season == 2) {
+                    date_str += '-06-01';
+                }
+                else if (Season == 3) {
+                    date_str += '-09-01';
+                }
+            }
+            else {
+                date_str += '-0' + Season + '-01';
+            }
+        }
+        if (Period == 'm') {
+            $('.seasons2').hide();
+            $('.months2').show();
+            date_str += '-' + Month + '-01';
+        }
+
+        var Source_Climate_New = new ol.source.TileWMS({
+            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
+            params: {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                tiled: true,
+                "LAYERS": geoserver_workspace_name + ':' + layerClimate,
+                "exceptions": 'application/vnd.ogc.se_inimage',
+                tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+            },
+            serverType: 'geoserver'
+        });
+        Layer_Climate2.setSource(Source_Climate_New);
+    }
+</script>
 
 @*for RangeSlaider*@
 <script>
@@ -1312,7 +1609,7 @@
 </script>
 
 <script>
-    var yearlabels = [1951, 1961, 1970, 1981, 1991, 2001, 2011, 2021, 2031, 2041, 2051, 2061, 2071, 2081, 2091, 2101];
+    var yearlabels = [1951, 1961, 1971, 1981, 1991, 2001, 2011, 2021, 2031, 2041, 2051, 2061, 2071, 2081, 2091, 2101];
     var seasonlabels = ['1951 весна', '1951  лето', '1951  осень', '1951  зима', '1961 весна', '1961  лето', '1961  осень', '1961  зима', '1970 весна', '1970  лето', '1970  осень', '1970  зима', '1981 весна', '1981  лето', '1981  осень', '1981  зима', '1991 весна', '1991  лето', '1991  осень', '1991  зима', '2001 весна', '2001  лето', '2001  осень', '2001  зима', '2011 весна', '2011  лето', '2011  осень', '2011  зима', '2021 весна', '2021  лето', '2021  осень', '2021  зима', '2031 весна', '2031  лето', '2031  осень', '2031  зима', '2041 весна', '2041  лето', '2041  осень', '2041  зима', '2051 весна', '2051  лето', '2051  осень', '2051  зима', '2061 весна', '2061  лето', '2061  осень', '2061  зима', '2071 весна', '2071  лето', '2071  осень', '2071  зима', '2081 весна', '2081  лето', '2081  осень', '2081  зима', '2091 весна', '2091  лето', '2091  осень', '2091  зима', '2101весна', '2101  лето', '2101  осень', '2101  зима'];
     var chartDates10Med = [15.22, 15.18, 15.46, 15.50, 15.55, 15.59, NaN, 15.85, 16.02, 16.05, 16.10, 16.22, 16.25, 19.07, 16.33, 16.25];
     var chartSeasonDates10Med = [12.22, 12.18, 12.46, 12.50, 12.55, 12.59, NaN, 12.85, 12.02, 13.05, 13.10, 13.22, 13.25, 13.07, 13.33, 13.25, 16.22, 16.18, 16.46, 16.50, 16.55, NaN, NaN, 16.85, 16.02, 16.05, 16.10, 16.22, 16.25, 19.07, 16.33, 16.25, 15.22, 15.18, 15.46, 15.50, 15.55, 15.59, NaN, 15.85, 16.02, 16.05, 16.10, 16.22, 16.25, 19.07, 16.33, 16.25, 13.22, 13.18, 13.46, 13.50, 13.55, NaN, NaN, 13.85, 13.02, 13.05, 13.10, 13.22, 13.25, 13.07, 13.33, 13.25];
@@ -1380,4 +1677,12 @@
             chart.update();
     };
 
+</script>
+
+@* $(document).ready(function ()) { } *@
+<script>
+    $(document).ready(function () {
+        ChangeLayerClimate1();
+        ChangeLayerClimate2();
+    });
 </script>
