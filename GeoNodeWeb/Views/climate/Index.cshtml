@@ -2229,7 +2229,6 @@
         if (x == 0 || y == 0) {
             return;
         }
-        console.log('x: ' + x + ', y: ' + y);
         $.ajax({
             url: '@Url.Action("TableRasters")',
             data: {
@@ -2262,9 +2261,6 @@
                 //for (i = 0; i < data.raster_table.length; i++) {
                 //    $('#' + data.raster_table[i].id).text(parseFloat(data.raster_table[i].value).toFixed(4));
                 //}
-                console.log(data.messsage);
-                console.log('q1: ' + data.q1);
-                console.log('q2: ' + data.q2);
                 raster_data = data.raster_table_bs;
                 $(function () {
                     $('#rasterdata').bootstrapTable({ data: data.raster_table_bs, iconSize: "sm" });

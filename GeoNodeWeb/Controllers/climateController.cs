@@ -5545,9 +5545,6 @@ namespace GeoNodeWeb.Controllers
             string messsage = "TableRasters OK";
             List<raster_table> raster_table = new List<raster_table>();
             List<raster_table_b> raster_table_bs = new List<raster_table_b>();
-            string q1 = "",
-                q2 = "";
-
             try
             {
                 decimal pointx = 0,
@@ -5703,7 +5700,6 @@ namespace GeoNodeWeb.Controllers
                         $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString().Replace(',', '.')} {pointy.ToString().Replace(',', '.')})')) =" +
                         $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString().Replace(',', '.')} {pointy.ToString().Replace(',', '.')})')))" +
                         $" FROM public.climate_coords) LIMIT 1;";
-                    q1 = query_point;
                     var points = connection.Query<string>(query_point, commandTimeout: 600);
                     string point = points.FirstOrDefault();
                     foreach (string table in tables)
@@ -5719,7 +5715,6 @@ namespace GeoNodeWeb.Controllers
                         string query = $"SELECT dt, name, value" +
                             $" FROM public.{table}" +
                             $" WHERE point = ST_GeomFromEWKT('{point}');";
-                        q2 = query;
                         var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
                         foreach (string parameter in parameters)
                         {
@@ -5834,9 +5829,7 @@ namespace GeoNodeWeb.Controllers
             {
                 raster_table,
                 raster_table_bs,
-                messsage,
-                q1,
-                q2
+                messsage
             });
         }
 
