@@ -302,8 +302,9 @@
                                 <button type="button" class="btn-default" onclick="Chart3Show()">Месяц</button>
                             </div>
                             <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
-                                <button type="button" class="btn-danger" onclick="addValueMax()">Максимум</button>
-                                <button type="button" class="btn-primary" onclick="addValueMin()">Минимум</button>
+                                <button type="button" class="btn-danger" onclick="ShowMax()">Максимум</button>
+                                <button type="button" class="btn-primary" onclick="ShowMin()">Минимум</button>
+                                <button type="button" class="btn-primary" onclick="ShowMedian()">Медиана</button>
                             </div>
                             <div class="card-body" id="chartbody1">
                                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
@@ -909,6 +910,7 @@
     </main>
 </div>
 
+@* Chart1, chart1UpdateDates *@
 <script>
     var chart1 = null,
         chart2 = null,
@@ -1812,13 +1814,112 @@
     }
     function Chart2Show() {
         $('#chartbody1').hide();
-        $('#chartbody2').show(); 
+        $('#chartbody2').show();
         $('#chartbody3').hide();
     }
     function Chart3Show() {
         $('#chartbody1').hide();
         $('#chartbody2').hide();
-        $('#chartbody3').show(); 
+        $('#chartbody3').show();
+    }
+</script>
+
+@* ShowMax *@
+<script>
+    function ShowMax() {
+        for (var i = 0; i < chart1.data.datasets.length; ++i) {
+            if (chart1.data.datasets[i].label.toLowerCase().includes('максимум')) {
+                chart1.data.datasets[i].hidden = false;
+            }
+            else {
+                chart1.data.datasets[i].hidden = true;
+            }
+        }
+        chart1.update();
+
+        for (var i = 0; i < chart2.data.datasets.length; ++i) {
+            if (chart2.data.datasets[i].label.toLowerCase().includes('максимум')) {
+                chart2.data.datasets[i].hidden = false;
+            }
+            else {
+                chart2.data.datasets[i].hidden = true;
+            }
+        }
+        chart2.update();
+
+        for (var i = 0; i < chart3.data.datasets.length; ++i) {
+            if (chart3.data.datasets[i].label.toLowerCase().includes('максимум')) {
+                chart3.data.datasets[i].hidden = false;
+            }
+            else {
+                chart3.data.datasets[i].hidden = true;
+            }
+        }
+        chart3.update();
+    }
+
+    function ShowMin() {
+        for (var i = 0; i < chart1.data.datasets.length; ++i) {
+            if (chart1.data.datasets[i].label.toLowerCase().includes('минимум')) {
+                chart1.data.datasets[i].hidden = false;
+            }
+            else {
+                chart1.data.datasets[i].hidden = true;
+            }
+        }
+        chart1.update();
+
+        for (var i = 0; i < chart2.data.datasets.length; ++i) {
+            if (chart2.data.datasets[i].label.toLowerCase().includes('минимум')) {
+                chart2.data.datasets[i].hidden = false;
+            }
+            else {
+                chart2.data.datasets[i].hidden = true;
+            }
+        }
+        chart2.update();
+
+        for (var i = 0; i < chart3.data.datasets.length; ++i) {
+            if (chart3.data.datasets[i].label.toLowerCase().includes('минимум')) {
+                chart3.data.datasets[i].hidden = false;
+            }
+            else {
+                chart3.data.datasets[i].hidden = true;
+            }
+        }
+        chart3.update();
+    }
+
+    function ShowMedian() {
+        for (var i = 0; i < chart1.data.datasets.length; ++i) {
+            if (chart1.data.datasets[i].label.toLowerCase().includes('медиана')) {
+                chart1.data.datasets[i].hidden = false;
+            }
+            else {
+                chart1.data.datasets[i].hidden = true;
+            }
+        }
+        chart1.update();
+
+        for (var i = 0; i < chart2.data.datasets.length; ++i) {
+            if (chart2.data.datasets[i].label.toLowerCase().includes('медиана')) {
+                chart2.data.datasets[i].hidden = false;
+            }
+            else {
+                chart2.data.datasets[i].hidden = true;
+            }
+        }
+        chart2.update();
+
+        for (var i = 0; i < chart3.data.datasets.length; ++i) {
+            if (chart3.data.datasets[i].label.toLowerCase().includes('медиана')) {
+                chart3.data.datasets[i].hidden = false;
+            }
+            else {
+                chart3.data.datasets[i].hidden = true;
+            }
+        }
+        chart3.update();
     }
 </script>
 
