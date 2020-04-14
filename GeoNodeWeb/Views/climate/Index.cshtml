@@ -1733,6 +1733,8 @@
         }
 
         $('#InfoYears').text(range_instance.result.from.toString() + ' - ' + range_instance.result.to.toString());
+
+        TableRasters(clickX, clickY, range_instance.result.from);
     }
 
     function addSpecialAreas($slider) {
@@ -1770,6 +1772,8 @@
 
 @* map.on('singleclick') *@
 <script>
+    var clickX = 0,
+        clickY = 0;
     var InfoMapModal;
     $(document).ready(function () {
         InfoMapModal = new jBox('Modal', {
@@ -1835,6 +1839,10 @@
             }
         }
         if (tool == 'info') {
+            clickX = ol.proj.toLonLat(evt.coordinate)[0];
+            clickY = ol.proj.toLonLat(evt.coordinate)[1];
+            TableRasters(clickX, clickY, range_instance.result.from);
+
             var viewResolution = (map.getView().getResolution());
             var url_Climate = Layer_Climate.getSource().getGetFeatureInfoUrl(
                 evt.coordinate, viewResolution, 'EPSG:3857',
@@ -1907,7 +1915,6 @@
                                 else {
                                     ChartRasters(layerClimate, seasonmonth, ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1], -1);
                                 }
-                                TableRasters(ol.proj.toLonLat(evt.coordinate)[0], ol.proj.toLonLat(evt.coordinate)[1], range_instance.result.from);
                             });
                         }
                     }
@@ -2159,7 +2166,7 @@
 
     var chartRaster = null;
     function ChartRasters(raster, seasonmonth, x, y, objectid) {
-        console.log('x: ' + x + '; y: ' + y);
+        //console.log('x: ' + x + '; y: ' + y);
         $.ajax({
             url: '@Url.Action("ChartRasters")',
             data: {
@@ -2219,34 +2226,38 @@
     }
 
     function TableRasters(x, y, year) {
+        if (x == 0 || y == 0) {
+            return;
+        }
         $.ajax({
             url: '@Url.Action("TableRasters")',
             data: {
-                pointx: x,
-                pointy: y,
+                pointxs: x,
+                pointys: y,
                 year: year,
                 rcp: RCP,
                 decade: Decade
             },
+            //async: false,
             type: 'POST',
             success: function (data) {
-                console.log('-----------------------------------------------------------------------------------');
-                var unique = data.raster_table.filter(function (itm, i, a) {
-                    return i == a.indexOf(itm);
-                });
-                const unique_columns = [...new Set(data.raster_table.map(item => item.column))];
-                console.log('\t' + unique_columns.join('\t'));
-                const unique_rows = [...new Set(data.raster_table.map(item => item.row))];
-                for (i = 0; i < unique_rows.length; i++) {
-                    var row = unique_rows[i] + '\t';
-                    for (j = 0; j < unique_columns.length; j++) {
-                        row += parseFloat(data.raster_table.find(r => r.column === unique_columns[j] && r.row == unique_rows[i]).value).toFixed(4);
-                        if (j < unique_columns.length - 1) {
-                            row += '\t';
-                        }
-                    }
-                    console.log(row);
-                }
+                //console.log('-----------------------------------------------------------------------------------');
+                //var unique = data.raster_table.filter(function (itm, i, a) {
+                //    return i == a.indexOf(itm);
+                //});
+                //const unique_columns = [...new Set(data.raster_table.map(item => item.column))];
+                //console.log('\t' + unique_columns.join('\t'));
+                //const unique_rows = [...new Set(data.raster_table.map(item => item.row))];
+                //for (i = 0; i < unique_rows.length; i++) {
+                //    var row = unique_rows[i] + '\t';
+                //    for (j = 0; j < unique_columns.length; j++) {
+                //        row += parseFloat(data.raster_table.find(r => r.column === unique_columns[j] && r.row == unique_rows[i]).value).toFixed(4);
+                //        if (j < unique_columns.length - 1) {
+                //            row += '\t';
+                //        }
+                //    }
+                //    console.log(row);
+                //}
                 //for (i = 0; i < data.raster_table.length; i++) {
                 //    $('#' + data.raster_table[i].id).text(parseFloat(data.raster_table[i].value).toFixed(4));
                 //}
@@ -2300,8 +2311,8 @@
         if ($('#Evapotranspiration').is(':checked')) {
             table = $('#downloadet').val();
         }
-        console.log('layerClimate: ' + layerClimate);
-        console.log('table: ' + table);
+        //console.log('layerClimate: ' + layerClimate);
+        //console.log('table: ' + table);
         if (Source_Rectangle.getFeatures().length > 0) {
             var left =      ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326')[0],
                 bottom =    ol.proj.transform(Source_Rectangle.getFeatures()[0].getGeometry().getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326')[1],
@@ -2322,7 +2333,7 @@
                 },
                 type: 'POST',
                 success: function (data) {
-                    console.log(data.message);
+                    //console.log(data.message);
                 },
                 error: function () {
                     console.log('Error: ' + data.message);
@@ -2551,6 +2562,6 @@
             + '<td>' + parseFloat(raster_data[index].m11).toFixed(2) + '</td>'
             + '<td>' + parseFloat(raster_data[index].m12).toFixed(2) + '</td>'
             + '</tr>';
-        content += '</tr>' + '</table>' + '</div>';
+        //content += '</tr>' + '</table>' + '</div>';
     }
 </script>

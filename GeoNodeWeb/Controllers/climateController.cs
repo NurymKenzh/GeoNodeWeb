@@ -5536,276 +5536,300 @@ namespace GeoNodeWeb.Controllers
 
         [HttpPost]
         public ActionResult TableRasters(
-            decimal pointx,
-            decimal pointy,
+            string pointxs,
+            string pointys,
             int year,
             string rcp,
             string decade)
         {
-            //if(period == "y")
-            //{
-            //    season = null;
-            //    month = null;
-            //}
-            //if (period == "s")
-            //{
-            //    month = null;
-            //}
-            List<string> tables = new List<string>();
-            //tables.Add("climate_tasmax");
-            //tables.Add("climate_tas");
-            //tables.Add("climate_tasmin");
-            //tables.Add("climate_tasmax_dlt");
-            //tables.Add("climate_tas_dlt");
-            //tables.Add("climate_tasmin_dlt");
-            //tables.Add("climate_pr");
-            //tables.Add("climate_pr_dlt");
-            tables.Add("climate_et");
-            //tables.Add("climate_et_dlt");
-            List<string> parameters = new List<string>();
-            try
-            {
-                parameters.Add("avg_m_rcp45_10_01");
-                parameters.Add("avg_m_rcp45_10_02");
-                parameters.Add("avg_m_rcp45_10_03");
-                parameters.Add("avg_m_rcp45_10_04");
-                parameters.Add("avg_m_rcp45_10_05");
-                parameters.Add("avg_m_rcp45_10_06");
-                parameters.Add("avg_m_rcp45_10_07");
-                parameters.Add("avg_m_rcp45_10_08");
-                parameters.Add("avg_m_rcp45_10_09");
-                parameters.Add("avg_m_rcp45_10_10");
-                parameters.Add("avg_m_rcp45_10_11");
-                parameters.Add("avg_m_rcp45_10_12");
-                parameters.Add("avg_m_rcp45_20_01");
-                parameters.Add("avg_m_rcp45_20_02");
-                parameters.Add("avg_m_rcp45_20_03");
-                parameters.Add("avg_m_rcp45_20_04");
-                parameters.Add("avg_m_rcp45_20_05");
-                parameters.Add("avg_m_rcp45_20_06");
-                parameters.Add("avg_m_rcp45_20_07");
-                parameters.Add("avg_m_rcp45_20_08");
-                parameters.Add("avg_m_rcp45_20_09");
-                parameters.Add("avg_m_rcp45_20_10");
-                parameters.Add("avg_m_rcp45_20_11");
-                parameters.Add("avg_m_rcp45_20_12");
-                parameters.Add("avg_m_rcp45_30_01");
-                parameters.Add("avg_m_rcp45_30_02");
-                parameters.Add("avg_m_rcp45_30_03");
-                parameters.Add("avg_m_rcp45_30_04");
-                parameters.Add("avg_m_rcp45_30_05");
-                parameters.Add("avg_m_rcp45_30_06");
-                parameters.Add("avg_m_rcp45_30_07");
-                parameters.Add("avg_m_rcp45_30_08");
-                parameters.Add("avg_m_rcp45_30_09");
-                parameters.Add("avg_m_rcp45_30_10");
-                parameters.Add("avg_m_rcp45_30_11");
-                parameters.Add("avg_m_rcp45_30_12");
-                parameters.Add("avg_m_rcp85_10_01");
-                parameters.Add("avg_m_rcp85_10_02");
-                parameters.Add("avg_m_rcp85_10_03");
-                parameters.Add("avg_m_rcp85_10_04");
-                parameters.Add("avg_m_rcp85_10_05");
-                parameters.Add("avg_m_rcp85_10_06");
-                parameters.Add("avg_m_rcp85_10_07");
-                parameters.Add("avg_m_rcp85_10_08");
-                parameters.Add("avg_m_rcp85_10_09");
-                parameters.Add("avg_m_rcp85_10_10");
-                parameters.Add("avg_m_rcp85_10_11");
-                parameters.Add("avg_m_rcp85_10_12");
-                parameters.Add("avg_m_rcp85_20_01");
-                parameters.Add("avg_m_rcp85_20_02");
-                parameters.Add("avg_m_rcp85_20_03");
-                parameters.Add("avg_m_rcp85_20_04");
-                parameters.Add("avg_m_rcp85_20_05");
-                parameters.Add("avg_m_rcp85_20_06");
-                parameters.Add("avg_m_rcp85_20_07");
-                parameters.Add("avg_m_rcp85_20_08");
-                parameters.Add("avg_m_rcp85_20_09");
-                parameters.Add("avg_m_rcp85_20_10");
-                parameters.Add("avg_m_rcp85_20_11");
-                parameters.Add("avg_m_rcp85_20_12");
-                parameters.Add("avg_m_rcp85_30_01");
-                parameters.Add("avg_m_rcp85_30_02");
-                parameters.Add("avg_m_rcp85_30_03");
-                parameters.Add("avg_m_rcp85_30_04");
-                parameters.Add("avg_m_rcp85_30_05");
-                parameters.Add("avg_m_rcp85_30_06");
-                parameters.Add("avg_m_rcp85_30_07");
-                parameters.Add("avg_m_rcp85_30_08");
-                parameters.Add("avg_m_rcp85_30_09");
-                parameters.Add("avg_m_rcp85_30_10");
-                parameters.Add("avg_m_rcp85_30_11");
-                parameters.Add("avg_m_rcp85_30_12");
-                parameters.Add("avg_s_rcp45_10_1");
-                parameters.Add("avg_s_rcp45_10_2");
-                parameters.Add("avg_s_rcp45_10_3");
-                parameters.Add("avg_s_rcp45_10_4");
-                parameters.Add("avg_s_rcp45_20_1");
-                parameters.Add("avg_s_rcp45_20_2");
-                parameters.Add("avg_s_rcp45_20_3");
-                parameters.Add("avg_s_rcp45_20_4");
-                parameters.Add("avg_s_rcp45_30_1");
-                parameters.Add("avg_s_rcp45_30_2");
-                parameters.Add("avg_s_rcp45_30_3");
-                parameters.Add("avg_s_rcp45_30_4");
-                parameters.Add("avg_s_rcp85_10_1");
-                parameters.Add("avg_s_rcp85_10_2");
-                parameters.Add("avg_s_rcp85_10_3");
-                parameters.Add("avg_s_rcp85_10_4");
-                parameters.Add("avg_s_rcp85_20_1");
-                parameters.Add("avg_s_rcp85_20_2");
-                parameters.Add("avg_s_rcp85_20_3");
-                parameters.Add("avg_s_rcp85_20_4");
-                parameters.Add("avg_s_rcp85_30_1");
-                parameters.Add("avg_s_rcp85_30_2");
-                parameters.Add("avg_s_rcp85_30_3");
-                parameters.Add("avg_s_rcp85_30_4");
-                parameters.Add("avg_y_rcp45_10");
-                parameters.Add("avg_y_rcp45_20");
-                parameters.Add("avg_y_rcp45_30");
-                parameters.Add("avg_y_rcp85_10");
-                parameters.Add("avg_y_rcp85_20");
-                parameters.Add("avg_y_rcp85_30");
-            }
-            catch { }
-            parameters = parameters
-                .Where(p => p.Contains(rcp))
-                .Where(p => p.Split('_')[3] == decade)
-                .ToList();
+            string messsage = "TableRasters OK";
             List<raster_table> raster_table = new List<raster_table>();
             List<raster_table_b> raster_table_bs = new List<raster_table_b>();
-            using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
+            try
             {
-                connection.Open();
-                string query_point = $"SELECT ST_AsEWKT(point) as point" +
-                    $" FROM public.climate_coords" +
-                    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx} {pointy})')) =" +
-                    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx} {pointy})')))" +
-                    $" FROM public.climate_coords) LIMIT 1;";
-                var points = connection.Query<string>(query_point, commandTimeout: 600);
-                string point = points.FirstOrDefault();
-                foreach (string table in tables)
+                decimal pointx = 0,
+                pointy = 0;
+                try
                 {
-                    //string query = $"SELECT dt, name, value" +
-                    //    $" FROM public.{table}" +
-                    //    $" WHERE point =" +
-                    //    $" (SELECT point" +
-                    //    $" FROM public.climate_coords" +
-                    //    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
-                    //    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
-                    //    $" FROM public.climate_coords) LIMIT 1);";
-                    string query = $"SELECT dt, name, value" +
-                        $" FROM public.{table}" +
-                        $" WHERE point = ST_GeomFromEWKT('{point}');";
-                    var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
-                    foreach (string parameter in parameters)
+                    pointx = Convert.ToDecimal(pointxs);
+                    pointy = Convert.ToDecimal(pointys);
+                }
+                catch
+                {
+                    pointx = Convert.ToDecimal(pointxs.Replace('.', ','));
+                    pointy = Convert.ToDecimal(pointys.Replace('.', ','));
+                }
+
+                //if(period == "y")
+                //{
+                //    season = null;
+                //    month = null;
+                //}
+                //if (period == "s")
+                //{
+                //    month = null;
+                //}
+                List<string> tables = new List<string>();
+                tables.Add("climate_tasmax");
+                tables.Add("climate_tas");
+                tables.Add("climate_tasmin");
+                tables.Add("climate_tasmax_dlt");
+                tables.Add("climate_tas_dlt");
+                tables.Add("climate_tasmin_dlt");
+                tables.Add("climate_pr");
+                tables.Add("climate_pr_dlt");
+                tables.Add("climate_et");
+                tables.Add("climate_et_dlt");
+                List<string> parameters = new List<string>();
+                try
+                {
+                    parameters.Add("avg_m_rcp45_10_01");
+                    parameters.Add("avg_m_rcp45_10_02");
+                    parameters.Add("avg_m_rcp45_10_03");
+                    parameters.Add("avg_m_rcp45_10_04");
+                    parameters.Add("avg_m_rcp45_10_05");
+                    parameters.Add("avg_m_rcp45_10_06");
+                    parameters.Add("avg_m_rcp45_10_07");
+                    parameters.Add("avg_m_rcp45_10_08");
+                    parameters.Add("avg_m_rcp45_10_09");
+                    parameters.Add("avg_m_rcp45_10_10");
+                    parameters.Add("avg_m_rcp45_10_11");
+                    parameters.Add("avg_m_rcp45_10_12");
+                    parameters.Add("avg_m_rcp45_20_01");
+                    parameters.Add("avg_m_rcp45_20_02");
+                    parameters.Add("avg_m_rcp45_20_03");
+                    parameters.Add("avg_m_rcp45_20_04");
+                    parameters.Add("avg_m_rcp45_20_05");
+                    parameters.Add("avg_m_rcp45_20_06");
+                    parameters.Add("avg_m_rcp45_20_07");
+                    parameters.Add("avg_m_rcp45_20_08");
+                    parameters.Add("avg_m_rcp45_20_09");
+                    parameters.Add("avg_m_rcp45_20_10");
+                    parameters.Add("avg_m_rcp45_20_11");
+                    parameters.Add("avg_m_rcp45_20_12");
+                    parameters.Add("avg_m_rcp45_30_01");
+                    parameters.Add("avg_m_rcp45_30_02");
+                    parameters.Add("avg_m_rcp45_30_03");
+                    parameters.Add("avg_m_rcp45_30_04");
+                    parameters.Add("avg_m_rcp45_30_05");
+                    parameters.Add("avg_m_rcp45_30_06");
+                    parameters.Add("avg_m_rcp45_30_07");
+                    parameters.Add("avg_m_rcp45_30_08");
+                    parameters.Add("avg_m_rcp45_30_09");
+                    parameters.Add("avg_m_rcp45_30_10");
+                    parameters.Add("avg_m_rcp45_30_11");
+                    parameters.Add("avg_m_rcp45_30_12");
+                    parameters.Add("avg_m_rcp85_10_01");
+                    parameters.Add("avg_m_rcp85_10_02");
+                    parameters.Add("avg_m_rcp85_10_03");
+                    parameters.Add("avg_m_rcp85_10_04");
+                    parameters.Add("avg_m_rcp85_10_05");
+                    parameters.Add("avg_m_rcp85_10_06");
+                    parameters.Add("avg_m_rcp85_10_07");
+                    parameters.Add("avg_m_rcp85_10_08");
+                    parameters.Add("avg_m_rcp85_10_09");
+                    parameters.Add("avg_m_rcp85_10_10");
+                    parameters.Add("avg_m_rcp85_10_11");
+                    parameters.Add("avg_m_rcp85_10_12");
+                    parameters.Add("avg_m_rcp85_20_01");
+                    parameters.Add("avg_m_rcp85_20_02");
+                    parameters.Add("avg_m_rcp85_20_03");
+                    parameters.Add("avg_m_rcp85_20_04");
+                    parameters.Add("avg_m_rcp85_20_05");
+                    parameters.Add("avg_m_rcp85_20_06");
+                    parameters.Add("avg_m_rcp85_20_07");
+                    parameters.Add("avg_m_rcp85_20_08");
+                    parameters.Add("avg_m_rcp85_20_09");
+                    parameters.Add("avg_m_rcp85_20_10");
+                    parameters.Add("avg_m_rcp85_20_11");
+                    parameters.Add("avg_m_rcp85_20_12");
+                    parameters.Add("avg_m_rcp85_30_01");
+                    parameters.Add("avg_m_rcp85_30_02");
+                    parameters.Add("avg_m_rcp85_30_03");
+                    parameters.Add("avg_m_rcp85_30_04");
+                    parameters.Add("avg_m_rcp85_30_05");
+                    parameters.Add("avg_m_rcp85_30_06");
+                    parameters.Add("avg_m_rcp85_30_07");
+                    parameters.Add("avg_m_rcp85_30_08");
+                    parameters.Add("avg_m_rcp85_30_09");
+                    parameters.Add("avg_m_rcp85_30_10");
+                    parameters.Add("avg_m_rcp85_30_11");
+                    parameters.Add("avg_m_rcp85_30_12");
+                    parameters.Add("avg_s_rcp45_10_1");
+                    parameters.Add("avg_s_rcp45_10_2");
+                    parameters.Add("avg_s_rcp45_10_3");
+                    parameters.Add("avg_s_rcp45_10_4");
+                    parameters.Add("avg_s_rcp45_20_1");
+                    parameters.Add("avg_s_rcp45_20_2");
+                    parameters.Add("avg_s_rcp45_20_3");
+                    parameters.Add("avg_s_rcp45_20_4");
+                    parameters.Add("avg_s_rcp45_30_1");
+                    parameters.Add("avg_s_rcp45_30_2");
+                    parameters.Add("avg_s_rcp45_30_3");
+                    parameters.Add("avg_s_rcp45_30_4");
+                    parameters.Add("avg_s_rcp85_10_1");
+                    parameters.Add("avg_s_rcp85_10_2");
+                    parameters.Add("avg_s_rcp85_10_3");
+                    parameters.Add("avg_s_rcp85_10_4");
+                    parameters.Add("avg_s_rcp85_20_1");
+                    parameters.Add("avg_s_rcp85_20_2");
+                    parameters.Add("avg_s_rcp85_20_3");
+                    parameters.Add("avg_s_rcp85_20_4");
+                    parameters.Add("avg_s_rcp85_30_1");
+                    parameters.Add("avg_s_rcp85_30_2");
+                    parameters.Add("avg_s_rcp85_30_3");
+                    parameters.Add("avg_s_rcp85_30_4");
+                    parameters.Add("avg_y_rcp45_10");
+                    parameters.Add("avg_y_rcp45_20");
+                    parameters.Add("avg_y_rcp45_30");
+                    parameters.Add("avg_y_rcp85_10");
+                    parameters.Add("avg_y_rcp85_20");
+                    parameters.Add("avg_y_rcp85_30");
+                }
+                catch { }
+                parameters = parameters
+                    .Where(p => p.Contains(rcp))
+                    .Where(p => p.Split('_')[3] == decade)
+                    .ToList();
+
+                using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
+                {
+                    connection.Open();
+                    string query_point = $"SELECT ST_AsEWKT(point) as point" +
+                        $" FROM public.climate_coords" +
+                        $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString().Replace(',', '.')} {pointy.ToString().Replace(',', '.')})')) =" +
+                        $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString().Replace(',', '.')} {pointy.ToString().Replace(',', '.')})')))" +
+                        $" FROM public.climate_coords) LIMIT 1;";
+                    var points = connection.Query<string>(query_point, commandTimeout: 600);
+                    string point = points.FirstOrDefault();
+                    foreach (string table in tables)
                     {
-                        string parameter_ = "";
-                        if (table.Contains("dlt"))
+                        //string query = $"SELECT dt, name, value" +
+                        //    $" FROM public.{table}" +
+                        //    $" WHERE point =" +
+                        //    $" (SELECT point" +
+                        //    $" FROM public.climate_coords" +
+                        //    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
+                        //    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
+                        //    $" FROM public.climate_coords) LIMIT 1);";
+                        string query = $"SELECT dt, name, value" +
+                            $" FROM public.{table}" +
+                            $" WHERE point = ST_GeomFromEWKT('{point}');";
+                        var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
+                        foreach (string parameter in parameters)
                         {
-                            parameter_ = $"{table.Replace("climate_", "")}_{parameter}";
-                            if(table == "climate_pr_dlt")
+                            string parameter_ = "";
+                            if (table.Contains("dlt"))
                             {
-                                string[] ps = parameter.Split('_');
-                                parameter_ = $"{table.Replace("climate_", "")}_{ps[0]}_{ps[1]}_{ps[2]}_{ps[3]}_mm";
-                                if(ps.Length == 5)
+                                parameter_ = $"{table.Replace("climate_", "")}_{parameter}";
+                                if (table == "climate_pr_dlt")
                                 {
-                                    parameter_ += $"_{ps[4]}";
+                                    string[] ps = parameter.Split('_');
+                                    parameter_ = $"{table.Replace("climate_", "")}_{ps[0]}_{ps[1]}_{ps[2]}_{ps[3]}_mm";
+                                    if (ps.Length == 5)
+                                    {
+                                        parameter_ += $"_{ps[4]}";
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            parameter_ = $"{table.Replace("climate_", "")}_pd_{parameter}";
-                        }
+                            else
+                            {
+                                parameter_ = $"{table.Replace("climate_", "")}_pd_{parameter}";
+                            }
 
-                        decimal? value = climate_xsQ.FirstOrDefault(c => c.dt.Year == year && c.name == parameter_)?.value;
-                        raster_table.Add(new raster_table()
-                        {
-                            column = GetColumn(parameter),
-                            column_index = GetColumnIndex(parameter),
-                            row = GetRow(table, parameter),
-                            value = value == null ? null : (decimal?)Math.Round((decimal)value, 2),
-                            id = $"{table}_{parameter}"
-                        });
+                            decimal? value = climate_xsQ.FirstOrDefault(c => c.dt.Year == year && c.name == parameter_)?.value;
+                            raster_table.Add(new raster_table()
+                            {
+                                column = GetColumn(parameter),
+                                column_index = GetColumnIndex(parameter),
+                                row = GetRow(table, parameter),
+                                value = value == null ? null : (decimal?)Math.Round((decimal)value, 2),
+                                id = $"{table}_{parameter}"
+                            });
+                        }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-            raster_table = raster_table.OrderBy(r => r.row).ThenBy(r => r.column_index).ToList();
+                raster_table = raster_table.OrderBy(r => r.row).ThenBy(r => r.column_index).ToList();
 
-            string[] rows = raster_table.Select(r => r.row).Distinct().ToArray();
-            int[] columns = raster_table.Select(r => r.column_index).Distinct().ToArray();
-            for (int i = 0; i < rows.Count(); i++)
-            {
-                raster_table_b raster_table_b_new = new raster_table_b() {
-                    parameter = rows[i]
-                };
-                for (int j = 0; j < columns.Count(); j++)
+                string[] rows = raster_table.Select(r => r.row).Distinct().ToArray();
+                int[] columns = raster_table.Select(r => r.column_index).Distinct().ToArray();
+                for (int i = 0; i < rows.Count(); i++)
                 {
-                    switch (columns[j])
+                    raster_table_b raster_table_b_new = new raster_table_b()
                     {
-                        case 1:
-                            raster_table_b_new.year = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 2:
-                            raster_table_b_new.s1 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 3:
-                            raster_table_b_new.s2 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 4:
-                            raster_table_b_new.s3 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 5:
-                            raster_table_b_new.s4 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 6:
-                            raster_table_b_new.m1 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 7:
-                            raster_table_b_new.m2 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 8:
-                            raster_table_b_new.m3 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 9:
-                            raster_table_b_new.m4 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 10:
-                            raster_table_b_new.m5 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 11:
-                            raster_table_b_new.m6 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 12:
-                            raster_table_b_new.m7 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 13:
-                            raster_table_b_new.m8 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 14:
-                            raster_table_b_new.m9 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 15:
-                            raster_table_b_new.m10 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 16:
-                            raster_table_b_new.m11 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
-                        case 17:
-                            raster_table_b_new.m12 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
-                            break;
+                        parameter = rows[i]
+                    };
+                    for (int j = 0; j < columns.Count(); j++)
+                    {
+                        switch (columns[j])
+                        {
+                            case 1:
+                                raster_table_b_new.year = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 2:
+                                raster_table_b_new.s1 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 3:
+                                raster_table_b_new.s2 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 4:
+                                raster_table_b_new.s3 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 5:
+                                raster_table_b_new.s4 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 6:
+                                raster_table_b_new.m1 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 7:
+                                raster_table_b_new.m2 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 8:
+                                raster_table_b_new.m3 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 9:
+                                raster_table_b_new.m4 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 10:
+                                raster_table_b_new.m5 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 11:
+                                raster_table_b_new.m6 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 12:
+                                raster_table_b_new.m7 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 13:
+                                raster_table_b_new.m8 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 14:
+                                raster_table_b_new.m9 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 15:
+                                raster_table_b_new.m10 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 16:
+                                raster_table_b_new.m11 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                            case 17:
+                                raster_table_b_new.m12 = raster_table.FirstOrDefault(r => r.row == rows[i] && r.column_index == columns[j])?.value;
+                                break;
+                        }
                     }
+                    raster_table_bs.Add(raster_table_b_new);
                 }
-                raster_table_bs.Add(raster_table_b_new);
             }
-
+            catch(Exception ex)
+            {
+                messsage = ex.Message + ". " + ex.InnerException?.Message;
+            }
+            
             return Json(new
             {
                 raster_table,
-                raster_table_bs
+                raster_table_bs,
+                messsage
             });
         }
 

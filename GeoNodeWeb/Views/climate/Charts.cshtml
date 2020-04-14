@@ -5,11 +5,13 @@
 }
 
 @await Html.PartialAsync("_StylesTabChart")
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" />
 <link href="~/esnow/lib/rangeSlider/ion.rangeSlider.min.css" rel="stylesheet" />
 <script src="~/esnow/lib/rangeSlider/ion.rangeSlider.min.js"></script>
 <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+
 <style>
     .mapTooltip {
         position: fixed;
@@ -66,7 +68,7 @@
                 </div>
                 <div class="form-group">
                     <label for="wma">ВХУ:</label>
-                    <select class="form-control" id="wma"></select>
+                    <select class="form-control" id="wma" onchange="NavigateToWMA()"></select>
                 </div>
             </form>
             <input type="button" class="btn btn-primary btn-block" value="Обновить" onclick="RefreshWMS()" />
@@ -1363,6 +1365,7 @@
                 }
             }
         });
+        NavigateToWMA();
     }
 
     function RefreshWMS() {
@@ -1434,6 +1437,70 @@
     Layer_Climate2.set('name', 'Climate');
     Layer_Climate2.setOpacity(0.80);
 
+    var url_wma_polygon = geoserver_url + 'geonode' + '/wms';
+
+    var Source_wma_polygon1 = new ol.source.TileWMS({
+        url: url_wma_polygon,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wma_polygon',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_wma_polygon1 = new ol.layer.Tile({
+        source: Source_wma_polygon1
+    });
+    Layer_wma_polygon1.set('name', 'wma_polygon');
+    Layer_wma_polygon1.setOpacity(0.80);
+
+    var Source_wma_polygon2 = new ol.source.TileWMS({
+        url: url_wma_polygon,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wma_polygon',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_wma_polygon2 = new ol.layer.Tile({
+        source: Source_wma_polygon2
+    });
+    Layer_wma_polygon2.set('name', 'wma_polygon');
+    Layer_wma_polygon2.setOpacity(0.80);
+
+    var Layer_wma_polygon_Navigate1 = new ol.layer.Vector({
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'transparent'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 4
+            })
+        })
+    });
+    Layer_wma_polygon_Navigate1.set('name', 'wma_polygonnavigate');
+
+    var Layer_wma_polygon_Navigate2 = new ol.layer.Vector({
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'transparent'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 4
+            })
+        })
+    });
+    Layer_wma_polygon_Navigate2.set('name', 'wma_polygonnavigate');
+
     var map1 = new ol.Map({
         target: 'map1',
         controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
@@ -1441,7 +1508,8 @@
         ]),
         layers: [
             Layer_Base,
-            Layer_Climate1
+            Layer_Climate1,
+            Layer_wma_polygon1
         ],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
@@ -1458,7 +1526,8 @@
         ]),
         layers: [
             Layer_Base,
-            Layer_Climate2
+            Layer_Climate2,
+            Layer_wma_polygon2
         ],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
@@ -1467,6 +1536,66 @@
             extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
         })
     });
+</script>
+
+@* NavigateToWMA *@
+<script>
+    var first_wma_polygon_Navigate1 = true,
+        first_wma_polygon_Navigate2 = true;
+
+    function NavigateToWMA() {
+        var wma_code = $("#wma option:selected").text();
+        var filter = "CodeWMA = '" + wma_code + "'";
+        var filterParams = {
+            'FILTER': null,
+            'CQL_FILTER': null,
+            'FEATUREID': null
+        };
+        if (filter.replace(/^\s\s*/, '').replace(/\s\s*$/, '') != "") {
+            filterParams["CQL_FILTER"] = filter;
+        }
+        url_wma_polygon_Navigate = geoserver_url + 'geonode' + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode:wma_polygon&CQL_FILTER=" + filter + "&outputFormat=text/javascript&format_options=callback:getJson";
+
+        if (Layer_wma_polygon_Navigate1.getSource() != null) {
+            Layer_wma_polygon_Navigate1.getSource().clear();
+        }
+        if (Layer_wma_polygon_Navigate2.getSource() != null) {
+            Layer_wma_polygon_Navigate2.getSource().clear();
+        }
+        $.ajax({
+            jsonp: false,
+            jsonpCallback: 'getJson',
+            type: 'GET',
+            url: url_wma_polygon_Navigate,
+            async: false,
+            dataType: 'jsonp',
+            success: function (data_wma_polygon_Navigate) {
+                var new_source1 = new ol.source.Vector({
+                    features: (new ol.format.GeoJSON()).readFeatures(data_wma_polygon_Navigate, {
+                        featureProjection: 'EPSG:3857'
+                    })
+                });
+                Layer_wma_polygon_Navigate1.setSource(new_source1);
+                map1.getView().fit(Layer_wma_polygon_Navigate1.getSource().getExtent());
+                if (first_wma_polygon_Navigate1) {
+                    map1.addLayer(Layer_wma_polygon_Navigate1);
+                    first_wma_polygon_Navigate1 = false;
+                }
+
+                var new_source2 = new ol.source.Vector({
+                    features: (new ol.format.GeoJSON()).readFeatures(data_wma_polygon_Navigate, {
+                        featureProjection: 'EPSG:3857'
+                    })
+                });
+                Layer_wma_polygon_Navigate2.setSource(new_source2);
+                map2.getView().fit(Layer_wma_polygon_Navigate2.getSource().getExtent());
+                if (first_wma_polygon_Navigate2) {
+                    map2.addLayer(Layer_wma_polygon_Navigate2);
+                    first_wma_polygon_Navigate2 = false;
+                }
+            }
+        });
+    }
 </script>
 
 @* ChangeLayerClimate *@
@@ -1712,5 +1841,6 @@
     $(document).ready(function () {
         ChangeLayerClimate1();
         ChangeLayerClimate2();
+        NavigateToWMA();
     });
 </script>
