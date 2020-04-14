@@ -121,11 +121,31 @@
                                     <label for="Period1">Период</label>
                                     <select class="form-control form-control-sm" id="Period1" onchange="ChangeLayerClimate1()">
                                         <option value="y">Год</option>
-                                        <option value="s">Сезон</option>
-                                        <option value="m">Месяц</option>
+                                        @*<option value="s">Сезон</option>*@
+                                        <optgroup label="Сезон">
+                                            <option value="4">Зима</option>
+                                            <option value="1">Весна</option>
+                                            <option value="2">Лето</option>
+                                            <option value="3">Осень</option>
+                                        </optgroup>
+                                        @*<option value="m">Месяц</option>*@
+                                        <optgroup label="Месяц">
+                                            <option value="01">Январь</option>
+                                            <option value="02">Февраль</option>
+                                            <option value="03">Март</option>
+                                            <option value="04">Апрель</option>
+                                            <option value="05">Май</option>
+                                            <option value="06">Июнь</option>
+                                            <option value="07">Июль</option>
+                                            <option value="08">Август</option>
+                                            <option value="09">Сентябрь</option>
+                                            <option value="10">Октябрь</option>
+                                            <option value="11">Ноябрь</option>
+                                            <option value="12">Декабрь</option>
+                                        </optgroup>
                                     </select>
                                 </div>
-                                <div class="col-md-4 mb-3 seasons1">
+                                @*<div class="col-md-4 mb-3 seasons1">
                                     <label for="Season1">Сезон</label>
                                     <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
                                         <option value="4">Зима</option>
@@ -150,7 +170,7 @@
                                         <option value="11">Ноябрь</option>
                                         <option value="12">Декабрь</option>
                                     </select>
-                                </div>
+                                </div>*@
                             </div>
                         </form>
                     </div>
@@ -190,11 +210,31 @@
                                     <label for="Period1">Период</label>
                                     <select class="form-control form-control-sm" id="Period2" onchange="ChangeLayerClimate2()">
                                         <option value="y">Год</option>
-                                        <option value="s">Сезон</option>
-                                        <option value="m">Месяц</option>
+                                        @*<option value="s">Сезон</option>*@
+                                        <optgroup label="Сезон">
+                                            <option value="4">Зима</option>
+                                            <option value="1">Весна</option>
+                                            <option value="2">Лето</option>
+                                            <option value="3">Осень</option>
+                                        </optgroup>
+                                        @*<option value="m">Месяц</option>*@
+                                        <optgroup label="Месяц">
+                                            <option value="01">Январь</option>
+                                            <option value="02">Февраль</option>
+                                            <option value="03">Март</option>
+                                            <option value="04">Апрель</option>
+                                            <option value="05">Май</option>
+                                            <option value="06">Июнь</option>
+                                            <option value="07">Июль</option>
+                                            <option value="08">Август</option>
+                                            <option value="09">Сентябрь</option>
+                                            <option value="10">Октябрь</option>
+                                            <option value="11">Ноябрь</option>
+                                            <option value="12">Декабрь</option>
+                                        </optgroup>
                                     </select>
                                 </div>
-                                <div class="col-md-4 mb-3 seasons2">
+                                @*<div class="col-md-4 mb-3 seasons2">
                                     <label for="Season1">Сезон</label>
                                     <select class="form-control form-control-sm" id="Season2" onchange="ChangeLayerClimate2()">
                                         <option value="4">Зима</option>
@@ -219,7 +259,7 @@
                                         <option value="11">Ноябрь</option>
                                         <option value="12">Декабрь</option>
                                     </select>
-                                </div>
+                                </div>*@
                             </div>
                         </form>
                     </div>
@@ -1605,8 +1645,16 @@
             Period = $('#Period1').val(),
             RCP = $('#RCP1').val(),
             Decade = $('#Decade').val(),
-            Season = $('#Season1').val(),
-            Month = $('#Month1').val();
+            Season = ''/*$('#Season1').val()*/,
+            Month = ''/*$('#Month1').val()*/;
+        if (Period.length == 1 && Period != 'y') {
+            Season = Period;
+            Period = 's';
+        }
+        else if (Period.length == 2) {
+            Month = Period;
+            Period = 'm';
+        }
 
         var layerClimate = '';
 
@@ -1675,8 +1723,16 @@
             Period = $('#Period2').val(),
             RCP = $('#RCP2').val(),
             Decade = $('#Decade').val(),
-            Season = $('#Season2').val(),
-            Month = $('#Month2').val();
+            Season = ''/*$('#Season2').val()*/,
+            Month = ''/*$('#Month2').val()*/;
+        if (Period.length == 1 && Period != 'y') {
+            Season = Period;
+            Period = 's';
+        }
+        else if (Period.length == 2) {
+            Month = Period;
+            Period = 'm';
+        }
 
         var layerClimate = '';
 
