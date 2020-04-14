@@ -5472,17 +5472,17 @@ namespace GeoNodeWeb.Controllers
                         break;
                 }
                 connection.Open();
-                string query = $"SELECT dt, value" +
+                string query = $"SELECT name, dt, value" +
                     $" FROM public.{table}" +
-                    $" WHERE name = '{rnameDB}'" +
-                    $" AND point =" +
+                    //$" WHERE name = '{rnameDB}'" +
+                    $" WHERE point =" +
                     $" (SELECT point" +
                     $" FROM public.climate_coords" +
                     $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
                     $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
                     $" FROM public.climate_coords) LIMIT 1);";
                 var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
-                climate_xs = climate_xsQ.OrderBy(c => c.dt).ToList();
+                climate_xs = climate_xsQ.Where(c => c.name == rnameDB).OrderBy(c => c.dt).ToList();
                 connection.Close();
             }
             for (int i = 0; i < climate_xs.Count(); i++)
