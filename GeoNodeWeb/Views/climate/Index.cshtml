@@ -146,7 +146,7 @@
                         <div class="sidebar-menu">
                             <ul>
                                 <li class="header-menu mt-1">
-                                    <span class="text-white-50">Периодичность</span>
+                                    <span class="text-white-50">Период</span>
                                 </li>
                                 <li class="header-menu">
                                     <div class="current_items">
@@ -190,7 +190,7 @@
                                     </div>
                                 </li>
                                 <li class="header-menu">
-                                    <span class="text-white-50">Период</span>
+                                    <span class="text-white-50">Периодичность</span>
                                 </li>
                                 <li class="header-menu">
                                     <div class="current_items">
@@ -567,7 +567,7 @@
                             <i class="SomeInfo fa fa-file" InfoTitle="Test"></i>
                         </a>
                         <a href="#" OnClick="Charts()" id="ChartsButton" value="Выделить" onclick="Charts()">
-                            <i class="SomeInfo fa fa-bar-chart-o" InfoTitle="Для построение Графика, сначало выберите объект на карте (ВХБ или БХУ)"></i>
+                            <i class="SomeInfo fa fa-bar-chart-o" InfoTitle="График"></i>
                             <span id="chartSpan" class="badge badge-pill badge-info notification">0</span>
                         </a>
                         <a href="#" id="LegendBtn" class="target-click">
@@ -2274,9 +2274,7 @@
     }
 </script>
 
-<script>
-    
-</script>
+
 
 @* ChangeLayersClimate *@
 <script>
@@ -2452,6 +2450,21 @@
             maxWidth: 400,
             adjustPosition: true,
             adjustTracker: true
+        });
+        new jBox('Tooltip', {
+            attach: '#ChartsButton',
+            target: '#SelectButton',
+            theme: 'TooltipDark',
+            trigger: 'click',
+            trigger: 'click',
+            adjustTracker: true,
+            closeOnClick: 'body',
+            closeButton: 'box',
+            pointer: 'right:15',
+            maxWidth: 400,
+            adjustPosition: true,
+            adjustTracker: true,
+            content: 'Для построение Графика, сначала выберите объект на карте!'
         });
         new jBox('Modal', {
             id: 'modal-white',
