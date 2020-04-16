@@ -99,7 +99,7 @@
                                 <option value="et_pd_avg">Эвапотранспирация</option>
                                 <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
-                            <h3 class="text-light font-weight-bold" id="mapinfo1">1951 - 1960</h3>
+                            <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
                         </div>
                     </div>
                     <div class="card-body">
@@ -188,7 +188,7 @@
                                 <option value="et_pd_avg">Эвапотранспирация</option>
                                 <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
-                            <h3 class="text-light font-weight-bold" id="mapinfo2">1951 - 1960</h3>
+                            <h5 class="alert-warning font-weight-bold" id="mapinfo2">1951 - 1960</h5>
                         </div>
                     </div>
                     <div class="card-body">
@@ -260,7 +260,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="row d-flex">
             <div class="col-md-auto">
@@ -293,6 +292,11 @@
                                         <button type="button" class="btn-default" onclick="Chart2Show()">Сезон</button>
                                         <button type="button" class="btn-default" onclick="Chart3Show()">Месяц</button>
                                     </div>
+                                    <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Min-max">
+                                        <button type="button" class="btn-danger" onclick="ShowMax()">Максимум</button>
+                                        <button type="button" class="btn-primary" onclick="ShowMin()">Минимум</button>
+                                        <button type="button" class="btn-info" onclick="ShowMedian()">Медиана</button>
+                                    </div>
                                     <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Chart type">
                                         <button id="changeToLine" onclick="Chart1()"><i class="fa fa-area-chart"></i></button>
                                         <button id="changeToBar" onclick="Chart1()"><i class="fa fa-bar-chart"></i></button>
@@ -303,12 +307,7 @@
                         <div class="row mb-3" id="chartbody1">
                             <div class="col-md-3 order-md-2 mt-2">
                                 <fieldset class="scheduler-border">
-                                    <legend class="scheduler-border"> Configure Plot 1 </legend>
-                                    <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
-                                        <button type="button" class="btn-danger" onclick="ShowMax()">Максимум</button>
-                                        <button type="button" class="btn-primary" onclick="ShowMin()">Минимум</button>
-                                        <button type="button" class="btn-primary" onclick="ShowMedian()">Медиана</button>
-                                    </div>
+                                    <legend class="scheduler-border"> Configure Plot 1 </legend>                                    
                                     <form>
                                         <div class="form-group">
                                             <label for="chart1SubParameter">Климатический параметр:</label>
@@ -416,6 +415,14 @@
                             <div class="col-md-3 order-md-2 mt-2">
                                 <fieldset class="scheduler-border">
                                     <legend class="scheduler-border"> Configure Plot 2 </legend>
+                                    <div class="form-group">
+                                        <label for="chartType" class="mr-2">Тип диаграммы:</label>
+                                        <select name="chartType" id="chartType" onchange="updateChartType()">
+                                            <option value="line">Линии</option>
+                                            <option value="bar">Столбцы</option>
+                                            <option value="radar">Радар</option>
+                                        </select>
+                                    </div>
                                     <form>
                                         <div class="form-group">
                                             <label for="chart2SubParameter">Климатический параметр:</label>
@@ -531,15 +538,7 @@
                                     <input type="button" class="btn btn-outline-primary btn-sm" value="Обновить" onclick="Chart2()" />
                                 </fieldset>
                             </div>
-                            <div class="col-md-9">
-                                <div class="form-group">
-                                    <label for="chartType" class="mr-2">Тип диаграммы:</label>
-                                    <select name="chartType" id="chartType" onchange="updateChartType()">
-                                        <option value="line">Линии</option>
-                                        <option value="bar">Столбцы</option>
-                                        <option value="radar">Радар</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-9">                                
                                 <canvas class="my-1 w-100 chartjs-render-monitor" id="chart2Canvas" width="900" height="380"></canvas>
                             </div>
                         </div>

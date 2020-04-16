@@ -2263,7 +2263,7 @@
                 //}
                 raster_data = data.raster_table_bs;
                 $(function () {
-                    $('#rasterdata').bootstrapTable({ data: data.raster_table_bs, iconSize: "sm" });
+                    $('#rasterdata').bootstrapTable('destroy').bootstrapTable({ data: data.raster_table_bs, iconSize: "sm" });
                     $('#rasterdata').bootstrapTable('load', data.raster_table_bs);
                 })
             },
