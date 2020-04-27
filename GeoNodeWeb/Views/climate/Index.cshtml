@@ -1562,6 +1562,18 @@
         else if (SubParameter == 'pr_dlt_avg_mm' && Period == 'm') {
             $("#legend").attr("src", "/esnow/img/legend/Delt_Precipation_Month.svg");
         }
+        else if (SubParameter == 'et_pd_avg' && Period == 'y') {
+            $("#legend").attr("src", "/esnow/img/legend/Evapotranspiration_Year.svg");
+        }
+        else if (SubParameter == 'et_pd_avg' && (Period == 'm' || Period == 's')) {
+            $("#legend").attr("src", "/esnow/img/legend/Evapotranspiration_Month.svg");
+        }
+        else if (SubParameter == 'et_dlt_avg' && Period == 'y') {
+            $("#legend").attr("src", "/esnow/img/legend/Evapotranspiration_Year_Dlt.svg");
+        }
+        else if (SubParameter == 'et_dlt_avg' && (Period == 'm' || Period == 's')) {
+            $("#legend").attr("src", "/esnow/img/legend/Evapotranspiration_Month_Dlt.svg");
+        }
     };
 
     function CreateDateSlider() {
@@ -2210,7 +2222,8 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            text: InfoTitletitle
                         },
                         tooltips: {
                             mode: 'index',
