@@ -284,7 +284,7 @@
                 <div class="card shadow-sm mt-3" id="section0">                                                            
                     <div class="card-body">
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                            <h1 class="h4">Динамика климатического параметра по сезонам</h1>
+                            <h1 id="ChartTitle" class="h4"></h1>
                             <div class="btn-toolbar">
                                 <div class="btn-group mr-2">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Period">
@@ -713,45 +713,69 @@
     function chart1UpdateDates() {
         $('input:checkbox[name="chart1Dates"][value="1991"]').removeAttr('disabled');
         $('input:checkbox[name="chart1Dates"][value="1981"]').removeAttr('disabled');
+        $('input:checkbox[name="chart1Dates"][value="2091"]').removeAttr('disabled');
+        $('input:checkbox[name="chart1Dates"][value="2081"]').removeAttr('disabled');
         if ($('#chart1Decade').val() == 20) {
             $('input:checkbox[name="chart1Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart1Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
         }
         if ($('#chart1Decade').val() == 30) {
             $('input:checkbox[name="chart1Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart1Dates"][value="1991"]').prop("disabled", true);
             $('input:checkbox[name="chart1Dates"][value="1981"]').prop('checked', false);
             $('input:checkbox[name="chart1Dates"][value="1981"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2081"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2081"]').prop("disabled", true);
         }
     }
 
     function chart2UpdateDates() {
         $('input:checkbox[name="chart2Dates"][value="1991"]').removeAttr('disabled');
         $('input:checkbox[name="chart2Dates"][value="1981"]').removeAttr('disabled');
+        $('input:checkbox[name="chart1Dates"][value="2091"]').removeAttr('disabled');
+        $('input:checkbox[name="chart1Dates"][value="2081"]').removeAttr('disabled');
         if ($('#chart2Decade').val() == 20) {
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
         }
         if ($('#chart2Decade').val() == 30) {
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop("disabled", true);
             $('input:checkbox[name="chart2Dates"][value="1981"]').prop('checked', false);
             $('input:checkbox[name="chart2Dates"][value="1981"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2081"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2081"]').prop("disabled", true);
         }
     }
 
     function chart3UpdateDates() {
         $('input:checkbox[name="chart3Dates"][value="1991"]').removeAttr('disabled');
         $('input:checkbox[name="chart3Dates"][value="1981"]').removeAttr('disabled');
+        $('input:checkbox[name="chart1Dates"][value="2091"]').removeAttr('disabled');
+        $('input:checkbox[name="chart1Dates"][value="2081"]').removeAttr('disabled');
         if ($('#chart3Decade').val() == 20) {
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
         }
         if ($('#chart3Decade').val() == 30) {
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop("disabled", true);
             $('input:checkbox[name="chart3Dates"][value="1981"]').prop('checked', false);
             $('input:checkbox[name="chart3Dates"][value="1981"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart1Dates"][value="2081"]').prop('checked', false);
+            $('input:checkbox[name="chart1Dates"][value="2081"]').prop("disabled", true);
         }
     }
 
@@ -775,6 +799,7 @@
             },
             type: 'POST',
             success: function (data) {
+                $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
                 for (var i = 0; i < data.max.length; ++i) {
                     data.max[i] = parseFloat(data.max[i]).toFixed(2);
                 }
@@ -823,7 +848,8 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: ['ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')', $("#chart1SubParameter option:selected ").text() +' ('+ $("#chart1Decade option:selected").text()+'/'+ $("#chart1RCP option:selected").text()+')']
+                            //text: ['ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')', $("#chart1SubParameter option:selected ").text() +' ('+ $("#chart1Decade option:selected").text()+'/'+ $("#chart1RCP option:selected").text()+')']
+                            text: $("#chart1SubParameter option:selected ").text() + ' (' + $("#chart1Decade option:selected").text() + '/' + $("#chart1RCP option:selected").text() + ')'
                         },
                         tooltips: {
 						    mode: 'index',
@@ -845,7 +871,7 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
                         },
                         tooltips: {
 						    mode: 'index',
@@ -891,6 +917,7 @@
             },
             type: 'POST',
             success: function (data) {
+                $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
                 // 0 - spring
                 for (var i = 0; i < data.max.length; ++i) {
                     for (var j = 0; j < data.max[i].length; ++j) {
@@ -964,7 +991,7 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
                         },
                         tooltips: {
                             mode: 'index',
@@ -1057,6 +1084,7 @@
             },
             type: 'POST',
             success: function (data) {
+                $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
                 for (var i = 0; i < data.max.length; ++i) {
                     for (var j = 0; j < data.max[i].length; ++j) {
                         data.max[i][j] = parseFloat(data.max[i][j]).toFixed(2);
@@ -1128,7 +1156,7 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
                         },
                         tooltips: {
 						    mode: 'index',
