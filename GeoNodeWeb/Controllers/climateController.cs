@@ -5379,7 +5379,9 @@ namespace GeoNodeWeb.Controllers
             });
         }
 
-        public IActionResult Charts(int Id)
+        public IActionResult Charts(int Id,
+            decimal x,
+            decimal y)
         {
             ViewBag.Id = Id;
             //List<layers_layer> layers_layers = new List<layers_layer>();
@@ -5422,6 +5424,8 @@ namespace GeoNodeWeb.Controllers
                 connection.Close();
             }
             ViewBag.wms = wms;
+            ViewBag.CoordX = x;
+            ViewBag.CoordY = y;
 
             return View();
         }
