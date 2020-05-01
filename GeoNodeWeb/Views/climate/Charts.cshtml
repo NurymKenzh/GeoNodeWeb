@@ -1613,7 +1613,8 @@
 
         $('#mapinfo1').text($('#years10').val().split(';')[0] + ' - ' + (parseInt($('#years10').val().split(';')[0]) + parseInt(Decade) - 1));
 
-        var date_str = $('#years10').val().split(';')[0];
+        var yearNumber = parseInt($('#years10').val().split(';')[0]) + 1; //add one year for query (1950 -> 1951)
+        var date_str = yearNumber;
         if (Period == 'y') {
             date_str += '-01-01';
             $('.seasons1').hide();
@@ -1691,7 +1692,8 @@
 
         $('#mapinfo2').text($('#years10').val().split(';')[0] + ' - ' + (parseInt($('#years10').val().split(';')[0]) + parseInt(Decade) - 1));
 
-        var date_str = $('#years10').val().split(';')[0];
+        var yearNumber = parseInt($('#years10').val().split(';')[0]) + 1; //add one year for query (1950 -> 1951)
+        var date_str = yearNumber;
         if (Period == 'y') {
             date_str += '-01-01';
             $('.seasons2').hide();
