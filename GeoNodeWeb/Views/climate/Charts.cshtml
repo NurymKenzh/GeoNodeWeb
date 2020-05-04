@@ -58,8 +58,6 @@
     }
 </style>
 <input id="id" value="@ViewBag.Id" type="hidden" />
-<input id="CoordX" value="@ViewBag.CoordX" type="hidden" />
-<input id="CoordY" value="@ViewBag.CoordY" type="hidden" />
 <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <fieldset class="scheduler-border">
@@ -300,9 +298,9 @@
                                 <div class="btn-toolbar">
                                     <div class="btn-group mr-2">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="Period">
-                                            <button type="button" class="btn-default" onclick="Chart1Show()">Год</button>
-                                            <button type="button" class="btn-default" onclick="Chart2Show()">Сезон</button>
-                                            <button type="button" class="btn-default" onclick="Chart3Show()">Месяц</button>
+                                            <button type="button" class="btn-default" onclick="Chart1Show(); Table1Show();">Год</button>
+                                            <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">Сезон</button>
+                                            <button type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">Месяц</button>
                                         </div>
                                         <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Min-max">
                                             <button type="button" class="btn-danger" onclick="ShowMax()">Максимум</button>
@@ -712,14 +710,13 @@
                         </div>
                         <div class="tab-pane fade active show" id="tables" role="tabpanel" aria-labelledby="tables-tab">
                             @*<p class="card-text text-secondary">Averages for the decade 1981–2010</p>*@
-                            <div class="table-responsive">
-                                <table id="rasterdata" class="table table-striped"
+                            <div id="table1" class="table-responsive">
+                                <table id="rasterdata1" class="table table-striped"
                                        data-toggle="table"
                                        data-buttons="btn btn-sm"
                                        data-buttons-class="primary"
                                        data-search="true"
                                        data-detail-view="true"
-                                       data-detail-view-by-click="true"
                                        data-detail-view-icon="false"
                                        data-show-fullscreen="true"
                                        data-show-refresh="true"
@@ -728,19 +725,72 @@
                                        data-show-export="true">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th data-field="parameter"
-                                                data-detail-formatter="idDetailMonth"
-                                                class="text-primary" scope="row"><i class="fa fa-plus"></i>Параметр</th>
                                             <th data-field="year"
                                                 data-detail-formatter="idDetailMonth">Год</th>
-                                            <th data-field="s1"
-                                                data-detail-formatter="idDetailMonth">Весна</th>
-                                            <th data-field="s2"
-                                                data-detail-formatter="idDetailMonth">Лето</th>
-                                            <th data-field="s3"
-                                                data-detail-formatter="idDetailMonth">Осень</th>
-                                            <th data-field="s4"
-                                                data-detail-formatter="idDetailMonth">Зима</th>
+                                            <th data-field="max"
+                                                data-detail-formatter="idDetailMonth">Максимум</th>
+                                            <th data-field="min"
+                                                data-detail-formatter="idDetailMonth">Минимум</th>
+                                            <th data-field="median"
+                                                data-detail-formatter="idDetailMonth">Медиана</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="table2" class="table-responsive">
+                                <table id="rasterdata2" class="table table-striped"
+                                       data-toggle="table"
+                                       data-buttons="btn btn-sm"
+                                       data-buttons-class="primary"
+                                       data-search="true"
+                                       data-detail-view="true"
+                                       data-detail-view-icon="false"
+                                       data-show-fullscreen="true"
+                                       data-show-refresh="true"
+                                       data-show-columns="true"
+                                       data-show-print="true"
+                                       data-show-export="true">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th data-field="year"
+                                                data-detail-formatter="idDetailMonth">Год</th>
+                                            <th data-field="season"
+                                                data-detail-formatter="idDetailMonth">Сезон</th>
+                                            <th data-field="max"
+                                                data-detail-formatter="idDetailMonth">Максимум</th>
+                                            <th data-field="min"
+                                                data-detail-formatter="idDetailMonth">Минимум</th>
+                                            <th data-field="median"
+                                                data-detail-formatter="idDetailMonth">Медиана</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="table3" class="table-responsive">
+                                <table id="rasterdata3" class="table table-striped"
+                                       data-toggle="table"
+                                       data-buttons="btn btn-sm"
+                                       data-buttons-class="primary"
+                                       data-search="true"
+                                       data-detail-view="true"
+                                       data-detail-view-icon="false"
+                                       data-show-fullscreen="true"
+                                       data-show-refresh="true"
+                                       data-show-columns="true"
+                                       data-show-print="true"
+                                       data-show-export="true">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th data-field="year"
+                                                data-detail-formatter="idDetailMonth">Год</th>
+                                            <th data-field="month"
+                                                data-detail-formatter="idDetailMonth">Месяц</th>
+                                            <th data-field="max"
+                                                data-detail-formatter="idDetailMonth">Максимум</th>
+                                            <th data-field="min"
+                                                data-detail-formatter="idDetailMonth">Минимум</th>
+                                            <th data-field="median"
+                                                data-detail-formatter="idDetailMonth">Медиана</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -848,7 +898,7 @@
             },
             type: 'POST',
             success: function (data) {
-                Table1($("#CoordX").val(), $("#CoordY").val(), 1);
+                Table1(Id, $('#chart1SubParameter').val(), $('#chart1Decade').val(), $('#chart1RCP').val(), chart1Dates);
 
                 $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
                 for (var i = 0; i < data.max.length; ++i) {
@@ -968,7 +1018,7 @@
             },
             type: 'POST',
             success: function (data) {
-                Table1($("#CoordX").val(), $("#CoordY").val(), 2);
+                Table2(Id, $('#chart2SubParameter').val(), $('#chart2Decade').val(), $('#chart2RCP').val(), chart2Dates, chart2Seasons);
 
                 $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
                 // 0 - spring
@@ -1045,6 +1095,7 @@
                             fontSize: 20,
                             fontColor: '#000',
                             //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            text: $("#chart2SubParameter option:selected ").text() + ' (' + $("#chart2Decade option:selected").text() + '/' + $("#chart2RCP option:selected").text() + ')'
                         },
                         tooltips: {
                             mode: 'index',
@@ -1137,7 +1188,7 @@
             },
             type: 'POST',
             success: function (data) {
-                Table1($("#CoordX").val(), $("#CoordY").val(), 3);
+                Table3(Id, $('#chart3SubParameter').val(), $('#chart3Decade').val(), $('#chart3RCP').val(), chart3Dates, chart3Months);
 
                 $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
                 for (var i = 0; i < data.max.length; ++i) {
@@ -1212,6 +1263,7 @@
                             fontSize: 20,
                             fontColor: '#000',
                             //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+                            text: $("#chart3SubParameter option:selected ").text() + ' (' + $("#chart3Decade option:selected").text() + '/' + $("#chart3RCP option:selected").text() + ')'
                         },
                         tooltips: {
 						    mode: 'index',
@@ -1240,30 +1292,26 @@
     }
 </script>
 
-@* Table1, GetMinYear *@
+@* Table1, Table2, Table3 *@
 
 <script>
-    function Table1(x, y, chartNumber) {
-        if (x == 0 || y == 0) {
-            return;
-        }
-        var year = GetMinYear(chartNumber);
+    function Table1(Id, SubParameter, Decade, RCP, Dates) {
         $.ajax({
-            url: '@Url.Action("TableRasters")',
+            url: '@Url.Action("GetTable1")',
             data: {
-                pointxs: x,
-                pointys: y,
-                year: year,
-                rcp: $('#chart1RCP').val(),
-                decade: $('#chart1Decade').val()
+                Id: Id,
+                SubParameter: SubParameter,
+                Decade: Decade,
+                RCP: RCP,
+                Dates: Dates
             },
             //async: false,
             type: 'POST',
             success: function (data) {
-                raster_data = data.raster_table_bs;
+                raster_data = data.raster_table_for_chart_bs;
                 $(function () {
-                    $('#rasterdata').bootstrapTable('destroy').bootstrapTable({ data: data.raster_table_bs, iconSize: "sm" });
-                    $('#rasterdata').bootstrapTable('load', data.raster_table_bs);
+                    $('#rasterdata1').bootstrapTable('destroy').bootstrapTable({ data: data.raster_table_for_chart_bs, iconSize: "sm" });
+                    $('#rasterdata1').bootstrapTable('load', data.raster_table_for_chart_bs);
                 })
             },
             error: function () {
@@ -1272,29 +1320,56 @@
         });
     }
 
-    function GetMinYear(chartNumber) {
-        var checked = [];
-        var minYear;
-        if (chartNumber == 1) {
-            $('#yearCheckboxesChart1 input:checkbox:checked').each(function () {
-                checked.push($(this).val());
-            });
-            var minYear = Math.min.apply(null, checked);
-        }
-        if (chartNumber == 2) {
-            $('#yearCheckboxesChart2 input:checkbox:checked').each(function () {
-                checked.push($(this).val());
-            });
-            var minYear = Math.min.apply(null, checked);
-        }
-        if (chartNumber == 3) {
-            $('#yearCheckboxesChart3 input:checkbox:checked').each(function () {
-                checked.push($(this).val());
-            });
-            var minYear = Math.min.apply(null, checked);
-        }
+    function Table2(Id, SubParameter, Decade, RCP, Dates, Seasons) {
+        $.ajax({
+            url: '@Url.Action("GetTable2")',
+            data: {
+                Id: Id,
+                SubParameter: SubParameter,
+                Decade: Decade,
+                RCP: RCP,
+                Dates: Dates,
+                Seasons: Seasons
+            },
+            //async: false,
+            type: 'POST',
+            success: function (data) {
+                raster_data = data.raster_table_for_chart_bs;
+                $(function () {
+                    $('#rasterdata2').bootstrapTable('destroy').bootstrapTable({ data: data.raster_table_for_chart_bs, iconSize: "sm" });
+                    $('#rasterdata2').bootstrapTable('load', data.raster_table_for_chart_bs);
+                })
+            },
+            error: function () {
+                console.log('Error TableRasters');
+            }
+        });
+    }
 
-        return minYear;
+    function Table3(Id, SubParameter, Decade, RCP, Dates, Months) {
+        $.ajax({
+            url: '@Url.Action("GetTable3")',
+            data: {
+                Id: Id,
+                SubParameter: SubParameter,
+                Decade: Decade,
+                RCP: RCP,
+                Dates: Dates,
+                Months: Months
+            },
+            //async: false,
+            type: 'POST',
+            success: function (data) {
+                raster_data = data.raster_table_for_chart_bs;
+                $(function () {
+                    $('#rasterdata3').bootstrapTable('destroy').bootstrapTable({ data: data.raster_table_for_chart_bs, iconSize: "sm" });
+                    $('#rasterdata3').bootstrapTable('load', data.raster_table_for_chart_bs);
+                })
+            },
+            error: function () {
+                console.log('Error TableRasters');
+            }
+        });
     }
 </script>
 
@@ -1743,7 +1818,7 @@
     }
 </script>
 
-@* Chart1Show, Chart1Show, Chart3Show *@
+@* Chart1Show, Chart2Show, Chart3Show *@
 <script>
     function Chart1Show() {
         $('#chartbody1').show();
@@ -1759,6 +1834,25 @@
         $('#chartbody1').hide();
         $('#chartbody2').hide();
         $('#chartbody3').show();
+    }
+</script>
+
+@* Table1Show, Table2Show, Table3Show *@
+<script>
+    function Table1Show() {
+        $('#table1').show();
+        $('#table2').hide();
+        $('#table3').hide();
+    }
+    function Table2Show() {
+        $('#table1').hide();
+        $('#table2').show();
+        $('#table3').hide();
+    }
+    function Table3Show() {
+        $('#table1').hide();
+        $('#table2').hide();
+        $('#table3').show();
     }
 </script>
 
@@ -2033,6 +2127,7 @@
 <script>
     $(document).ready(function () {
         Chart1Show();
+        Table1Show();
         ChartTableShow();
         ChangeLayerClimate1();
         ChangeLayerClimate2();
