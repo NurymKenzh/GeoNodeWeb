@@ -1815,8 +1815,6 @@
         });
     });
     map.on('singleclick', function (evt) {
-        clickX = ol.proj.toLonLat(evt.coordinate)[0];
-        clickY = ol.proj.toLonLat(evt.coordinate)[1];
         $('#chartSpan').text('0');
         if (tool == 'select') {
             Source_Select.clear();
@@ -2180,7 +2178,7 @@
     function Charts() {
         if ($('#featureId').val() != '' && $('#featureId').val() != null && $('#featureId').val() != undefined && $('#featureId').val() > -1) {
             var urlC = '@Url.Action("Charts", "climate")';
-            var urlC = '/climate/Charts?Id=' + $('#featureId').val() + "&x=" + clickX + "&y=" + clickY;
+            var urlC = '/climate/Charts?Id=' + $('#featureId').val();
             var win = window.open(urlC, '_blank');
             win.focus();
         }

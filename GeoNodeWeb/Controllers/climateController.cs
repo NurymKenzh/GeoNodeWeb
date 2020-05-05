@@ -109,6 +109,16 @@ namespace GeoNodeWeb.Controllers
         public decimal? m12;
     }
 
+    public class raster_table_for_chart
+    {
+        public decimal? year;
+        public decimal? max;
+        public decimal? min;
+        public decimal? median;
+        public string month;
+        public string season;
+    }
+
     public class climateController : Controller
     {
         private readonly HttpApiClientController _HttpApiClient;
@@ -5439,9 +5449,7 @@ namespace GeoNodeWeb.Controllers
             });
         }
 
-        public IActionResult Charts(int Id,
-            decimal x,
-            decimal y)
+        public IActionResult Charts(int Id)
         {
             ViewBag.Id = Id;
             //List<layers_layer> layers_layers = new List<layers_layer>();
@@ -5484,8 +5492,6 @@ namespace GeoNodeWeb.Controllers
                 connection.Close();
             }
             ViewBag.wms = wms;
-            ViewBag.CoordX = x;
-            ViewBag.CoordY = y;
 
             return View();
         }
@@ -6441,6 +6447,389 @@ namespace GeoNodeWeb.Controllers
                 median,
                 wmbname,
                 wmacode
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetTable1(int Id,
+            string SubParameter,
+            string Decade,
+            string RCP,
+            int[] Dates)
+        {
+            string layer_name = $"{SubParameter}_y_{RCP}_{Decade}";
+            List<raster_table_for_chart> raster_table_for_chart_bs = new List<raster_table_for_chart>();
+
+            // Отклонения осадков в мм
+            if (SubParameter == "pr_dlt_avg_mm")
+            {
+                string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
+                layer_name = $"{SubParameter_}_y_{RCP}_{Decade}_mm";
+            }
+
+            List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
+            {
+                connection.Open();
+                string query = $"SELECT date, data" +
+                    $" FROM public.climate_rasterstats" +
+                    $" WHERE layer_name = '{layer_name}'" +
+                    $" AND feature_id = {Id.ToString()}" +
+                    $" ORDER BY date;";
+                var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
+                climate_rasterstats = climate_rasterstats_DB.ToList();
+                connection.Close();
+            }
+            
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                connection.Close();
+            }
+
+            List<decimal?> max = new List<decimal?>(),
+                min = new List<decimal?>(),
+                median = new List<decimal?>();
+            climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
+            int year_start = climate_rasterstats.Min(c => c.date.Year),
+                year_finish = climate_rasterstats.Max(c => c.date.Year);
+            List<int> years = new List<int>();
+            for (int year = year_start; year <= year_finish; year += 10)
+            {
+                years.Add(year);
+                climate_rasterstat climate_rasterstat = climate_rasterstats.FirstOrDefault(c => c.date.Year == year);
+                if (climate_rasterstat == null)
+                {
+                    max.Add(null);
+                    min.Add(null);
+                    median.Add(null);
+                }
+                else
+                {
+                    var data = JObject.Parse(climate_rasterstat.data);
+                    foreach (JProperty property in data.Properties())
+                    {
+                        if (property.Name == "max")
+                        {
+                            decimal? d = Convert.ToDecimal(property.Value);
+                            max.Add(d);
+                        }
+                        if (property.Name == "min")
+                        {
+                            decimal? d = Convert.ToDecimal(property.Value);
+                            min.Add(d);
+                        }
+                        if (property.Name == "median")
+                        {
+                            decimal? d = Convert.ToDecimal(property.Value);
+                            median.Add(d);
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < years.Count; i++)
+            {
+                raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
+
+                raster_table_for_chart_b_new.year = years[i];
+                raster_table_for_chart_b_new.min = min[i];
+                raster_table_for_chart_b_new.max = max[i];
+                raster_table_for_chart_b_new.median = median[i];
+
+                raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
+            }
+
+            return Json(new
+            {
+                raster_table_for_chart_bs
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetTable2(int Id,
+            string SubParameter,
+            string Decade,
+            string RCP,
+            int[] Seasons,
+            int[] Dates)
+        {
+            string layer_name = $"{SubParameter}_s_{RCP}_{Decade}";
+            List<raster_table_for_chart> raster_table_for_chart_bs = new List<raster_table_for_chart>();
+
+            // Отклонения осадков в мм
+            if (SubParameter == "pr_dlt_avg_mm")
+            {
+                string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
+                layer_name = $"{SubParameter_}_s_{RCP}_{Decade}_mm";
+            }
+
+            List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
+            {
+                connection.Open();
+                string query = $"SELECT date, data" +
+                    $" FROM public.climate_rasterstats" +
+                    $" WHERE layer_name = '{layer_name}'" +
+                    $" AND feature_id = {Id.ToString()}" +
+                    $" ORDER BY date;";
+                var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
+                climate_rasterstats = climate_rasterstats_DB
+                    .Where(c => Seasons.Contains(c.date.Month))
+                    .ToList();
+                connection.Close();
+            }
+            
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                connection.Close();
+            }
+
+            climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
+            int year_start = climate_rasterstats.Min(c => c.date.Year),
+                year_finish = climate_rasterstats.Max(c => c.date.Year);
+            List<int> years = new List<int>();
+            int yearsCount = (year_finish - year_start) / 10 + 1;
+            decimal?[,] max = new decimal?[4, yearsCount],
+                min = new decimal?[4, yearsCount],
+                median = new decimal?[4, yearsCount];
+            for (int year = year_start, i = 0; year <= year_finish; year += 10, i++)
+            {
+                years.Add(year);
+                for (int season = 0; season <= 3; season++)
+                {
+                    climate_rasterstat climate_rasterstat = climate_rasterstats
+                        .FirstOrDefault(c => c.date.Year == year && c.date.Month == season + 1);
+                    if (climate_rasterstat == null)
+                    {
+                        max[season, i] = null;
+                        min[season, i] = null;
+                        median[season, i] = null;
+                    }
+                    else
+                    {
+                        var data = JObject.Parse(climate_rasterstat.data);
+                        foreach (JProperty property in data.Properties())
+                        {
+                            if (property.Name == "max")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                max[season, i] = d;
+                            }
+                            if (property.Name == "min")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                min[season, i] = d;
+                            }
+                            if (property.Name == "median")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                median[season, i] = d;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                bool checkForNull = true;
+                for (int j = 0; j < years.Count; j++)
+                {
+                    if (max[i, j] != null)
+                    {
+                        checkForNull = false;
+                        break;
+                    }
+                }
+                if (!checkForNull)
+                {
+                    for (int j = 0; j < years.Count; j++)
+                    {
+                        raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
+                        if (i == 0)
+                        {
+                            raster_table_for_chart_b_new.season = "Весна";
+                        }
+                        if (i == 1)
+                        {
+                            raster_table_for_chart_b_new.season = "Лето";
+                        }
+                        if (i == 2)
+                        {
+                            raster_table_for_chart_b_new.season = "Осень";
+                        }
+                        if (i == 3)
+                        {
+                            raster_table_for_chart_b_new.season = "Зима";
+                        }
+                        raster_table_for_chart_b_new.year = years[j];
+                        raster_table_for_chart_b_new.min = min[i, j];
+                        raster_table_for_chart_b_new.max = max[i, j];
+                        raster_table_for_chart_b_new.median = median[i, j];
+
+                        raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                raster_table_for_chart_bs
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetTable3(int Id,
+            string SubParameter,
+            string Decade,
+            string RCP,
+            int[] Months,
+            int[] Dates)
+        {
+            string layer_name = $"{SubParameter}_m_{RCP}_{Decade}";
+            List<raster_table_for_chart> raster_table_for_chart_bs = new List<raster_table_for_chart>();
+
+            // Отклонения осадков в мм
+            if (SubParameter == "pr_dlt_avg_mm")
+            {
+                string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
+                layer_name = $"{SubParameter_}_m_{RCP}_{Decade}_mm";
+            }
+
+            List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
+            {
+                connection.Open();
+                string query = $"SELECT date, data" +
+                    $" FROM public.climate_rasterstats" +
+                    $" WHERE layer_name = '{layer_name}'" +
+                    $" AND feature_id = {Id.ToString()}" +
+                    $" ORDER BY date;";
+                var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
+                climate_rasterstats = climate_rasterstats_DB
+                    .Where(c => Months.Contains(c.date.Month))
+                    .ToList();
+                connection.Close();
+            }
+            
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                connection.Close();
+            }
+
+            climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
+            int year_start = climate_rasterstats.Min(c => c.date.Year),
+                year_finish = climate_rasterstats.Max(c => c.date.Year);
+            List<int> years = new List<int>();
+            int yearsCount = (year_finish - year_start) / 10 + 1;
+            decimal?[,] max = new decimal?[12, yearsCount],
+                min = new decimal?[12, yearsCount],
+                median = new decimal?[12, yearsCount];
+            for (int year = year_start, i = 0; year <= year_finish; year += 10, i++)
+            {
+                years.Add(year);
+                for (int month = 0; month <= 11; month++)
+                {
+                    climate_rasterstat climate_rasterstat = climate_rasterstats
+                        .FirstOrDefault(c => c.date.Year == year && c.date.Month == month + 1);
+                    if (climate_rasterstat == null)
+                    {
+                        max[month, i] = null;
+                        min[month, i] = null;
+                        median[month, i] = null;
+                    }
+                    else
+                    {
+                        var data = JObject.Parse(climate_rasterstat.data);
+                        foreach (JProperty property in data.Properties())
+                        {
+                            if (property.Name == "max")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                max[month, i] = d;
+                            }
+                            if (property.Name == "min")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                min[month, i] = d;
+                            }
+                            if (property.Name == "median")
+                            {
+                                decimal? d = Convert.ToDecimal(property.Value);
+                                median[month, i] = d;
+                            }
+                        }
+                    }
+                }
+            }
+
+            List<string> months = new List<string>
+            { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
+                "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
+            for (int i = 0; i < 12; i++)
+            {
+                bool checkForNull = true;
+                for (int j = 0; j < years.Count; j++)
+                {
+                    if (max[i, j] != null)
+                    {
+                        checkForNull = false;
+                        break;
+                    }
+                }
+                if (!checkForNull)
+                {
+                    for (int j = 0; j < years.Count; j++)
+                    {
+                        raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
+                        for (int k = 0; k < months.Count; k++)
+                        {
+                            if (i == k)
+                            {
+                                raster_table_for_chart_b_new.month = months[k];
+                            }
+                        }
+
+                        raster_table_for_chart_b_new.year = years[j];
+                        raster_table_for_chart_b_new.min = min[i, j];
+                        raster_table_for_chart_b_new.max = max[i, j];
+                        raster_table_for_chart_b_new.median = median[i, j];
+
+                        raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                raster_table_for_chart_bs
             });
         }
 
