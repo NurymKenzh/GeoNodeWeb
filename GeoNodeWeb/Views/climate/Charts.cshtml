@@ -101,6 +101,9 @@
                             </select>
                             <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
                         </div>
+                        @*<div style="width:60%; float:right">
+                            <img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
+                        </div>*@
                     </div>
                     <div class="card-body">
                         <form>
@@ -141,31 +144,31 @@
                                     </select>
                                 </div>
                                 @*<div class="col-md-4 mb-3 seasons1">
-                                        <label for="Season1">Сезон</label>
-                                        <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
-                                            <option value="4">Зима</option>
-                                            <option value="1">Весна</option>
-                                            <option value="2">Лето</option>
-                                            <option value="3">Осень</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 mb-3 months1">
-                                        <label for="Month1">Месяц</label>
-                                        <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
-                                            <option value="01">Январь</option>
-                                            <option value="02">Февраль</option>
-                                            <option value="03">Март</option>
-                                            <option value="04">Апрель</option>
-                                            <option value="05">Май</option>
-                                            <option value="06">Июнь</option>
-                                            <option value="07">Июль</option>
-                                            <option value="08">Август</option>
-                                            <option value="09">Сентябрь</option>
-                                            <option value="10">Октябрь</option>
-                                            <option value="11">Ноябрь</option>
-                                            <option value="12">Декабрь</option>
-                                        </select>
-                                    </div>*@
+                        <label for="Season1">Сезон</label>
+                        <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
+                            <option value="4">Зима</option>
+                            <option value="1">Весна</option>
+                            <option value="2">Лето</option>
+                            <option value="3">Осень</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3 months1">
+                        <label for="Month1">Месяц</label>
+                        <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
+                            <option value="01">Январь</option>
+                            <option value="02">Февраль</option>
+                            <option value="03">Март</option>
+                            <option value="04">Апрель</option>
+                            <option value="05">Май</option>
+                            <option value="06">Июнь</option>
+                            <option value="07">Июль</option>
+                            <option value="08">Август</option>
+                            <option value="09">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
+                        </select>
+                    </div>*@
                             </div>
                         </form>
                     </div>
@@ -264,18 +267,18 @@
         <div class="row d-flex">
             <div class="col-md-auto">
                 <div class="btn-group mt-2" role="group" aria-label="example">
-                    <select class="form-control form-control-lg" id="Decade" onchange="ChangeLayerClimate1(); ChangeLayerClimate2()">
+                    <select class="form-control form-control-lg" id="Decade" onchange="CreateDateSlider();">
                         <option value="10">10 лет</option>
                         <option value="20">20 лет</option>
                         <option value="30">30 лет</option>
                     </select>
-                    <button type="button" class="btn btn-primary"><i class="fa fa-step-backward"></i></button>
+                    <button id="MinusBtn" type="button" class="btn btn-primary"><i class="fa fa-step-backward"></i></button>
                     <button type="button" class="btn btn-primary"><i class="fa fa-play-circle fa-2x"></i></button>
-                    <button type="button" class="btn btn-primary"><i class="fa fa-step-forward"></i></button>
+                    <button id="PlusBtn" type="button" class="btn btn-primary"><i class="fa fa-step-forward"></i></button>
                 </div>
             </div>
             <div class="col" style="cursor: pointer;">
-                <input id="years10" class="js-range-slider" name="my_range" value="" onchange="ChangeLayerClimate1(); ChangeLayerClimate2();" />
+                <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
             </div>
         </div>
         <hr class="featurette-divider">
@@ -1685,10 +1688,11 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
+        
+        $('#mapinfo1').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
 
-        $('#mapinfo1').text($('#years10').val().split(';')[0] + ' - ' + (parseInt($('#years10').val().split(';')[0]) + parseInt(Decade) - 1));
-
-        var yearNumber = parseInt($('#years10').val().split(';')[0]) + 1; //add one year for query (1950 -> 1951)
+        var yearNumber = parseInt($('#ClimateTimeline').val().split(';')[0]);
+        console.log(yearNumber);
         var date_str = yearNumber;
         if (Period == 'y') {
             date_str += '-01-01';
@@ -1764,10 +1768,10 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
+        
+        $('#mapinfo2').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
 
-        $('#mapinfo2').text($('#years10').val().split(';')[0] + ' - ' + (parseInt($('#years10').val().split(';')[0]) + parseInt(Decade) - 1));
-
-        var yearNumber = parseInt($('#years10').val().split(';')[0]) + 1; //add one year for query (1950 -> 1951)
+        var yearNumber = parseInt($('#ClimateTimeline').val().split(';')[0]);
         var date_str = yearNumber;
         if (Period == 'y') {
             date_str += '-01-01';
@@ -1815,6 +1819,132 @@
             serverType: 'geoserver'
         });
         Layer_Climate2.setSource(Source_Climate_New);
+    }
+</script>
+
+
+@*for RangeSlaider*@
+<script>
+    var slider_first = true;
+    var years10values = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100];
+    var min = Math.min(...years10values),
+        max = Math.max(...years10values),
+        step = 10,
+        Decade = $('#Decade').val();
+
+    var from = min + 1,
+        to = from + parseInt(Decade) - 1;
+    var range_instance = null;
+    var $ClimateTimeline = $(".js-range-slider");
+    $btn_minus = $("#MinusBtn"),
+    $btn_plus = $("#PlusBtn");
+
+    function CreateDateSlider() {
+        Decade = $('#Decade').val();
+        to = from + parseInt(Decade) - 1;
+        console.log(slider_first);
+        if (slider_first) {
+            $("#ClimateTimeline").ionRangeSlider({
+                skin: "round",
+                type: "double",
+                grid: true,
+                grid_snap: true,
+                min: min,
+                max: max,
+                step: step,
+                from: from,
+                to: to,
+                min_interval: parseInt(Decade) - 1,
+                max_interval: parseInt(Decade) - 1,
+                drag_interval: true,
+                prettify_enabled: false,
+                onFinish: function (data) {
+                    from = data.from + 1;
+                    to = data.to;
+                    if (+to.toString().split('').pop() != 0) {
+                        to = to + 1;
+                    }
+                    range_instance.update({
+                        step: step,
+                        from: from,
+                        to: to
+                    });
+
+                    ChangeDate();
+                    ChangeLayerClimate1();
+                    ChangeLayerClimate2();
+                },
+                onChange: function (data) {
+                    // Called every time handle position is changed
+                },
+                onStart: function (data) {
+                    //onStart
+                },
+                onUpdate: function (data) {
+                    //onUpdate
+                }
+            });
+
+            slider_first = false;
+
+            $btn_minus.on("click", function () {
+                updateRange(-1);
+                ChangeDate();
+                ChangeLayerClimate1();
+                ChangeLayerClimate2();
+            });
+
+            $btn_plus.on("click", function () {
+                updateRange(1);
+                ChangeDate();
+                ChangeLayerClimate1();
+                ChangeLayerClimate2();
+            });
+        }
+
+        range_instance = $ClimateTimeline.data("ionRangeSlider");
+
+        range_instance.update({
+            min: min,
+            max: max,
+            step: step,
+            from: from,
+            to: to,
+            min_interval: parseInt(Decade) - 1,
+            max_interval: parseInt(Decade) - 1,
+        });
+
+        var updateRange = function (direction) {
+            if (direction == 1) {
+                if (to + step * direction <= max) {
+                    from += step * direction;
+                    to += step * direction;
+                }
+            }
+
+            if (direction == -1) {
+                if (from + step * direction >= min) {
+                    from += step * direction;
+                    to += step * direction;
+                }
+            }
+
+            range_instance.update({
+                min: min,
+                max: max,
+                step: step,
+                from: from,
+                to: to
+            });
+        };
+
+        ChangeLayerClimate1();
+        ChangeLayerClimate2();
+    }
+
+    function ChangeDate() {
+        $('#mapinfo1').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
+        $('#mapinfo2').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
     }
 </script>
 
@@ -1983,30 +2113,6 @@
     }
 </script>
 
-@*for RangeSlaider*@
-<script>
-    var years10values = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100];
-
-    // be careful! FROM and TO should be index of values array
-    var my_from = years10values.indexOf(1951);
-    var my_to = years10values.indexOf(1961);
-
-    $("#years10").ionRangeSlider({
-        skin: "round",
-        type: "double",
-        grid: true,
-        grid_snap: true,
-        from: my_from,
-        to: my_to,
-        values: years10values,
-        drag_interval: true,
-        min_interval: null,
-        max_interval: null,
-        prettify_enabled: false,
-
-    });
-</script>
-
 <script>
     var yearlabels = [1951, 1961, 1971, 1981, 1991, 2001, 2011, 2021, 2031, 2041, 2051, 2061, 2071, 2081, 2091, 2101];
     var seasonlabels = ['1951 весна', '1951  лето', '1951  осень', '1951  зима', '1961 весна', '1961  лето', '1961  осень', '1961  зима', '1970 весна', '1970  лето', '1970  осень', '1970  зима', '1981 весна', '1981  лето', '1981  осень', '1981  зима', '1991 весна', '1991  лето', '1991  осень', '1991  зима', '2001 весна', '2001  лето', '2001  осень', '2001  зима', '2011 весна', '2011  лето', '2011  осень', '2011  зима', '2021 весна', '2021  лето', '2021  осень', '2021  зима', '2031 весна', '2031  лето', '2031  осень', '2031  зима', '2041 весна', '2041  лето', '2041  осень', '2041  зима', '2051 весна', '2051  лето', '2051  осень', '2051  зима', '2061 весна', '2061  лето', '2061  осень', '2061  зима', '2071 весна', '2071  лето', '2071  осень', '2071  зима', '2081 весна', '2081  лето', '2081  осень', '2081  зима', '2091 весна', '2091  лето', '2091  осень', '2091  зима', '2101весна', '2101  лето', '2101  осень', '2101  зима'];
@@ -2129,8 +2235,9 @@
         Chart1Show();
         Table1Show();
         ChartTableShow();
-        ChangeLayerClimate1();
-        ChangeLayerClimate2();
+        //ChangeLayerClimate1();
+        //ChangeLayerClimate2();
+        CreateDateSlider();
         NavigateToWMA();
     });
 </script>
