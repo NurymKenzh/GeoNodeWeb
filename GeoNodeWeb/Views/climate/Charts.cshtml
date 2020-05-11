@@ -56,6 +56,66 @@
     .map {
         position: relative;
     }
+
+    .selectLayer {
+        position: absolute;
+        top: 5%;
+        left: 10%;
+    }
+
+    .mapYears {
+        position: absolute;
+        top: 5%;
+        right: 5%;
+    }
+
+    .ol-popup {
+        position: absolute;
+        background-color: white;
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        bottom: 12px;
+        left: -50px;
+        min-width: 280px;
+    }
+
+        .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+
+        .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+
+    .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+    }
+
+    .ol-popup-closer:after {
+        content: "✖";
+    }
 </style>
 <input id="id" value="@ViewBag.Id" type="hidden" />
 <div class="row">
@@ -85,9 +145,33 @@
             <div class="col-md-6">
                 <div class="card mb-4 shadow-sm">
                     <div id="map1"></div>
-                    <div class="card-img-overlay">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter1" onchange="ChangeLayerClimate1()">
+                    <div id="popup1" class="ol-popup">
+                        <a href="#" id="popup-closer1" class="ol-popup-closer"></a>
+                        <div id="popup-content1"></div>
+                    </div>
+                    @*<div class="card-img-overlay">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter1" onchange="ChangeLayerClimate1()">
+                                    <option value="tasmax_pd_avg">Максимальная температура</option>
+                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                    <option value="tas_pd_avg">Средняя температура</option>
+                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                    <option value="tasmin_pd_avg">Минимальная температура</option>
+                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                    <option value="pr_pd_avg">Осадки</option>
+                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                    <option value="et_pd_avg">Эвапотранспирация</option>
+                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                                </select>
+                                <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
+                            </div>
+                            <div style="width:60%; float:right">
+                                <img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
+                            </div>
+                        </div>*@
+                    <div class="selectLayer w-50">
+                        <div>
+                            <select class="form-control form-control-sm alert-warning" id="SubParameter1" onchange="ChangeLayerClimate1()">
                                 <option value="tasmax_pd_avg">Максимальная температура</option>
                                 <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
                                 <option value="tas_pd_avg">Средняя температура</option>
@@ -99,11 +183,10 @@
                                 <option value="et_pd_avg">Эвапотранспирация</option>
                                 <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
-                            <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
                         </div>
-                        @*<div style="width:60%; float:right">
-                            <img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
-                        </div>*@
+                    </div>
+                    <div class="mapYears">
+                        <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
                     </div>
                     <div class="card-body">
                         <form>
@@ -144,31 +227,31 @@
                                     </select>
                                 </div>
                                 @*<div class="col-md-4 mb-3 seasons1">
-                        <label for="Season1">Сезон</label>
-                        <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
-                            <option value="4">Зима</option>
-                            <option value="1">Весна</option>
-                            <option value="2">Лето</option>
-                            <option value="3">Осень</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-3 months1">
-                        <label for="Month1">Месяц</label>
-                        <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
-                            <option value="01">Январь</option>
-                            <option value="02">Февраль</option>
-                            <option value="03">Март</option>
-                            <option value="04">Апрель</option>
-                            <option value="05">Май</option>
-                            <option value="06">Июнь</option>
-                            <option value="07">Июль</option>
-                            <option value="08">Август</option>
-                            <option value="09">Сентябрь</option>
-                            <option value="10">Октябрь</option>
-                            <option value="11">Ноябрь</option>
-                            <option value="12">Декабрь</option>
-                        </select>
-                    </div>*@
+                                        <label for="Season1">Сезон</label>
+                                        <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
+                                            <option value="4">Зима</option>
+                                            <option value="1">Весна</option>
+                                            <option value="2">Лето</option>
+                                            <option value="3">Осень</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3 months1">
+                                        <label for="Month1">Месяц</label>
+                                        <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
+                                            <option value="01">Январь</option>
+                                            <option value="02">Февраль</option>
+                                            <option value="03">Март</option>
+                                            <option value="04">Апрель</option>
+                                            <option value="05">Май</option>
+                                            <option value="06">Июнь</option>
+                                            <option value="07">Июль</option>
+                                            <option value="08">Август</option>
+                                            <option value="09">Сентябрь</option>
+                                            <option value="10">Октябрь</option>
+                                            <option value="11">Ноябрь</option>
+                                            <option value="12">Декабрь</option>
+                                        </select>
+                                    </div>*@
                             </div>
                         </form>
                     </div>
@@ -177,9 +260,30 @@
             <div class="col-md-6">
                 <div class="card mb-4 shadow-sm">
                     <div id="map2"></div>
-                    <div class="card-img-overlay">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter2" onchange="ChangeLayerClimate2()">
+                    <div id="popup2" class="ol-popup">
+                        <a href="#" id="popup-closer2" class="ol-popup-closer"></a>
+                        <div id="popup-content2"></div>
+                    </div>
+                    @*<div class="card-img-overlay">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter2" onchange="ChangeLayerClimate2()">
+                                    <option value="tasmax_pd_avg">Максимальная температура</option>
+                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                    <option value="tas_pd_avg">Средняя температура</option>
+                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                    <option value="tasmin_pd_avg">Минимальная температура</option>
+                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                    <option value="pr_pd_avg">Осадки</option>
+                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                    <option value="et_pd_avg">Эвапотранспирация</option>
+                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                                </select>
+                                <h5 class="alert-warning font-weight-bold" id="mapinfo2">1951 - 1960</h5>
+                            </div>
+                        </div>*@
+                    <div class="selectLayer w-50">
+                        <div>
+                            <select class="form-control form-control-sm alert-warning" id="SubParameter2" onchange="ChangeLayerClimate2()">
                                 <option value="tasmax_pd_avg">Максимальная температура</option>
                                 <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
                                 <option value="tas_pd_avg">Средняя температура</option>
@@ -191,8 +295,10 @@
                                 <option value="et_pd_avg">Эвапотранспирация</option>
                                 <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
-                            <h5 class="alert-warning font-weight-bold" id="mapinfo2">1951 - 1960</h5>
                         </div>
+                    </div>
+                    <div class="mapYears">
+                        <h5 class="alert-warning font-weight-bold" id="mapinfo2">1951 - 1960</h5>
                     </div>
                     <div class="card-body">
                         <form>
@@ -273,7 +379,7 @@
                         <option value="30">30 лет</option>
                     </select>
                     <button id="MinusBtn" type="button" class="btn btn-primary"><i class="fa fa-step-backward"></i></button>
-                    <button type="button" class="btn btn-primary"><i class="fa fa-play-circle fa-2x"></i></button>
+                    <button id="PlayPauseBtn" type="button" class="btn btn-primary"><i class="fa fa-play-circle fa-2x"></i></button>
                     <button id="PlusBtn" type="button" class="btn btn-primary"><i class="fa fa-step-forward"></i></button>
                 </div>
             </div>
@@ -1563,6 +1669,39 @@
     });
     Layer_wma_polygon_Navigate2.set('name', 'wma_polygonnavigate');
 
+    // popup
+    var container1 = document.getElementById('popup1');
+    var content1 = document.getElementById('popup-content1');
+    var closer1 = document.getElementById('popup-closer1');
+    var overlay1 = new ol.Overlay({
+        element: container1,
+        autoPan: true,
+        autoPanAnimation: {
+            duration: 250
+        }
+    });
+    closer1.onclick = function () {
+        overlay1.setPosition(undefined);
+        closer1.blur();
+        return false;
+    };
+
+    var container2 = document.getElementById('popup2');
+    var content2 = document.getElementById('popup-content2');
+    var closer2 = document.getElementById('popup-closer2');
+    var overlay2 = new ol.Overlay({
+        element: container2,
+        autoPan: true,
+        autoPanAnimation: {
+            duration: 250
+        }
+    });
+    closer2.onclick = function () {
+        overlay2.setPosition(undefined);
+        closer2.blur();
+        return false;
+    };
+
     var map1 = new ol.Map({
         target: 'map1',
         controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
@@ -1573,6 +1712,7 @@
             Layer_Climate1,
             Layer_wma_polygon1
         ],
+        overlays: [overlay1],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 4,
@@ -1591,12 +1731,68 @@
             Layer_Climate2,
             Layer_wma_polygon2
         ],
+        overlays: [overlay2],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 4,
             minZoom: 4,
             extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
         })
+    });
+</script>
+
+@* map.on('singleclick') *@
+<script>
+    map1.on('singleclick', function (evt) {
+        var viewResolution = (map1.getView().getResolution());
+        var url_Climate = Layer_Climate1.getSource().getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {
+                'INFO_FORMAT': 'text/javascript'
+            });
+        if (url_Climate) {
+            var parser = new ol.format.GeoJSON();
+            $.ajax({
+                url: url_Climate,
+                dataType: 'jsonp',
+                jsonpCallback: 'parseResponse',
+                error: function (xhr, status, error) {
+                }
+            }).then(function (response) {
+                var result = parser.readFeatures(response);
+                if (result.length) {
+                    var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
+                    content1.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>';
+                    overlay1.setPosition(evt.coordinate);
+                }
+            })
+        }
+    });
+
+    map2.on('singleclick', function (evt) {
+        var viewResolution = (map2.getView().getResolution());
+        var url_Climate = Layer_Climate2.getSource().getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {
+                'INFO_FORMAT': 'text/javascript'
+            });
+        if (url_Climate) {
+            var parser = new ol.format.GeoJSON();
+            $.ajax({
+                url: url_Climate,
+                dataType: 'jsonp',
+                jsonpCallback: 'parseResponse',
+                error: function (xhr, status, error) {
+                }
+            }).then(function (response) {
+                var result = parser.readFeatures(response);
+                if (result.length) {
+                    var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
+                    content2.innerHTML = '<p>' + hdms + '</p><code>' + result[0].get('GRAY_INDEX').toFixed(2) + '</code>';
+                    overlay2.setPosition(evt.coordinate);
+                }
+            })
+        }
     });
 </script>
 
@@ -1688,11 +1884,10 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
-        
+
         $('#mapinfo1').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
 
         var yearNumber = parseInt($('#ClimateTimeline').val().split(';')[0]);
-        console.log(yearNumber);
         var date_str = yearNumber;
         if (Period == 'y') {
             date_str += '-01-01';
@@ -1768,7 +1963,7 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
-        
+
         $('#mapinfo2').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
 
         var yearNumber = parseInt($('#ClimateTimeline').val().split(';')[0]);
@@ -1837,12 +2032,12 @@
     var range_instance = null;
     var $ClimateTimeline = $(".js-range-slider");
     $btn_minus = $("#MinusBtn"),
-    $btn_plus = $("#PlusBtn");
+        $btn_plus = $("#PlusBtn"),
+        $btn_play_pause = $("#PlayPauseBtn");
 
     function CreateDateSlider() {
         Decade = $('#Decade').val();
         to = from + parseInt(Decade) - 1;
-        console.log(slider_first);
         if (slider_first) {
             $("#ClimateTimeline").ionRangeSlider({
                 skin: "round",
@@ -1899,6 +2094,41 @@
                 ChangeDate();
                 ChangeLayerClimate1();
                 ChangeLayerClimate2();
+            });
+
+            $btn_play_pause.on("click", function () {
+                var child_play_pause = $btn_play_pause[0].childNodes[0];
+                if ($(child_play_pause).hasClass("fa-play-circle")) {
+                    $(child_play_pause).removeClass("fa-play-circle");
+                    $(child_play_pause).addClass("fa-pause-circle");
+                    var i = years10values.indexOf(from - 1);
+                    var end = years10values.length - 1;
+                    if (Decade == 20) {
+                        end = end - 1;
+                    }
+                    if (Decade == 30) {
+                        end = end - 2;
+                    }
+                    i++;
+                    (function () {
+                        if (i < end && $(child_play_pause).hasClass("fa-pause-circle")) {
+                            updateRange(1);
+                            ChangeDate();
+                            ChangeLayerClimate1();
+                            ChangeLayerClimate2();
+                            i++;
+                            setTimeout(arguments.callee, 2000);
+                        }
+                        else {
+                            $(child_play_pause).removeClass("fa-pause-circle");
+                            $(child_play_pause).addClass("fa-play-circle");
+                        }
+                    })();
+                }
+                else {
+                    $(child_play_pause).removeClass("fa-pause-circle");
+                    $(child_play_pause).addClass("fa-play-circle");
+                }
             });
         }
 
