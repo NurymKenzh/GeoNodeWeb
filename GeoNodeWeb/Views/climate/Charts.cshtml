@@ -116,6 +116,21 @@
     .ol-popup-closer:after {
         content: "✖";
     }
+
+    #map1, #map2 {
+        position: relative;
+    }
+
+    .legend {
+        position: absolute;
+        z-index: 1;
+        width: 50%;
+        right: 1%;
+        bottom: 2%;
+        border: 1px solid #fff;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4), 0 0 5px rgba(0, 0, 0, 0.4);
+        background: #3a465d;
+    }
 </style>
 <input id="id" value="@ViewBag.Id" type="hidden" />
 <div class="row">
@@ -144,31 +159,35 @@
         <div class="row d-flex">
             <div class="col-md-6">
                 <div class="card mb-4 shadow-sm">
-                    <div id="map1"></div>
+                    <div id="map1">
+                        <div class="legend">
+                            <img id="legend1" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
+                        </div>
+                    </div>
                     <div id="popup1" class="ol-popup">
                         <a href="#" id="popup-closer1" class="ol-popup-closer"></a>
                         <div id="popup-content1"></div>
                     </div>
                     @*<div class="card-img-overlay">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter1" onchange="ChangeLayerClimate1()">
-                                    <option value="tasmax_pd_avg">Максимальная температура</option>
-                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                    <option value="tas_pd_avg">Средняя температура</option>
-                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                    <option value="tasmin_pd_avg">Минимальная температура</option>
-                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                    <option value="pr_pd_avg">Осадки</option>
-                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                    <option value="et_pd_avg">Эвапотранспирация</option>
-                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                </select>
-                                <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
-                            </div>
-                            <div style="width:60%; float:right">
-                                <img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
-                            </div>
-                        </div>*@
+                        <div class="d-flex justify-content-between align-items-center">
+                            <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter1" onchange="ChangeLayerClimate1()">
+                                <option value="tasmax_pd_avg">Максимальная температура</option>
+                                <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
+                                <option value="tas_pd_avg">Средняя температура</option>
+                                <option value="tas_dlt_avg">Отклонения средней температуры</option>
+                                <option value="tasmin_pd_avg">Минимальная температура</option>
+                                <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                <option value="pr_pd_avg">Осадки</option>
+                                <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                <option value="et_pd_avg">Эвапотранспирация</option>
+                                <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                            </select>
+                            <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
+                        </div>
+                        <div style="width:60%; float:right">
+                            <img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
+                        </div>
+                    </div>*@
                     <div class="selectLayer w-50">
                         <div>
                             <select class="form-control form-control-sm alert-warning" id="SubParameter1" onchange="ChangeLayerClimate1()">
@@ -227,31 +246,31 @@
                                     </select>
                                 </div>
                                 @*<div class="col-md-4 mb-3 seasons1">
-                                        <label for="Season1">Сезон</label>
-                                        <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
-                                            <option value="4">Зима</option>
-                                            <option value="1">Весна</option>
-                                            <option value="2">Лето</option>
-                                            <option value="3">Осень</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 mb-3 months1">
-                                        <label for="Month1">Месяц</label>
-                                        <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
-                                            <option value="01">Январь</option>
-                                            <option value="02">Февраль</option>
-                                            <option value="03">Март</option>
-                                            <option value="04">Апрель</option>
-                                            <option value="05">Май</option>
-                                            <option value="06">Июнь</option>
-                                            <option value="07">Июль</option>
-                                            <option value="08">Август</option>
-                                            <option value="09">Сентябрь</option>
-                                            <option value="10">Октябрь</option>
-                                            <option value="11">Ноябрь</option>
-                                            <option value="12">Декабрь</option>
-                                        </select>
-                                    </div>*@
+                                    <label for="Season1">Сезон</label>
+                                    <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
+                                        <option value="4">Зима</option>
+                                        <option value="1">Весна</option>
+                                        <option value="2">Лето</option>
+                                        <option value="3">Осень</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3 months1">
+                                    <label for="Month1">Месяц</label>
+                                    <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
+                                        <option value="01">Январь</option>
+                                        <option value="02">Февраль</option>
+                                        <option value="03">Март</option>
+                                        <option value="04">Апрель</option>
+                                        <option value="05">Май</option>
+                                        <option value="06">Июнь</option>
+                                        <option value="07">Июль</option>
+                                        <option value="08">Август</option>
+                                        <option value="09">Сентябрь</option>
+                                        <option value="10">Октябрь</option>
+                                        <option value="11">Ноябрь</option>
+                                        <option value="12">Декабрь</option>
+                                    </select>
+                                </div>*@
                             </div>
                         </form>
                     </div>
@@ -259,7 +278,11 @@
             </div>
             <div class="col-md-6">
                 <div class="card mb-4 shadow-sm">
-                    <div id="map2"></div>
+                    <div id="map2">
+                        <div class="legend">
+                            <img id="legend2" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
+                        </div>
+                    </div>
                     <div id="popup2" class="ol-popup">
                         <a href="#" id="popup-closer2" class="ol-popup-closer"></a>
                         <div id="popup-content2"></div>
@@ -1885,6 +1908,44 @@
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
 
+        //change legend
+        if (SubParameter == 'tasmax_pd_avg' || SubParameter == 'tas_pd_avg' || SubParameter == 'tasmin_pd_avg') {
+            $("#legend1").attr("src", "/esnow/img/legend/Temperature.svg");
+        }
+        else if (SubParameter == 'tasmax_dlt_avg' || SubParameter == 'tas_dlt_avg' || SubParameter == 'tasmin_dlt_avg') {
+            $("#legend1").attr("src", "/esnow/img/legend/Delt_Temperature.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 'y') {
+            $("#legend1").attr("src", "/esnow/img/legend/Precipation_Year.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 's') {
+            $("#legend1").attr("src", "/esnow/img/legend/Precipation_Season.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 'm') {
+            $("#legend1").attr("src", "/esnow/img/legend/Precipation_Month.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 'y') {
+            $("#legend1").attr("src", "/esnow/img/legend/Delt_Precipation_Year.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 's') {
+            $("#legend1").attr("src", "/esnow/img/legend/Delt_Precipation_Season.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 'm') {
+            $("#legend1").attr("src", "/esnow/img/legend/Delt_Precipation_Month.svg");
+        }
+        else if (SubParameter == 'et_pd_avg' && Period == 'y') {
+            $("#legend1").attr("src", "/esnow/img/legend/Evapotranspiration_Year.svg");
+        }
+        else if (SubParameter == 'et_pd_avg' && (Period == 'm' || Period == 's')) {
+            $("#legend1").attr("src", "/esnow/img/legend/Evapotranspiration_Month.svg");
+        }
+        else if (SubParameter == 'et_dlt_avg' && Period == 'y') {
+            $("#legend1").attr("src", "/esnow/img/legend/Evapotranspiration_Year_Dlt.svg");
+        }
+        else if (SubParameter == 'et_dlt_avg' && (Period == 'm' || Period == 's')) {
+            $("#legend1").attr("src", "/esnow/img/legend/Evapotranspiration_Month_Dlt.svg");
+        }
+
         $('#mapinfo1').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
 
         var yearNumber = parseInt($('#ClimateTimeline').val().split(';')[0]);
@@ -1962,6 +2023,44 @@
         }
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
+
+        //change legend
+        if (SubParameter == 'tasmax_pd_avg' || SubParameter == 'tas_pd_avg' || SubParameter == 'tasmin_pd_avg') {
+            $("#legend2").attr("src", "/esnow/img/legend/Temperature.svg");
+        }
+        else if (SubParameter == 'tasmax_dlt_avg' || SubParameter == 'tas_dlt_avg' || SubParameter == 'tasmin_dlt_avg') {
+            $("#legend2").attr("src", "/esnow/img/legend/Delt_Temperature.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 'y') {
+            $("#legend2").attr("src", "/esnow/img/legend/Precipation_Year.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 's') {
+            $("#legend2").attr("src", "/esnow/img/legend/Precipation_Season.svg");
+        }
+        else if (SubParameter == 'pr_pd_avg' && Period == 'm') {
+            $("#legend2").attr("src", "/esnow/img/legend/Precipation_Month.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 'y') {
+            $("#legend2").attr("src", "/esnow/img/legend/Delt_Precipation_Year.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 's') {
+            $("#legend2").attr("src", "/esnow/img/legend/Delt_Precipation_Season.svg");
+        }
+        else if (SubParameter == 'pr_dlt_avg_mm' && Period == 'm') {
+            $("#legend2").attr("src", "/esnow/img/legend/Delt_Precipation_Month.svg");
+        }
+        else if (SubParameter == 'et_pd_avg' && Period == 'y') {
+            $("#legend2").attr("src", "/esnow/img/legend/Evapotranspiration_Year.svg");
+        }
+        else if (SubParameter == 'et_pd_avg' && (Period == 'm' || Period == 's')) {
+            $("#legend2").attr("src", "/esnow/img/legend/Evapotranspiration_Month.svg");
+        }
+        else if (SubParameter == 'et_dlt_avg' && Period == 'y') {
+            $("#legend2").attr("src", "/esnow/img/legend/Evapotranspiration_Year_Dlt.svg");
+        }
+        else if (SubParameter == 'et_dlt_avg' && (Period == 'm' || Period == 's')) {
+            $("#legend2").attr("src", "/esnow/img/legend/Evapotranspiration_Month_Dlt.svg");
         }
 
         $('#mapinfo2').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
