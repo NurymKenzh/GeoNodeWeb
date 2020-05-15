@@ -582,7 +582,7 @@
                 <footer class="footer-classic fixed-bottom border-top border-light" style="background: #16344e;">
                     <div class="container-fluid">
                         <div class="row align-items-center">
-                            <div class="col-2">
+                            <div class="col">
                                 <div class="col">
                                     <div class="input-group">
                                         <select id="type" class="measure input-group-sm">
@@ -597,7 +597,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-9">
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">Отклонение</button>
@@ -607,11 +607,12 @@
                                     </div>
                                     <div class="col">
                                         <button id="MinusBtn" class="MinusBtn btn btn-outline-light btn-sm align-middle"><i class="fa fa-arrow-circle-left"></i></button>
+                                        <button id="PlayPauseBtn" class="PlayPauseBtn btn btn-outline-light btn-sm"><i class="fa fa-play-circle"></i></button>
                                         <button id="PlusBtn" class="PlusBtn btn btn-outline-light btn-sm"><i class="fa fa-arrow-circle-right"></i></button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col">
                                 <small class="text-light float-right">&copy; @DateTime.Now.Year.ToString() - GeoNode - <a href="mailto:ingeokz@gmail.com">ingeokz@gmail.com</a></small>
                             </div>
                         </div>
@@ -1450,7 +1451,8 @@
     var range_instance = null;
     var $ClimateTimeline = $(".js-range-slider"),
         $btn_minus = $(".MinusBtn"),
-        $btn_plus = $(".PlusBtn");
+        $btn_plus = $(".PlusBtn"),
+        $btn_play_pause = $(".PlayPauseBtn");
     var InfoTitle = '',
         InfoTitletitle = '',
         Layerdescription = '';
@@ -1626,6 +1628,39 @@
             $btn_plus.on("click", function () {
                 updateRange(1);
                 ChangeDate();
+            });
+
+            $btn_play_pause.on("click", function () {
+                var child_play_pause = $btn_play_pause[0].childNodes[0];
+                if ($(child_play_pause).hasClass("fa-play-circle")) {
+                    $(child_play_pause).removeClass("fa-play-circle");
+                    $(child_play_pause).addClass("fa-pause-circle");
+                    var i = yearsvalues.indexOf(from - 1);
+                    var end = yearsvalues.length - 1;
+                    if (Decade == 20) {
+                        end = end - 1;
+                    }
+                    if (Decade == 30) {
+                        end = end - 2;
+                    }
+                    i++;
+                    (function () {
+                        if (i < end && $(child_play_pause).hasClass("fa-pause-circle")) {
+                            updateRange(1);
+                            ChangeDate();
+                            i++;
+                            setTimeout(arguments.callee, 4000);
+                        }
+                        else {
+                            $(child_play_pause).removeClass("fa-pause-circle");
+                            $(child_play_pause).addClass("fa-play-circle");
+                        }
+                    })();
+                }
+                else {
+                    $(child_play_pause).removeClass("fa-pause-circle");
+                    $(child_play_pause).addClass("fa-play-circle");
+                }
             });
         }
 
@@ -1947,7 +1982,10 @@
         $table.bootstrapTable('destroy').bootstrapTable({
             exportDataType: $(this).val(),
             exportTypes: ['txt', 'excel', 'pdf'],
-            iconSize: "sm"
+            iconSize: "sm",
+            exportOptions: {
+                preventInjection: false
+            }
         }).trigger('change')
     })
 </script>
@@ -2287,7 +2325,13 @@
                 //}
                 raster_data = data.raster_table_bs;
                 $(function () {
-                    $('#rasterdata').bootstrapTable('destroy').bootstrapTable({ data: data.raster_table_bs, iconSize: "sm" });
+                    $('#rasterdata').bootstrapTable('destroy').bootstrapTable({
+                        data: data.raster_table_bs,
+                        iconSize: "sm",
+                        exportOptions: {
+                            preventInjection: false
+                        }
+                    });
                     $('#rasterdata').bootstrapTable('load', data.raster_table_bs);
                 })
             },
@@ -2450,6 +2494,7 @@
                     overlay: false,
                     repositionOnOpen: false
                 })
+                $('#LegendBtn').trigger('click');
 
                 $('#InfoTitle').text(data.title);
                 $('#Layerdescription').text(data.description);
