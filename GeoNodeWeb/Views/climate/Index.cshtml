@@ -83,12 +83,12 @@
         background-color: white;
         -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
         filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-        padding: 15px;
-        border-radius: 10px;
+        padding: 10px;
+        border-radius: 5px;
         border: 1px solid #cccccc;
         bottom: 12px;
         left: -50px;
-        min-width: 280px;
+        min-width: 200px;
     }
 
         .ol-popup:after, .ol-popup:before {
@@ -115,8 +115,12 @@
             margin-left: -11px;
         }
 
+    .ol-popup p {
+        font-size: 12px;
+        margin: 0px;
+    }
     .ol-popup-closer {
-        text-decoration: none;
+        text-decoration: none;        
         position: absolute;
         top: 2px;
         right: 8px;
@@ -1890,7 +1894,7 @@
                         $('#chartSpan').text('1');
                         //var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
                         content.innerHTML = '<p>ВХБ - ' + result[0].get('NameWMB_Ru') + '</p><code>ВХУ - ' + result[0].get('CodeWMA') + '</code>'
-                            + '<br /><input type="button" value="График" onclick="Charts()"/>';
+                            + '<br /><button type="button" class="btn btn-outline-primary btn-sm"  onclick="Charts()"><i class="fa fa-bar-chart-o"></i></button>';
                         overlay.setPosition(evt.coordinate);
                     }
                 });
