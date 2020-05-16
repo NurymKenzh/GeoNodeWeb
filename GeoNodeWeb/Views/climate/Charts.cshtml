@@ -155,42 +155,18 @@
 
     </nav>
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="margin-top: 50px;">
-        <h4 class="py-4 text-center bg-light">Section title</h4>
+        <h4 id="ChartTitle" class="py-4 text-center bg-light"></h4>
         <div class="row d-flex">
             <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div id="map1">
-                        <div class="legend">
-                            <img id="legend1" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
-                        </div>
+                <div class="card-img-overlay">
+                    <div style="width:60%; float:right">
+                        <img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
                     </div>
-                    <div id="popup1" class="ol-popup">
-                        <a href="#" id="popup-closer1" class="ol-popup-closer"></a>
-                        <div id="popup-content1"></div>
-                    </div>
-                    @*<div class="card-img-overlay">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter1" onchange="ChangeLayerClimate1()">
-                                    <option value="tasmax_pd_avg">Максимальная температура</option>
-                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                    <option value="tas_pd_avg">Средняя температура</option>
-                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                    <option value="tasmin_pd_avg">Минимальная температура</option>
-                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                    <option value="pr_pd_avg">Осадки</option>
-                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                    <option value="et_pd_avg">Эвапотранспирация</option>
-                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                </select>
-                                <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
-                            </div>
-                            <div style="width:60%; float:right">
-                                <img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
-                            </div>
-                        </div>*@
-                    <div class="selectLayer w-50">
-                        <div>
-                            <select class="form-control form-control-sm alert-warning" id="SubParameter1" onchange="ChangeLayerClimate1()">
+                </div>
+                <div class="card border-info rounded-0 mb-4 shadow-sm">
+                    <div class="card-header rounded-0 bg-info border-info">
+                        <div class="input-group input-group-sm">
+                            <select class="form-control w-50" id="SubParameter1" onchange="ChangeLayerClimate1()">
                                 <option value="tasmax_pd_avg">Максимальная температура</option>
                                 <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
                                 <option value="tas_pd_avg">Средняя температура</option>
@@ -202,111 +178,56 @@
                                 <option value="et_pd_avg">Эвапотранспирация</option>
                                 <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
-                        </div>
-                    </div>
-                    <div class="mapYears">
-                        <h5 class="font-weight-bold alert-warning" id="mapinfo1">1951 - 1960</h5>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="RCP1">RCP</label>
-                                    <select class="form-control form-control-sm" id="RCP1" onchange="ChangeLayerClimate1()">
-                                        <option value="rcp45">rcp 4.5</option>
-                                        <option value="rcp85">rcp 8.5</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="Period1">Период</label>
-                                    <select class="form-control form-control-sm" id="Period1" onchange="ChangeLayerClimate1()">
-                                        <option value="y">Год</option>
-                                        @*<option value="s">Сезон</option>*@
-                                        <optgroup label="Сезон">
-                                            <option value="4">Зима</option>
-                                            <option value="1">Весна</option>
-                                            <option value="2">Лето</option>
-                                            <option value="3">Осень</option>
-                                        </optgroup>
-                                        @*<option value="m">Месяц</option>*@
-                                        <optgroup label="Месяц">
-                                            <option value="01">Январь</option>
-                                            <option value="02">Февраль</option>
-                                            <option value="03">Март</option>
-                                            <option value="04">Апрель</option>
-                                            <option value="05">Май</option>
-                                            <option value="06">Июнь</option>
-                                            <option value="07">Июль</option>
-                                            <option value="08">Август</option>
-                                            <option value="09">Сентябрь</option>
-                                            <option value="10">Октябрь</option>
-                                            <option value="11">Ноябрь</option>
-                                            <option value="12">Декабрь</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                                @*<div class="col-md-4 mb-3 seasons1">
-                                        <label for="Season1">Сезон</label>
-                                        <select class="form-control form-control-sm" id="Season1" onchange="ChangeLayerClimate1()">
-                                            <option value="4">Зима</option>
-                                            <option value="1">Весна</option>
-                                            <option value="2">Лето</option>
-                                            <option value="3">Осень</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 mb-3 months1">
-                                        <label for="Month1">Месяц</label>
-                                        <select class="form-control form-control-sm" id="Month1" onchange="ChangeLayerClimate1()">
-                                            <option value="01">Январь</option>
-                                            <option value="02">Февраль</option>
-                                            <option value="03">Март</option>
-                                            <option value="04">Апрель</option>
-                                            <option value="05">Май</option>
-                                            <option value="06">Июнь</option>
-                                            <option value="07">Июль</option>
-                                            <option value="08">Август</option>
-                                            <option value="09">Сентябрь</option>
-                                            <option value="10">Октябрь</option>
-                                            <option value="11">Ноябрь</option>
-                                            <option value="12">Декабрь</option>
-                                        </select>
-                                    </div>*@
+                            <select class="form-control" id="RCP1" onchange="ChangeLayerClimate1()">
+                                <option value="rcp45">rcp 4.5</option>
+                                <option value="rcp85">rcp 8.5</option>
+                            </select>
+                            <select class="form-control" id="Period1" onchange="ChangeLayerClimate1()">
+                                <option value="y">Год</option>
+                                <optgroup label="Сезон">
+                                    <option value="4">Зима</option>
+                                    <option value="1">Весна</option>
+                                    <option value="2">Лето</option>
+                                    <option value="3">Осень</option>
+                                </optgroup>
+                                <optgroup label="Месяц">
+                                    <option value="01">Январь</option>
+                                    <option value="02">Февраль</option>
+                                    <option value="03">Март</option>
+                                    <option value="04">Апрель</option>
+                                    <option value="05">Май</option>
+                                    <option value="06">Июнь</option>
+                                    <option value="07">Июль</option>
+                                    <option value="08">Август</option>
+                                    <option value="09">Сентябрь</option>
+                                    <option value="10">Октябрь</option>
+                                    <option value="11">Ноябрь</option>
+                                    <option value="12">Декабрь</option>
+                                </optgroup>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text small" id="mapinfo1">1951 - 1960</span>
                             </div>
-                        </form>
+                        </div>                       
                     </div>
+                    <div class="card-body p-0">
+                        <div id="map1">
+                            <div class="legend">
+                                <img id="legend1" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
+                            </div>
+                        </div>
+                        <div id="popup1" class="ol-popup">
+                            <a href="#" id="popup-closer1" class="ol-popup-closer"></a>
+                            <div id="popup-content1"></div>
+                        </div>
+                    </div>                    
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div id="map2">
-                        <div class="legend">
-                            <img id="legend2" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
-                        </div>
-                    </div>
-                    <div id="popup2" class="ol-popup">
-                        <a href="#" id="popup-closer2" class="ol-popup-closer"></a>
-                        <div id="popup-content2"></div>
-                    </div>
-                    @*<div class="card-img-overlay">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <select class="form-control form-control-sm alert-warning w-50 ml-4" id="SubParameter2" onchange="ChangeLayerClimate2()">
-                                    <option value="tasmax_pd_avg">Максимальная температура</option>
-                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                    <option value="tas_pd_avg">Средняя температура</option>
-                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                    <option value="tasmin_pd_avg">Минимальная температура</option>
-                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                    <option value="pr_pd_avg">Осадки</option>
-                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                    <option value="et_pd_avg">Эвапотранспирация</option>
-                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                </select>
-                                <h5 class="alert-warning font-weight-bold" id="mapinfo2">1951 - 1960</h5>
-                            </div>
-                        </div>*@
-                    <div class="selectLayer w-50">
-                        <div>
-                            <select class="form-control form-control-sm alert-warning" id="SubParameter2" onchange="ChangeLayerClimate2()">
+                <div class="card border-info rounded-0 mb-4 shadow-sm">
+                    <div class="card-header rounded-0 bg-info border-info">
+                        <div class="input-group input-group-sm">
+                            <select class="form-control w-50" id="SubParameter2" onchange="ChangeLayerClimate2()">
                                 <option value="tasmax_pd_avg">Максимальная температура</option>
                                 <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
                                 <option value="tas_pd_avg">Средняя температура</option>
@@ -318,78 +239,49 @@
                                 <option value="et_pd_avg">Эвапотранспирация</option>
                                 <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
                             </select>
+                            <select class="form-control" id="RCP2" onchange="ChangeLayerClimate2()">
+                                <option value="rcp45">rcp 4.5</option>
+                                <option value="rcp85">rcp 8.5</option>
+                            </select>
+                            <select class="form-control" id="Period2" onchange="ChangeLayerClimate2()">
+                                <option value="y">Год</option>
+                                <optgroup label="Сезон">
+                                    <option value="4">Зима</option>
+                                    <option value="1">Весна</option>
+                                    <option value="2">Лето</option>
+                                    <option value="3">Осень</option>
+                                </optgroup>
+                                <optgroup label="Месяц">
+                                    <option value="01">Январь</option>
+                                    <option value="02">Февраль</option>
+                                    <option value="03">Март</option>
+                                    <option value="04">Апрель</option>
+                                    <option value="05">Май</option>
+                                    <option value="06">Июнь</option>
+                                    <option value="07">Июль</option>
+                                    <option value="08">Август</option>
+                                    <option value="09">Сентябрь</option>
+                                    <option value="10">Октябрь</option>
+                                    <option value="11">Ноябрь</option>
+                                    <option value="12">Декабрь</option>
+                                </optgroup>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text small" id="mapinfo2">1951 - 1960</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="mapYears">
-                        <h5 class="alert-warning font-weight-bold" id="mapinfo2">1951 - 1960</h5>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="RCP1">RCP</label>
-                                    <select class="form-control form-control-sm" id="RCP2" onchange="ChangeLayerClimate2()">
-                                        <option value="rcp45">rcp 4.5</option>
-                                        <option value="rcp85">rcp 8.5</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="Period1">Период</label>
-                                    <select class="form-control form-control-sm" id="Period2" onchange="ChangeLayerClimate2()">
-                                        <option value="y">Год</option>
-                                        @*<option value="s">Сезон</option>*@
-                                        <optgroup label="Сезон">
-                                            <option value="4">Зима</option>
-                                            <option value="1">Весна</option>
-                                            <option value="2">Лето</option>
-                                            <option value="3">Осень</option>
-                                        </optgroup>
-                                        @*<option value="m">Месяц</option>*@
-                                        <optgroup label="Месяц">
-                                            <option value="01">Январь</option>
-                                            <option value="02">Февраль</option>
-                                            <option value="03">Март</option>
-                                            <option value="04">Апрель</option>
-                                            <option value="05">Май</option>
-                                            <option value="06">Июнь</option>
-                                            <option value="07">Июль</option>
-                                            <option value="08">Август</option>
-                                            <option value="09">Сентябрь</option>
-                                            <option value="10">Октябрь</option>
-                                            <option value="11">Ноябрь</option>
-                                            <option value="12">Декабрь</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                                @*<div class="col-md-4 mb-3 seasons2">
-                                        <label for="Season1">Сезон</label>
-                                        <select class="form-control form-control-sm" id="Season2" onchange="ChangeLayerClimate2()">
-                                            <option value="4">Зима</option>
-                                            <option value="1">Весна</option>
-                                            <option value="2">Лето</option>
-                                            <option value="3">Осень</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 mb-3 months2">
-                                        <label for="Month1">Месяц</label>
-                                        <select class="form-control form-control-sm" id="Month2" onchange="ChangeLayerClimate2()">
-                                            <option value="01">Январь</option>
-                                            <option value="02">Февраль</option>
-                                            <option value="03">Март</option>
-                                            <option value="04">Апрель</option>
-                                            <option value="05">Май</option>
-                                            <option value="06">Июнь</option>
-                                            <option value="07">Июль</option>
-                                            <option value="08">Август</option>
-                                            <option value="09">Сентябрь</option>
-                                            <option value="10">Октябрь</option>
-                                            <option value="11">Ноябрь</option>
-                                            <option value="12">Декабрь</option>
-                                        </select>
-                                    </div>*@
+                    <div class="card-body p-0">
+                        <div id="map2">
+                            <div class="legend">
+                                <img id="legend2" class="card-img-top" src="/esnow/img/legend/Temperature.svg">
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div id="popup2" class="ol-popup">
+                            <a href="#" id="popup-closer2" class="ol-popup-closer"></a>
+                            <div id="popup-content2"></div>
+                        </div>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -423,26 +315,22 @@
                                 <a class="nav-link" id="tables-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="tables" aria-selected="false" onclick="TabClick(this)">Table</a>
                             </li>
                         </ul>
-
                         <div id="charts" role="tabpanel" aria-labelledby="charts-tab">
-                            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                                <h1 id="ChartTitle" class="h4"></h1>
-                                <div class="btn-toolbar">
-                                    <div class="btn-group mr-2">
-                                        <div class="btn-group btn-group-sm" role="group" aria-label="Period">
-                                            <button type="button" class="btn-default" onclick="Chart1Show(); Table1Show();">Год</button>
-                                            <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">Сезон</button>
-                                            <button type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">Месяц</button>
-                                        </div>
-                                        <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Min-max">
-                                            <button type="button" class="btn-danger" onclick="ShowMax()">Максимум</button>
-                                            <button type="button" class="btn-primary" onclick="ShowMin()">Минимум</button>
-                                            <button type="button" class="btn-info" onclick="ShowMedian()">Медиана</button>
-                                        </div>
-                                        <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Chart type">
-                                            <button id="changeToLine" onclick="Chart1()"><i class="fa fa-area-chart"></i></button>
-                                            <button id="changeToBar" onclick="Chart1()"><i class="fa fa-bar-chart"></i></button>
-                                        </div>
+                            <div class="btn-toolbar mt-2">
+                                <div class="btn-group mr-2">
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Period">
+                                        <button type="button" class="btn-default" onclick="Chart1Show(); Table1Show();">Год</button>
+                                        <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">Сезон</button>
+                                        <button type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">Месяц</button>
+                                    </div>
+                                    <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Min-max">
+                                        <button type="button" class="btn-danger" onclick="ShowMax()">Максимум</button>
+                                        <button type="button" class="btn-primary" onclick="ShowMin()">Минимум</button>
+                                        <button type="button" class="btn-info" onclick="ShowMedian()">Медиана</button>
+                                    </div>
+                                    <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Chart type">
+                                        <button id="changeToLine" onclick="Chart1()"><i class="fa fa-area-chart"></i></button>
+                                        <button id="changeToBar" onclick="Chart1()"><i class="fa fa-bar-chart"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -881,8 +769,7 @@
                                        data-show-refresh="true"
                                        data-show-columns="true"
                                        data-show-print="true"
-                                       data-show-export="true"
-                                       >
+                                       data-show-export="true">
                                     <thead class="thead-light">
                                         <tr>
                                             <th data-field="year"
@@ -1076,7 +963,7 @@
                     options: {
                         responsive: true,
                         legend: {
-                            position: 'right',
+                            position: 'bottom',
                         },
                         title: {
                             display: true,
