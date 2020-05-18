@@ -441,7 +441,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">
                                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                                        <h6 class="mb-0">Среднее значение по десятилетьям 1951-1960 + <small>(RCP 4.5)</small></h6>
+                                        <h6 class="mb-0" id="table_title">Среднее значение по десятилетиям 1951-1960 (RCP 4.5)</h6>
                                         <i class="fa fa-info-circle text-primary SomeInfo" InfoTitle="Чтобы просмотреть данные по месяцам, ... Раскройте список"></i>
                                     </div>                                    
                                     <div class="table-responsive">
@@ -1463,7 +1463,7 @@
     var InfoTitle = '',
         InfoTitletitle = '',
         Layerdescription = '';
-        var InfoInfo = '';
+    var InfoInfo = '';
 
     function ChangeLayerClimate() {
         var layerClimate = '';
@@ -1709,6 +1709,8 @@
     }
 
     function ChangeDate() {
+        ChangeTableTitle();
+
         // popup
         overlay.setPosition(undefined);
         closer.blur();
@@ -1724,16 +1726,12 @@
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
 
-
-
         //var date = dates[$('#date').val()];
         //date = date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2);
         date = range_instance.result.from;
         if (+range_instance.result.from.toString().split('').pop() != 1) {
             date = range_instance.result.from.toString().substr(0, 3) + '1';
         }
-        
-
 
         var date_str = date,
             date_label = date;
@@ -1830,6 +1828,43 @@
     function removeSpecialAreas() {
         $('#specialarea').remove();
     }
+
+    function ChangeTableTitle() {
+        var date_str = range_instance.result.from,
+            date_label = range_instance.result.from;
+        if (Period == 'y') {
+            date_str += '-01-01';
+        }
+        if (Period == 's') {
+            // эвапотранспорация
+            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg') {
+                if (Season == 4) {
+                    date_str += '-01-01';
+                }
+                else if (Season == 1) {
+                    date_str += '-03-01';
+                }
+                else if (Season == 2) {
+                    date_str += '-06-01';
+                }
+                else if (Season == 3) {
+                    date_str += '-09-01';
+                }
+            }
+            else {
+                date_str += '-0' + Season + '-01';
+            }
+        }
+        if (Period == 'm') {
+            date_str += '-' + Month + '-01';
+        }
+        date_label += ' - ' + (parseInt(date_label) + parseInt(Decade) - 1).toString();
+        var rcp_label = 'RCP 4.5';
+        if (RCP == 'rcp85') {
+            rcp_label = 'RCP 8.5'
+        }
+        $('#table_title').text('Среднее значение по десятилетиям ' + date_label + ' (' + rcp_label + ')');
+    }
 </script>
 
 @* map.on('singleclick') *@
@@ -1904,6 +1939,8 @@
             clickX = ol.proj.toLonLat(evt.coordinate)[0];
             clickY = ol.proj.toLonLat(evt.coordinate)[1];
             TableRasters(clickX, clickY, range_instance.result.from);
+
+            ChangeTableTitle();
 
             var viewResolution = (map.getView().getResolution());
             var url_Climate = Layer_Climate.getSource().getGetFeatureInfoUrl(
@@ -2349,8 +2386,6 @@
     }
 </script>
 
-
-
 @* ChangeLayersClimate *@
 <script>
     function ChangeLayersClimate() {
@@ -2591,7 +2626,9 @@
                     }
                 });
             },
-
+            onClose: function () {
+                Source_Rectangle.clear();
+            },
         });
         // Confirm
         $('#DownloadBtn').click(function () {

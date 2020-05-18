@@ -147,10 +147,10 @@
                 </div>
                 <div class="form-group">
                     <label for="wma">ВХУ:</label>
-                    <select class="form-control" id="wma" onchange="NavigateToWMA()"></select>
+                    <select class="form-control" id="wma" onchange="NavigateToWMA(); RefreshWMS();"></select>
                 </div>
             </form>
-            <input type="button" class="btn btn-primary btn-block" value="Обновить" onclick="RefreshWMS()" />
+            @*<input type="button" class="btn btn-primary btn-block" value="Обновить" onclick="RefreshWMS()" />*@
         </fieldset>
         <div class="card-body">
 
@@ -332,29 +332,29 @@
                                         <button type="button" class="btn-info" onclick="ShowMedian()">Медиана</button>
                                     </div>
                                     <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Chart type">
-                                        <button id="changeToLine" onclick="Chart1()"><i class="fa fa-area-chart"></i></button>
-                                        <button id="changeToBar" onclick="Chart1()"><i class="fa fa-bar-chart"></i></button>
+                                        <button id="changeToLine" onclick="Chart1($('#wma').val(), 'line'); Chart2($('#wma').val(), 'line'); Chart3($('#wma').val(), 'line');"><i class="fa fa-area-chart"></i></button>
+                                        <button id="changeToBar" onclick="Chart1($('#wma').val(), 'bar'); Chart2($('#wma').val(), 'bar'); Chart3($('#wma').val(), 'bar');"><i class="fa fa-bar-chart"></i></button>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3" id="chartbody1">
                                 <div class="col-md-3 order-md-2 mt-2">
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border"> Configure Plot 1 </legend>
+                                        <legend class="scheduler-border"> Параметры графика </legend>
                                         <form>
                                             <div class="form-group">
                                                 <label for="chart1SubParameter">Климатический параметр:</label>
                                                 <select class="form-control form-control-sm" id="chart1SubParameter">
-                                                    <option value="tasmax_pd_avg">Максимальная температура</option>
-                                                    <option value="tas_pd_avg">Средняя температура</option>
-                                                    <option value="tasmin_pd_avg">Минимальная температура</option>
-                                                    <option value="pr_pd_avg">Осадки</option>
+                                                    <option value="tasmax_pd_avg">Максимальная температура, ⁰С</option>
+                                                    <option value="tas_pd_avg">Средняя температура, ⁰С</option>
+                                                    <option value="tasmin_pd_avg">Минимальная температура, ⁰С</option>
+                                                    <option value="pr_pd_avg">Осадки, мм</option>
                                                     <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                                    <option value="et_pd_avg">Эвапотранспирация</option>
-                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                                    <option value="et_pd_avg">Эвапотранспирация, мм</option>
+                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода, мм</option>
+                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода, ⁰С</option>
+                                                    <option value="tas_dlt_avg">Отклонения средней температуры, ⁰С</option>
+                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры, ⁰С</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -447,7 +447,7 @@
                             <div class="row mb-3" id="chartbody2">
                                 <div class="col-md-3 order-md-2 mt-2">
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border"> Configure Plot 2 </legend>
+                                        <legend class="scheduler-border"> Параметры графика </legend>
                                         <div class="form-group">
                                             <label for="chartType" class="mr-2">Тип диаграммы:</label>
                                             <select name="chartType" id="chartType" onchange="updateChartType()">
@@ -460,16 +460,16 @@
                                             <div class="form-group">
                                                 <label for="chart2SubParameter">Климатический параметр:</label>
                                                 <select class="form-control form-control-sm" id="chart2SubParameter">
-                                                    <option value="tasmax_pd_avg">Максимальная температура</option>
-                                                    <option value="tas_pd_avg">Средняя температура</option>
-                                                    <option value="tasmin_pd_avg">Минимальная температура</option>
-                                                    <option value="pr_pd_avg">Осадки</option>
+                                                    <option value="tasmax_pd_avg">Максимальная температура, ⁰С</option>
+                                                    <option value="tas_pd_avg">Средняя температура, ⁰С</option>
+                                                    <option value="tasmin_pd_avg">Минимальная температура, ⁰С</option>
+                                                    <option value="pr_pd_avg">Осадки, мм</option>
                                                     <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                                    <option value="et_pd_avg">Эвапотранспирация</option>
-                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                                    <option value="et_pd_avg">Эвапотранспирация, мм</option>
+                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода, мм</option>
+                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода, ⁰С</option>
+                                                    <option value="tas_dlt_avg">Отклонения средней температуры, ⁰С</option>
+                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры, ⁰С</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -578,21 +578,21 @@
                             <div class="row mb-3" id="chartbody3">
                                 <div class="col-md-3 order-md-2 mt-2">
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border"> Configure Plot 3 </legend>
+                                        <legend class="scheduler-border"> Параметры графика </legend>
                                         <form>
                                             <div class="form-group">
                                                 <label for="chart3SubParameter">Климатический параметр:</label>
                                                 <select class="form-control form-control-sm" id="chart3SubParameter">
-                                                    <option value="tasmax_pd_avg">Максимальная температура</option>
-                                                    <option value="tas_pd_avg">Средняя температура</option>
-                                                    <option value="tasmin_pd_avg">Минимальная температура</option>
-                                                    <option value="pr_pd_avg">Осадки</option>
+                                                    <option value="tasmax_pd_avg">Максимальная температура, ⁰С</option>
+                                                    <option value="tas_pd_avg">Средняя температура, ⁰С</option>
+                                                    <option value="tasmin_pd_avg">Минимальная температура, ⁰С</option>
+                                                    <option value="pr_pd_avg">Осадки, мм</option>
                                                     <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                                    <option value="et_pd_avg">Эвапотранспирация</option>
-                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
-                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                                    <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
+                                                    <option value="et_pd_avg">Эвапотранспирация, мм</option>
+                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода, мм</option>
+                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода, ⁰С</option>
+                                                    <option value="tas_dlt_avg">Отклонения средней температуры, ⁰С</option>
+                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры, ⁰С</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -734,6 +734,7 @@
                         <div class="tab-pane fade active show" id="tables" role="tabpanel" aria-labelledby="tables-tab">
                             @*<p class="card-text text-secondary">Averages for the decade 1981–2010</p>*@
                             <div id="table1" class="table-responsive">
+                                <h4 id="table1title"></h4>
                                 <table id="rasterdata1" class="table table-striped"
                                        data-toggle="table"
                                        data-buttons="btn btn-sm"
@@ -748,8 +749,8 @@
                                        data-show-export="true">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th data-field="year"
-                                                data-detail-formatter="idDetailMonth">Год</th>
+                                            <th data-field="period"
+                                                data-detail-formatter="idDetailMonth">Период</th>
                                             <th data-field="max"
                                                 data-detail-formatter="idDetailMonth">Максимум</th>
                                             <th data-field="min"
@@ -761,6 +762,7 @@
                                 </table>
                             </div>
                             <div id="table2" class="table-responsive">
+                                <h4 id="table2title"></h4>
                                 <table id="rasterdata2" class="table table-striped"
                                        data-toggle="table"
                                        data-buttons="btn btn-sm"
@@ -775,8 +777,8 @@
                                        data-show-export="true">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th data-field="year"
-                                                data-detail-formatter="idDetailMonth">Год</th>
+                                            <th data-field="period"
+                                                data-detail-formatter="idDetailMonth">Период</th>
                                             <th data-field="season"
                                                 data-detail-formatter="idDetailMonth">Сезон</th>
                                             <th data-field="max"
@@ -790,6 +792,7 @@
                                 </table>
                             </div>
                             <div id="table3" class="table-responsive">
+                                <h4 id="table3title"></h4>
                                 <table id="rasterdata3" class="table table-striped"
                                        data-toggle="table"
                                        data-buttons="btn btn-sm"
@@ -804,8 +807,8 @@
                                        data-show-export="true">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th data-field="year"
-                                                data-detail-formatter="idDetailMonth">Год</th>
+                                            <th data-field="period"
+                                                data-detail-formatter="idDetailMonth">Период</th>
                                             <th data-field="month"
                                                 data-detail-formatter="idDetailMonth">Месяц</th>
                                             <th data-field="max"
@@ -901,7 +904,7 @@
         }
     }
 
-    function Chart1(objectid) {
+    function Chart1(objectid, type ='line') {
         var Id = objectid;
         if (objectid == null) {
             Id = @ViewBag.Id;
@@ -961,7 +964,7 @@
                     chart1.destroy();
                 }
                 chart1 = new Chart(ctx1, {
-                    type: 'bar',
+                    type: type,
                     data: chart1Data,
                     options: {
                         responsive: true,
@@ -981,29 +984,33 @@
 					    }
                     }
                 });
-                document.getElementById('changeToLine').onclick = function () {
-                    chart1.destroy();
-                    chart1 = new Chart(ctx1, {
-                        type: 'line',
-                        data: chart1Data,
-                        options: {
-                        responsive: true,
-                        legend: {
-                            position: 'right',
-                        },
-                        title: {
-                            display: true,
-                            fontSize: 20,
-                            fontColor: '#000',
-                            //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
-                        },
-                        tooltips: {
-						    mode: 'index',
-						    intersect: false
-					    }
-                    }
-                    });
-                };
+                ShowMedian();
+                if ($('#chart1SubParameter').val() == 'tasmax_pd_avg') {
+                    ShowMax();
+                }
+         //       document.getElementById('changeToLine').onclick = function () {
+         //           chart1.destroy();
+         //           chart1 = new Chart(ctx1, {
+         //               type: 'line',
+         //               data: chart1Data,
+         //               options: {
+         //               responsive: true,
+         //               legend: {
+         //                   position: 'right',
+         //               },
+         //               title: {
+         //                   display: true,
+         //                   fontSize: 20,
+         //                   fontColor: '#000',
+         //                   //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
+         //               },
+         //               tooltips: {
+						   // mode: 'index',
+						   // intersect: false
+					    //}
+         //           }
+         //           });
+         //       };
             },
             error: function () {
                 console.log('Error 1');
@@ -1011,7 +1018,7 @@
         });
     };
 
-    function Chart2(objectid) {
+    function Chart2(objectid, type = 'line') {
         var Id = objectid;
         if (objectid == null) {
             Id = @ViewBag.Id;
@@ -1101,7 +1108,7 @@
                     }
                 }
                 var ctx2 = document.getElementById('chart2Canvas').getContext('2d');
-                var type = document.getElementById("chartType").value;
+                //var type = document.getElementById("chartType").value;
                 if (chart2 != null) {
                     chart2.destroy();
                 }
@@ -1126,14 +1133,17 @@
                         }
                     }
                 });
-
+                ShowMedian();
+                if ($('#chart2SubParameter').val() == 'tasmax_pd_avg') {
+                    ShowMax();
+                }
             },
             error: function () {
             }
         });
     };
 
-    function Chart3(objectid) {
+    function Chart3(objectid, type = 'line') {
         var Id = objectid;
         if (objectid == null) {
             Id = @ViewBag.Id;
@@ -1274,7 +1284,7 @@
                     chart3.destroy();
                 }
                 chart3 = new Chart(ctx2, {
-                    type: 'bar',
+                    type: type,
                     data: chart3Data,
                     options: {
                         responsive: true,
@@ -1294,6 +1304,10 @@
 					    }
                     }
                 });
+                ShowMedian();
+                if ($('#chart3SubParameter').val() == 'tasmax_pd_avg') {
+                    ShowMax();
+                }
             },
             error: function () {
             }
@@ -1319,6 +1333,7 @@
 
 <script>
     function Table1(Id, SubParameter, Decade, RCP, Dates) {
+        $('#table1title').text($("#chart1SubParameter option:selected ").text() + ' (' + $("#chart1Decade option:selected").text() + '/' + $("#chart1RCP option:selected").text() + ')');
         $.ajax({
             url: '@Url.Action("GetTable1")',
             data: {
@@ -1332,15 +1347,26 @@
             type: 'POST',
             success: function (data) {
                 raster_data = data.raster_table_for_chart_bs;
+                for (var i = 0; i < raster_data.length; ++i) {
+                    if (raster_data[i].max) {
+                        raster_data[i].max = raster_data[i].max.toFixed(2);
+                    }
+                    if (raster_data[i].min) {
+                        raster_data[i].min = raster_data[i].min.toFixed(2);
+                    }
+                    if (raster_data[i].median) {
+                        raster_data[i].median = raster_data[i].median.toFixed(2);
+                    }
+                }
                 $(function () {
                     $('#rasterdata1').bootstrapTable('destroy').bootstrapTable({
-                        data: data.raster_table_for_chart_bs,
+                        data: raster_data,
                         iconSize: "sm",
                         exportOptions: {
                             preventInjection: false
                         }
                     });
-                    $('#rasterdata1').bootstrapTable('load', data.raster_table_for_chart_bs);
+                    $('#rasterdata1').bootstrapTable('load', raster_data);
                 })
             },
             error: function () {
@@ -1350,6 +1376,7 @@
     }
 
     function Table2(Id, SubParameter, Decade, RCP, Dates, Seasons) {
+        $('#table2title').text($("#chart2SubParameter option:selected ").text() + ' (' + $("#chart2Decade option:selected").text() + '/' + $("#chart2RCP option:selected").text() + ')');
         $.ajax({
             url: '@Url.Action("GetTable2")',
             data: {
@@ -1364,15 +1391,26 @@
             type: 'POST',
             success: function (data) {
                 raster_data = data.raster_table_for_chart_bs;
+                for (var i = 0; i < raster_data.length; ++i) {
+                    if (raster_data[i].max) {
+                        raster_data[i].max = raster_data[i].max.toFixed(2);
+                    }
+                    if (raster_data[i].min) {
+                        raster_data[i].min = raster_data[i].min.toFixed(2);
+                    }
+                    if (raster_data[i].median) {
+                        raster_data[i].median = raster_data[i].median.toFixed(2);
+                    }
+                }
                 $(function () {
                     $('#rasterdata2').bootstrapTable('destroy').bootstrapTable({
-                        data: data.raster_table_for_chart_bs,
+                        data: raster_data,
                         iconSize: "sm",
                         exportOptions: {
                             preventInjection: false
                         }
                     });
-                    $('#rasterdata2').bootstrapTable('load', data.raster_table_for_chart_bs);
+                    $('#rasterdata2').bootstrapTable('load', raster_data);
                 })
             },
             error: function () {
@@ -1382,6 +1420,7 @@
     }
 
     function Table3(Id, SubParameter, Decade, RCP, Dates, Months) {
+        $('#table3title').text($("#chart3SubParameter option:selected ").text() + ' (' + $("#chart3Decade option:selected").text() + '/' + $("#chart3RCP option:selected").text() + ')');
         $.ajax({
             url: '@Url.Action("GetTable3")',
             data: {
@@ -1396,15 +1435,26 @@
             type: 'POST',
             success: function (data) {
                 raster_data = data.raster_table_for_chart_bs;
+                for (var i = 0; i < raster_data.length; ++i) {
+                    if (raster_data[i].max) {
+                        raster_data[i].max = raster_data[i].max.toFixed(2);
+                    }
+                    if (raster_data[i].min) {
+                        raster_data[i].min = raster_data[i].min.toFixed(2);
+                    }
+                    if (raster_data[i].median) {
+                        raster_data[i].median = raster_data[i].median.toFixed(2);
+                    }
+                }
                 $(function () {
                     $('#rasterdata3').bootstrapTable('destroy').bootstrapTable({
-                        data: data.raster_table_for_chart_bs,
+                        data: raster_data,
                         iconSize: "sm",
                         exportOptions: {
                             preventInjection: false
                         }
                     });
-                    $('#rasterdata3').bootstrapTable('load', data.raster_table_for_chart_bs);
+                    $('#rasterdata3').bootstrapTable('load', raster_data);
                 })
             },
             error: function () {
@@ -1465,6 +1515,7 @@
             }
         });
         NavigateToWMA();
+        RefreshWMS();
     }
 
     function RefreshWMS() {
