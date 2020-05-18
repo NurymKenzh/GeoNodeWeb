@@ -2206,6 +2206,9 @@
                 },
                 onChange: function (data) {
                     // Called every time handle position is changed
+                    if (data.from == data.to) {
+                        data.to = data.to + 10;
+                    }
                 },
                 onStart: function (data) {
                     //onStart
