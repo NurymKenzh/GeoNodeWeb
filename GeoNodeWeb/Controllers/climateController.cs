@@ -111,6 +111,7 @@ namespace GeoNodeWeb.Controllers
 
     public class raster_table_for_chart
     {
+        public string period;
         public decimal? year;
         public decimal? max;
         public decimal? min;
@@ -6536,6 +6537,7 @@ namespace GeoNodeWeb.Controllers
                 }
             }
 
+            int decade = Convert.ToInt32(Decade);
             for (int i = 0; i < years.Count; i++)
             {
                 raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
@@ -6544,6 +6546,8 @@ namespace GeoNodeWeb.Controllers
                 raster_table_for_chart_b_new.min = min[i];
                 raster_table_for_chart_b_new.max = max[i];
                 raster_table_for_chart_b_new.median = median[i];
+
+                raster_table_for_chart_b_new.period = raster_table_for_chart_b_new.year.ToString() + " - " + (raster_table_for_chart_b_new.year + decade - 1).ToString();
 
                 raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
             }
@@ -6648,6 +6652,7 @@ namespace GeoNodeWeb.Controllers
                 }
             }
 
+            int decade = Convert.ToInt32(Decade);
             for (int i = 0; i < 4; i++)
             {
                 bool checkForNull = true;
@@ -6684,6 +6689,8 @@ namespace GeoNodeWeb.Controllers
                         raster_table_for_chart_b_new.min = min[i, j];
                         raster_table_for_chart_b_new.max = max[i, j];
                         raster_table_for_chart_b_new.median = median[i, j];
+
+                        raster_table_for_chart_b_new.period = raster_table_for_chart_b_new.year.ToString() + " - " + (raster_table_for_chart_b_new.year + decade - 1).ToString();
 
                         raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
                     }
@@ -6790,6 +6797,7 @@ namespace GeoNodeWeb.Controllers
                 }
             }
 
+            int decade = Convert.ToInt32(Decade);
             List<string> months = new List<string>
             { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
                 "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
@@ -6821,6 +6829,8 @@ namespace GeoNodeWeb.Controllers
                         raster_table_for_chart_b_new.min = min[i, j];
                         raster_table_for_chart_b_new.max = max[i, j];
                         raster_table_for_chart_b_new.median = median[i, j];
+
+                        raster_table_for_chart_b_new.period = raster_table_for_chart_b_new.year.ToString() + " - " + (raster_table_for_chart_b_new.year + decade - 1).ToString();
 
                         raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
                     }
