@@ -5541,6 +5541,12 @@ namespace GeoNodeWeb.Controllers
                     case "pr_dlt":
                         table = "climate_pr_dlt";
                         break;
+                    case "et_pd":
+                        table = "climate_et";
+                        break;
+                    case "et_dlt":
+                        table = "climate_et_dlt";
+                        break;
                 }
                 connection.Open();
                 string query = $"SELECT name, dt, value" +
