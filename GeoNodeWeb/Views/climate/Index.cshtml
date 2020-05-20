@@ -598,20 +598,20 @@
                                 <div class="col">
                                     <div class="input-group">
                                         <select id="type" class="measure input-group-sm">
-                                            <option value="length">@SharedLocalizer["Length"]</option>
-                                            <option value="area">@SharedLocalizer["Area"]</option>
+                                            <option value="length">Длина (линия)</option>
+                                            <option value="area">Площадь (полигон)</option>
                                         </select>
                                         <div class="input-group-prepend">
-                                            <button id="MeasureButton" type="button" value="@SharedLocalizer["Measure"]" class="btn btn-outline-light btn-sm" onclick="MeasureTool()"><i class="fa fa-ruler SomeInfo" InfoTitle="@SharedLocalizer["MeasureDistance"]"></i></button>
-                                            <button id="SelectButton" type="button" value="@SharedLocalizer["Highlight"]" class="btn btn-outline-light btn-sm" onclick="SelectTool()"><i class="fa fa-map-marked SomeInfo" InfoTitle="@SharedLocalizer["SelectMapObject"]"></i></button>
-                                            <button id="FilterDownloadBtn" type="button" value="@SharedLocalizer["Download"]" class="btn btn-outline-light btn-sm"><i class="fa fa-download SomeInfo" InfoTitle="@SharedLocalizer["DownloadData"]"></i></button>
+                                            <button id="MeasureButton" type="button" value="Измерять" class="btn btn-outline-light btn-sm" onclick="MeasureTool()"><i class="fa fa-ruler SomeInfo" InfoTitle="Измерить расстояние или площадь на Карте"></i></button>
+                                            <button id="SelectButton" type="button" value="Выделить" class="btn btn-outline-light btn-sm" onclick="SelectTool()"><i class="fa fa-map-marked SomeInfo" InfoTitle="Выделение объекта на карте"></i></button>
+                                            <button id="FilterDownloadBtn" type="button" value="Скачать" class="btn btn-outline-light btn-sm"><i class="fa fa-download SomeInfo" InfoTitle="Скачать данные"></i></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="row align-items-center d-flex justify-content-center">
-                                    <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">@SharedLocalizer["Deviation"]</button>
+                                    <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">Отклонение</button>
                                     <div class="col-md-8 m-1 " style="cursor: pointer;">
                                         <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
                                     </div>
@@ -630,7 +630,7 @@
                 </footer>
             </div>
         </main>
-        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light" style="height: calc(100% - 120px);"></div>
+        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light" style="height: calc(100% - 130px);"></div>
         <div id="popup" class="ol-popup">
             <a href="#" id="popup-closer" class="ol-popup-closer"></a>
             <div id="popup-content"></div>
@@ -2536,8 +2536,10 @@
                     },
                     offset: {
                         x: -10,
-                        y: -90
+                        y: -100
                     },
+                    adjustTracker: true,
+                    adjustPosition: true,
                     content: '<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legend/Temperature.svg"></div>',
                     overlay: false,
                     repositionOnOpen: false
