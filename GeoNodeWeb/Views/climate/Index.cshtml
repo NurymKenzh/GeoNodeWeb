@@ -1,6 +1,8 @@
 ﻿@using GeoNodeWeb.Controllers
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @{
-    ViewData["Title"] = "Карта";
+    ViewData["Title"] = SharedLocalizer["Map"];
     Layout = "~/Views/Shared/_LayoutClimate.cshtml";
 }
 
@@ -115,12 +117,13 @@
             margin-left: -11px;
         }
 
-    .ol-popup p {
-        font-size: 12px;
-        margin: 0px;
-    }
+        .ol-popup p {
+            font-size: 12px;
+            margin: 0px;
+        }
+
     .ol-popup-closer {
-        text-decoration: none;        
+        text-decoration: none;
         position: absolute;
         top: 2px;
         right: 8px;
@@ -141,7 +144,7 @@
                 <nav id="sidebar" class="sidebar-wrapper border-right border-light">
                     <div class="sidebar-content">
                         <div class="sidebar-brand">
-                            <a href="#">МЕНЮ</a>
+                            <a href="#">@SharedLocalizer["Menu"]</a>
                             <div id="close-sidebar">
                                 <i class="fa fa-angle-double-left"></i>
                             </div>
@@ -150,26 +153,26 @@
                         <div class="sidebar-menu">
                             <ul>
                                 <li class="header-menu mt-1">
-                                    <span class="text-white-50">Период</span>
+                                    <span class="text-white-50">@SharedLocalizer["Period"]</span>
                                 </li>
                                 <li class="header-menu">
                                     <div class="current_items">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="decade" id="decade10" value="10" checked onchange="ChangeDecade()">
-                                            <label class="form-check-label" for="decade10">
-                                                10 лет
+                                            <label class="form-check-label text-lowercase" for="decade10">
+                                                10 @SharedLocalizer["YearsOld"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="decade" id="decade20" value="20" onchange="ChangeDecade()">
-                                            <label class="form-check-label" for="decade20">
-                                                20 лет
+                                            <label class="form-check-label text-lowercase" for="decade20">
+                                                20 @SharedLocalizer["YearsOld"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="decade" id="decade30" value="30" onchange="ChangeDecade()">
-                                            <label class="form-check-label" for="decade30">
-                                                30 лет
+                                            <label class="form-check-label text-lowercase" for="decade30">
+                                                30 @SharedLocalizer["YearsOld"]
                                             </label>
                                         </div>
                                     </div>
@@ -194,136 +197,136 @@
                                     </div>
                                 </li>
                                 <li class="header-menu">
-                                    <span class="text-white-50">Периодичность</span>
+                                    <span class="text-white-50">@SharedLocalizer["Periodicity"]</span>
                                 </li>
                                 <li class="header-menu">
                                     <div class="current_items">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Period" id="Year" value="10" checked onchange="ChangePeriod()">
                                             <label class="form-check-label" for="Year">
-                                                Год
+                                                @SharedLocalizer["Year"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Period" id="Season" value="20" onchange="ChangePeriod()">
                                             <label class="form-check-label" for="Season">
-                                                Сезон
+                                                @SharedLocalizer["Season"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Period" id="Month" value="30" onchange="ChangePeriod()">
                                             <label class="form-check-label" for="Month">
-                                                Месяц
+                                                @SharedLocalizer["Month"]
                                             </label>
                                         </div>
                                     </div>
                                 </li>
                                 <li class="header-menu Seasons">
-                                    <span class="text-white-50">Сезоны</span>
+                                    <span class="text-white-50">@SharedLocalizer["Seasons"]</span>
                                 </li>
                                 <li class="header-menu Seasons">
                                     <div class="current_items">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Season" id="Season4" value="4" checked onchange="ChangeSeason()">
                                             <label class="form-check-label" for="Season4">
-                                                Зима
+                                                @SharedLocalizer["Winter"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Season" id="Season1" value="1" onchange="ChangeSeason()">
                                             <label class="form-check-label" for="Season1">
-                                                Весна
+                                                @SharedLocalizer["Spring"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Season" id="Season2" value="2" onchange="ChangeSeason()">
                                             <label class="form-check-label" for="Season2">
-                                                Лето
+                                                @SharedLocalizer["Summer"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Season" id="Season3" value="3" onchange="ChangeSeason()">
                                             <label class="form-check-label" for="Season3">
-                                                Осень
+                                                @SharedLocalizer["Autumn"]
                                             </label>
                                         </div>
                                     </div>
                                 </li>
                                 <li class="header-menu Months">
-                                    <span class="text-white-50">Месяцы</span>
+                                    <span class="text-white-50">@SharedLocalizer["Months"]</span>
                                 </li>
                                 <li class="header-menu Months">
                                     <div class="current_items">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month01" value="01" checked onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month01">
-                                                Январь
+                                                @SharedLocalizer["January"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month02" value="02" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month02">
-                                                Февраль
+                                                @SharedLocalizer["February"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month03" value="03" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month03">
-                                                Март
+                                                @SharedLocalizer["March"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month04" value="04" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month04">
-                                                Апрель
+                                                @SharedLocalizer["April"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month05" value="05" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month05">
-                                                Май
+                                                @SharedLocalizer["May"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month06" value="06" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month06">
-                                                Июнь
+                                                @SharedLocalizer["June"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month07" value="07" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month07">
-                                                Июль
+                                                @SharedLocalizer["July"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month08" value="08" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month08">
-                                                Август
+                                                @SharedLocalizer["August"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month09" value="09" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month09">
-                                                Сентябрь
+                                                @SharedLocalizer["September"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month10" value="10" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month10">
-                                                Октябрь
+                                                @SharedLocalizer["October"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month11" value="11" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month11">
-                                                Ноябрь
+                                                @SharedLocalizer["November"]
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="Month" id="Month12" value="12" onchange="ChangeMonth()">
                                             <label class="form-check-label" for="Month12">
-                                                Декабрь
+                                                @SharedLocalizer["December"]
                                             </label>
                                         </div>
                                     </div>
@@ -331,7 +334,7 @@
                                 <li class="sidebar-dropdown">
                                     <a href="#">
                                         <i class="fa fa-globe" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
-                                        <span>Слои</span>
+                                        <span>@SharedLocalizer["Layers"]</span>
                                     </a>
                                     <div class="sidebar-submenu">
                                         <ul>
@@ -341,35 +344,35 @@
                                                         <div class="col-11">
                                                             <input type="checkbox" id="layerriversShow" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerrivers">
-                                                                Реки
+                                                                @SharedLocalizer["Rivers"]
                                                             </label>
                                                             <input id="layerriversOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
                                                             <input type="checkbox" id="layerlakesShow" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerlakes">
-                                                                Озера
+                                                                @SharedLocalizer["Lakes"]
                                                             </label>
                                                             <input id="layerlakesOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
                                                             <input type="checkbox" id="layerwma_polygonShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerwma_polygon">
-                                                                ВХУ
+                                                                @SharedLocalizer["VHU"]
                                                             </label>
                                                             <input id="layerwma_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
                                                             <input type="checkbox" id="layerwmb_polygonShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerwmb_polygon">
-                                                                ВХБ
+                                                                @SharedLocalizer["VHB"]
                                                             </label>
                                                             <input id="layerwmb_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
                                                             <input type="checkbox" id="layerClimateShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerClimateShow">
-                                                                Климат
+                                                                @SharedLocalizer["Climate"]
                                                             </label>
                                                             <input id="layerClimateOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
                                                             <label class="form-check-label text-white" for="layerBaseShow">
-                                                                Базовые слои
+                                                                @SharedLocalizer["BaseLayers"]
                                                             </label>
                                                             <div class="input-group input-group-sm">
                                                                 <select class="custom-select" id="layerBaseType" onchange="ChangeLayers()">
@@ -410,12 +413,12 @@
                                     </div>
                                 </li>
                                 <li class="header-menu">
-                                    <span class="text-white-50">Extra</span>
+                                    <span class="text-white-50">@SharedLocalizer["Extra"]</span>
                                 </li>
                                 <li>
                                     <a href="#">
                                         <i class="fa fa-book" data-toggle="tooltip" data-placement="right" title="Tooltip on right"></i>
-                                        <span>Documentation</span>
+                                        <span>@SharedLocalizer["Documentation"]</span>
                                         <span class="badge badge-pill badge-primary">i</span>
                                     </a>
                                 </li>
@@ -428,22 +431,22 @@
                         <div class="col-md-auto" style="display: none" id="InfoMapContent">
                             <ul class="nav nav-pills" id="InfoMapTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active text-white" id="pills-home-tab" data-toggle="pill" href="#pills-chart" role="tab" aria-controls="pills-chart" aria-selected="true">Chart</a>
+                                    <a class="nav-link active text-white" id="pills-home-tab" data-toggle="pill" href="#pills-chart" role="tab" aria-controls="pills-chart" aria-selected="true">@SharedLocalizer["Chart"]</a>
                                 </li>
                                 <li class="nav-item text-white">
-                                    <a class="nav-link text-white" id="pills-table-tab" data-toggle="pill" href="#pills-table" role="tab" aria-controls="pills-table" aria-selected="false">Table</a>
+                                    <a class="nav-link text-white" id="pills-table-tab" data-toggle="pill" href="#pills-table" role="tab" aria-controls="pills-table" aria-selected="false">@SharedLocalizer["Table"]</a>
                                 </li>
                             </ul>
                             <div class="tab-content mt-n2" id="InfoMapTabContent">
-                                <div class="tab-pane fade show active" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">                  
+                                <div class="tab-pane fade show active" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
                                     @*<p class="card-text text-secondary">RCP45:   <b>Averages for the decade 1981–2010</b></p>*@
                                     <canvas id="chartRaster" class="chartjs-render-monitor my-0 mh-100" width="600" height="380"></canvas>
                                 </div>
                                 <div class="tab-pane fade" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">
                                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-                                        <h6 class="mb-0" id="table_title">Среднее значение по десятилетиям 1951-1960 (RCP 4.5)</h6>
-                                        <i class="fa fa-info-circle text-primary SomeInfo" InfoTitle="Чтобы просмотреть данные по месяцам, ... Раскройте список"></i>
-                                    </div>                                    
+                                        <h6 class="mb-0" id="table_title">@SharedLocalizer["DecadeAverageYears"]</h6>
+                                        <i class="fa fa-info-circle text-primary SomeInfo" InfoTitle="@SharedLocalizer["ViewDataByMonth"]"></i>
+                                    </div>
                                     <div class="table-responsive">
                                         <table id="rasterdata" class="table table-striped table-sm small"
                                                data-toggle="table"
@@ -463,22 +466,22 @@
                                                     <th data-field="parameter"
                                                         data-detail-formatter="idDetailMonth"
                                                         data-switchable="false"
-                                                        class="text-primary" scope="row"><i class="fa fa-plus"></i> Параметр</th>
+                                                        class="text-primary" scope="row"><i class="fa fa-plus"></i> @SharedLocalizer["Parameter"]</th>
                                                     <th data-field="year"
-                                                        data-detail-formatter="idDetailMonth">Год</th>
+                                                        data-detail-formatter="idDetailMonth">@SharedLocalizer["Year"]</th>
                                                     <th data-field="s1"
-                                                        data-detail-formatter="idDetailMonth">Весна</th>
+                                                        data-detail-formatter="idDetailMonth">@SharedLocalizer["Spring"]</th>
                                                     <th data-field="s2"
-                                                        data-detail-formatter="idDetailMonth">Лето</th>
+                                                        data-detail-formatter="idDetailMonth">@SharedLocalizer["Summer"]</th>
                                                     <th data-field="s3"
-                                                        data-detail-formatter="idDetailMonth">Осень</th>
+                                                        data-detail-formatter="idDetailMonth">@SharedLocalizer["Autumn"]</th>
                                                     <th data-field="s4"
-                                                        data-detail-formatter="idDetailMonth">Зима</th>
+                                                        data-detail-formatter="idDetailMonth">@SharedLocalizer["Winter"]</th>
                                                 </tr>
                                             </thead>
                                         </table>
                                     </div>
-                                    <pre class="text-black-50 mb-0">* Вы можете выбрать другое десятилетие на временной шкале ниже</pre>
+                                    <pre class="text-black-50 mb-0">* @SharedLocalizer["ChoosingAnotherDecade"]</pre>
                                 </div>
                             </div>
                         </div>
@@ -486,42 +489,42 @@
                             <form class="was-validated">
                                 <div class="form-group">
                                     <div class="downloadmail">
-                                        <label for="colFormLabelSm" class="col-form-label col-form-label-sm">Email</label>
+                                        <label for="colFormLabelSm" class="col-form-label col-form-label-sm">@SharedLocalizer["Email"]</label>
                                         <input type="email" class="form-control form-control-sm" id="colFormLabelSm" placeholder="name@example.com" required>
                                         <div class="invalid-feedback">
-                                            Укажите почтовый ящик
+                                            @SharedLocalizer["SpecifyMailbox"]
                                         </div>
                                     </div>
                                     <div class="download-tas">
-                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">Параметр</label>
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
                                         <select id="downloadtas" class="form-control form-control-sm" required>
-                                            <option value="">Выберите...</option>
-                                            <option value="climate_tasmax">Максимальная температура</option>
-                                            <option value="climate_tas">Средняя температура</option>
-                                            <option value="climate_tasmin">Минимальная температура</option>
-                                            <option value="climate_tasmax_dlt">Отклонения максимальной температуры от значений базового периода</option>
-                                            <option value="climate_tas_dlt">Отклонения средней температуры</option>
-                                            <option value="climate_tasmin_dlt">Отклонения минимальной температуры</option>
+                                            <option value="">@SharedLocalizer["Choose"]...</option>
+                                            <option value="climate_tasmax">@SharedLocalizer["MaxTemperature"]</option>
+                                            <option value="climate_tas">@SharedLocalizer["AverageTemperature"]</option>
+                                            <option value="climate_tasmin">@SharedLocalizer["MinTemperature"]</option>
+                                            <option value="climate_tasmax_dlt">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                            <option value="climate_tas_dlt">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                            <option value="climate_tasmin_dlt">@SharedLocalizer["MinTemperatureDev"]</option>
                                         </select>
-                                        <div class="invalid-feedback">Выберите параметры</div>
+                                        <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
                                     </div>
                                     <div class="download-pr">
-                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">Параметр</label>
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
                                         <select id="downloadpr" class="form-control form-control-sm" required>
-                                            <option value="">Выберите...</option>
-                                            <option value="climate_pr">Осадки</option>
-                                            <option value="climate_pr_dlt">Отклонения средней суммы осадков от значений базового периода в мм</option>
+                                            <option value="">@SharedLocalizer["Choose"]...</option>
+                                            <option value="climate_pr">@SharedLocalizer["Precipitation"]</option>
+                                            <option value="climate_pr_dlt">@SharedLocalizer["AveragePrecipitationDev"]</option>
                                         </select>
-                                        <div class="invalid-feedback">Выберите параметры</div>
+                                        <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
                                     </div>
                                     <div class="download-et">
-                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">Параметр</label>
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
                                         <select id="downloadet" class="form-control form-control-sm" required>
-                                            <option value="">Выберите...</option>
-                                            <option value="climate_et">Эвапотранспирация</option>
-                                            <option value="climate_et_dlt">Отклонения эвапотранспирации от значений базового периода</option>
+                                            <option value="">@SharedLocalizer["Choose"]...</option>
+                                            <option value="climate_et">@SharedLocalizer["Evapotranspiration"]</option>
+                                            <option value="climate_et_dlt">@SharedLocalizer["EvapotranspirationDev"]</option>
                                         </select>
-                                        <div class="invalid-feedback">Выберите параметры</div>
+                                        <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -566,24 +569,24 @@
                                     </div>
                                 </div>
                             </form>
-                            <button id="CropBtn" class="btn btn-outline-danger btn-block btn-sm mt-2"><i class="fa fa-crop"></i> Выбрать область на карте</button>
-                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm target-notice" onclick="Download()">Скачать</button>
+                            <button id="CropBtn" class="btn btn-outline-danger btn-block btn-sm mt-2"><i class="fa fa-crop"></i> @SharedLocalizer["SelectMapArea"]</button>
+                            <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm target-notice" onclick="Download()">@SharedLocalizer["Download"]</button>
                         </div>
                     </div>
                     <!-- sidebar-content  -->
                     <div class="sidebar-footer border-bottom border-light">
                         <a href="#">
-                            <i class="SomeInfo fa fa-file" InfoTitle="Test"></i>
+                            <i class="SomeInfo fa fa-file" InfoTitle="@SharedLocalizer["Test"]"></i>
                         </a>
-                        <a href="#" OnClick="Charts()" id="ChartsButton" value="Выделить" onclick="Charts()">
-                            <i class="SomeInfo fa fa-bar-chart-o" InfoTitle="График"></i>
+                        <a href="#" OnClick="Charts()" id="ChartsButton" value="@SharedLocalizer["Highlight"]" onclick="Charts()">
+                            <i class="SomeInfo fa fa-bar-chart-o" InfoTitle="@SharedLocalizer["Chart"]"></i>
                             <span id="chartSpan" class="badge badge-pill badge-info notification">0</span>
                         </a>
                         <a href="#" id="LegendBtn" class="target-click">
-                            <i class="fa fa-list-alt SomeInfo" InfoTitle="Легенда"></i>
+                            <i class="fa fa-list-alt SomeInfo" InfoTitle="@SharedLocalizer["Legend"]"></i>
                         </a>
                         <a href="#" id="MapTitleBtn" class="target-click">
-                            <i class="fa fa-bookmark SomeInfo" InfoTitle="Информация о слое"></i>
+                            <i class="fa fa-bookmark SomeInfo" InfoTitle="@SharedLocalizer["LayerInfo"]"></i>
                         </a>
                     </div>
                 </nav>
@@ -595,20 +598,20 @@
                                 <div class="col">
                                     <div class="input-group">
                                         <select id="type" class="measure input-group-sm">
-                                            <option value="length">Длина (линия)</option>
-                                            <option value="area">Площадь (полигон)</option>
+                                            <option value="length">@SharedLocalizer["Length"]</option>
+                                            <option value="area">@SharedLocalizer["Area"]</option>
                                         </select>
                                         <div class="input-group-prepend">
-                                            <button id="MeasureButton" type="button" value="Измерять" class="btn btn-outline-light btn-sm" onclick="MeasureTool()"><i class="fa fa-ruler SomeInfo" InfoTitle="Измерить расстояние или площадь на Карте"></i></button>
-                                            <button id="SelectButton" type="button" value="Выделить" class="btn btn-outline-light btn-sm" onclick="SelectTool()"><i class="fa fa-map-marked SomeInfo" InfoTitle="Выделение объекта на карте"></i></button>
-                                            <button id="FilterDownloadBtn" type="button" value="Скачать" class="btn btn-outline-light btn-sm"><i class="fa fa-download SomeInfo" InfoTitle="Скачать данные"></i></button>
+                                            <button id="MeasureButton" type="button" value="@SharedLocalizer["Measure"]" class="btn btn-outline-light btn-sm" onclick="MeasureTool()"><i class="fa fa-ruler SomeInfo" InfoTitle="@SharedLocalizer["MeasureDistance"]"></i></button>
+                                            <button id="SelectButton" type="button" value="@SharedLocalizer["Highlight"]" class="btn btn-outline-light btn-sm" onclick="SelectTool()"><i class="fa fa-map-marked SomeInfo" InfoTitle="@SharedLocalizer["SelectMapObject"]"></i></button>
+                                            <button id="FilterDownloadBtn" type="button" value="@SharedLocalizer["Download"]" class="btn btn-outline-light btn-sm"><i class="fa fa-download SomeInfo" InfoTitle="@SharedLocalizer["DownloadData"]"></i></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="row align-items-center d-flex justify-content-center">
-                                    <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">Отклонение</button>
+                                    <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">@SharedLocalizer["Deviation"]</button>
                                     <div class="col-md-8 m-1 " style="cursor: pointer;">
                                         <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
                                     </div>
@@ -667,13 +670,13 @@
     var helpTooltip = null;
     var measureTooltipElement;
     var measureTooltip;
-    var continuePolygonMsg = 'Нажмите, чтобы продолжить рисование многоугольника';
-    var continueLineMsg = 'Нажмите, чтобы продолжить рисование линии';
+    var continuePolygonMsg = '@SharedLocalizer["ClickContinueDrawPolygon"]';
+    var continueLineMsg = '@SharedLocalizer["ClickContinueDrawLine"]';
     var pointerMoveHandler = function (evt) {
         if (evt.dragging) {
             return;
         }
-        var helpMsg = 'Нажмите, чтобы начать рисование';
+        var helpMsg = '@SharedLocalizer["ClickStartDraw"]';
         if (sketch) {
             var geom = sketch.getGeometry();
             if (geom instanceof ol.geom.Polygon) {
@@ -1783,7 +1786,7 @@
         if ((Decade == '10' && range_instance.result.from == 2001)
             || (Decade == '20' && (range_instance.result.from == 1991 || range_instance.result.from == 2001))
             || (Decade == '30' && (range_instance.result.from == 1981 || range_instance.result.from == 1991 || range_instance.result.from == 2001))) {
-            $('#InfoTitle').text('При построении карт используются архивные данные состоящие из ретроспективных проекций за период с 1950 г. по 2005 г. и проекций на будущее, которые представлены за период 2006-2100 гг. для двух сценариев репрезентативных траекторий концентрации парниковых газов: RCP4.5 и RCP8.5. В связи с перекрытием ретроспективных данных и проекций на будущее в период с 2001-2010 гг. ограничивают возможность проведения корректных расчетов и построения карт за определенные периоды: 10 лет – 2001-2010 гг., за 20 лет – 1991-2010, 2001-2020 гг., за 30 лет – 1981-2010, 1991-2020, 2001-2030 гг.');
+            $('#InfoTitle').text('@SharedLocalizer["NotCalcData"]');
             $('#divInfo').attr('data-original-title', '');
             $('#divInfo').text('');
             $('#Layerdescription').text('');
@@ -1866,7 +1869,7 @@
         if (RCP == 'rcp85') {
             rcp_label = 'RCP 8.5'
         }
-        $('#table_title').text('Среднее значение по десятилетиям ' + date_label + ' (' + rcp_label + ')');
+        $('#table_title').text('@SharedLocalizer["DecadeAverage"] ' + date_label + ' (' + rcp_label + ')');
     }
 </script>
 
@@ -2046,7 +2049,7 @@
             return;
         }
         tool = 'select';
-        $('#SelectButton').val('Снять выделение');
+        $('#SelectButton').val('@SharedLocalizer["RemoveSelection"]');
         $('#SelectButton');
         map.removeInteraction(draw);
         Source_Measure.clear();
@@ -2089,7 +2092,7 @@
             return;
         }
         tool = 'info';
-        $('#SelectButton').val('Выделить');
+        $('#SelectButton').val('@SharedLocalizer["Highlight"]');
         $('#SelectButton');
         map.removeInteraction(draw);
         Source_Measure.clear();
@@ -2295,7 +2298,7 @@
                 var chart1Data = {
                     labels: labels,
                     datasets: [{
-                        label: 'Значения',
+                        label: '@SharedLocalizer["Values"]',
                         backgroundColor: 'rgba(255, 99, 132, 0.5)',
                         borderColor: 'rgba(255,99,132,1)',
                         borderWidth: 1,
@@ -2579,7 +2582,7 @@
             maxWidth: 400,
             adjustPosition: true,
             adjustTracker: true,
-            content: 'Для построение Графика, сначала выберите объект на карте!'
+            content: '@SharedLocalizer["SelectObjOnMap"]!'
         });
         new jBox('Modal', {
             id: 'modal-white',
@@ -2601,7 +2604,7 @@
             onOpen: function () {
                 // Add t
                 this.setContent($('#DownloadFormCont'));
-                this.setTitle('<div class="ajax-complete">Скачать данные</div>');
+                this.setTitle('<div class="ajax-complete">@SharedLocalizer["DownloadData"]</div>');
             },
             onCreated: function () {
                 // Add tooltip
@@ -2619,13 +2622,13 @@
                         y: 'center'
                     },
                     outside: 'x',
-                    content: 'Нажмите и удерживайте клавишу <span class="badge badge-warning text-wrap">Ctrl</span>, чтобы нарисовать область интереса <br>  Для ОС macOS Command + Drag',
+                    content: '@SharedLocalizer["PressHoldKey"] <span class="badge badge-warning text-wrap">Ctrl</span>, @SharedLocalizer["DrawAreaInterest"] <br>  @SharedLocalizer["ForOS"] macOS Command + Drag',
                     onOpen: function () {
-                        this.source.addClass('active').html('Нарисуйте на карте');
+                        this.source.addClass('active').html('@SharedLocalizer["DrawOnMap"]');
                     },
                     onClose: function () {
                         this.source.removeClass('btn btn-outline-danger btn-block btn-sm mt-2');
-                        this.source.addClass('btn btn-outline-success btn-block btn-sm mt-2').html('Выбрать область на карте');
+                        this.source.addClass('btn btn-outline-success btn-block btn-sm mt-2').html('@SharedLocalizer["SelectAreaOnMap"]');
                     }
                 });
             },
@@ -2638,7 +2641,7 @@
             if (Source_Rectangle.getFeatures().length > 0) {
                 new jBox('Notice', {
                     animation: 'flip',
-                    content: 'Данные формируются и будут отправлены на указанный email',
+                    content: '@SharedLocalizer["DataGenerated"]',
                     color: 'yellow',
                     delayOnHover: true,
                     showCountdown: true
@@ -2665,19 +2668,19 @@
 
     })
     function idDetailMonth(index) {
-        var content = '<div class="table-responsive">' + '<table class="table table-borderless">' +'<tr>'
-            + '<th>' + 'Январь' + '</th>'
-            + '<th>' + 'Февраль ' + '</th>'
-            + '<th>' + 'Март' + '</th>'
-            + '<th>' + 'Апрель ' + '</th>'
-            + '<th>' + 'Май' + '</th>'
-            + '<th>' + 'Июнь' + '</th>'
-            + '<th>' + 'Июль' + '</th>'
-            + '<th>' + 'Август ' + '</th>'
-            + '<th>' + 'Сентябрь' + '</th>'
-            + '<th>' + 'Октябрь ' + '</th>'
-            + '<th>' + 'Ноябрь ' + '</th>'
-            + '<th>' + 'Декабрь' + '</th>';
+        var content = '<div class="table-responsive">' + '<table class="table table-borderless">' + '<tr>'
+            + '<th>' + '@SharedLocalizer["January"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["February"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["March"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["April"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["May"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["June"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["July"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["August"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["September"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["October"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["November"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["December"]' + '</th>';
         return content += '<tr>'
             + '<td>' + parseFloat(raster_data[index].m1).toFixed(2) + '</td>'
             + '<td>' + parseFloat(raster_data[index].m2).toFixed(2) + '</td>'

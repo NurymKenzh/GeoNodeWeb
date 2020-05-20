@@ -1,6 +1,8 @@
 ﻿@using GeoNodeWeb.Controllers
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @{
-    ViewData["Title"] = "Графики";
+    ViewData["Title"] = SharedLocalizer["Charts"];
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -105,10 +107,12 @@
             left: 48px;
             margin-left: -11px;
         }
+
         .ol-popup p {
             font-size: 12px;
             margin: 0px;
         }
+
     .ol-popup-closer {
         text-decoration: none;
         position: absolute;
@@ -139,14 +143,14 @@
 <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <fieldset class="scheduler-border">
-            <legend class="scheduler-border mt-4"> Выбрать ВХБ или ВХУ</legend>
+            <legend class="scheduler-border mt-4"> @SharedLocalizer["ChooseVHBorVHU"]</legend>
             <form>
                 <div class="form-group">
-                    <label for="wmb">ВХБ:</label>
+                    <label for="wmb">@SharedLocalizer["VHB"]:</label>
                     <select class="form-control" id="wmb" onchange="ChangeWMB()"></select>
                 </div>
                 <div class="form-group">
-                    <label for="wma">ВХУ:</label>
+                    <label for="wma">@SharedLocalizer["VHU"]:</label>
                     <select class="form-control" id="wma" onchange="NavigateToWMA(); RefreshWMS();"></select>
                 </div>
             </form>
@@ -170,48 +174,48 @@
                     <div class="card-header rounded-0 bg-info border-info">
                         <div class="input-group input-group-sm">
                             <select class="form-control w-50" id="SubParameter1" onchange="ChangeLayerClimate1()">
-                                <option value="tasmax_pd_avg">Максимальная температура</option>
-                                <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                <option value="tas_pd_avg">Средняя температура</option>
-                                <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                <option value="tasmin_pd_avg">Минимальная температура</option>
-                                <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                <option value="pr_pd_avg">Осадки</option>
-                                <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                <option value="et_pd_avg">Эвапотранспирация</option>
-                                <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                                <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"]</option>
+                                <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"]</option>
+                                <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"]</option>
+                                <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
+                                <option value="pr_pd_avg">@SharedLocalizer["Precipitation"]</option>
+                                <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
+                                <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
+                                <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
                             </select>
                             <select class="form-control" id="RCP1" onchange="ChangeLayerClimate1()">
                                 <option value="rcp45">rcp 4.5</option>
                                 <option value="rcp85">rcp 8.5</option>
                             </select>
                             <select class="form-control" id="Period1" onchange="ChangeLayerClimate1()">
-                                <option value="y">Год</option>
-                                <optgroup label="Сезон">
-                                    <option value="4">Зима</option>
-                                    <option value="1">Весна</option>
-                                    <option value="2">Лето</option>
-                                    <option value="3">Осень</option>
+                                <option value="y">@SharedLocalizer["Year"]</option>
+                                <optgroup label="@SharedLocalizer["Season"]">
+                                    <option value="4">@SharedLocalizer["Winter"]</option>
+                                    <option value="1">@SharedLocalizer["Spring"]</option>
+                                    <option value="2">@SharedLocalizer["Summer"]</option>
+                                    <option value="3">@SharedLocalizer["Autumn"]</option>
                                 </optgroup>
-                                <optgroup label="Месяц">
-                                    <option value="01">Январь</option>
-                                    <option value="02">Февраль</option>
-                                    <option value="03">Март</option>
-                                    <option value="04">Апрель</option>
-                                    <option value="05">Май</option>
-                                    <option value="06">Июнь</option>
-                                    <option value="07">Июль</option>
-                                    <option value="08">Август</option>
-                                    <option value="09">Сентябрь</option>
-                                    <option value="10">Октябрь</option>
-                                    <option value="11">Ноябрь</option>
-                                    <option value="12">Декабрь</option>
+                                <optgroup label="@SharedLocalizer["Month"]">
+                                    <option value="01">@SharedLocalizer["January"]</option>
+                                    <option value="02">@SharedLocalizer["February"]</option>
+                                    <option value="03">@SharedLocalizer["March"]</option>
+                                    <option value="04">@SharedLocalizer["April"]</option>
+                                    <option value="05">@SharedLocalizer["May"]</option>
+                                    <option value="06">@SharedLocalizer["June"]</option>
+                                    <option value="07">@SharedLocalizer["July"]</option>
+                                    <option value="08">@SharedLocalizer["August"]</option>
+                                    <option value="09">@SharedLocalizer["September"]</option>
+                                    <option value="10">@SharedLocalizer["October"]</option>
+                                    <option value="11">@SharedLocalizer["November"]</option>
+                                    <option value="12">@SharedLocalizer["December"]</option>
                                 </optgroup>
                             </select>
                             <div class="input-group-append">
                                 <span class="input-group-text small" id="mapinfo1">1951 - 1960</span>
                             </div>
-                        </div>                       
+                        </div>
                     </div>
                     <div class="card-body p-0">
                         <div id="map1">
@@ -223,7 +227,7 @@
                             <a href="#" id="popup-closer1" class="ol-popup-closer"></a>
                             <div id="popup-content1"></div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -231,42 +235,42 @@
                     <div class="card-header rounded-0 bg-info border-info">
                         <div class="input-group input-group-sm">
                             <select class="form-control w-50" id="SubParameter2" onchange="ChangeLayerClimate2()">
-                                <option value="tasmax_pd_avg">Максимальная температура</option>
-                                <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода</option>
-                                <option value="tas_pd_avg">Средняя температура</option>
-                                <option value="tas_dlt_avg">Отклонения средней температуры</option>
-                                <option value="tasmin_pd_avg">Минимальная температура</option>
-                                <option value="tasmin_dlt_avg">Отклонения минимальной температуры</option>
-                                <option value="pr_pd_avg">Осадки</option>
-                                <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                <option value="et_pd_avg">Эвапотранспирация</option>
-                                <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода</option>
+                                <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"]</option>
+                                <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"]</option>
+                                <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"]</option>
+                                <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
+                                <option value="pr_pd_avg">@SharedLocalizer["Precipitation"]</option>
+                                <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
+                                <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
+                                <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
                             </select>
                             <select class="form-control" id="RCP2" onchange="ChangeLayerClimate2()">
                                 <option value="rcp45">rcp 4.5</option>
                                 <option value="rcp85">rcp 8.5</option>
                             </select>
                             <select class="form-control" id="Period2" onchange="ChangeLayerClimate2()">
-                                <option value="y">Год</option>
-                                <optgroup label="Сезон">
-                                    <option value="4">Зима</option>
-                                    <option value="1">Весна</option>
-                                    <option value="2">Лето</option>
-                                    <option value="3">Осень</option>
+                                <option value="y">@SharedLocalizer["Year"]</option>
+                                <optgroup label="@SharedLocalizer["Season"]">
+                                    <option value="4">@SharedLocalizer["Winter"]</option>
+                                    <option value="1">@SharedLocalizer["Spring"]</option>
+                                    <option value="2">@SharedLocalizer["Summer"]</option>
+                                    <option value="3">@SharedLocalizer["Autumn"]</option>
                                 </optgroup>
-                                <optgroup label="Месяц">
-                                    <option value="01">Январь</option>
-                                    <option value="02">Февраль</option>
-                                    <option value="03">Март</option>
-                                    <option value="04">Апрель</option>
-                                    <option value="05">Май</option>
-                                    <option value="06">Июнь</option>
-                                    <option value="07">Июль</option>
-                                    <option value="08">Август</option>
-                                    <option value="09">Сентябрь</option>
-                                    <option value="10">Октябрь</option>
-                                    <option value="11">Ноябрь</option>
-                                    <option value="12">Декабрь</option>
+                                <optgroup label="@SharedLocalizer["Month"]">
+                                    <option value="01">@SharedLocalizer["January"]</option>
+                                    <option value="02">@SharedLocalizer["February"]</option>
+                                    <option value="03">@SharedLocalizer["March"]</option>
+                                    <option value="04">@SharedLocalizer["April"]</option>
+                                    <option value="05">@SharedLocalizer["May"]</option>
+                                    <option value="06">@SharedLocalizer["June"]</option>
+                                    <option value="07">@SharedLocalizer["July"]</option>
+                                    <option value="08">@SharedLocalizer["August"]</option>
+                                    <option value="09">@SharedLocalizer["September"]</option>
+                                    <option value="10">@SharedLocalizer["October"]</option>
+                                    <option value="11">@SharedLocalizer["November"]</option>
+                                    <option value="12">@SharedLocalizer["December"]</option>
                                 </optgroup>
                             </select>
                             <div class="input-group-append">
@@ -284,7 +288,7 @@
                             <a href="#" id="popup-closer2" class="ol-popup-closer"></a>
                             <div id="popup-content2"></div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,9 +296,9 @@
             <div class="col-md-auto">
                 <div class="btn-group mt-2" role="group" aria-label="example">
                     <select class="form-control form-control-lg" id="Decade" onchange="CreateDateSlider();">
-                        <option value="10">10 лет</option>
-                        <option value="20">20 лет</option>
-                        <option value="30">30 лет</option>
+                        <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
+                        <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
+                        <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
                     </select>
                     <button id="MinusBtn" type="button" class="btn btn-primary"><i class="fa fa-step-backward"></i></button>
                     <button id="PlayPauseBtn" type="button" class="btn btn-primary"><i class="fa fa-play-circle fa-2x"></i></button>
@@ -312,24 +316,24 @@
                     <div class="card-body">
                         <ul class="nav nav-tabs" id="section01" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="charts-tab" data-toggle="tab" href="#charts" role="tab" aria-controls="charts" aria-selected="true" onclick="TabClick(this)">Chart</a>
+                                <a class="nav-link active" id="charts-tab" data-toggle="tab" href="#charts" role="tab" aria-controls="charts" aria-selected="true" onclick="TabClick(this)">@SharedLocalizer["Chart"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="tables-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="tables" aria-selected="false" onclick="TabClick(this)">Table</a>
+                                <a class="nav-link" id="tables-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="tables" aria-selected="false" onclick="TabClick(this)">@SharedLocalizer["Table"]</a>
                             </li>
                         </ul>
                         <div id="charts" role="tabpanel" aria-labelledby="charts-tab">
                             <div class="btn-toolbar mt-2">
                                 <div class="btn-group mr-2">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Period">
-                                        <button type="button" class="btn-default" onclick="Chart1Show(); Table1Show();">Год</button>
-                                        <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">Сезон</button>
-                                        <button type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">Месяц</button>
+                                        <button type="button" class="btn-default" onclick="Chart1Show(); Table1Show();">@SharedLocalizer["Year"]</button>
+                                        <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">@SharedLocalizer["Season"]</button>
+                                        <button type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">@SharedLocalizer["Month"]</button>
                                     </div>
                                     <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Min-max">
-                                        <button type="button" class="btn-danger" onclick="ShowMax()">Максимум</button>
-                                        <button type="button" class="btn-primary" onclick="ShowMin()">Минимум</button>
-                                        <button type="button" class="btn-info" onclick="ShowMedian()">Медиана</button>
+                                        <button type="button" class="btn-danger" onclick="ShowMax()">@SharedLocalizer["Maximum"]</button>
+                                        <button type="button" class="btn-primary" onclick="ShowMin()">@SharedLocalizer["Minimum"]</button>
+                                        <button type="button" class="btn-info" onclick="ShowMedian()">@SharedLocalizer["Median"]</button>
                                     </div>
                                     <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Chart type">
                                         <button id="changeToLine" onclick="Chart1($('#wma').val(), 'line'); Chart2($('#wma').val(), 'line'); Chart3($('#wma').val(), 'line');"><i class="fa fa-area-chart"></i></button>
@@ -340,29 +344,29 @@
                             <div class="row mb-3" id="chartbody1">
                                 <div class="col-md-3 order-md-2 mt-2">
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border"> Параметры графика </legend>
+                                        <legend class="scheduler-border"> @SharedLocalizer["ChartOptions"] </legend>
                                         <form>
                                             <div class="form-group">
-                                                <label for="chart1SubParameter">Климатический параметр:</label>
+                                                <label for="chart1SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
                                                 <select class="form-control form-control-sm" id="chart1SubParameter">
-                                                    <option value="tasmax_pd_avg">Максимальная температура, ⁰С</option>
-                                                    <option value="tas_pd_avg">Средняя температура, ⁰С</option>
-                                                    <option value="tasmin_pd_avg">Минимальная температура, ⁰С</option>
-                                                    <option value="pr_pd_avg">Осадки, мм</option>
-                                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                                    <option value="et_pd_avg">Эвапотранспирация, мм</option>
-                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода, мм</option>
-                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода, ⁰С</option>
-                                                    <option value="tas_dlt_avg">Отклонения средней температуры, ⁰С</option>
-                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры, ⁰С</option>
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"], ⁰С</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"], ⁰С</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"], ⁰С</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"], мм</option>
+                                                    <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"], мм</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"], мм</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"], ⁰С</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"], ⁰С</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"], ⁰С</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="chart1Decade">Периодичность:</label>
+                                                <label for="chart1Decade">@SharedLocalizer["Periodicity"]:</label>
                                                 <select class="form-control form-control-sm" id="chart1Decade" onchange="chart1UpdateDates()">
-                                                    <option value="10">10 лет</option>
-                                                    <option value="20">20 лет</option>
-                                                    <option value="30">30 лет</option>
+                                                    <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -447,37 +451,37 @@
                             <div class="row mb-3" id="chartbody2">
                                 <div class="col-md-3 order-md-2 mt-2">
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border"> Параметры графика </legend>
+                                        <legend class="scheduler-border"> @SharedLocalizer["ChartOptions"] </legend>
                                         <div class="form-group">
-                                            <label for="chartType" class="mr-2">Тип диаграммы:</label>
+                                            <label for="chartType" class="mr-2">@SharedLocalizer["ChartType"]:</label>
                                             <select name="chartType" id="chartType" onchange="updateChartType()">
-                                                <option value="line">Линии</option>
-                                                <option value="bar">Столбцы</option>
-                                                <option value="radar">Радар</option>
+                                                <option value="line">@SharedLocalizer["Lines"]</option>
+                                                <option value="bar">@SharedLocalizer["Columns"]</option>
+                                                <option value="radar">@SharedLocalizer["Radar"]</option>
                                             </select>
                                         </div>
                                         <form>
                                             <div class="form-group">
-                                                <label for="chart2SubParameter">Климатический параметр:</label>
+                                                <label for="chart2SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
                                                 <select class="form-control form-control-sm" id="chart2SubParameter">
-                                                    <option value="tasmax_pd_avg">Максимальная температура, ⁰С</option>
-                                                    <option value="tas_pd_avg">Средняя температура, ⁰С</option>
-                                                    <option value="tasmin_pd_avg">Минимальная температура, ⁰С</option>
-                                                    <option value="pr_pd_avg">Осадки, мм</option>
-                                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                                    <option value="et_pd_avg">Эвапотранспирация, мм</option>
-                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода, мм</option>
-                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода, ⁰С</option>
-                                                    <option value="tas_dlt_avg">Отклонения средней температуры, ⁰С</option>
-                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры, ⁰С</option>
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"], ⁰С</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"], ⁰С</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"], ⁰С</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"], мм</option>
+                                                    <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"], мм</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"], мм</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"], ⁰С</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"], ⁰С</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"], ⁰С</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="chart2Decade">Периодичность:</label>
+                                                <label for="chart2Decade">@SharedLocalizer["Periodicity"]:</label>
                                                 <select class="form-control form-control-sm" id="chart2Decade" onchange="chart2UpdateDates()">
-                                                    <option value="10">10 лет</option>
-                                                    <option value="20">20 лет</option>
-                                                    <option value="30">30 лет</option>
+                                                    <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -552,23 +556,23 @@
                                             <div class="form-group">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart2Season1" name="chart2Seasons" value="1" checked>
-                                                    <label class="form-check-label" for="chart2Season1">Весна</label>
+                                                    <label class="form-check-label" for="chart2Season1">@SharedLocalizer["Spring"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart2Season2" name="chart2Seasons" value="2">
-                                                    <label class="form-check-label" for="chart2Season2">Лето</label>
+                                                    <label class="form-check-label" for="chart2Season2">@SharedLocalizer["Summer"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart2Season3" name="chart2Seasons" value="3">
-                                                    <label class="form-check-label" for="chart2Season3">Осень</label>
+                                                    <label class="form-check-label" for="chart2Season3">@SharedLocalizer["Autumn"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart2Season4" name="chart2Seasons" value="4">
-                                                    <label class="form-check-label" for="chart2Season4">Зима</label>
+                                                    <label class="form-check-label" for="chart2Season4">@SharedLocalizer["Winter"]</label>
                                                 </div>
                                             </div>
                                         </form>
-                                        <input type="button" class="btn btn-outline-primary btn-sm" value="Обновить" onclick="Chart2()" />
+                                        <input type="button" class="btn btn-outline-primary btn-sm" value="@SharedLocalizer["Refresh"]" onclick="Chart2()" />
                                     </fieldset>
                                 </div>
                                 <div class="col-md-9">
@@ -578,29 +582,29 @@
                             <div class="row mb-3" id="chartbody3">
                                 <div class="col-md-3 order-md-2 mt-2">
                                     <fieldset class="scheduler-border">
-                                        <legend class="scheduler-border"> Параметры графика </legend>
+                                        <legend class="scheduler-border"> @SharedLocalizer["ChartOptions"] </legend>
                                         <form>
                                             <div class="form-group">
-                                                <label for="chart3SubParameter">Климатический параметр:</label>
+                                                <label for="chart3SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
                                                 <select class="form-control form-control-sm" id="chart3SubParameter">
-                                                    <option value="tasmax_pd_avg">Максимальная температура, ⁰С</option>
-                                                    <option value="tas_pd_avg">Средняя температура, ⁰С</option>
-                                                    <option value="tasmin_pd_avg">Минимальная температура, ⁰С</option>
-                                                    <option value="pr_pd_avg">Осадки, мм</option>
-                                                    <option value="pr_dlt_avg_mm">Отклонения средней суммы осадков от значений базового периода в мм</option>
-                                                    <option value="et_pd_avg">Эвапотранспирация, мм</option>
-                                                    <option value="et_dlt_avg">Отклонения эвапотранспирации от значений базового периода, мм</option>
-                                                    <option value="tasmax_dlt_avg">Отклонения максимальной температуры от значений базового периода, ⁰С</option>
-                                                    <option value="tas_dlt_avg">Отклонения средней температуры, ⁰С</option>
-                                                    <option value="tasmin_dlt_avg">Отклонения минимальной температуры, ⁰С</option>
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"], ⁰С</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"], ⁰С</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"], ⁰С</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"], мм</option>
+                                                    <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"], мм</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"], мм</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"], ⁰С</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"], ⁰С</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"], ⁰С</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="chart3Decade">Периодичность:</label>
+                                                <label for="chart3Decade">@SharedLocalizer["Periodicity"]:</label>
                                                 <select class="form-control form-control-sm" id="chart3Decade" onchange="chart3UpdateDates()">
-                                                    <option value="10">10 лет</option>
-                                                    <option value="20">20 лет</option>
-                                                    <option value="30">30 лет</option>
+                                                    <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -675,55 +679,55 @@
                                             <div class="form-group">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month1" name="chart3Months" value="1" checked>
-                                                    <label class="form-check-label" for="chart3Month1">Январь</label>
+                                                    <label class="form-check-label" for="chart3Month1">@SharedLocalizer["January"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month2" name="chart3Months" value="2">
-                                                    <label class="form-check-label" for="chart3Month2">Февраль</label>
+                                                    <label class="form-check-label" for="chart3Month2">@SharedLocalizer["February"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month3" name="chart3Months" value="3">
-                                                    <label class="form-check-label" for="chart3Month3">Март</label>
+                                                    <label class="form-check-label" for="chart3Month3">@SharedLocalizer["March"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month4" name="chart3Months" value="4">
-                                                    <label class="form-check-label" for="chart3Month4">Апрель</label>
+                                                    <label class="form-check-label" for="chart3Month4">@SharedLocalizer["April"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month5" name="chart3Months" value="5">
-                                                    <label class="form-check-label" for="chart3Month5">Май</label>
+                                                    <label class="form-check-label" for="chart3Month5">@SharedLocalizer["May"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month6" name="chart3Months" value="6">
-                                                    <label class="form-check-label" for="chart3Month6">Июнь</label>
+                                                    <label class="form-check-label" for="chart3Month6">@SharedLocalizer["June"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month7" name="chart3Months" value="7">
-                                                    <label class="form-check-label" for="chart3Month7">Июль</label>
+                                                    <label class="form-check-label" for="chart3Month7">@SharedLocalizer["July"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month8" name="chart3Months" value="8">
-                                                    <label class="form-check-label" for="chart3Month8">Август</label>
+                                                    <label class="form-check-label" for="chart3Month8">@SharedLocalizer["August"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month9" name="chart3Months" value="9">
-                                                    <label class="form-check-label" for="chart3Month9">Сентябрь</label>
+                                                    <label class="form-check-label" for="chart3Month9">@SharedLocalizer["September"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month10" name="chart3Months" value="10">
-                                                    <label class="form-check-label" for="chart3Month10">Октябрь</label>
+                                                    <label class="form-check-label" for="chart3Month10">@SharedLocalizer["October"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month11" name="chart3Months" value="11">
-                                                    <label class="form-check-label" for="chart3Month11">Ноябрь</label>
+                                                    <label class="form-check-label" for="chart3Month11">@SharedLocalizer["November"]</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="chart3Month12" name="chart3Months" value="12">
-                                                    <label class="form-check-label" for="chart3Month12">Декабрь</label>
+                                                    <label class="form-check-label" for="chart3Month12">@SharedLocalizer["December"]</label>
                                                 </div>
                                             </div>
                                         </form>
-                                        <input type="button" class="btn btn-outline-primary btn-sm" value="Обновить" onclick="Chart3()" />
+                                        <input type="button" class="btn btn-outline-primary btn-sm" value="@SharedLocalizer["Refresh"]" onclick="Chart3()" />
                                     </fieldset>
                                 </div>
                                 <div class="col-md-9">
@@ -750,13 +754,13 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th data-field="period"
-                                                data-detail-formatter="idDetailMonth">Период</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Period"]</th>
                                             <th data-field="max"
-                                                data-detail-formatter="idDetailMonth">Максимум</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Maximum"]</th>
                                             <th data-field="min"
-                                                data-detail-formatter="idDetailMonth">Минимум</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Minimum"]</th>
                                             <th data-field="median"
-                                                data-detail-formatter="idDetailMonth">Медиана</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Median"]</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -778,15 +782,15 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th data-field="period"
-                                                data-detail-formatter="idDetailMonth">Период</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Period"]</th>
                                             <th data-field="season"
-                                                data-detail-formatter="idDetailMonth">Сезон</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Season"]</th>
                                             <th data-field="max"
-                                                data-detail-formatter="idDetailMonth">Максимум</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Maximum"]</th>
                                             <th data-field="min"
-                                                data-detail-formatter="idDetailMonth">Минимум</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Minimum"]</th>
                                             <th data-field="median"
-                                                data-detail-formatter="idDetailMonth">Медиана</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Median"]</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -808,15 +812,15 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th data-field="period"
-                                                data-detail-formatter="idDetailMonth">Период</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Period"]</th>
                                             <th data-field="month"
-                                                data-detail-formatter="idDetailMonth">Месяц</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Month"]</th>
                                             <th data-field="max"
-                                                data-detail-formatter="idDetailMonth">Максимум</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Maximum"]</th>
                                             <th data-field="min"
-                                                data-detail-formatter="idDetailMonth">Минимум</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Minimum"]</th>
                                             <th data-field="median"
-                                                data-detail-formatter="idDetailMonth">Медиана</th>
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Median"]</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -939,19 +943,19 @@
                 var chart1Data = {
                     labels: data.years,
                     datasets: [{
-                        label: 'Максимум',
+                        label: '@SharedLocalizer["Maximum"]',
                         backgroundColor: 'rgba(255, 99, 132, 0.5)',
                         borderColor: 'rgba(255,99,132,1)',
                         borderWidth: 1,
                         data: data.max
                     }, {
-                        label: 'Минимум',
+                        label: '@SharedLocalizer["Minimum"]',
                         backgroundColor: 'rgba(153, 102, 255, 0.5)',
                         borderColor: 'rgba(153, 102, 255,1)',
                         borderWidth: 1,
                         data: data.min
                     }, {
-                        label: 'Медиана',
+                        label: '@SharedLocalizer["Median"]',
                         backgroundColor: "rgba(75, 192, 192, 0.5)",
                         borderColor: "rgba(75, 192, 192,1)",
                         borderWidth: 1,
@@ -1023,7 +1027,7 @@
         if (objectid == null) {
             Id = @ViewBag.Id;
         }
-        var seasonNames = ['весна', 'лето', 'осень', 'зима'],
+        var seasonNames = ['@SharedLocalizer["Spring"]', '@SharedLocalizer["Summer"]', '@SharedLocalizer["Autumn"]', '@SharedLocalizer["Winter"]'],
             seasonColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
             seasonMaxColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
             seasonMinColors = ['rgba(102, 203, 102, 0.4)', 'rgba(255, 102, 102, 0.4)', 'rgba(255, 255, 113, 0.4)', 'rgba(161, 153, 255, 0.4)'],
@@ -1074,7 +1078,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
-                            label: 'Максимум (' + seasonNames[i] + ')',
+                            label: '@SharedLocalizer["Maximum"] (' + seasonNames[i] + ')',
                             backgroundColor: seasonMaxColors[i],
                             borderColor: 'rgba(3, 0, 51, 0.7)',
                             borderWidth: 1,
@@ -1086,7 +1090,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
-                            label: 'Минимум (' + seasonNames[i] + ')',
+                            label: '@SharedLocalizer["Minimum"] (' + seasonNames[i] + ')',
                             backgroundColor: seasonMinColors[i],
                             borderColor: 'rgba(3, 0, 51, 0.7)',
                             borderWidth: 1,
@@ -1098,7 +1102,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
-                            label: 'Медиана (' + seasonNames[i] + ')',
+                            label: '@SharedLocalizer["Median"] (' + seasonNames[i] + ')',
                             backgroundColor: seasonMedianColors[i],
                             borderColor: 'rgba(3, 0, 51, 0.7)',
                             borderWidth: 1,
@@ -1148,7 +1152,7 @@
         if (objectid == null) {
             Id = @ViewBag.Id;
         }
-        var monthNames = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
+        var monthNames = ['@SharedLocalizer["January"]', '@SharedLocalizer["February"]', '@SharedLocalizer["March"]', '@SharedLocalizer["April"]', '@SharedLocalizer["May"]', '@SharedLocalizer["June"]', '@SharedLocalizer["July"]', '@SharedLocalizer["August"]', '@SharedLocalizer["September"]', '@SharedLocalizer["October"]', '@SharedLocalizer["November"]', '@SharedLocalizer["December"]'];
             monthColors =[
                 'rgba(255, 99, 132, 0.5)',
                 'rgba(153, 102, 255, 0.5)',
@@ -1246,7 +1250,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
-                            label: 'Максимум (' + monthNames[i] + ')',
+                            label: '@SharedLocalizer["Maximum"] (' + monthNames[i] + ')',
                             backgroundColor: monthMaxColors[i],
                             borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
@@ -1258,7 +1262,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
-                            label: 'Минимум (' + monthNames[i] + ')',
+                            label: '@SharedLocalizer["Minimum"] (' + monthNames[i] + ')',
                             backgroundColor: monthMinColors[i],
                             borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
@@ -1270,7 +1274,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
-                            label: 'Медиана (' + monthNames[i] + ')',
+                            label: '@SharedLocalizer["Median"] (' + monthNames[i] + ')',
                             backgroundColor: monthMedianColors[i],
                             borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
@@ -2508,18 +2512,18 @@
     })
     function idDetailMonth(index) {
         var content = '<div class="table-responsive">' + '<table class="table table-borderless">' + '<tr>'
-            + '<th>' + 'Январь' + '</th>'
-            + '<th>' + 'Февраль ' + '</th>'
-            + '<th>' + 'Март' + '</th>'
-            + '<th>' + 'Апрель ' + '</th>'
-            + '<th>' + 'Май' + '</th>'
-            + '<th>' + 'Июнь' + '</th>'
-            + '<th>' + 'Июль' + '</th>'
-            + '<th>' + 'Август ' + '</th>'
-            + '<th>' + 'Сентябрь' + '</th>'
-            + '<th>' + 'Октябрь ' + '</th>'
-            + '<th>' + 'Ноябрь ' + '</th>'
-            + '<th>' + 'Декабрь' + '</th>';
+            + '<th>' + '@SharedLocalizer["January"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["February"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["March"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["April"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["May"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["June"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["July"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["August"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["September"]' + '</th>'
+            + '<th>' + '@SharedLocalizer["October"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["November"] ' + '</th>'
+            + '<th>' + '@SharedLocalizer["December"]' + '</th>';
         return content += '<tr>'
             + '<td>' + parseFloat(raster_data[index].m1).toFixed(2) + '</td>'
             + '<td>' + parseFloat(raster_data[index].m2).toFixed(2) + '</td>'

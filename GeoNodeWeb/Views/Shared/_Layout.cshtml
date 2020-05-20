@@ -60,6 +60,11 @@
     </script>
 
     <script src="~/esnow/js/site.js" asp-append-version="true"></script>
+    <style>
+        .language {
+            margin-left:auto;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -84,6 +89,9 @@
                     </li>
                 </ul>
             </div>*@
+            <div class="language">
+                @await Html.PartialAsync("_SelectLanguagePartial")
+            </div>
         </nav>
     </header>
     <partial name="_CookieConsentPartial" />

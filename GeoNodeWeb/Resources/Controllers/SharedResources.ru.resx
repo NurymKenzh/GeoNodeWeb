@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AirTemperature" xml:space="preserve">
+    <value>Tемпература воздуха</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Апрель</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Площадь (полигон)</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Август</value>
+  </data>
+  <data name="Autumn" xml:space="preserve">
+    <value>Осень</value>
+  </data>
+  <data name="AveragePrecipitationDev" xml:space="preserve">
+    <value>Отклонения средней суммы осадков от значений базового периода в мм</value>
+  </data>
+  <data name="AverageTemperature" xml:space="preserve">
+    <value>Средняя температура</value>
+  </data>
+  <data name="AverageTemperatureDev" xml:space="preserve">
+    <value>Отклонения средней температуры</value>
+  </data>
+  <data name="BaseLayers" xml:space="preserve">
+    <value>Базовые слои</value>
+  </data>
+  <data name="Chart" xml:space="preserve">
+    <value>График</value>
+  </data>
+  <data name="ChartOptions" xml:space="preserve">
+    <value>Параметры графика</value>
+  </data>
+  <data name="Charts" xml:space="preserve">
+    <value>Графики</value>
+  </data>
+  <data name="ChartType" xml:space="preserve">
+    <value>Тип диаграммы</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>Выберите</value>
+  </data>
+  <data name="ChooseVHBorVHU" xml:space="preserve">
+    <value>Выбрать ВХБ или ВХУ</value>
+  </data>
+  <data name="ChoosingAnotherDecade" xml:space="preserve">
+    <value>Вы можете выбрать другое десятилетие на временной шкале ниже</value>
+  </data>
+  <data name="ClickContinueDrawLine" xml:space="preserve">
+    <value>Нажмите, чтобы продолжить рисование линии</value>
+  </data>
+  <data name="ClickContinueDrawPolygon" xml:space="preserve">
+    <value>Нажмите, чтобы продолжить рисование многоугольника</value>
+  </data>
+  <data name="ClickStartDraw" xml:space="preserve">
+    <value>Нажмите, чтобы начать рисование</value>
+  </data>
+  <data name="Climate" xml:space="preserve">
+    <value>Климат</value>
+  </data>
+  <data name="ClimateParameter" xml:space="preserve">
+    <value>Климатический параметр</value>
+  </data>
+  <data name="Columns" xml:space="preserve">
+    <value>Столбцы</value>
+  </data>
+  <data name="DataGenerated" xml:space="preserve">
+    <value>Данные формируются и будут отправлены на указанный email</value>
+  </data>
+  <data name="DecadeAverage" xml:space="preserve">
+    <value>Среднее значение по десятилетиям</value>
+  </data>
+  <data name="DecadeAverageYears" xml:space="preserve">
+    <value>Среднее значение по десятилетиям 1951-1960 (RCP 4.5)</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Декабрь</value>
+  </data>
+  <data name="Deviation" xml:space="preserve">
+    <value>Отклонение</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Документация</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
+  <data name="DownloadData" xml:space="preserve">
+    <value>Скачать данные</value>
+  </data>
+  <data name="DrawAreaInterest" xml:space="preserve">
+    <value>чтобы нарисовать область интереса</value>
+  </data>
+  <data name="DrawOnMap" xml:space="preserve">
+    <value>Нарисуйте на карте</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Evapotranspiration" xml:space="preserve">
+    <value>Эвапотранспирация</value>
+  </data>
+  <data name="EvapotranspirationDev" xml:space="preserve">
+    <value>Отклонения эвапотранспирации от значений базового периода</value>
+  </data>
+  <data name="Extra" xml:space="preserve">
+    <value>Дополнительно</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Февраль</value>
+  </data>
+  <data name="ForOS" xml:space="preserve">
+    <value>Для ОС</value>
+  </data>
+  <data name="Highlight" xml:space="preserve">
+    <value>Выделить</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Январь</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Июль</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Июнь</value>
+  </data>
+  <data name="Lakes" xml:space="preserve">
+    <value>Озера</value>
+  </data>
+  <data name="LayerInfo" xml:space="preserve">
+    <value>Информация о слое</value>
+  </data>
+  <data name="Layers" xml:space="preserve">
+    <value>Слои</value>
+  </data>
+  <data name="Legend" xml:space="preserve">
+    <value>Легенда</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Длина (линия)</value>
+  </data>
+  <data name="Lines" xml:space="preserve">
+    <value>Линии</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Карта</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Март</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Максимум</value>
+  </data>
+  <data name="MaxTemperature" xml:space="preserve">
+    <value>Максимальная температура</value>
+  </data>
+  <data name="MaxTemperatureDev" xml:space="preserve">
+    <value>Отклонения максимальной температуры от значений базового периода</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Май</value>
+  </data>
+  <data name="Measure" xml:space="preserve">
+    <value>Измерять</value>
+  </data>
+  <data name="MeasureDistance" xml:space="preserve">
+    <value>Измерить расстояние или площадь на Карте</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Медиана</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Меню</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>Минимум</value>
+  </data>
+  <data name="MinTemperature" xml:space="preserve">
+    <value>Минимальная температура</value>
+  </data>
+  <data name="MinTemperatureDev" xml:space="preserve">
+    <value>Отклонения минимальной температуры</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Месяц</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>Месяцы</value>
+  </data>
+  <data name="NotCalcData" xml:space="preserve">
+    <value>При построении карт используются архивные данные состоящие из ретроспективных проекций за период с 1950 г. по 2005 г. и проекций на будущее, которые представлены за период 2006-2100 гг. для двух сценариев репрезентативных траекторий концентрации парниковых газов: RCP4.5 и RCP8.5. В связи с перекрытием ретроспективных данных и проекций на будущее в период с 2001-2010 гг. ограничивают возможность проведения корректных расчетов и построения карт за определенные периоды: 10 лет – 2001-2010 гг., за 20 лет – 1991-2010, 2001-2020 гг., за 30 лет – 1981-2010, 1991-2020, 2001-2030 гг.</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Ноябрь</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Октябрь</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Другие</value>
+  </data>
+  <data name="Parameter" xml:space="preserve">
+    <value>Параметр</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Период</value>
+  </data>
+  <data name="Periodicity" xml:space="preserve">
+    <value>Периодичность</value>
+  </data>
+  <data name="Precipitation" xml:space="preserve">
+    <value>Осадки</value>
+  </data>
+  <data name="PressHoldKey" xml:space="preserve">
+    <value>Нажмите и удерживайте клавишу</value>
+  </data>
+  <data name="Radar" xml:space="preserve">
+    <value>Радар</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="RemoveSelection" xml:space="preserve">
+    <value>Снять выделение</value>
+  </data>
+  <data name="Rivers" xml:space="preserve">
+    <value>Реки</value>
+  </data>
+  <data name="Season" xml:space="preserve">
+    <value>Сезон</value>
+  </data>
+  <data name="Seasons" xml:space="preserve">
+    <value>Сезоны</value>
+  </data>
+  <data name="SelectAreaOnMap" xml:space="preserve">
+    <value>Выбрать область на карте</value>
+  </data>
+  <data name="SelectMapArea" xml:space="preserve">
+    <value>Выбрать область на карте</value>
+  </data>
+  <data name="SelectMapObject" xml:space="preserve">
+    <value>Выделение объекта на карте</value>
+  </data>
+  <data name="SelectObjOnMap" xml:space="preserve">
+    <value>Для построение Графика, сначала выберите объект на карте</value>
+  </data>
+  <data name="SelectOptions" xml:space="preserve">
+    <value>Выберите параметры</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Сентябрь</value>
+  </data>
+  <data name="SpecifyMailbox" xml:space="preserve">
+    <value>Укажите почтовый ящик</value>
+  </data>
+  <data name="Spring" xml:space="preserve">
+    <value>Весна</value>
+  </data>
+  <data name="Summer" xml:space="preserve">
+    <value>Лето</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>Таблица</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Тест</value>
+  </data>
+  <data name="Values" xml:space="preserve">
+    <value>Значения</value>
+  </data>
+  <data name="VHB" xml:space="preserve">
+    <value>ВХБ</value>
+  </data>
+  <data name="VHU" xml:space="preserve">
+    <value>ВХУ</value>
+  </data>
+  <data name="ViewDataByMonth" xml:space="preserve">
+    <value>Чтобы просмотреть данные по месяцам, ... Раскройте список</value>
+  </data>
+  <data name="Winter" xml:space="preserve">
+    <value>Зима</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Год</value>
+  </data>
+  <data name="YearsOld" xml:space="preserve">
+    <value>Лет</value>
+  </data>
+</root>
