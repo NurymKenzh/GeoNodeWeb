@@ -1,9 +1,14 @@
 ﻿@using GeoNodeWeb.Controllers
+@using Microsoft.AspNetCore.Localization
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResources> SharedLocalizer
 @{
     ViewData["Title"] = SharedLocalizer["Charts"];
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var language = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
 }
 
 @await Html.PartialAsync("_StylesTabChart")
@@ -139,7 +144,33 @@
         background: #3a465d;
     }
 </style>
+
 <input id="id" value="@ViewBag.Id" type="hidden" />
+<div hidden="hidden">
+    <input id="Language" type="text" value="@language" />
+    <input id="VHB" type="text" value="@SharedLocalizer["VHB"]" />
+    <input id="VHU" type="text" value="@SharedLocalizer["VHU"]" />
+    <input id="Maximum" type="text" value="@SharedLocalizer["Maximum"]" />
+    <input id="Minimum" type="text" value="@SharedLocalizer["Minimum"]" />
+    <input id="Median" type="text" value="@SharedLocalizer["Median"]" />
+    <input id="Spring" type="text" value="@SharedLocalizer["Spring"]" />
+    <input id="Summer" type="text" value="@SharedLocalizer["Summer"]" />
+    <input id="Autumn" type="text" value="@SharedLocalizer["Autumn"]" />
+    <input id="Winter" type="text" value="@SharedLocalizer["Winter"]" />
+    <input id="January" type="text" value="@SharedLocalizer["January"]" />
+    <input id="February" type="text" value="@SharedLocalizer["February"]" />
+    <input id="March" type="text" value="@SharedLocalizer["March"]" />
+    <input id="April" type="text" value="@SharedLocalizer["April"]" />
+    <input id="May" type="text" value="@SharedLocalizer["May"]" />
+    <input id="June" type="text" value="@SharedLocalizer["June"]" />
+    <input id="July" type="text" value="@SharedLocalizer["July"]" />
+    <input id="August" type="text" value="@SharedLocalizer["August"]" />
+    <input id="September" type="text" value="@SharedLocalizer["September"]" />
+    <input id="October" type="text" value="@SharedLocalizer["October"]" />
+    <input id="November" type="text" value="@SharedLocalizer["November"]" />
+    <input id="December" type="text" value="@SharedLocalizer["December"]" />
+</div>
+
 <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <fieldset class="scheduler-border">
@@ -295,7 +326,7 @@
         <div class="row d-flex">
             <div class="col-md-auto">
                 <div class="btn-group mt-2" role="group" aria-label="example">
-                    <select class="form-control form-control-lg" id="Decade" onchange="CreateDateSlider();">
+                    <select class="form-control form-control-lg text-lowercase" id="Decade" onchange="CreateDateSlider();">
                         <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
                         <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
                         <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
@@ -349,21 +380,21 @@
                                             <div class="form-group">
                                                 <label for="chart1SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
                                                 <select class="form-control form-control-sm" id="chart1SubParameter">
-                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"], ⁰С</option>
-                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"], ⁰С</option>
-                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"], ⁰С</option>
-                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"], мм</option>
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"]</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"]</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"]</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"]</option>
                                                     <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
-                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"], мм</option>
-                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"], мм</option>
-                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"], ⁰С</option>
-                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"], ⁰С</option>
-                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"], ⁰С</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="chart1Decade">@SharedLocalizer["Periodicity"]:</label>
-                                                <select class="form-control form-control-sm" id="chart1Decade" onchange="chart1UpdateDates()">
+                                                <select class="form-control form-control-sm text-lowercase" id="chart1Decade" onchange="chart1UpdateDates()">
                                                     <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
                                                     <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
                                                     <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
@@ -439,7 +470,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <input type="button" class="btn btn-outline-primary btn-sm" value="Обновить" onclick="Chart1()" />
+                                        <input type="button" class="btn btn-outline-primary btn-sm" value="@SharedLocalizer["Refresh"]" onclick="Chart1()" />
                                     </fieldset>
                                 </div>
                                 <div class="col-md-9">
@@ -464,21 +495,21 @@
                                             <div class="form-group">
                                                 <label for="chart2SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
                                                 <select class="form-control form-control-sm" id="chart2SubParameter">
-                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"], ⁰С</option>
-                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"], ⁰С</option>
-                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"], ⁰С</option>
-                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"], мм</option>
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"]</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"]</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"]</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"]</option>
                                                     <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
-                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"], мм</option>
-                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"], мм</option>
-                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"], ⁰С</option>
-                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"], ⁰С</option>
-                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"], ⁰С</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="chart2Decade">@SharedLocalizer["Periodicity"]:</label>
-                                                <select class="form-control form-control-sm" id="chart2Decade" onchange="chart2UpdateDates()">
+                                                <select class="form-control form-control-sm text-lowercase" id="chart2Decade" onchange="chart2UpdateDates()">
                                                     <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
                                                     <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
                                                     <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
@@ -587,21 +618,21 @@
                                             <div class="form-group">
                                                 <label for="chart3SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
                                                 <select class="form-control form-control-sm" id="chart3SubParameter">
-                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"], ⁰С</option>
-                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"], ⁰С</option>
-                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"], ⁰С</option>
-                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"], мм</option>
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"]</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"]</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"]</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"]</option>
                                                     <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
-                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"], мм</option>
-                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"], мм</option>
-                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"], ⁰С</option>
-                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"], ⁰С</option>
-                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"], ⁰С</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="chart3Decade">@SharedLocalizer["Periodicity"]:</label>
-                                                <select class="form-control form-control-sm" id="chart3Decade" onchange="chart3UpdateDates()">
+                                                <select class="form-control form-control-sm text-lowercase" id="chart3Decade" onchange="chart3UpdateDates()">
                                                     <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
                                                     <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
                                                     <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
@@ -930,7 +961,7 @@
             success: function (data) {
                 Table1(Id, $('#chart1SubParameter').val(), $('#chart1Decade').val(), $('#chart1RCP').val(), chart1Dates);
 
-                $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
+                $('#ChartTitle').text($('#VHB').val() + ' - ' + data.wmbname + ' (' + $('#VHU').val() + ' - ' + data.wmacode + ')');
                 for (var i = 0; i < data.max.length; ++i) {
                     data.max[i] = parseFloat(data.max[i]).toFixed(2);
                 }
@@ -943,19 +974,19 @@
                 var chart1Data = {
                     labels: data.years,
                     datasets: [{
-                        label: '@SharedLocalizer["Maximum"]',
+                        label: $('#Maximum').val(),
                         backgroundColor: 'rgba(255, 99, 132, 0.5)',
                         borderColor: 'rgba(255,99,132,1)',
                         borderWidth: 1,
                         data: data.max
                     }, {
-                        label: '@SharedLocalizer["Minimum"]',
+                        label: $('#Minimum').val(),
                         backgroundColor: 'rgba(153, 102, 255, 0.5)',
                         borderColor: 'rgba(153, 102, 255,1)',
                         borderWidth: 1,
                         data: data.min
                     }, {
-                        label: '@SharedLocalizer["Median"]',
+                        label: $('#Median').val(),
                         backgroundColor: "rgba(75, 192, 192, 0.5)",
                         borderColor: "rgba(75, 192, 192,1)",
                         borderWidth: 1,
@@ -1027,7 +1058,7 @@
         if (objectid == null) {
             Id = @ViewBag.Id;
         }
-        var seasonNames = ['@SharedLocalizer["Spring"]', '@SharedLocalizer["Summer"]', '@SharedLocalizer["Autumn"]', '@SharedLocalizer["Winter"]'],
+        var seasonNames = [$('#Spring').val(), $('#Summer').val(), $('#Autumn').val(), $('#Winter').val()],
             seasonColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
             seasonMaxColors = ['rgba(0, 128, 0, 0.7)', 'rgba(230, 0, 0, 0.7)', 'rgba(219, 205, 0, 0.7)', 'rgba(34, 26, 194, 0.7)'],
             seasonMinColors = ['rgba(102, 203, 102, 0.4)', 'rgba(255, 102, 102, 0.4)', 'rgba(255, 255, 113, 0.4)', 'rgba(161, 153, 255, 0.4)'],
@@ -1054,7 +1085,7 @@
             success: function (data) {
                 Table2(Id, $('#chart2SubParameter').val(), $('#chart2Decade').val(), $('#chart2RCP').val(), chart2Dates, chart2Seasons);
 
-                $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
+                $('#ChartTitle').text($('#VHB').val() + ' - ' + data.wmbname + ' (' + $('#VHU').val() + ' - ' + data.wmacode + ')');
                 // 0 - spring
                 for (var i = 0; i < data.max.length; ++i) {
                     for (var j = 0; j < data.max[i].length; ++j) {
@@ -1078,7 +1109,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
-                            label: '@SharedLocalizer["Maximum"] (' + seasonNames[i] + ')',
+                            label: $('#Maximum').val() + ' (' + seasonNames[i] + ')',
                             backgroundColor: seasonMaxColors[i],
                             borderColor: 'rgba(3, 0, 51, 0.7)',
                             borderWidth: 1,
@@ -1090,7 +1121,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
-                            label: '@SharedLocalizer["Minimum"] (' + seasonNames[i] + ')',
+                            label: $('#Minimum').val() + ' (' + seasonNames[i] + ')',
                             backgroundColor: seasonMinColors[i],
                             borderColor: 'rgba(3, 0, 51, 0.7)',
                             borderWidth: 1,
@@ -1102,7 +1133,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart2Seasons.includes(i + 1)) {
                         chart2Data.datasets.push({
-                            label: '@SharedLocalizer["Median"] (' + seasonNames[i] + ')',
+                            label: $('#Median').val() + ' (' + seasonNames[i] + ')',
                             backgroundColor: seasonMedianColors[i],
                             borderColor: 'rgba(3, 0, 51, 0.7)',
                             borderWidth: 1,
@@ -1152,7 +1183,7 @@
         if (objectid == null) {
             Id = @ViewBag.Id;
         }
-        var monthNames = ['@SharedLocalizer["January"]', '@SharedLocalizer["February"]', '@SharedLocalizer["March"]', '@SharedLocalizer["April"]', '@SharedLocalizer["May"]', '@SharedLocalizer["June"]', '@SharedLocalizer["July"]', '@SharedLocalizer["August"]', '@SharedLocalizer["September"]', '@SharedLocalizer["October"]', '@SharedLocalizer["November"]', '@SharedLocalizer["December"]'];
+        var monthNames = [$('#January').val(), $('#February').val(), $('#March').val(), $('#April').val(), $('#May').val(), $('#June').val(), $('#July').val(), $('#August').val(), $('#September').val(), $('#October').val(), $('#November').val(), $('#December').val()];
             monthColors =[
                 'rgba(255, 99, 132, 0.5)',
                 'rgba(153, 102, 255, 0.5)',
@@ -1227,7 +1258,7 @@
             success: function (data) {
                 Table3(Id, $('#chart3SubParameter').val(), $('#chart3Decade').val(), $('#chart3RCP').val(), chart3Dates, chart3Months);
 
-                $('#ChartTitle').text('ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')');
+                $('#ChartTitle').text($('#VHB').val() + ' - ' + data.wmbname + ' (' + $('#VHU').val() + ' - ' + data.wmacode + ')');
                 for (var i = 0; i < data.max.length; ++i) {
                     for (var j = 0; j < data.max[i].length; ++j) {
                         data.max[i][j] = parseFloat(data.max[i][j]).toFixed(2);
@@ -1250,7 +1281,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
-                            label: '@SharedLocalizer["Maximum"] (' + monthNames[i] + ')',
+                            label: $('#Maximum').val() + ' (' + monthNames[i] + ')',
                             backgroundColor: monthMaxColors[i],
                             borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
@@ -1262,7 +1293,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
-                            label: '@SharedLocalizer["Minimum"] (' + monthNames[i] + ')',
+                            label: $('#Minimum').val() + ' (' + monthNames[i] + ')',
                             backgroundColor: monthMinColors[i],
                             borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
@@ -1274,7 +1305,7 @@
                 for (var i = 0; i < data.max.length; ++i) {
                     if (chart3Months.includes(i + 1)) {
                         chart3Data.datasets.push({
-                            label: '@SharedLocalizer["Median"] (' + monthNames[i] + ')',
+                            label: $('#Median').val() + ' (' + monthNames[i] + ')',
                             backgroundColor: monthMedianColors[i],
                             borderColor: 'rgba(8, 0, 97, 1)',
                             borderWidth: 1,
@@ -1479,17 +1510,41 @@
             @:wms_new["objectid"] = '@Html.Raw(wm_.objectid)';
             @:wms_new["codewmb"] = '@Html.Raw(wm_.codewmb)';
             @:wms_new["namewmb_ru"] = '@Html.Raw(wm_.namewmb_ru)';
+            @:wms_new["namewmb_en"] = '@Html.Raw(wm_.namewmb_en)';
+            @:wms_new["namewmb_kk"] = '@Html.Raw(wm_.namewmb_kk)';
             @:wms_new["codewma"] = '@Html.Raw(wm_.codewma)';
             @:wms.push(wms_new);
         }
     }
     $.each(wms, function () {
-        if (this.objectid == @ViewBag.Id) {
-            $("#wmb").append($("<option selected />").val(this.codewmb).text(this.namewmb_ru));
+        if ($('#Language').val() == "ru") {
+            if (this.objectid == @ViewBag.Id) {
+                $("#wmb").append($("<option selected />").val(this.codewmb).text(this.namewmb_ru));
+            }
+            else if ($("#wmb option[value='" + this.codewmb + "']").length == 0) {
+                if (this.namewmb_ru.length > 0) {
+                    $("#wmb").append($("<option />").val(this.codewmb).text(this.namewmb_ru));
+                }
+            }
         }
-        else if ($("#wmb option[value='" + this.codewmb + "']").length == 0) {
-            if (this.namewmb_ru.length > 0) {
-                $("#wmb").append($("<option />").val(this.codewmb).text(this.namewmb_ru));
+        else if ($('#Language').val() == "en") {
+            if (this.objectid == @ViewBag.Id) {
+                $("#wmb").append($("<option selected />").val(this.codewmb).text(this.namewmb_en));
+            }
+            else if ($("#wmb option[value='" + this.codewmb + "']").length == 0) {
+                if (this.namewmb_en.length > 0) {
+                    $("#wmb").append($("<option />").val(this.codewmb).text(this.namewmb_en));
+                }
+            }
+        }
+        else {
+            if (this.objectid == @ViewBag.Id) {
+                $("#wmb").append($("<option selected />").val(this.codewmb).text(this.namewmb_kk));
+            }
+            else if ($("#wmb option[value='" + this.codewmb + "']").length == 0) {
+                if (this.namewmb_kk.length > 0) {
+                    $("#wmb").append($("<option />").val(this.codewmb).text(this.namewmb_kk));
+                }
             }
         }
     });
@@ -2512,18 +2567,18 @@
     })
     function idDetailMonth(index) {
         var content = '<div class="table-responsive">' + '<table class="table table-borderless">' + '<tr>'
-            + '<th>' + '@SharedLocalizer["January"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["February"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["March"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["April"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["May"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["June"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["July"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["August"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["September"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["October"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["November"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["December"]' + '</th>';
+            + '<th>' + $('#January').val() + '</th>'
+            + '<th>' + $('#February').val() + '</th>'
+            + '<th>' + $('#March').val() + '</th>'
+            + '<th>' + $('#April').val() + '</th>'
+            + '<th>' + $('#May').val() + '</th>'
+            + '<th>' + $('#June').val() + '</th>'
+            + '<th>' + $('#July').val() + '</th>'
+            + '<th>' + $('#August').val() + '</th>'
+            + '<th>' + $('#September').val() + '</th>'
+            + '<th>' + $('#October').val() + '</th>'
+            + '<th>' + $('#November').val() + '</th>'
+            + '<th>' + $('#December').val() + '</th>';
         return content += '<tr>'
             + '<td>' + parseFloat(raster_data[index].m1).toFixed(2) + '</td>'
             + '<td>' + parseFloat(raster_data[index].m2).toFixed(2) + '</td>'
