@@ -78,13 +78,16 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="btn-group btn-group-toggle ml-3 mr-3" data-toggle="buttons">
                     <label class="btn btn-outline-light btn-sm active" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["AirTemperature"]">
-                        <input type="radio" name="parameter" id="Temperature" autocomplete="off" checked onchange="ChangeParameter()"><i class="fa fa-thermometer-2"></i>
+                        <input type="radio" name="parameter" id="Temperature" autocomplete="off" checked onchange="ChangeParameter()"><i class="fa fa-temperature-low"></i>
                     </label>
                     <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["Precipitation"]">
-                        <input type="radio" name="parameter" id="Precipitation" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-tint"></i>
+                        <input type="radio" name="parameter" id="Precipitation" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-cloud-rain"></i>
                     </label>
                     <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["Evapotranspiration"]">
-                        <input type="radio" name="parameter" id="Evapotranspiration" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-ellipsis-v"></i>
+                        <input type="radio" name="parameter" id="Evapotranspiration" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-smog"></i>
+                    </label>
+                    <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="Climate Index">
+                        <input type="radio" name="parameter" id="ClimatIndex" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-superscript"></i>
                     </label>
                 </div>
                 <ul class="navbar-nav mr-auto" id="subparameterlinks">

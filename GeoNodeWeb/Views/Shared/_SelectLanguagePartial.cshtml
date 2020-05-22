@@ -18,7 +18,7 @@
 
 <div title="Request culture provider: @requestCulture?.Provider?.GetType().Name">
     <form id="selectLanguage" asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" class="form-horizontal" role="form">
-        <label class="menu language-label" asp-for="@requestCulture.RequestCulture.UICulture.Name">@SharedLocalizer["Language"]:</label>
+        <label class="menu language-label text-white-50" asp-for="@requestCulture.RequestCulture.UICulture.Name">@SharedLocalizer["Language"]:</label>
         <select class="language-select" name="culture" onchange="this.form.submit();" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
     </form>
 </div>
