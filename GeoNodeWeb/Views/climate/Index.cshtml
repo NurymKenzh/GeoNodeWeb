@@ -1,9 +1,14 @@
 ﻿@using GeoNodeWeb.Controllers
+@using Microsoft.AspNetCore.Localization
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResources> SharedLocalizer
 @{
     ViewData["Title"] = SharedLocalizer["Map"];
     Layout = "~/Views/Shared/_LayoutClimate.cshtml";
+}
+
+@{
+    var language = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
 }
 
 @await Html.PartialAsync("_StylesTabChart")
@@ -133,6 +138,37 @@
             content: "✖";
         }
 </style>
+
+<div hidden="hidden">
+    <input id="Language" type="text" value="@language" />
+    <input id="Values" type="text" value="@SharedLocalizer["Values"]" />
+    <input id="NotCalcData" type="text" value="@SharedLocalizer["NotCalcData"]" />
+    <input id="DecadeAverage" type="text" value="@SharedLocalizer["DecadeAverage"]" />
+    <input id="VHB" type="text" value="@SharedLocalizer["VHB"]" />
+    <input id="VHU" type="text" value="@SharedLocalizer["VHU"]" />
+    <input id="RemoveSelection" type="text" value="@SharedLocalizer["RemoveSelection"]" />
+    <input id="Highlight" type="text" value="@SharedLocalizer["Highlight"]" />
+    <input id="SelectObjOnMap" type="text" value="@SharedLocalizer["SelectObjOnMap"]" />
+    <input id="DownloadData" type="text" value="@SharedLocalizer["DownloadData"]" />
+    <input id="PressHoldKey" type="text" value="@SharedLocalizer["PressHoldKey"]" />
+    <input id="DrawAreaInterest" type="text" value="@SharedLocalizer["DrawAreaInterest"]" />
+    <input id="ForOS" type="text" value="@SharedLocalizer["ForOS"]" />
+    <input id="DrawOnMap" type="text" value="@SharedLocalizer["DrawOnMap"]" />
+    <input id="SelectAreaOnMap" type="text" value="@SharedLocalizer["SelectAreaOnMap"]" />
+    <input id="DataGenerated" type="text" value="@SharedLocalizer["DataGenerated"]" />
+    <input id="January" type="text" value="@SharedLocalizer["January"]" />
+    <input id="February" type="text" value="@SharedLocalizer["February"]" />
+    <input id="March" type="text" value="@SharedLocalizer["March"]" />
+    <input id="April" type="text" value="@SharedLocalizer["April"]" />
+    <input id="May" type="text" value="@SharedLocalizer["May"]" />
+    <input id="June" type="text" value="@SharedLocalizer["June"]" />
+    <input id="July" type="text" value="@SharedLocalizer["July"]" />
+    <input id="August" type="text" value="@SharedLocalizer["August"]" />
+    <input id="September" type="text" value="@SharedLocalizer["September"]" />
+    <input id="October" type="text" value="@SharedLocalizer["October"]" />
+    <input id="November" type="text" value="@SharedLocalizer["November"]" />
+    <input id="December" type="text" value="@SharedLocalizer["December"]" />
+</div>
 
 <div class="container-fluid p-0">
     <div class="row">
@@ -573,7 +609,7 @@
                             <button id="DownloadBtn" class="btn btn-primary btn-block btn-sm target-notice" onclick="Download()">@SharedLocalizer["Download"]</button>
                         </div>
                     </div>
-                    <!-- sidebar-content  -->
+                <!-- sidebar-content  -->
                     <div class="sidebar-footer border-bottom border-light">
                         <a href="#">
                             <i class="SomeInfo fa fa-file" InfoTitle="@SharedLocalizer["Test"]"></i>
@@ -588,7 +624,7 @@
                         <a href="#" id="MapTitleBtn" class="target-click">
                             <i class="fa fa-bookmark SomeInfo" InfoTitle="@SharedLocalizer["LayerInfo"]"></i>
                         </a>
-                    </div>
+                    </div>                            
                 </nav>
                 <!-- sidebar-wrapper  -->
                 <footer class="footer-classic fixed-bottom border-top border-light" style="background: #16344e;">
@@ -598,20 +634,20 @@
                                 <div class="col">
                                     <div class="input-group">
                                         <select id="type" class="measure input-group-sm">
-                                            <option value="length">Длина (линия)</option>
-                                            <option value="area">Площадь (полигон)</option>
+                                            <option value="length">"@SharedLocalizer["Length"]</option>
+                                            <option value="area">"@SharedLocalizer["Area"]</option>
                                         </select>
                                         <div class="input-group-prepend">
-                                            <button id="MeasureButton" type="button" value="Измерять" class="btn btn-outline-light btn-sm" onclick="MeasureTool()"><i class="fa fa-ruler SomeInfo" InfoTitle="Измерить расстояние или площадь на Карте"></i></button>
-                                            <button id="SelectButton" type="button" value="Выделить" class="btn btn-outline-light btn-sm" onclick="SelectTool()"><i class="fa fa-map-marked SomeInfo" InfoTitle="Выделение объекта на карте"></i></button>
-                                            <button id="FilterDownloadBtn" type="button" value="Скачать" class="btn btn-outline-light btn-sm"><i class="fa fa-download SomeInfo" InfoTitle="Скачать данные"></i></button>
+                                            <button id="MeasureButton" type="button" value="@SharedLocalizer["Measure"]" class="btn btn-outline-light btn-sm" onclick="MeasureTool()"><i class="fa fa-ruler SomeInfo" InfoTitle="@SharedLocalizer["MeasureDistance"]"></i></button>
+                                            <button id="SelectButton" type="button" value="@SharedLocalizer["Highlight"]" class="btn btn-outline-light btn-sm" onclick="SelectTool()"><i class="fa fa-map-marked SomeInfo" InfoTitle="@SharedLocalizer["SelectMapObject"]"></i></button>
+                                            <button id="FilterDownloadBtn" type="button" value="@SharedLocalizer["Download"]" class="btn btn-outline-light btn-sm"><i class="fa fa-download SomeInfo" InfoTitle="@SharedLocalizer["DownloadData"]"></i></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="row align-items-center d-flex justify-content-center">
-                                    <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">Отклонение</button>
+                                    <button id="Difference" type="button" class="btn btn-outline-warning btn-sm" onclick="Difference()">@SharedLocalizer["Deviation"]</button>
                                     <div class="col-md-8 m-1 " style="cursor: pointer;">
                                         <input id="ClimateTimeline" class="js-range-slider" name="my_range" value="" />
                                     </div>
@@ -1802,7 +1838,7 @@
         if ((Decade == '10' && range_instance.result.from == 2001)
             || (Decade == '20' && (range_instance.result.from == 1991 || range_instance.result.from == 2001))
             || (Decade == '30' && (range_instance.result.from == 1981 || range_instance.result.from == 1991 || range_instance.result.from == 2001))) {
-            $('#InfoTitle').text('@SharedLocalizer["NotCalcData"]');
+            $('#InfoTitle').text($('#NotCalcData').val());
             $('#divInfo').attr('data-original-title', '');
             $('#divInfo').text('');
             $('#Layerdescription').text('');
@@ -1885,7 +1921,7 @@
         if (RCP == 'rcp85') {
             rcp_label = 'RCP 8.5'
         }
-        $('#table_title').text('@SharedLocalizer["DecadeAverage"] ' + date_label + ' (' + rcp_label + ')');
+        $('#table_title').text($('#DecadeAverage').val() + ' ' + date_label + ' (' + rcp_label + ')');
     }
 </script>
 
@@ -1949,8 +1985,18 @@
                     }
                     if (featureId >= 0) {
                         $('#chartSpan').text('1');
+                        var name = '';
+                        if ($('#Language').val() == "ru") {
+                            name = result[0].get('NameWMB_Ru');
+                        }
+                        else if ($('#Language').val() == "en") {
+                            name = result[0].get('NameWMB_En');
+                        }
+                        else {
+                            name = result[0].get('NameWMB_Kz');
+                        }
                         //var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
-                        content.innerHTML = '<p>ВХБ - ' + result[0].get('NameWMB_Ru') + '</p><code>ВХУ - ' + result[0].get('CodeWMA') + '</code>'
+                        content.innerHTML = '<p>' + $('#VHB').val() + ' - ' + name + '</p><code>' + $('#VHU').val() + ' - ' + result[0].get('CodeWMA') + '</code>'
                             + '<br /><button type="button" class="btn btn-outline-primary btn-sm"  onclick="Charts()"><i class="fa fa-bar-chart-o"></i></button>';
                         overlay.setPosition(evt.coordinate);
                     }
@@ -2065,7 +2111,7 @@
             return;
         }
         tool = 'select';
-        $('#SelectButton').val('@SharedLocalizer["RemoveSelection"]');
+        $('#SelectButton').val($('#RemoveSelection').val());
         $('#SelectButton');
         map.removeInteraction(draw);
         Source_Measure.clear();
@@ -2108,7 +2154,7 @@
             return;
         }
         tool = 'info';
-        $('#SelectButton').val('@SharedLocalizer["Highlight"]');
+        $('#SelectButton').val($('#Highlight').val());
         $('#SelectButton');
         map.removeInteraction(draw);
         Source_Measure.clear();
@@ -2314,7 +2360,7 @@
                 var chart1Data = {
                     labels: labels,
                     datasets: [{
-                        label: '@SharedLocalizer["Values"]',
+                        label: $('#Values').val(),
                         backgroundColor: 'rgba(255, 99, 132, 0.5)',
                         borderColor: 'rgba(255,99,132,1)',
                         borderWidth: 1,
@@ -2600,7 +2646,7 @@
             maxWidth: 400,
             adjustPosition: true,
             adjustTracker: true,
-            content: '@SharedLocalizer["SelectObjOnMap"]!'
+            content: $('#SelectObjOnMap').val() + '!'
         });
         new jBox('Modal', {
             id: 'modal-white',
@@ -2622,7 +2668,7 @@
             onOpen: function () {
                 // Add t
                 this.setContent($('#DownloadFormCont'));
-                this.setTitle('<div class="ajax-complete">@SharedLocalizer["DownloadData"]</div>');
+                this.setTitle('<div class="ajax-complete">' + $('#DownloadData').val() + '</div>');
             },
             onCreated: function () {
                 // Add tooltip
@@ -2640,13 +2686,13 @@
                         y: 'center'
                     },
                     outside: 'x',
-                    content: '@SharedLocalizer["PressHoldKey"] <span class="badge badge-warning text-wrap">Ctrl</span>, @SharedLocalizer["DrawAreaInterest"] <br>  @SharedLocalizer["ForOS"] macOS Command + Drag',
+                    content: $('#PressHoldKey').val() + ' <span class="badge badge-warning text-wrap">Ctrl</span>, ' + $('#DrawAreaInterest').val() + ' <br>  ' + $('#ForOS').val() + ' macOS Command + Drag',
                     onOpen: function () {
-                        this.source.addClass('active').html('@SharedLocalizer["DrawOnMap"]');
+                        this.source.addClass('active').html($('#DrawOnMap').val());
                     },
                     onClose: function () {
                         this.source.removeClass('btn btn-outline-danger btn-block btn-sm mt-2');
-                        this.source.addClass('btn btn-outline-success btn-block btn-sm mt-2').html('@SharedLocalizer["SelectAreaOnMap"]');
+                        this.source.addClass('btn btn-outline-success btn-block btn-sm mt-2').html($('#SelectAreaOnMap').val());
                     }
                 });
             },
@@ -2659,7 +2705,7 @@
             if (Source_Rectangle.getFeatures().length > 0) {
                 new jBox('Notice', {
                     animation: 'flip',
-                    content: '@SharedLocalizer["DataGenerated"]',
+                    content: $('#DataGenerated').val(),
                     color: 'yellow',
                     delayOnHover: true,
                     showCountdown: true
@@ -2687,18 +2733,18 @@
     })
     function idDetailMonth(index) {
         var content = '<div class="table-responsive">' + '<table class="table table-borderless">' + '<tr>'
-            + '<th>' + '@SharedLocalizer["January"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["February"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["March"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["April"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["May"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["June"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["July"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["August"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["September"]' + '</th>'
-            + '<th>' + '@SharedLocalizer["October"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["November"] ' + '</th>'
-            + '<th>' + '@SharedLocalizer["December"]' + '</th>';
+            + '<th>' + $('#January').val() + '</th>'
+            + '<th>' + $('#February').val() + '</th>'
+            + '<th>' + $('#March').val() + '</th>'
+            + '<th>' + $('#April').val() + '</th>'
+            + '<th>' + $('#May').val() + '</th>'
+            + '<th>' + $('#June').val() + '</th>'
+            + '<th>' + $('#July').val() + '</th>'
+            + '<th>' + $('#August').val() + '</th>'
+            + '<th>' + $('#September').val() + '</th>'
+            + '<th>' + $('#October').val() + '</th>'
+            + '<th>' + $('#November').val() + '</th>'
+            + '<th>' + $('#December').val() + '</th>';
         return content += '<tr>'
             + '<td>' + parseFloat(raster_data[index].m1).toFixed(2) + '</td>'
             + '<td>' + parseFloat(raster_data[index].m2).toFixed(2) + '</td>'

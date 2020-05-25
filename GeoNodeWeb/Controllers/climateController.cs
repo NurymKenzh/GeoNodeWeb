@@ -11,9 +11,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Dapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
@@ -75,6 +77,8 @@ namespace GeoNodeWeb.Controllers
         public int? objectid;
         public int? codewmb;
         public string namewmb_ru;
+        public string namewmb_en;
+        public string namewmb_kk;
         public string codewma;
     }
 
@@ -124,6 +128,7 @@ namespace GeoNodeWeb.Controllers
     {
         private readonly HttpApiClientController _HttpApiClient;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IStringLocalizer<SharedResources> _sharedLocalizer;
 
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
         private string geoserverConnection = server ? Startup.Configuration["geoserverConnectionServer"].ToString() : Startup.Configuration["geoserverConnectionDebug"].ToString(),
@@ -136,10 +141,12 @@ namespace GeoNodeWeb.Controllers
             geodataanalyticsProdConnection = server ? Startup.Configuration["geodataanalyticsProdConnectionServer"].ToString() : Startup.Configuration["geodataanalyticsProdConnectionDebug"].ToString();
 
         public climateController(HttpApiClientController HttpApiClient,
-            IHostingEnvironment hostingEnvironment)
+            IHostingEnvironment hostingEnvironment,
+            IStringLocalizer<SharedResources> sharedLocalizer)
         {
             _HttpApiClient = HttpApiClient;
             _hostingEnvironment = hostingEnvironment;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         public IActionResult Index()
@@ -378,9 +385,25 @@ namespace GeoNodeWeb.Controllers
                     $" WHERE name LIKE '{layer}';";
                 var climate_mosaicinfos = connection.Query<climate_mosaicinfo>(query);
                 climate_mosaicinfo climate_Mosaicinfo = climate_mosaicinfos.FirstOrDefault();
-                title = climate_Mosaicinfo?.title_ru;
-                description = climate_Mosaicinfo?.description_ru;
-                extended_title = climate_Mosaicinfo?.extended_title_ru;
+                string language = new RequestLocalizationOptions().DefaultRequestCulture.Culture.Name;
+                if (language == "ru")
+                {
+                    title = climate_Mosaicinfo?.title_ru;
+                    description = climate_Mosaicinfo?.description_ru;
+                    extended_title = climate_Mosaicinfo?.extended_title_ru;
+                }
+                else if (language == "en")
+                {
+                    title = climate_Mosaicinfo?.title_en;
+                    description = climate_Mosaicinfo?.description_en;
+                    extended_title = climate_Mosaicinfo?.extended_title_en;
+                }
+                else
+                {
+                    title = climate_Mosaicinfo?.title_kk;
+                    description = climate_Mosaicinfo?.description_kk;
+                    extended_title = climate_Mosaicinfo?.extended_title_kk;
+                }
                 connection.Close();
             }
 
@@ -430,8 +453,20 @@ namespace GeoNodeWeb.Controllers
             using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
-                var wmsDB = connection.Query<wm>($"SELECT \"OBJECTID\" as objectid, \"NameWMB_Ru\" as namewmb_ru, \"CodeWMA\" as codewma, \"CodeWMB\" as codewmb FROM public.wma_polygon;");
-                wms = wmsDB.ToList().OrderBy(w => w.namewmb_ru).ThenBy(w => w.codewma).ToList();
+                var wmsDB = connection.Query<wm>($"SELECT \"OBJECTID\" as objectid, \"NameWMB_Ru\" as namewmb_ru, \"NameWMB_En\" as namewmb_en, \"NameWMB_Kz\" as namewmb_kk, \"CodeWMA\" as codewma, \"CodeWMB\" as codewmb FROM public.wma_polygon;");
+                string language = new RequestLocalizationOptions().DefaultRequestCulture.Culture.Name;
+                if (language == "ru")
+                {
+                    wms = wmsDB.ToList().OrderBy(w => w.namewmb_ru).ThenBy(w => w.codewma).ToList();
+                }
+                else if (language == "en")
+                {
+                    wms = wmsDB.ToList().OrderBy(w => w.namewmb_en).ThenBy(w => w.codewma).ToList();
+                }
+                else
+                {
+                    wms = wmsDB.ToList().OrderBy(w => w.namewmb_kk).ThenBy(w => w.codewma).ToList();
+                }
                 connection.Close();
             }
             ViewBag.wms = wms;
@@ -531,7 +566,15 @@ namespace GeoNodeWeb.Controllers
                 using (var connection = new NpgsqlConnection(geodataProdConnection))
                 {
                     connection.Open();
-                    var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    var nameRu = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                        $"FROM public.wma_polygon " +
+                        $"WHERE \"OBJECTID\" = {objectid.ToString()} " +
+                        $"LIMIT 1;");
+                    var nameEn = connection.Query<string>($"SELECT \"NameWMB_En\" " +
+                        $"FROM public.wma_polygon " +
+                        $"WHERE \"OBJECTID\" = {objectid.ToString()} " +
+                        $"LIMIT 1;");
+                    var nameKk = connection.Query<string>($"SELECT \"NameWMB_Kz\" " +
                         $"FROM public.wma_polygon " +
                         $"WHERE \"OBJECTID\" = {objectid.ToString()} " +
                         $"LIMIT 1;");
@@ -539,7 +582,19 @@ namespace GeoNodeWeb.Controllers
                         $"FROM public.wma_polygon " +
                         $"WHERE \"OBJECTID\" = {objectid.ToString()} " +
                         $"LIMIT 1;");
-                    wmbname = name.FirstOrDefault();
+                    string language = new RequestLocalizationOptions().DefaultRequestCulture.Culture.Name;
+                    if (language == "ru")
+                    {
+                        wmbname = nameRu.FirstOrDefault();
+                    }
+                    else if (language == "en")
+                    {
+                        wmbname = nameEn.FirstOrDefault();
+                    }
+                    else
+                    {
+                        wmbname = nameKk.FirstOrDefault();
+                    }
                     wmacode = code.FirstOrDefault();
                     connection.Close();
                 }
@@ -856,20 +911,20 @@ namespace GeoNodeWeb.Controllers
         {
             if(parameter.Contains("_y_"))
             {
-                return "Год";
+                return _sharedLocalizer["Year"];
             }
             else if(parameter.Contains("_s_"))
             {
                 switch (parameter.Split('_')[4])
                 {
                     case "1":
-                        return "Весна";
+                        return _sharedLocalizer["Spring"];
                     case "2":
-                        return "Лето";
+                        return _sharedLocalizer["Summer"];
                     case "3":
-                        return "Осень";
+                        return _sharedLocalizer["Autumn"];
                     case "4":
-                        return "Зима";
+                        return _sharedLocalizer["Winter"];
                 }
             }
             else if (parameter.Contains("_m_"))
@@ -877,29 +932,29 @@ namespace GeoNodeWeb.Controllers
                 switch (parameter.Split('_')[4])
                 {
                     case "01":
-                        return "Январь";
+                        return _sharedLocalizer["January"];
                     case "02":
-                        return "Февраль";
+                        return _sharedLocalizer["February"];
                     case "03":
-                        return "Март";
+                        return _sharedLocalizer["March"];
                     case "04":
-                        return "Апрель";
+                        return _sharedLocalizer["April"];
                     case "05":
-                        return "Май";
+                        return _sharedLocalizer["May"];
                     case "06":
-                        return "Июнь";
+                        return _sharedLocalizer["June"];
                     case "07":
-                        return "Июль";
+                        return _sharedLocalizer["July"];
                     case "08":
-                        return "Август";
+                        return _sharedLocalizer["August"];
                     case "09":
-                        return "Сентябрь";
+                        return _sharedLocalizer["September"];
                     case "10":
-                        return "Октябрь";
+                        return _sharedLocalizer["October"];
                     case "11":
-                        return "Ноябрь";
+                        return _sharedLocalizer["November"];
                     case "12":
-                        return "Декабрь";
+                        return _sharedLocalizer["December"];
                 }
             }
             return "";
@@ -964,34 +1019,34 @@ namespace GeoNodeWeb.Controllers
             switch (table)
             {
                 case "climate_tasmax":
-                    r = "Максимальная температура";
+                    r = _sharedLocalizer["MaxTemperature"];
                     break;
                 case "climate_tas":
-                    r = "Средняя температура";
+                    r = _sharedLocalizer["AverageTemperature"];
                     break;
                 case "climate_tasmin":
-                    r = "Минимальная температура";
+                    r = _sharedLocalizer["MinTemperature"];
                     break;
                 case "climate_tasmax_dlt":
-                    r = "Отклонения максимальной температуры";
+                    r = _sharedLocalizer["MaxTemperatureDev"];
                     break;
                 case "climate_tas_dlt":
-                    r = "Отклонения средней температуры";
+                    r = _sharedLocalizer["AverageTemperatureDev"];
                     break;
                 case "climate_tasmin_dlt":
-                    r = "Отклонения минимальной температуры";
+                    r = _sharedLocalizer["MinTemperatureDev"];
                     break;
                 case "climate_pr":
-                    r = "Осадки";
+                    r = _sharedLocalizer["Precipitation"];
                     break;
                 case "climate_pr_dlt":
-                    r = "Отклонения средней суммы осадков";
+                    r = _sharedLocalizer["AveragePrecipitationDev"];
                     break;
                 case "climate_et":
-                    r = "Эвапотранспирация";
+                    r = _sharedLocalizer["Evapotranspiration"];
                     break;
                 case "climate_et_dlt":
-                    r = "Отклонения эвапотранспирации";
+                    r = _sharedLocalizer["EvapotranspirationDev"];
                     break;
             }
             //switch (parameter.Split('_')[3])
@@ -1118,7 +1173,15 @@ namespace GeoNodeWeb.Controllers
             using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
-                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                var nameRu = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameEn = connection.Query<string>($"SELECT \"NameWMB_En\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameKk = connection.Query<string>($"SELECT \"NameWMB_Kz\" " +
                     $"FROM public.wma_polygon " +
                     $"WHERE \"OBJECTID\" = {Id.ToString()} " +
                     $"LIMIT 1;");
@@ -1126,7 +1189,19 @@ namespace GeoNodeWeb.Controllers
                     $"FROM public.wma_polygon " +
                     $"WHERE \"OBJECTID\" = {Id.ToString()} " +
                     $"LIMIT 1;");
-                wmbname = name.FirstOrDefault();
+                string language = new RequestLocalizationOptions().DefaultRequestCulture.Culture.Name;
+                if (language == "ru")
+                {
+                    wmbname = nameRu.FirstOrDefault();
+                }
+                else if (language == "en")
+                {
+                    wmbname = nameEn.FirstOrDefault();
+                }
+                else
+                {
+                    wmbname = nameKk.FirstOrDefault();
+                }
                 wmacode = code.FirstOrDefault();
                 connection.Close();
             }
@@ -1221,7 +1296,15 @@ namespace GeoNodeWeb.Controllers
             using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
-                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                var nameRu = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameEn = connection.Query<string>($"SELECT \"NameWMB_En\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameKk = connection.Query<string>($"SELECT \"NameWMB_Kz\" " +
                     $"FROM public.wma_polygon " +
                     $"WHERE \"OBJECTID\" = {Id.ToString()} " +
                     $"LIMIT 1;");
@@ -1229,7 +1312,19 @@ namespace GeoNodeWeb.Controllers
                     $"FROM public.wma_polygon " +
                     $"WHERE \"OBJECTID\" = {Id.ToString()} " +
                     $"LIMIT 1;");
-                wmbname = name.FirstOrDefault();
+                string language = new RequestLocalizationOptions().DefaultRequestCulture.Culture.Name;
+                if (language == "ru")
+                {
+                    wmbname = nameRu.FirstOrDefault();
+                }
+                else if (language == "en")
+                {
+                    wmbname = nameEn.FirstOrDefault();
+                }
+                else
+                {
+                    wmbname = nameKk.FirstOrDefault();
+                }
                 wmacode = code.FirstOrDefault();
                 connection.Close();
             }
@@ -1329,7 +1424,15 @@ namespace GeoNodeWeb.Controllers
             using (var connection = new NpgsqlConnection(geodataProdConnection))
             {
                 connection.Open();
-                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                var nameRu = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameEn = connection.Query<string>($"SELECT \"NameWMB_En\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameKk = connection.Query<string>($"SELECT \"NameWMB_Kz\" " +
                     $"FROM public.wma_polygon " +
                     $"WHERE \"OBJECTID\" = {Id.ToString()} " +
                     $"LIMIT 1;");
@@ -1337,7 +1440,19 @@ namespace GeoNodeWeb.Controllers
                     $"FROM public.wma_polygon " +
                     $"WHERE \"OBJECTID\" = {Id.ToString()} " +
                     $"LIMIT 1;");
-                wmbname = name.FirstOrDefault();
+                string language = new RequestLocalizationOptions().DefaultRequestCulture.Culture.Name;
+                if (language == "ru")
+                {
+                    wmbname = nameRu.FirstOrDefault();
+                }
+                else if (language == "en")
+                {
+                    wmbname = nameEn.FirstOrDefault();
+                }
+                else
+                {
+                    wmbname = nameKk.FirstOrDefault();
+                }
                 wmacode = code.FirstOrDefault();
                 connection.Close();
             }
@@ -1619,19 +1734,19 @@ namespace GeoNodeWeb.Controllers
                         raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
                         if (i == 0)
                         {
-                            raster_table_for_chart_b_new.season = "Весна";
+                            raster_table_for_chart_b_new.season = _sharedLocalizer["Spring"];
                         }
                         if (i == 1)
                         {
-                            raster_table_for_chart_b_new.season = "Лето";
+                            raster_table_for_chart_b_new.season = _sharedLocalizer["Summer"];
                         }
                         if (i == 2)
                         {
-                            raster_table_for_chart_b_new.season = "Осень";
+                            raster_table_for_chart_b_new.season = _sharedLocalizer["Autumn"];
                         }
                         if (i == 3)
                         {
-                            raster_table_for_chart_b_new.season = "Зима";
+                            raster_table_for_chart_b_new.season = _sharedLocalizer["Winter"];
                         }
                         raster_table_for_chart_b_new.year = years[j];
                         raster_table_for_chart_b_new.min = min[i, j];
@@ -1747,8 +1862,8 @@ namespace GeoNodeWeb.Controllers
 
             int decade = Convert.ToInt32(Decade);
             List<string> months = new List<string>
-            { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
-                "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
+            { _sharedLocalizer["January"], _sharedLocalizer["February"], _sharedLocalizer["March"], _sharedLocalizer["April"], _sharedLocalizer["May"], _sharedLocalizer["June"],
+              _sharedLocalizer["July"], _sharedLocalizer["August"], _sharedLocalizer["September"], _sharedLocalizer["October"], _sharedLocalizer["November"], _sharedLocalizer["December"]};
             for (int i = 0; i < 12; i++)
             {
                 bool checkForNull = true;
