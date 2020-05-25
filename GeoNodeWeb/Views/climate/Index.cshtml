@@ -1265,6 +1265,19 @@
             ChangeSubParameter(SubParameter, 'Evapotranspiration1');
             $('.download-et').show();
         }
+        else if ($('#ClimatIndex').is(':checked')) {
+            $('.Temperature').hide();
+            $('.Precipitation').hide();
+            $('.Evapotranspiration').hide();
+            Parameter = 'gtk';
+            //if (firstEvapotranspiration) {
+            //    SubParameter = '?';
+            //    firstEvapotranspiration = false;
+            //}
+            SubParameter = 'gtk_pd_avg';
+            ChangeSubParameter(SubParameter, 'ClimatIndex1');
+            $('.download-et').show();
+        }
         //ChangeLayerClimate();
         //ChangePeriod();
     }
@@ -1769,6 +1782,9 @@
         }
         date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
         //$('#DateLabel').text(date_label);
+
+        console.log('layerClimate: ' + layerClimate + ':' + date_str);
+
         var Source_Climate_New = new ol.source.TileWMS({
             url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
             params: {
