@@ -2409,6 +2409,9 @@
                 });
             },
             error: function () {
+                if (chartRaster != null) {
+                    chartRaster.destroy();
+                }
                 console.log('Error');
             }
         });
