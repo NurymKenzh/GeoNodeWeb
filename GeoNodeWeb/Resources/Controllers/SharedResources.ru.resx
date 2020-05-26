@@ -126,6 +126,9 @@
   <data name="Area" xml:space="preserve">
     <value>Площадь (полигон)</value>
   </data>
+  <data name="AridityIndices" xml:space="preserve">
+    <value>Индексы засушливости</value>
+  </data>
   <data name="August" xml:space="preserve">
     <value>Август</value>
   </data>

@@ -90,6 +90,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string AridityIndices {
+            get {
+                return ResourceManager.GetString("AridityIndices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string August {
             get {
                 return ResourceManager.GetString("August", resourceCulture);

@@ -478,16 +478,32 @@ namespace GeoNodeWeb.Controllers
         public ActionResult ChartRasters(
             string rname,
             string seasonmonth,
-            decimal pointx,
-            decimal pointy,
+            string pointxs,
+            string pointys,
             int objectid)
         {
+            decimal pointx = 0,
+                pointy = 0;
+            try
+            {
+                pointx = Convert.ToDecimal(pointxs);
+                pointy = Convert.ToDecimal(pointys);
+            }
+            catch
+            {
+                pointx = Convert.ToDecimal(pointxs.Replace('.', ','));
+                pointy = Convert.ToDecimal(pointys.Replace('.', ','));
+            }
             //string rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
-            //if(!string.IsNullOrEmpty(seasonmonth))
+            //if (!string.IsNullOrEmpty(seasonmonth))
             //{
-            //    rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5]+ "_" + seasonmonth + "_h_" + rname.Split('_')[4];
+            //    rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_" + seasonmonth + "_h_" + rname.Split('_')[4];
             //}
             string rnameDB = rname;
+            if (!string.IsNullOrEmpty(seasonmonth))
+            {
+                rnameDB += "_" + seasonmonth.ToString();
+            }
             List<climate_x> climate_xs = new List<climate_x>();
             using (var connection = new NpgsqlConnection(geodataanalyticsProdConnection))
             {
@@ -528,12 +544,12 @@ namespace GeoNodeWeb.Controllers
                 connection.Open();
                 string query = $"SELECT name, dt, value" +
                     $" FROM public.{table}" +
-                    //$" WHERE name = '{rnameDB}'" +
-                    $" WHERE point =" +
+                    $" WHERE name = '{rnameDB}'" +
+                    $" AND point =" +
                     $" (SELECT point" +
                     $" FROM public.climate_coords" +
-                    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')) =" +
-                    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
+                    $" WHERE ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString().Replace(',','.')} {pointy.ToString().Replace(',', '.')})')) =" +
+                    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString().Replace(',', '.')} {pointy.ToString().Replace(',', '.')})')))" +
                     $" FROM public.climate_coords) LIMIT 1);";
                 var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
                 climate_xs = climate_xsQ.Where(c => c.name == rnameDB).OrderBy(c => c.dt).ToList();

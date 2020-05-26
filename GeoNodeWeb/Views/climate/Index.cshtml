@@ -1819,22 +1819,25 @@
         date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
         //$('#DateLabel').text(date_label);
 
-        console.log('layerClimate: ' + layerClimate + ':' + date_str);
-
-        var Source_Climate_New = new ol.source.TileWMS({
-            url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
-            params: {
-                'FORMAT': 'image/png',
-                'VERSION': '1.1.1',
-                tiled: true,
-                "LAYERS": geoserver_workspace_name + ':' + layerClimate,
-                "exceptions": 'application/vnd.ogc.se_inimage',
-                tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
-            },
-            serverType: 'geoserver'
-        });
-        Layer_Climate.setSource(Source_Climate_New);
-
+        if (layerClimate.includes('gtk_pd_avg_y') || layerClimate.includes('gtk_pd_avg_s')) {
+            Layer_Climate.setSource(null);
+        }
+        else {
+            var Source_Climate_New = new ol.source.TileWMS({
+                url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' + date_str + '&',
+                params: {
+                    'FORMAT': 'image/png',
+                    'VERSION': '1.1.1',
+                    tiled: true,
+                    "LAYERS": geoserver_workspace_name + ':' + layerClimate,
+                    "exceptions": 'application/vnd.ogc.se_inimage',
+                    tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+                },
+                serverType: 'geoserver'
+            });
+            Layer_Climate.setSource(Source_Climate_New);
+        }
+        
         if ((Decade == '10' && range_instance.result.from == 2001)
             || (Decade == '20' && (range_instance.result.from == 1991 || range_instance.result.from == 2001))
             || (Decade == '30' && (range_instance.result.from == 1981 || range_instance.result.from == 1991 || range_instance.result.from == 2001))) {
@@ -2345,8 +2348,8 @@
             data: {
                 rname: raster,
                 seasonmonth: seasonmonth,
-                pointx: x,
-                pointy: y,
+                pointxs: x,
+                pointys: y,
                 objectid: objectid
             },
             type: 'POST',
