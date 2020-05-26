@@ -562,6 +562,14 @@
                                         </select>
                                         <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
                                     </div>
+                                    <div class="download-gtk">
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
+                                        <select id="downloadet" class="form-control form-control-sm" required>
+                                            <option value="">@SharedLocalizer["Choose"]...</option>
+                                            <option value="climate_gtk">@SharedLocalizer["AridityIndices"]</option>
+                                        </select>
+                                        <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
+                                    </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-sm-auto">
@@ -1266,6 +1274,7 @@
         $('.download-tas').hide();
         $('.download-pr').hide();
         $('.download-et').hide();
+        $('.download-gtk').hide();
         if ($('#Temperature').is(':checked')) {
             $('.Temperature').show();
             $('.Precipitation').hide();
@@ -1312,7 +1321,7 @@
             //}
             SubParameter = 'gtk_pd_avg';
             ChangeSubParameter(SubParameter, 'ClimatIndex1');
-            $('.download-et').show();
+            $('.download-gtk').show();
         }
         //ChangeLayerClimate();
         //ChangePeriod();
