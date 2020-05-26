@@ -249,6 +249,9 @@
   <data name="Lakes" xml:space="preserve">
     <value>Озера</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
   <data name="LayerInfo" xml:space="preserve">
     <value>Информация о слое</value>
   </data>

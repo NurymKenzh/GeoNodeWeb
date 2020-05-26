@@ -117,4 +117,298 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AirTemperature" xml:space="preserve">
+    <value>Air temperature</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Area (polygon)</value>
+  </data>
+  <data name="AridityIndices" xml:space="preserve">
+    <value>Aridity Indices</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Autumn" xml:space="preserve">
+    <value>Fall</value>
+  </data>
+  <data name="AveragePrecipitationDev" xml:space="preserve">
+    <value>Deviations of the average precipitation (mm)</value>
+  </data>
+  <data name="AverageTemperature" xml:space="preserve">
+    <value>Average temperature (C °)</value>
+  </data>
+  <data name="AverageTemperatureDev" xml:space="preserve">
+    <value>Deviations of average temperature (C °)</value>
+  </data>
+  <data name="BaseLayers" xml:space="preserve">
+    <value>Base layers</value>
+  </data>
+  <data name="Chart" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="ChartOptions" xml:space="preserve">
+    <value>Chart Options</value>
+  </data>
+  <data name="Charts" xml:space="preserve">
+    <value>Graphs</value>
+  </data>
+  <data name="ChartType" xml:space="preserve">
+    <value>Chart type</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="ChooseVHBorVHU" xml:space="preserve">
+    <value>Choose VHB or VHU</value>
+  </data>
+  <data name="ChoosingAnotherDecade" xml:space="preserve">
+    <value>You can choose another decade on the timeline below.</value>
+  </data>
+  <data name="ClickContinueDrawLine" xml:space="preserve">
+    <value>Click to continue drawing the line.</value>
+  </data>
+  <data name="ClickContinueDrawPolygon" xml:space="preserve">
+    <value>Click to continue drawing the polygon.</value>
+  </data>
+  <data name="ClickStartDraw" xml:space="preserve">
+    <value>Click to start drawing.</value>
+  </data>
+  <data name="Climate" xml:space="preserve">
+    <value>Climate</value>
+  </data>
+  <data name="ClimateParameter" xml:space="preserve">
+    <value>Climate parameter</value>
+  </data>
+  <data name="Columns" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="DataGenerated" xml:space="preserve">
+    <value>Data is generated and will be sent to the specified email</value>
+  </data>
+  <data name="DecadeAverage" xml:space="preserve">
+    <value>Decade Average</value>
+  </data>
+  <data name="DecadeAverageYears" xml:space="preserve">
+    <value>Decade Average 1951-1960 (RCP 4.5)</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Deviation" xml:space="preserve">
+    <value>Deviation</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentation</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="DownloadData" xml:space="preserve">
+    <value>Download data</value>
+  </data>
+  <data name="DrawAreaInterest" xml:space="preserve">
+    <value>to draw an area of ​​interest</value>
+  </data>
+  <data name="DrawOnMap" xml:space="preserve">
+    <value>Draw on the map</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Evapotranspiration" xml:space="preserve">
+    <value>Evapotranspiration (mm)</value>
+  </data>
+  <data name="EvapotranspirationDev" xml:space="preserve">
+    <value>Evapotranspiration Deviations (mm)</value>
+  </data>
+  <data name="Extra" xml:space="preserve">
+    <value>Additionally</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="ForOS" xml:space="preserve">
+    <value>For OS</value>
+  </data>
+  <data name="Highlight" xml:space="preserve">
+    <value>Highlight</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Lakes" xml:space="preserve">
+    <value>Lakes</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Tongue</value>
+  </data>
+  <data name="LayerInfo" xml:space="preserve">
+    <value>Layer info</value>
+  </data>
+  <data name="Layers" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="Legend" xml:space="preserve">
+    <value>Legend</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length (line)</value>
+  </data>
+  <data name="Lines" xml:space="preserve">
+    <value>Lines</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="MaxTemperature" xml:space="preserve">
+    <value>Maximum temperature (C °)</value>
+  </data>
+  <data name="MaxTemperatureDev" xml:space="preserve">
+    <value>Deviations of the maximum temperature (C °)</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Measure" xml:space="preserve">
+    <value>To measure</value>
+  </data>
+  <data name="MeasureDistance" xml:space="preserve">
+    <value>Measure distance or area on a map</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Median</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="MinTemperature" xml:space="preserve">
+    <value>Minimum Temperature (C °)</value>
+  </data>
+  <data name="MinTemperatureDev" xml:space="preserve">
+    <value>Minimum Temperature Deviations (C °)</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>Months</value>
+  </data>
+  <data name="NotCalcData" xml:space="preserve">
+    <value>When building maps, archival data is used consisting of retrospective projections for the period from 1950 to 2005 and projections for the future, which are presented for the period 2006-2100. for two scenarios of representative trajectories of greenhouse gas concentrations: RCP4.5 and RCP8.5. In connection with the overlap of retrospective data and projections for the future in the period from 2001-2010. limit the possibility of correct calculations and building maps for certain periods: 10 years - 2001-2010, for 20 years - 1991-2010, 2001-2020, for 30 years - 1981-2010, 1991-2020, 2001-2030 years</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Parameter" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Periodicity" xml:space="preserve">
+    <value>Periodicity</value>
+  </data>
+  <data name="Precipitation" xml:space="preserve">
+    <value>Precipitation (mm)</value>
+  </data>
+  <data name="PressHoldKey" xml:space="preserve">
+    <value>Press and hold the key.</value>
+  </data>
+  <data name="Radar" xml:space="preserve">
+    <value>Radar</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="RemoveSelection" xml:space="preserve">
+    <value>Remove selection</value>
+  </data>
+  <data name="Rivers" xml:space="preserve">
+    <value>Rivers</value>
+  </data>
+  <data name="Season" xml:space="preserve">
+    <value>Season</value>
+  </data>
+  <data name="Seasons" xml:space="preserve">
+    <value>Seasons</value>
+  </data>
+  <data name="SelectAreaOnMap" xml:space="preserve">
+    <value>Select an area on the map</value>
+  </data>
+  <data name="SelectMapArea" xml:space="preserve">
+    <value>Select an area on the map</value>
+  </data>
+  <data name="SelectMapObject" xml:space="preserve">
+    <value>Select an object on the map</value>
+  </data>
+  <data name="SelectObjOnMap" xml:space="preserve">
+    <value>To plot, first select an object on the map</value>
+  </data>
+  <data name="SelectOptions" xml:space="preserve">
+    <value>select Options</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SpecifyMailbox" xml:space="preserve">
+    <value>Specify a mailbox</value>
+  </data>
+  <data name="Spring" xml:space="preserve">
+    <value>Spring</value>
+  </data>
+  <data name="Summer" xml:space="preserve">
+    <value>Summer</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="Values" xml:space="preserve">
+    <value>Values</value>
+  </data>
+  <data name="VHB" xml:space="preserve">
+    <value>VHB</value>
+  </data>
+  <data name="VHU" xml:space="preserve">
+    <value>VHU</value>
+  </data>
+  <data name="ViewDataByMonth" xml:space="preserve">
+    <value>To view data by month ... Expand the list</value>
+  </data>
+  <data name="Winter" xml:space="preserve">
+    <value>Winter</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="YearsOld" xml:space="preserve">
+    <value>Years old</value>
+  </data>
 </root>
