@@ -632,6 +632,10 @@ namespace GeoNodeWeb.Controllers
             string rcp,
             string decade)
         {
+            if(year.ToString()[3] == '0')
+            {
+                year += 1;
+            }
             string messsage = "TableRasters OK";
             List<raster_table> raster_table = new List<raster_table>();
             List<raster_table_b> raster_table_bs = new List<raster_table_b>();
