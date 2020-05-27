@@ -1478,8 +1478,13 @@ namespace GeoNodeWeb.Controllers
             }
 
             climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
-            int year_start = climate_rasterstats.Min(c => c.date.Year),
+            int year_start = 0,
+                year_finish = 0;
+            if(climate_rasterstats.Count() > 0)
+            {
+                year_start = climate_rasterstats.Min(c => c.date.Year);
                 year_finish = climate_rasterstats.Max(c => c.date.Year);
+            }
             List<int> years = new List<int>();
             int yearsCount = (year_finish - year_start) / 10 + 1;
             decimal?[,] max = new decimal?[12, yearsCount],
@@ -1505,17 +1510,32 @@ namespace GeoNodeWeb.Controllers
                         {
                             if (property.Name == "max")
                             {
-                                decimal? d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
                                 max[month, i] = d;
                             }
                             if (property.Name == "min")
                             {
-                                decimal? d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
                                 min[month, i] = d;
                             }
                             if (property.Name == "median")
                             {
-                                decimal? d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
                                 median[month, i] = d;
                             }
                         }
@@ -1835,8 +1855,13 @@ namespace GeoNodeWeb.Controllers
             }
 
             climate_rasterstats = climate_rasterstats.Where(c => Dates.Contains(c.date.Year)).ToList();
-            int year_start = climate_rasterstats.Min(c => c.date.Year),
+            int year_start = 0,
+                year_finish = 0;
+            if (climate_rasterstats.Count() > 0)
+            {
+                year_start = climate_rasterstats.Min(c => c.date.Year);
                 year_finish = climate_rasterstats.Max(c => c.date.Year);
+            }
             List<int> years = new List<int>();
             int yearsCount = (year_finish - year_start) / 10 + 1;
             decimal?[,] max = new decimal?[12, yearsCount],
@@ -1862,17 +1887,32 @@ namespace GeoNodeWeb.Controllers
                         {
                             if (property.Name == "max")
                             {
-                                decimal? d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
                                 max[month, i] = d;
                             }
                             if (property.Name == "min")
                             {
-                                decimal? d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
                                 min[month, i] = d;
                             }
                             if (property.Name == "median")
                             {
-                                decimal? d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
                                 median[month, i] = d;
                             }
                         }
