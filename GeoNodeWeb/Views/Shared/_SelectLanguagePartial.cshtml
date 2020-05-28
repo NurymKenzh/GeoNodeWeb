@@ -17,7 +17,7 @@
 }
 
 <div>
-    <form id="selectLanguage" asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" class="form-horizontal" role="form">
+    <form id="selectLanguage" asp-controller="climate" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" class="form-horizontal" role="form">
         <label class="menu language-label text-white-50" asp-for="@requestCulture.RequestCulture.UICulture.Name">@SharedLocalizer["Language"]:</label>
         <select class="language-select" name="culture" onchange="this.form.submit();" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
     </form>
