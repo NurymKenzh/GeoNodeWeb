@@ -556,6 +556,30 @@ namespace GeoNodeWeb.Controllers
                             rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_" + seasonmonth + "_h_" + rname.Split('_')[4];
                         }
                         break;
+                    case "spi_pd":
+                        table = "climate_spi";
+                        //rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
+                        if (!string.IsNullOrEmpty(seasonmonth))
+                        {
+                            rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_" + seasonmonth + "_h_" + rname.Split('_')[4];
+                        }
+                        else
+                        {
+                            rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5]  + "_h_" + rname.Split('_')[4];
+                        }
+                        break;
+                    case "spei_pd":
+                        table = "climate_spei";
+                        //rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_h_" + rname.Split('_')[4];
+                        if (!string.IsNullOrEmpty(seasonmonth))
+                        {
+                            rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5] + "_" + seasonmonth + "_h_" + rname.Split('_')[4];
+                        }
+                        else
+                        {
+                            rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[5]  + "_h_" + rname.Split('_')[4];
+                        }
+                        break;
                 }
                 connection.Open();
                 string query = $"SELECT name, dt, value" +
@@ -691,6 +715,8 @@ namespace GeoNodeWeb.Controllers
                 tables.Add("climate_et");
                 tables.Add("climate_et_dlt");
                 tables.Add("climate_gtk");
+                tables.Add("climate_spi");
+                tables.Add("climate_spei");
                 List<string> parameters = new List<string>();
                 try
                 {
@@ -847,7 +873,7 @@ namespace GeoNodeWeb.Controllers
                                     }
                                 }
                             }
-                            else if (table == "climate_gtk")
+                            else if (table == "climate_gtk" || table == "climate_spi" || table == "climate_spei")
                             {
                                 string[] ps = parameter.Split('_');
                                 parameter_ = $"{table.Replace("climate_", "")}_{ps[1]}_{ps[0]}_{ps[3]}_h_{ps[2]}";
@@ -1100,6 +1126,12 @@ namespace GeoNodeWeb.Controllers
                     break;
                 case "climate_gtk":
                     r = _sharedLocalizer["AridityIndices"];
+                    break;
+                case "climate_spi":
+                    r = _sharedLocalizer["SPI"];
+                    break;
+                case "climate_spei":
+                    r = _sharedLocalizer["SPEI"];
                     break;
             }
             //switch (parameter.Split('_')[3])

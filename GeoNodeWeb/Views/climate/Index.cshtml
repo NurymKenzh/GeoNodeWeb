@@ -570,6 +570,22 @@
                                         </select>
                                         <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
                                     </div>
+                                    <div class="download-spi">
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
+                                        <select id="downloadet" class="form-control form-control-sm" required>
+                                            <option value="">@SharedLocalizer["Choose"]...</option>
+                                            <option value="climate_spi">@SharedLocalizer["SPI"]</option>
+                                        </select>
+                                        <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
+                                    </div>
+                                    <div class="download-spei">
+                                        <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
+                                        <select id="downloadet" class="form-control form-control-sm" required>
+                                            <option value="">@SharedLocalizer["Choose"]...</option>
+                                            <option value="climate_spei">@SharedLocalizer["SPEI"]</option>
+                                        </select>
+                                        <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
+                                    </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-sm-auto">
@@ -1275,6 +1291,8 @@
         $('.download-pr').hide();
         $('.download-et').hide();
         $('.download-gtk').hide();
+        $('.download-spi').hide();
+        $('.download-spei').hide();
         if ($('#Temperature').is(':checked')) {
             $('.Temperature').show();
             $('.Precipitation').hide();
@@ -1322,6 +1340,32 @@
             SubParameter = 'gtk_pd_avg';
             ChangeSubParameter(SubParameter, 'ClimatIndex1');
             $('.download-gtk').show();
+        }
+        else if ($('#SPI').is(':checked')) {
+            $('.Temperature').hide();
+            $('.Precipitation').hide();
+            $('.Evapotranspiration').hide();
+            Parameter = 'spi';
+            //if (firstEvapotranspiration) {
+            //    SubParameter = '?';
+            //    firstEvapotranspiration = false;
+            //}
+            SubParameter = 'spi_pd_avg';
+            ChangeSubParameter(SubParameter, 'SPI1');
+            $('.download-spi').show();
+        }
+        else if ($('#SPEI').is(':checked')) {
+            $('.Temperature').hide();
+            $('.Precipitation').hide();
+            $('.Evapotranspiration').hide();
+            Parameter = 'spei';
+            //if (firstEvapotranspiration) {
+            //    SubParameter = '?';
+            //    firstEvapotranspiration = false;
+            //}
+            SubParameter = 'spei_pd_avg';
+            ChangeSubParameter(SubParameter, 'SPEI1');
+            $('.download-spei').show();
         }
         //ChangeLayerClimate();
         //ChangePeriod();
@@ -1646,6 +1690,12 @@
         }
         else if (SubParameter == 'gtk_pd_avg') {
             $("#legend").attr("src", "/esnow/img/legend/GTK.svg");
+        }
+        else if (SubParameter == 'spi_pd_avg') {
+            $("#legend").attr("src", "/esnow/img/legend/SPI.svg");
+        }
+        else if (SubParameter == 'spei_pd_avg') {
+            $("#legend").attr("src", "/esnow/img/legend/SPEI.svg");
         }
     };
 

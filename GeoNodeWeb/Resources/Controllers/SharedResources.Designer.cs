@@ -846,6 +846,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string SPEI {
+            get {
+                return ResourceManager.GetString("SPEI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string SPI {
+            get {
+                return ResourceManager.GetString("SPI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Spring {
             get {
                 return ResourceManager.GetString("Spring", resourceCulture);

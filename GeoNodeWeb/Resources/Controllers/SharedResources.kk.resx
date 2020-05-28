@@ -378,6 +378,12 @@
   <data name="SpecifyMailbox" xml:space="preserve">
     <value>Пошта жәшігін көрсетіңіз</value>
   </data>
+  <data name="SPEI" xml:space="preserve">
+    <value>SPEI</value>
+  </data>
+  <data name="SPI" xml:space="preserve">
+    <value>SPI</value>
+  </data>
   <data name="Spring" xml:space="preserve">
     <value>Көктем</value>
   </data>

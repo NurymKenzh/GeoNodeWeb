@@ -378,6 +378,12 @@
   <data name="SpecifyMailbox" xml:space="preserve">
     <value />
   </data>
+  <data name="SPEI" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SPI" xml:space="preserve">
+    <value />
+  </data>
   <data name="Spring" xml:space="preserve">
     <value />
   </data>

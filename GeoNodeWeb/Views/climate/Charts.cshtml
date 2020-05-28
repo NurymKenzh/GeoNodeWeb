@@ -216,6 +216,8 @@
                                 <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
                                 <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
                                 <option value="gtk_pd_avg">@SharedLocalizer["AridityIndices"]</option>
+                                <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
+                                <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
                             </select>
                             <select class="form-control" id="RCP1" onchange="ChangeLayerClimate1()">
                                 <option value="rcp45">rcp 4.5</option>
@@ -278,6 +280,8 @@
                                 <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
                                 <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
                                 <option value="gtk_pd_avg">@SharedLocalizer["AridityIndices"]</option>
+                                <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
+                                <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
                             </select>
                             <select class="form-control" id="RCP2" onchange="ChangeLayerClimate2()">
                                 <option value="rcp45">rcp 4.5</option>
@@ -392,6 +396,8 @@
                                                     <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
                                                     <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
                                                     <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
+                                                    <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
+                                                    <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -507,6 +513,8 @@
                                                     <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
                                                     <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
                                                     <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
+                                                    <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
+                                                    <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -631,6 +639,8 @@
                                                     <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
                                                     <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
                                                     <option value="gtk_pd_avg">@SharedLocalizer["AridityIndices"]</option>
+                                                    <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
+                                                    <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -2032,6 +2042,12 @@
         else if (SubParameter == 'gtk_pd_avg') {
             $("#legend1").attr("src", "/esnow/img/legend/GTK.svg");
         }
+        else if (SubParameter == 'spi_pd_avg') {
+            $("#legend1").attr("src", "/esnow/img/legend/SPI.svg");
+        }
+        else if (SubParameter == 'spei_pd_avg') {
+            $("#legend1").attr("src", "/esnow/img/legend/SPEI.svg");
+        }
 
         $('#mapinfo1').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
 
@@ -2154,6 +2170,12 @@
         }
         else if (SubParameter == 'gtk_pd_avg') {
             $("#legend2").attr("src", "/esnow/img/legend/GTK.svg");
+        }
+        else if (SubParameter == 'spi_pd_avg') {
+            $("#legend2").attr("src", "/esnow/img/legend/SPI.svg");
+        }
+        else if (SubParameter == 'spei_pd_avg') {
+            $("#legend2").attr("src", "/esnow/img/legend/SPEI.svg");
         }
 
         $('#mapinfo2').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
