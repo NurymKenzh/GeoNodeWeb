@@ -1,104 +1,169 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!-- Creator: Esri ArcMap 10.5.0.6491 -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="405.01417pt" height="42.74646pt" viewBox="0 0 405.01417 42.74646" enable-background="new 0 0 405.01417 42.74646"
+<svg width="251.51811pt" height="121.35118pt" viewBox="0 0 251.51811 121.35118" enable-background="new 0 0 251.51811 121.35118"
 	version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
 	<g id="Other">
 		<clipPath id="SVG_CP_1">
-			<path d="M0,42.74646L0,0L405.01417,0L405.01417,42.74646L0,42.74646z"/>
+			<path d="M0,121.35118L0,0L251.51811,0L251.51811,121.35118L0,121.35118z"/>
 		</clipPath>
-		<path clip-path="url(#SVG_CP_1)" fill="#ADFFE0" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M4.79851,22.5608L4.79851,2.8801L24.47238,2.8801L24.47238,22.5608L4.79851,22.5608z"/>
-		<path clip-path="url(#SVG_CP_1)" fill="#66CCA8" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M24.47238,22.5608L24.47238,2.8801L44.14625,2.8801L44.14625,22.5608L24.47238,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_1)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 27.83133 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">1</tspan>
+		<path clip-path="url(#SVG_CP_1)" fill="#FF545F" fill-rule="evenodd" stroke="#6E6E6E" stroke-width="0.48001" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
+			M7.20014,55.62788L7.20014,41.24136L35.0407,41.24136L35.0407,55.62788L7.20014,55.62788z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#000000" clip-path="url(#SVG_CP_1)" >
+			<text text-anchor="start" transform="matrix(12.00024 0 0 11.98877 39.8408 52.75057)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">&lt;</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.55947 ">0</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.11893 ">,</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.39866 ">4</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.95813 ">0</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="2.79732 ">–</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.63652 ">c</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.11606 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.67553 ">л</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.27495 ">ь</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.79446 ">н</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.31396 ">о</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.15315 ">з</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.6327 ">а</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.19216 ">с</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.6717 ">у</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.1912 ">ш</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.99044 ">л</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="10.5499 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="11.10937 ">в</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="11.62887 ">о</tspan>
 			</text>
 		</g>
-		<path clip-path="url(#SVG_CP_1)" fill="#40AE8C" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M44.14625,22.5608L44.14625,2.8801L64.29998,2.8801L64.29998,22.5608L44.14625,22.5608z"/>
-		<path clip-path="url(#SVG_CP_1)" fill="#008066" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M64.29998,22.5608L64.29998,2.8801L83.97385,2.8801L83.97385,22.5608L64.29998,22.5608z"/>
+		<path clip-path="url(#SVG_CP_1)" fill="#FF8A7A" fill-rule="evenodd" stroke="#6E6E6E" stroke-width="0.48001" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
+			M7.20014,74.33035L7.20014,60.42338L35.0407,60.42338L35.0407,74.33035L7.20014,74.33035z"/>
 		<clipPath id="SVG_CP_2">
-			<path d="M0,42.74646L0,0L405.01417,0L405.01417,42.74646L0,42.74646z"/>
+			<path d="M0,121.35118L0,0L251.51811,0L251.51811,121.35118L0,121.35118z"/>
 		</clipPath>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 67.17908 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">2</tspan>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#000000" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(12.00024 0 0 11.98877 39.8408 71.9326)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">0</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.5195 ">,</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.79924 ">5</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.3587 ">9</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="2.1979 ">–</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.03709 ">у</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.51664 ">м</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.19598 ">е</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.75545 ">р</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.31491 ">е</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.87438 ">н</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.43384 ">н</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.99331 ">о</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.8325 ">з</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.27208 ">а</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.83155 ">с</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.31109 ">у</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.83059 ">ш</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="10.62983 ">л</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="11.22925 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="11.74876 ">в</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="12.26826 ">о</tspan>
 			</text>
 		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#FFFF8C" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M83.97385,22.5608L83.97385,2.8801L103.64773,2.8801L103.64773,22.5608L83.97385,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#FFFF61" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M103.64773,22.5608L103.64773,2.8801L123.3216,2.8801L123.3216,22.5608L103.64773,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 107.00668 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">3</tspan>
+		<path clip-path="url(#SVG_CP_2)" fill="#F2D279" fill-rule="evenodd" stroke="#6E6E6E" stroke-width="0.48001" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
+			M7.20014,93.51238L7.20014,79.60541L35.0407,79.60541L35.0407,93.51238L7.20014,93.51238z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#000000" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(12.00024 0 0 11.98877 39.8408 90.63507)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">0</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.5195 ">,</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.79924 ">7</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.3587 ">9</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="2.1979 ">–</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.03709 ">с</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.51664 ">л</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.11606 ">а</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.67553 ">б</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.23499 ">о</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.07419 ">з</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.55373 ">а</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.07323 ">с</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.59273 ">у</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.07228 ">ш</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.91147 ">л</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.47094 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="10.0304 ">в</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="10.5499 ">о</tspan>
 			</text>
 		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#FFFF38" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M123.3216,22.5608L123.3216,2.8801L143.47532,2.8801L143.47532,22.5608L123.3216,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#FFFF00" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M143.47532,22.5608L143.47532,2.8801L163.1492,2.8801L163.1492,22.5608L143.47532,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 146.35443 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">4</tspan>
+		<path clip-path="url(#SVG_CP_2)" fill="#7AD16A" fill-rule="evenodd" stroke="#6E6E6E" stroke-width="0.48001" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
+			M7.20014,112.21485L7.20014,98.30788L35.0407,98.30788L35.0407,112.21485L7.20014,112.21485z"/>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#000000" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(12.00024 0 0 11.98877 39.8408 109.8171)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">&gt;</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.55947 ">0</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.11893 ">,</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.39866 ">8</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.95813 ">0</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="2.79732 ">–</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.63652 ">н</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.15602 ">е</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.99522 ">з</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.47476 ">а</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.03423 ">с</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.51377 ">у</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.03327 ">ш</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.8325 ">л</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.39197 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.95143 ">в</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.47094 ">о</tspan>
 			</text>
 		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#FFCC8C" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M163.1492,22.5608L163.1492,2.8801L182.82307,2.8801L182.82307,22.5608L163.1492,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#FF9A4D" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M182.82307,22.5608L182.82307,2.8801L202.49695,2.8801L202.49695,22.5608L182.82307,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 186.18203 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">5</tspan>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="700" fill="#000000" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(12.00024 0 0 11.98877 7.68015 20.95739)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">G</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.75927 ">T</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.3587 ">K</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="2.35774 ">-</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.2369 ">Г</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.79637 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.39579 ">д</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.03518 ">р</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.63461 ">о</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.23403 ">т</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.71358 ">е</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.27304 ">р</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.87247 ">м</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="8.63174 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.23117 ">ч</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="9.83059 ">е</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="10.3501 ">с</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="10.90956 ">к</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="11.42906 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="12.02849 ">й</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="12.90765 ">к</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="13.38719 ">о</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="13.98662 ">э</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="14.54608 ">ф</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="15.42524 ">ф</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="16.3044 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="16.90382 ">ц</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="17.54321 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="18.14264 ">е</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="18.7021 ">н</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="19.30153 ">т</tspan>
 			</text>
 		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#FF802B" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M202.49695,22.5608L202.49695,2.8801L222.17082,2.8801L222.17082,22.5608L202.49695,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#FF5E08" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M222.17082,22.5608L222.17082,2.8801L242.32454,2.8801L242.32454,22.5608L222.17082,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 225.52977 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">6</tspan>
-			</text>
-		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#FF7D7D" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M242.32454,22.5608L242.32454,2.8801L261.99842,2.8801L261.99842,22.5608L242.32454,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#FF5454" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M261.99842,22.5608L261.99842,2.8801L281.67229,2.8801L281.67229,22.5608L261.99842,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 265.35737 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">7</tspan>
-			</text>
-		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#FF2E2E" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M281.67229,22.5608L281.67229,2.8801L301.34617,2.8801L301.34617,22.5608L281.67229,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#FF0505" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M301.34617,22.5608L301.34617,2.8801L321.49989,2.8801L321.49989,22.5608L301.34617,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 304.70512 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">8</tspan>
-			</text>
-		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#C95F5F" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M321.49989,22.5608L321.49989,2.8801L341.17376,2.8801L341.17376,22.5608L321.49989,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#AB3737" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M341.17376,22.5608L341.17376,2.8801L360.84764,2.8801L360.84764,22.5608L341.17376,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 344.53272 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">9</tspan>
-			</text>
-		</g>
-		<path clip-path="url(#SVG_CP_2)" fill="#8F1717" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M360.84764,22.5608L360.84764,2.8801L380.52151,2.8801L380.52151,22.5608L360.84764,22.5608z"/>
-		<path clip-path="url(#SVG_CP_2)" fill="#730101" fill-rule="evenodd" stroke="#CCCCCC" stroke-width="0.47985" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
-			M380.52151,22.5608L380.52151,2.8801L400.67524,2.8801L400.67524,22.5608L380.52151,22.5608z"/>
-		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="400" fill="#FFFFFF" clip-path="url(#SVG_CP_2)" >
-			<text text-anchor="start" transform="matrix(11.51641 0 0 11.52041 377.16256 36.96131)" >
-				<tspan direction="ltr" unicode-bidi="embed" x="0 ">1</tspan>
-				<tspan direction="ltr" unicode-bidi="embed" x="0.58354 ">0</tspan>
+		<g font-family="'Arial'" font-size="1" kerning="0" font-weight="700" fill="#000000" clip-path="url(#SVG_CP_2)" >
+			<text text-anchor="start" transform="matrix(12.00024 0 0 11.98877 151.20302 34.86436)" >
+				<tspan direction="ltr" unicode-bidi="embed" x="0 ">Г</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.43958 ">.</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="0.67935 ">Т</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.19885 ">.</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="1.75832 ">С</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="2.47763 ">е</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.03709 ">л</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="3.67648 ">я</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.23595 ">н</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="4.83537 ">и</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="5.47476 ">н</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.07419 ">о</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="6.67361 ">в</tspan>
+				<tspan direction="ltr" unicode-bidi="embed" x="7.27304 ">а</tspan>
 			</text>
 		</g>
 	</g>
