@@ -1392,6 +1392,7 @@
         $('#Evapotranspiration2').removeClass('active');
         $('#Indexes1').removeClass('active');
         $('#Indexes2').removeClass('active');
+        $('#Indexes3').removeClass('active');
         $('#' + element).addClass('active');
         //ChangeLayerClimate();
         //ChangePeriod();
@@ -1403,6 +1404,29 @@
             diff = true;
             $('#Difference').addClass('btn-primary');
         }
+
+        // GTK
+        if (element == 'Indexes1') {
+            $('#Month').prop('checked', true);
+            $('#Month04').prop('checked', true);
+            $('#Year').attr('disabled', true);
+            $('#Season').attr('disabled', true);
+            $('#Month01').attr('disabled', true);
+            $('#Month02').attr('disabled', true);
+            $('#Month03').attr('disabled', true);
+            $('#Month11').attr('disabled', true);
+            $('#Month12').attr('disabled', true);
+        }
+        else {
+            $('#Year').attr('disabled', false);
+            $('#Season').attr('disabled', false);
+            $('#Month01').attr('disabled', false);
+            $('#Month02').attr('disabled', false);
+            $('#Month03').attr('disabled', false);
+            $('#Month11').attr('disabled', false);
+            $('#Month12').attr('disabled', false);
+        }
+
         ChangeDecade();
     }
 
@@ -1888,8 +1912,6 @@
         }
         date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
         //$('#DateLabel').text(date_label);
-
-        console.log(layerClimate + ':time=' + date_str);
 
         if (layerClimate.includes('gtk_pd_avg_y') || layerClimate.includes('gtk_pd_avg_s')) {
             Layer_Climate.setSource(null);
