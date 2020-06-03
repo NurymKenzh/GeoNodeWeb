@@ -423,6 +423,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string Indexes {
+            get {
+                return ResourceManager.GetString("Indexes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string January {
             get {
                 return ResourceManager.GetString("January", resourceCulture);

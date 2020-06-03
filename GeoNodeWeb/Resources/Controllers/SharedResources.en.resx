@@ -237,6 +237,9 @@
   <data name="Highlight" xml:space="preserve">
     <value>Highlight</value>
   </data>
+  <data name="Indexes" xml:space="preserve">
+    <value>Indexes</value>
+  </data>
   <data name="January" xml:space="preserve">
     <value>January</value>
   </data>

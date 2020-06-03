@@ -86,7 +86,10 @@
                     <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["Evapotranspiration"]">
                         <input type="radio" name="parameter" id="Evapotranspiration" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-smog"></i>
                     </label>
-                    <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["AridityIndices"]">
+                    <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["Indexes"]">
+                        <input type="radio" name="parameter" id="Indexes" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-superscript"></i>
+                    </label>
+                    @*<label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["AridityIndices"]">
                         <input type="radio" name="parameter" id="ClimatIndex" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-superscript"></i>
                     </label>
                     <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["SPI"]">
@@ -94,7 +97,7 @@
                     </label>
                     <label class="btn btn-outline-light btn-sm" data-toggle="tooltip" data-placement="bottom" title="@SharedLocalizer["SPEI"]">
                         <input type="radio" name="parameter" id="SPEI" autocomplete="off" onchange="ChangeParameter()"> <i class="fa fa-superscript"></i>
-                    </label>
+                    </label>*@
                 </div>
                 <ul class="navbar-nav mr-auto" id="subparameterlinks">
                     <li id="Temperature1" class="nav-item active Temperature">
@@ -122,6 +125,15 @@
                     </li>
                     <li id="Evapotranspiration2" class="nav-item Evapotranspiration">
                         <a class="nav-link" href="#" onclick="ChangeSubParameter('et_dlt_avg', 'Evapotranspiration2')">@SharedLocalizer["EvapotranspirationDev"]</a>
+                    </li>
+                    <li id="Indexes1" class="nav-item Indexes">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('gtk_pd_avg', 'Indexes1')">@SharedLocalizer["AridityIndices"]</a>
+                    </li>
+                    <li id="Indexes2" class="nav-item Indexes">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('spi_pd_avg', 'Indexes2')">@SharedLocalizer["SPI"]</a>
+                    </li>
+                    <li id="Indexes3" class="nav-item Indexes">
+                        <a class="nav-link" href="#" onclick="ChangeSubParameter('spei_pd_avg', 'Indexes3')">@SharedLocalizer["SPEI"]</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@SharedLocalizer["Other"]</a>

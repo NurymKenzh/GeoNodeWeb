@@ -237,6 +237,9 @@
   <data name="Highlight" xml:space="preserve">
     <value>Бөлектеу</value>
   </data>
+  <data name="Indexes" xml:space="preserve">
+    <value>Индекстер</value>
+  </data>
   <data name="January" xml:space="preserve">
     <value>Қаңтар</value>
   </data>

@@ -562,15 +562,17 @@
                                         </select>
                                         <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
                                     </div>
-                                    <div class="download-gtk">
+                                    <div class="download-indexes">
                                         <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
                                         <select id="downloadet" class="form-control form-control-sm" required>
                                             <option value="">@SharedLocalizer["Choose"]...</option>
                                             <option value="climate_gtk">@SharedLocalizer["AridityIndices"]</option>
+                                            <option value="climate_spi">@SharedLocalizer["SPI"]</option>
+                                            <option value="climate_spei">@SharedLocalizer["SPEI"]</option>
                                         </select>
                                         <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
                                     </div>
-                                    <div class="download-spi">
+                                    @*<div class="download-spi">
                                         <label for="colFormLabeltas" class="col-form-label col-form-label-sm">@SharedLocalizer["Parameter"]</label>
                                         <select id="downloadet" class="form-control form-control-sm" required>
                                             <option value="">@SharedLocalizer["Choose"]...</option>
@@ -585,7 +587,7 @@
                                             <option value="climate_spei">@SharedLocalizer["SPEI"]</option>
                                         </select>
                                         <div class="invalid-feedback">@SharedLocalizer["SelectOptions"]</div>
-                                    </div>
+                                    </div>*@
                                 </div>
                                 <div class="form-row">
                                     <div class="col-sm-auto">
@@ -1290,13 +1292,14 @@
         $('.download-tas').hide();
         $('.download-pr').hide();
         $('.download-et').hide();
-        $('.download-gtk').hide();
-        $('.download-spi').hide();
-        $('.download-spei').hide();
+        $('.download-indexes').hide();
+        //$('.download-spi').hide();
+        //$('.download-spei').hide();
         if ($('#Temperature').is(':checked')) {
             $('.Temperature').show();
             $('.Precipitation').hide();
             $('.Evapotranspiration').hide();
+            $('.Indexes').hide();
             Parameter = 'tas';
             SubParameter = 'tasmax_pd_avg';
             ChangeSubParameter(SubParameter, 'Temperature1');
@@ -1306,6 +1309,7 @@
             $('.Temperature').hide();
             $('.Precipitation').show();
             $('.Evapotranspiration').hide();
+            $('.Indexes').hide();
             Parameter = 'pr';
             //if (firstPrecipitation) {
             //    SubParameter = 'avg';
@@ -1319,6 +1323,7 @@
             $('.Temperature').hide();
             $('.Precipitation').hide();
             $('.Evapotranspiration').show();
+            $('.Indexes').hide();
             Parameter = 'et';
             //if (firstEvapotranspiration) {
             //    SubParameter = '?';
@@ -1328,45 +1333,46 @@
             ChangeSubParameter(SubParameter, 'Evapotranspiration1');
             $('.download-et').show();
         }
-        else if ($('#ClimatIndex').is(':checked')) {
+        else if ($('#Indexes').is(':checked')) {
             $('.Temperature').hide();
             $('.Precipitation').hide();
             $('.Evapotranspiration').hide();
+            $('.Indexes').show();
             Parameter = 'gtk';
             //if (firstEvapotranspiration) {
             //    SubParameter = '?';
             //    firstEvapotranspiration = false;
             //}
             SubParameter = 'gtk_pd_avg';
-            ChangeSubParameter(SubParameter, 'ClimatIndex1');
-            $('.download-gtk').show();
+            ChangeSubParameter(SubParameter, 'Indexes1');
+            $('.download-indexes').show();
         }
-        else if ($('#SPI').is(':checked')) {
-            $('.Temperature').hide();
-            $('.Precipitation').hide();
-            $('.Evapotranspiration').hide();
-            Parameter = 'spi';
-            //if (firstEvapotranspiration) {
-            //    SubParameter = '?';
-            //    firstEvapotranspiration = false;
-            //}
-            SubParameter = 'spi_pd_avg';
-            ChangeSubParameter(SubParameter, 'SPI1');
-            $('.download-spi').show();
-        }
-        else if ($('#SPEI').is(':checked')) {
-            $('.Temperature').hide();
-            $('.Precipitation').hide();
-            $('.Evapotranspiration').hide();
-            Parameter = 'spei';
-            //if (firstEvapotranspiration) {
-            //    SubParameter = '?';
-            //    firstEvapotranspiration = false;
-            //}
-            SubParameter = 'spei_pd_avg';
-            ChangeSubParameter(SubParameter, 'SPEI1');
-            $('.download-spei').show();
-        }
+        //else if ($('#SPI').is(':checked')) {
+        //    $('.Temperature').hide();
+        //    $('.Precipitation').hide();
+        //    $('.Evapotranspiration').hide();
+        //    Parameter = 'spi';
+        //    //if (firstEvapotranspiration) {
+        //    //    SubParameter = '?';
+        //    //    firstEvapotranspiration = false;
+        //    //}
+        //    SubParameter = 'spi_pd_avg';
+        //    ChangeSubParameter(SubParameter, 'SPI1');
+        //    $('.download-spi').show();
+        //}
+        //else if ($('#SPEI').is(':checked')) {
+        //    $('.Temperature').hide();
+        //    $('.Precipitation').hide();
+        //    $('.Evapotranspiration').hide();
+        //    Parameter = 'spei';
+        //    //if (firstEvapotranspiration) {
+        //    //    SubParameter = '?';
+        //    //    firstEvapotranspiration = false;
+        //    //}
+        //    SubParameter = 'spei_pd_avg';
+        //    ChangeSubParameter(SubParameter, 'SPEI1');
+        //    $('.download-spei').show();
+        //}
         //ChangeLayerClimate();
         //ChangePeriod();
     }
@@ -1384,6 +1390,8 @@
         $('#Precipitation3').removeClass('active');
         $('#Evapotranspiration1').removeClass('active');
         $('#Evapotranspiration2').removeClass('active');
+        $('#Indexes1').removeClass('active');
+        $('#Indexes2').removeClass('active');
         $('#' + element).addClass('active');
         //ChangeLayerClimate();
         //ChangePeriod();
