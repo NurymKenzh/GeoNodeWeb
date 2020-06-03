@@ -379,10 +379,10 @@
     <value>Specify a mailbox</value>
   </data>
   <data name="SPEI" xml:space="preserve">
-    <value>SPEI</value>
+    <value>Standardized Precipitation and Evapotranspiration Index (SPEI)</value>
   </data>
   <data name="SPI" xml:space="preserve">
-    <value>SPI</value>
+    <value>Standardized Precipitation Index (SPI)</value>
   </data>
   <data name="Spring" xml:space="preserve">
     <value>Spring</value>

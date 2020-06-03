@@ -379,10 +379,10 @@
     <value>Укажите почтовый ящик</value>
   </data>
   <data name="SPEI" xml:space="preserve">
-    <value>SPEI</value>
+    <value>Cтандартизированный индекс осадков и эвапотранспирации (SPEI)</value>
   </data>
   <data name="SPI" xml:space="preserve">
-    <value>SPI</value>
+    <value>Cтандартизированный индекс осадков (SPI)</value>
   </data>
   <data name="Spring" xml:space="preserve">
     <value>Весна</value>

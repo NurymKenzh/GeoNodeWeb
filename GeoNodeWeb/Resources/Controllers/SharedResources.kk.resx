@@ -379,10 +379,10 @@
     <value>Пошта жәшігін көрсетіңіз</value>
   </data>
   <data name="SPEI" xml:space="preserve">
-    <value>SPEI</value>
+    <value>Жауын-шашын мен эвапотранспирацияның стандартталған индексі (SPEI)</value>
   </data>
   <data name="SPI" xml:space="preserve">
-    <value>SPI</value>
+    <value>Жауын-шашынның стандартталған индексі (SPI)</value>
   </data>
   <data name="Spring" xml:space="preserve">
     <value>Көктем</value>
