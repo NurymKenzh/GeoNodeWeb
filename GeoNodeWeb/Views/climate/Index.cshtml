@@ -1865,7 +1865,7 @@
         }
         if (Period == 's') {
             // эвапотранспорация
-            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg') {
+            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg' || SubParameter == 'spi_pd_avg' || SubParameter == 'spei_pd_avg') {
                 if (Season == 4) {
                     date_str += '-01-01';
                 }
@@ -1888,6 +1888,8 @@
         }
         date_label += ' - ' + (parseInt(date_label) + parseInt(Decade)).toString();
         //$('#DateLabel').text(date_label);
+
+        console.log(layerClimate + ':time=' + date_str);
 
         if (layerClimate.includes('gtk_pd_avg_y') || layerClimate.includes('gtk_pd_avg_s')) {
             Layer_Climate.setSource(null);
@@ -1968,7 +1970,7 @@
         }
         if (Period == 's') {
             // эвапотранспорация
-            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg') {
+            if (SubParameter == 'et_pd_avg' || SubParameter == 'et_dlt_avg' || SubParameter == 'spi_pd_avg' || SubParameter == 'spei_pd_avg') {
                 if (Season == 4) {
                     date_str += '-01-01';
                 }
