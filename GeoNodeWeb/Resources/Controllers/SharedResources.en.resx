@@ -129,6 +129,9 @@
   <data name="AridityIndices" xml:space="preserve">
     <value>Aridity Indices</value>
   </data>
+  <data name="AridityIndicesShort" xml:space="preserve">
+    <value>GTK</value>
+  </data>
   <data name="August" xml:space="preserve">
     <value>August</value>
   </data>
@@ -138,11 +141,20 @@
   <data name="AveragePrecipitationDev" xml:space="preserve">
     <value>Deviations of the average precipitation (mm)</value>
   </data>
+  <data name="AveragePrecipitationDevShort" xml:space="preserve">
+    <value>Precipitation (off)</value>
+  </data>
   <data name="AverageTemperature" xml:space="preserve">
     <value>Average temperature (C °)</value>
   </data>
   <data name="AverageTemperatureDev" xml:space="preserve">
     <value>Deviations of average temperature (C °)</value>
+  </data>
+  <data name="AverageTemperatureDevShort" xml:space="preserve">
+    <value>Wed temperature (off)</value>
+  </data>
+  <data name="AverageTemperatureShort" xml:space="preserve">
+    <value>Wed temperature</value>
   </data>
   <data name="BaseLayers" xml:space="preserve">
     <value>Base layers</value>
@@ -225,6 +237,12 @@
   <data name="EvapotranspirationDev" xml:space="preserve">
     <value>Evapotranspiration Deviations (mm)</value>
   </data>
+  <data name="EvapotranspirationDevShort" xml:space="preserve">
+    <value>Evapotranspiration (off)</value>
+  </data>
+  <data name="EvapotranspirationShort" xml:space="preserve">
+    <value>Evapotranspiration</value>
+  </data>
   <data name="Extra" xml:space="preserve">
     <value>Additionally</value>
   </data>
@@ -253,7 +271,7 @@
     <value>Lakes</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Tongue</value>
+    <value>Language</value>
   </data>
   <data name="LayerInfo" xml:space="preserve">
     <value>Layer info</value>
@@ -285,6 +303,12 @@
   <data name="MaxTemperatureDev" xml:space="preserve">
     <value>Deviations of the maximum temperature (C °)</value>
   </data>
+  <data name="MaxTemperatureDevShort" xml:space="preserve">
+    <value>Poppy. temperature (off)</value>
+  </data>
+  <data name="MaxTemperatureShort" xml:space="preserve">
+    <value>Poppy. temperature</value>
+  </data>
   <data name="May" xml:space="preserve">
     <value>May</value>
   </data>
@@ -308,6 +332,12 @@
   </data>
   <data name="MinTemperatureDev" xml:space="preserve">
     <value>Minimum Temperature Deviations (C °)</value>
+  </data>
+  <data name="MinTemperatureDevShort" xml:space="preserve">
+    <value>Min temperature (off)</value>
+  </data>
+  <data name="MinTemperatureShort" xml:space="preserve">
+    <value>Min temperature</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Month</value>
@@ -338,6 +368,9 @@
   </data>
   <data name="Precipitation" xml:space="preserve">
     <value>Precipitation (mm)</value>
+  </data>
+  <data name="PrecipitationShort" xml:space="preserve">
+    <value>Precipitation</value>
   </data>
   <data name="PressHoldKey" xml:space="preserve">
     <value>Press and hold the key.</value>
@@ -384,8 +417,14 @@
   <data name="SPEI" xml:space="preserve">
     <value>Standardized Precipitation and Evapotranspiration Index (SPEI)</value>
   </data>
+  <data name="SPEIShort" xml:space="preserve">
+    <value>SPEI</value>
+  </data>
   <data name="SPI" xml:space="preserve">
     <value>Standardized Precipitation Index (SPI)</value>
+  </data>
+  <data name="SPIShort" xml:space="preserve">
+    <value>SPI</value>
   </data>
   <data name="Spring" xml:space="preserve">
     <value>Spring</value>

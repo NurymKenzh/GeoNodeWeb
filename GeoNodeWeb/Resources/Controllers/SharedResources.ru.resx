@@ -129,6 +129,9 @@
   <data name="AridityIndices" xml:space="preserve">
     <value>ГТК Селянинова</value>
   </data>
+  <data name="AridityIndicesShort" xml:space="preserve">
+    <value>GTK</value>
+  </data>
   <data name="August" xml:space="preserve">
     <value>Август</value>
   </data>
@@ -138,11 +141,20 @@
   <data name="AveragePrecipitationDev" xml:space="preserve">
     <value>Отклонения средней суммы осадков (мм)</value>
   </data>
+  <data name="AveragePrecipitationDevShort" xml:space="preserve">
+    <value>Осадки (откл.)</value>
+  </data>
   <data name="AverageTemperature" xml:space="preserve">
     <value>Средняя температура (C°)</value>
   </data>
   <data name="AverageTemperatureDev" xml:space="preserve">
     <value>Отклонения средней температуры (C°)</value>
+  </data>
+  <data name="AverageTemperatureDevShort" xml:space="preserve">
+    <value>Ср. температура (откл.)</value>
+  </data>
+  <data name="AverageTemperatureShort" xml:space="preserve">
+    <value>Ср. температура</value>
   </data>
   <data name="BaseLayers" xml:space="preserve">
     <value>Базовые слои</value>
@@ -225,6 +237,12 @@
   <data name="EvapotranspirationDev" xml:space="preserve">
     <value>Отклонения эвапотранспирации (мм)</value>
   </data>
+  <data name="EvapotranspirationDevShort" xml:space="preserve">
+    <value>Эвапотранспирация (откл.)</value>
+  </data>
+  <data name="EvapotranspirationShort" xml:space="preserve">
+    <value>Эвапотранспирация</value>
+  </data>
   <data name="Extra" xml:space="preserve">
     <value>Дополнительно</value>
   </data>
@@ -285,6 +303,12 @@
   <data name="MaxTemperatureDev" xml:space="preserve">
     <value>Отклонения максимальной температуры (C°)</value>
   </data>
+  <data name="MaxTemperatureDevShort" xml:space="preserve">
+    <value>Макс. температура (откл.)</value>
+  </data>
+  <data name="MaxTemperatureShort" xml:space="preserve">
+    <value>Макс. температура</value>
+  </data>
   <data name="May" xml:space="preserve">
     <value>Май</value>
   </data>
@@ -308,6 +332,12 @@
   </data>
   <data name="MinTemperatureDev" xml:space="preserve">
     <value>Отклонения минимальной температуры (C°)</value>
+  </data>
+  <data name="MinTemperatureDevShort" xml:space="preserve">
+    <value>Мин. температура (откл.)</value>
+  </data>
+  <data name="MinTemperatureShort" xml:space="preserve">
+    <value>Мин. температура</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Месяц</value>
@@ -338,6 +368,9 @@
   </data>
   <data name="Precipitation" xml:space="preserve">
     <value>Осадки (мм)</value>
+  </data>
+  <data name="PrecipitationShort" xml:space="preserve">
+    <value>Осадки</value>
   </data>
   <data name="PressHoldKey" xml:space="preserve">
     <value>Нажмите и удерживайте клавишу</value>
@@ -384,8 +417,14 @@
   <data name="SPEI" xml:space="preserve">
     <value>Cтандартизированный индекс осадков и эвапотранспирации (SPEI)</value>
   </data>
+  <data name="SPEIShort" xml:space="preserve">
+    <value>SPEI</value>
+  </data>
   <data name="SPI" xml:space="preserve">
     <value>Cтандартизированный индекс осадков (SPI)</value>
+  </data>
+  <data name="SPIShort" xml:space="preserve">
+    <value>SPI</value>
   </data>
   <data name="Spring" xml:space="preserve">
     <value>Весна</value>

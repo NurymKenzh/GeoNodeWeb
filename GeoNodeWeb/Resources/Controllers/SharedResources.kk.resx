@@ -129,6 +129,9 @@
   <data name="AridityIndices" xml:space="preserve">
     <value>Құрғақтық көрсеткіштері</value>
   </data>
+  <data name="AridityIndicesShort" xml:space="preserve">
+    <value>GTK</value>
+  </data>
   <data name="August" xml:space="preserve">
     <value>Тамыз</value>
   </data>
@@ -138,11 +141,20 @@
   <data name="AveragePrecipitationDev" xml:space="preserve">
     <value>Жауын-шашынның орташа ауытқуы (мм)</value>
   </data>
+  <data name="AveragePrecipitationDevShort" xml:space="preserve">
+    <value>Жауын-шашын (өшірулі)</value>
+  </data>
   <data name="AverageTemperature" xml:space="preserve">
     <value>Орташа температура (C °)</value>
   </data>
   <data name="AverageTemperatureDev" xml:space="preserve">
     <value>Орташа температураның ауытқуы (C °)</value>
+  </data>
+  <data name="AverageTemperatureDevShort" xml:space="preserve">
+    <value>Ср температура (өшірулі)</value>
+  </data>
+  <data name="AverageTemperatureShort" xml:space="preserve">
+    <value>Ср температура</value>
   </data>
   <data name="BaseLayers" xml:space="preserve">
     <value>Негізгі қабаттар</value>
@@ -225,6 +237,12 @@
   <data name="EvapotranspirationDev" xml:space="preserve">
     <value>Буландыру транспирациясының ауытқулары (мм)</value>
   </data>
+  <data name="EvapotranspirationDevShort" xml:space="preserve">
+    <value>Буландыру транспирациясы (өшірулі)</value>
+  </data>
+  <data name="EvapotranspirationShort" xml:space="preserve">
+    <value>Эвапотранспирация</value>
+  </data>
   <data name="Extra" xml:space="preserve">
     <value>Қосымша</value>
   </data>
@@ -253,7 +271,7 @@
     <value>Көлдер</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Тіл</value>
+    <value>Тілі</value>
   </data>
   <data name="LayerInfo" xml:space="preserve">
     <value>Қабат туралы ақпарат</value>
@@ -285,6 +303,12 @@
   <data name="MaxTemperatureDev" xml:space="preserve">
     <value>Максималды температураның ауытқуы (C °)</value>
   </data>
+  <data name="MaxTemperatureDevShort" xml:space="preserve">
+    <value>Көкнәр. температура (өшірулі)</value>
+  </data>
+  <data name="MaxTemperatureShort" xml:space="preserve">
+    <value>Көкнәр. температура</value>
+  </data>
   <data name="May" xml:space="preserve">
     <value>Мамыр</value>
   </data>
@@ -308,6 +332,12 @@
   </data>
   <data name="MinTemperatureDev" xml:space="preserve">
     <value>Температураның минималды ауытқуы (C °)</value>
+  </data>
+  <data name="MinTemperatureDevShort" xml:space="preserve">
+    <value>Мин температура (өшірулі)</value>
+  </data>
+  <data name="MinTemperatureShort" xml:space="preserve">
+    <value>Мин температура</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Ай</value>
@@ -338,6 +368,9 @@
   </data>
   <data name="Precipitation" xml:space="preserve">
     <value>Жауын-шашын (мм)</value>
+  </data>
+  <data name="PrecipitationShort" xml:space="preserve">
+    <value>Атмосфералық жауын-шашын</value>
   </data>
   <data name="PressHoldKey" xml:space="preserve">
     <value>Пернені басып тұрыңыз.</value>
@@ -384,8 +417,14 @@
   <data name="SPEI" xml:space="preserve">
     <value>Жауын-шашын мен эвапотранспирацияның стандартталған индексі (SPEI)</value>
   </data>
+  <data name="SPEIShort" xml:space="preserve">
+    <value>SPEI</value>
+  </data>
   <data name="SPI" xml:space="preserve">
     <value>Жауын-шашынның стандартталған индексі (SPI)</value>
+  </data>
+  <data name="SPIShort" xml:space="preserve">
+    <value>SPI</value>
   </data>
   <data name="Spring" xml:space="preserve">
     <value>Көктем</value>

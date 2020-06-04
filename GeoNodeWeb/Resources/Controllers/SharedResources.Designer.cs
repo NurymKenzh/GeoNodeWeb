@@ -99,6 +99,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string AridityIndicesShort {
+            get {
+                return ResourceManager.GetString("AridityIndicesShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string August {
             get {
                 return ResourceManager.GetString("August", resourceCulture);
@@ -126,6 +135,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string AveragePrecipitationDevShort {
+            get {
+                return ResourceManager.GetString("AveragePrecipitationDevShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string AverageTemperature {
             get {
                 return ResourceManager.GetString("AverageTemperature", resourceCulture);
@@ -138,6 +156,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string AverageTemperatureDev {
             get {
                 return ResourceManager.GetString("AverageTemperatureDev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string AverageTemperatureDevShort {
+            get {
+                return ResourceManager.GetString("AverageTemperatureDevShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string AverageTemperatureShort {
+            get {
+                return ResourceManager.GetString("AverageTemperatureShort", resourceCulture);
             }
         }
         
@@ -387,6 +423,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string EvapotranspirationDevShort {
+            get {
+                return ResourceManager.GetString("EvapotranspirationDevShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string EvapotranspirationShort {
+            get {
+                return ResourceManager.GetString("EvapotranspirationShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Extra {
             get {
                 return ResourceManager.GetString("Extra", resourceCulture);
@@ -567,6 +621,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string MaxTemperatureDevShort {
+            get {
+                return ResourceManager.GetString("MaxTemperatureDevShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MaxTemperatureShort {
+            get {
+                return ResourceManager.GetString("MaxTemperatureShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string May {
             get {
                 return ResourceManager.GetString("May", resourceCulture);
@@ -633,6 +705,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string MinTemperatureDev {
             get {
                 return ResourceManager.GetString("MinTemperatureDev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MinTemperatureDevShort {
+            get {
+                return ResourceManager.GetString("MinTemperatureDevShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MinTemperatureShort {
+            get {
+                return ResourceManager.GetString("MinTemperatureShort", resourceCulture);
             }
         }
         
@@ -723,6 +813,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string Precipitation {
             get {
                 return ResourceManager.GetString("Precipitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string PrecipitationShort {
+            get {
+                return ResourceManager.GetString("PrecipitationShort", resourceCulture);
             }
         }
         
@@ -864,9 +963,27 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string SPEIShort {
+            get {
+                return ResourceManager.GetString("SPEIShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string SPI {
             get {
                 return ResourceManager.GetString("SPI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string SPIShort {
+            get {
+                return ResourceManager.GetString("SPIShort", resourceCulture);
             }
         }
         
