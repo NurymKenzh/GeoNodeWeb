@@ -2018,7 +2018,13 @@
         if (RCP == 'rcp85') {
             rcp_label = 'RCP 8.5'
         }
-        $('#table_title').text($('#DecadeAverage').val() + ' ' + date_label + ' (' + rcp_label + ')');
+        if (range_instance.result.from < 2010) {
+            $('#table_title').text($('#DecadeAverage').val() + ' ' + date_label);
+        }
+        else {
+            $('#table_title').text($('#DecadeAverage').val() + ' ' + date_label + ' (' + rcp_label + ')');
+        }
+        
     }
 </script>
 
@@ -2468,6 +2474,10 @@
                 if (chartRaster != null) {
                     chartRaster.destroy();
                 }
+                var chart_title = InfoTitletitle;
+                if (range_instance.result.from < 2010) {
+                    chart_title = chart_title.substr(0, chart_title.indexOf(' +')) + ')';
+                }
                 chartRaster = new Chart(ctx1, {
                     type: 'bar',
                     data: chart1Data,
@@ -2481,7 +2491,7 @@
                             fontSize: 20,
                             fontColor: '#000',
                             //text: 'ВХБ - ' + data.wmbname + ' (ВХУ - ' + data.wmacode + ')'
-                            text: InfoTitletitle
+                            text: chart_title
                         },
                         tooltips: {
                             mode: 'index',
