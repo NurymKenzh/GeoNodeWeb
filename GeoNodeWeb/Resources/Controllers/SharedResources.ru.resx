@@ -127,7 +127,7 @@
     <value>Площадь (полигон)</value>
   </data>
   <data name="AridityIndices" xml:space="preserve">
-    <value>Индексы засушливости</value>
+    <value>ГТК Селянинова</value>
   </data>
   <data name="August" xml:space="preserve">
     <value>Август</value>
@@ -403,9 +403,15 @@
     <value>Значения</value>
   </data>
   <data name="VHB" xml:space="preserve">
+    <value>ВХБ</value>
+  </data>
+  <data name="VHBLayer" xml:space="preserve">
     <value>ВХУ китайской части бассейнов Ертис, Иле</value>
   </data>
   <data name="VHU" xml:space="preserve">
+    <value>ВХУ</value>
+  </data>
+  <data name="VHULayer" xml:space="preserve">
     <value>ВХУ Казахстан</value>
   </data>
   <data name="ViewDataByMonth" xml:space="preserve">
