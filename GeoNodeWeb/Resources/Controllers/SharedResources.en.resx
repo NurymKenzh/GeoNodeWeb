@@ -405,7 +405,13 @@
   <data name="VHB" xml:space="preserve">
     <value>VHB</value>
   </data>
+  <data name="VHBLayer" xml:space="preserve">
+    <value>VHB</value>
+  </data>
   <data name="VHU" xml:space="preserve">
+    <value>VHU</value>
+  </data>
+  <data name="VHULayer" xml:space="preserve">
     <value>VHU</value>
   </data>
   <data name="ViewDataByMonth" xml:space="preserve">
