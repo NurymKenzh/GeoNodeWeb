@@ -103,47 +103,47 @@
                 </div>
                 <ul class="navbar-nav mr-auto" id="subparameterlinks">
                     <li id="Temperature1" class="nav-item active Temperature">
-                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('tasmax_pd_avg', 'Temperature1')">@SharedLocalizer["MaxTemperatureShort"] <span class="sr-only">(current)</span></a>
+                        <a class="nav-link font-weight-bold SomeInfo" href="#" InfoTitle="@SharedLocalizer["MaxTemperature"]" onclick="ChangeSubParameter('tasmax_pd_avg', 'Temperature1')">@SharedLocalizer["MaxTemperature"] <span class="sr-only">(current)</span></a>
                     </li>
                     <li id="Temperature2" class="nav-item Temperature">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tas_pd_avg', 'Temperature2')">@SharedLocalizer["AverageTemperatureShort"]</a>
+                        <a class="nav-link SomeInfo" href="#" InfoTitle="@SharedLocalizer["AverageTemperature"]" onclick="ChangeSubParameter('tas_pd_avg', 'Temperature2')">@SharedLocalizer["AverageTemperature"]</a>
                     </li>
                     <li id="Temperature3" class="nav-item Temperature">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('tasmin_pd_avg', 'Temperature3')">@SharedLocalizer["MinTemperatureShort"]</a>
+                        <a class="nav-link SomeInfo" href="#" InfoTitle="@SharedLocalizer["MinTemperature"]" onclick="ChangeSubParameter('tasmin_pd_avg', 'Temperature3')">@SharedLocalizer["MinTemperature"]</a>
                     </li>
                     @*  *@
                     <li id="Precipitation1" class="nav-item active Precipitation">
-                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('pr_pd_avg', 'Precipitation1')">@SharedLocalizer["PrecipitationShort"] <span class="sr-only">(current)</span></a>
+                        <a class="nav-link font-weight-bold SomeInfo" href="#" InfoTitle="@SharedLocalizer["Precipitation"]" onclick="ChangeSubParameter('pr_pd_avg', 'Precipitation1')">@SharedLocalizer["Precipitation"] <span class="sr-only">(current)</span></a>
                     </li>
                     <li id="Precipitation2" class="nav-item Precipitation">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('pr_dlt_avg_mm', 'Precipitation2')">@SharedLocalizer["AveragePrecipitationDevShort"]</a>
+                        <a class="nav-link SomeInfo" href="#" InfoTitle="@SharedLocalizer["AveragePrecipitationDev"]" onclick="ChangeSubParameter('pr_dlt_avg_mm', 'Precipitation2')">@SharedLocalizer["AveragePrecipitationDev"]</a>
                     </li>
                     @*<li id="Precipitation3" class="nav-item Precipitation">
                             <a class="nav-link" href="#" onclick="ChangeSubParameter('pr_dlt_avg_prc', 'Precipitation3')">Отклонения средней суммы осадков от значений базового периода в %</a>
                         </li>*@
                     @*  *@
                     <li id="Evapotranspiration1" class="nav-item active Evapotranspiration">
-                        <a class="nav-link font-weight-bold" href="#" onclick="ChangeSubParameter('et_pd_avg', 'Evapotranspiration1')">@SharedLocalizer["EvapotranspirationShort"] <span class="sr-only">(current)</span></a>
+                        <a class="nav-link font-weight-bold SomeInfo" href="#" InfoTitle="@SharedLocalizer["Evapotranspiration"]" onclick="ChangeSubParameter('et_pd_avg', 'Evapotranspiration1')">@SharedLocalizer["Evapotranspiration"] <span class="sr-only">(current)</span></a>
                     </li>
                     <li id="Evapotranspiration2" class="nav-item Evapotranspiration">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('et_dlt_avg', 'Evapotranspiration2')">@SharedLocalizer["EvapotranspirationDevShort"]</a>
+                        <a class="nav-link SomeInfo" href="#" InfoTitle="@SharedLocalizer["EvapotranspirationDev"]" onclick="ChangeSubParameter('et_dlt_avg', 'Evapotranspiration2')">@SharedLocalizer["EvapotranspirationDev"]</a>
                     </li>
                     <li id="Indexes1" class="nav-item Indexes">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('gtk_pd_avg', 'Indexes1')">@SharedLocalizer["AridityIndicesShort"]</a>
+                        <a class="nav-link SomeInfo" href="#" InfoTitle="@SharedLocalizer["AridityIndices"]" onclick="ChangeSubParameter('gtk_pd_avg', 'Indexes1')">@SharedLocalizer["AridityIndices"]</a>
                     </li>
                     <li id="Indexes2" class="nav-item Indexes">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('spi_pd_avg', 'Indexes2')">@SharedLocalizer["SPIShort"]</a>
+                        <a class="nav-link SomeInfo" href="#" InfoTitle="@SharedLocalizer["SPI"]" onclick="ChangeSubParameter('spi_pd_avg', 'Indexes2')">@SharedLocalizer["SPI"]</a>
                     </li>
                     <li id="Indexes3" class="nav-item Indexes">
-                        <a class="nav-link" href="#" onclick="ChangeSubParameter('spei_pd_avg', 'Indexes3')">@SharedLocalizer["SPEIShort"]</a>
+                        <a class="nav-link SomeInfo" href="#" InfoTitle="@SharedLocalizer["SPEI"]" onclick="ChangeSubParameter('spei_pd_avg', 'Indexes3')">@SharedLocalizer["SPEI"]</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@SharedLocalizer["Other"]</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown07">
                             <div class="dropdown-divider"></div>
-                            <a id="Temperature4" class="dropdown-item Temperature" onclick="ChangeSubParameter('tasmax_dlt_avg', 'Temperature4')">@SharedLocalizer["MaxTemperatureDevShort"]</a>
-                            <a id="Temperature5" class="dropdown-item Temperature" onclick="ChangeSubParameter('tas_dlt_avg', 'Temperature5')">@SharedLocalizer["AverageTemperatureDevShort"]</a>
-                            <a id="Temperature6" class="dropdown-item Temperature" onclick="ChangeSubParameter('tasmin_dlt_avg', 'Temperature6')">@SharedLocalizer["MinTemperatureDevShort"]</a>
+                            <a id="Temperature4" class="dropdown-item Temperature SomeInfo" InfoTitle="@SharedLocalizer["MaxTemperatureDev"]" onclick="ChangeSubParameter('tasmax_dlt_avg', 'Temperature4')">@SharedLocalizer["MaxTemperatureDev"]</a>
+                            <a id="Temperature5" class="dropdown-item Temperature SomeInfo" InfoTitle="@SharedLocalizer["AverageTemperatureDev"]" onclick="ChangeSubParameter('tas_dlt_avg', 'Temperature5')">@SharedLocalizer["AverageTemperatureDev"]</a>
+                            <a id="Temperature6" class="dropdown-item Temperature SomeInfo" InfoTitle="@SharedLocalizer["MinTemperatureDev"]" onclick="ChangeSubParameter('tasmin_dlt_avg', 'Temperature6')">@SharedLocalizer["MinTemperatureDev"]</a>
                             @*<a class="dropdown-item" asp-area="" asp-controller="esnow" asp-action="Index">E-SNOW</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="climate" asp-action="Index">climate</a>*@
                         </div>
