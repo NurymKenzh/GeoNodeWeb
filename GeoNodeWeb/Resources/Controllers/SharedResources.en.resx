@@ -130,7 +130,7 @@
     <value>Aridity Indices</value>
   </data>
   <data name="AridityIndicesShort" xml:space="preserve">
-    <value>GTK</value>
+    <value>Selyaninov’s Hydrothermal coefficient</value>
   </data>
   <data name="August" xml:space="preserve">
     <value>August</value>
@@ -142,7 +142,7 @@
     <value>Deviations of the average precipitation (mm)</value>
   </data>
   <data name="AveragePrecipitationDevShort" xml:space="preserve">
-    <value>Precipitation (off)</value>
+    <value>Precipitation (deviations)</value>
   </data>
   <data name="AverageTemperature" xml:space="preserve">
     <value>Average temperature (C °)</value>
@@ -151,10 +151,10 @@
     <value>Deviations of average temperature (C °)</value>
   </data>
   <data name="AverageTemperatureDevShort" xml:space="preserve">
-    <value>Wed temperature (off)</value>
+    <value>Avg temperature  (deviations)</value>
   </data>
   <data name="AverageTemperatureShort" xml:space="preserve">
-    <value>Wed temperature</value>
+    <value>Avg temperature</value>
   </data>
   <data name="BaseLayers" xml:space="preserve">
     <value>Base layers</value>
@@ -238,7 +238,7 @@
     <value>Evapotranspiration Deviations (mm)</value>
   </data>
   <data name="EvapotranspirationDevShort" xml:space="preserve">
-    <value>Evapotranspiration (off)</value>
+    <value>Evapotranspiration (deviations)</value>
   </data>
   <data name="EvapotranspirationShort" xml:space="preserve">
     <value>Evapotranspiration</value>
@@ -307,7 +307,7 @@
     <value>Poppy. temperature (off)</value>
   </data>
   <data name="MaxTemperatureShort" xml:space="preserve">
-    <value>Poppy. temperature</value>
+    <value>Max. temperature</value>
   </data>
   <data name="May" xml:space="preserve">
     <value>May</value>
@@ -334,10 +334,10 @@
     <value>Minimum Temperature Deviations (C °)</value>
   </data>
   <data name="MinTemperatureDevShort" xml:space="preserve">
-    <value>Min temperature (off)</value>
+    <value>Min. temperature (deviations)</value>
   </data>
   <data name="MinTemperatureShort" xml:space="preserve">
-    <value>Min temperature</value>
+    <value>Min. temperature</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Month</value>
