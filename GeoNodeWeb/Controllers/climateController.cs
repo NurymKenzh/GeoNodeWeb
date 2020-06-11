@@ -2133,19 +2133,26 @@ namespace GeoNodeWeb.Controllers
                 // delete old files
                 foreach (string file in Directory.EnumerateFiles(Path.Combine(_hostingEnvironment.WebRootPath, "Download")))
                 {
-                    string date = file.Split("__")[1];
-                    int year = Convert.ToInt32(date.Substring(0, 4)),
-                        month = Convert.ToInt32(date.Substring(4, 2)),
-                        day = Convert.ToInt32(date.Substring(6, 2));
-                    DateTime dt = new DateTime(year, month, day);
-                    if (DateTime.Today - dt > new TimeSpan(2, 0, 0, 0))
+                    try
                     {
-                        try
+                        string date = file.Split("__")[1];
+                        int year = Convert.ToInt32(date.Substring(0, 4)),
+                            month = Convert.ToInt32(date.Substring(4, 2)),
+                            day = Convert.ToInt32(date.Substring(6, 2));
+                        DateTime dt = new DateTime(year, month, day);
+                        if (DateTime.Today - dt > new TimeSpan(2, 0, 0, 0))
                         {
-                            System.IO.File.Delete(file);
+                            try
+                            {
+                                System.IO.File.Delete(file);
+                            }
+                            catch
+                            { }
                         }
-                        catch
-                        { }
+                    }
+                    catch
+                    {
+
                     }
                 }
 
@@ -2184,36 +2191,36 @@ namespace GeoNodeWeb.Controllers
                 }
 
                 //send email
-                MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-                mail.From = new MailAddress("ingeokz@gmail.com");
-                mail.To.Add(email);
-                mail.Subject = "Climate data";
-                //Attachment attachment;
-                //attachment = new System.Net.Mail.Attachment(fileZipPath);
-                //mail.Attachments.Add(attachment);
-                mail.IsBodyHtml = true;
-                mail.Body = $"Скачать данные <a href=\"{this.Request.Host}\\climate\\DownloadDataFile?file={fileZipName}\">здесь</a>";
-                SmtpServer.UseDefaultCredentials = false;
-                SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@gmail.com", "Qwerty!@#");
-                SmtpServer.EnableSsl = true;
-                SmtpServer.Send(mail);
-
                 //MailMessage mail = new MailMessage();
-                //SmtpClient SmtpServer = new SmtpClient("smtp.mail.ru");
-                //mail.From = new MailAddress("ingeokz@mail.ru");
+                //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+                //mail.From = new MailAddress("ingeokz@gmail.com");
                 //mail.To.Add(email);
                 //mail.Subject = "Climate data";
-                //Attachment attachment;
-                //attachment = new System.Net.Mail.Attachment(fileZipPath);
-                //mail.Attachments.Add(attachment);
+                ////Attachment attachment;
+                ////attachment = new System.Net.Mail.Attachment(fileZipPath);
+                ////mail.Attachments.Add(attachment);
+                //mail.IsBodyHtml = true;
+                //mail.Body = $"Скачать данные <a href=\"{this.Request.Host}\\climate\\DownloadDataFile?file={fileZipName}\">здесь</a>";
                 //SmtpServer.UseDefaultCredentials = false;
                 //SmtpServer.Port = 587;
-                //SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@mail.ru", "geoportal2020");
+                //SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@gmail.com", "Qwerty!@#");
                 //SmtpServer.EnableSsl = true;
-                //SmtpServer.Timeout = int.MaxValue;
                 //SmtpServer.Send(mail);
+
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.mail.ru");
+                mail.From = new MailAddress("ingeokz@mail.ru");
+                mail.To.Add(email);
+                mail.Subject = "Climate data";
+                Attachment attachment;
+                attachment = new System.Net.Mail.Attachment(fileZipPath);
+                mail.Attachments.Add(attachment);
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("ingeokz@mail.ru", "geoportal2020");
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Timeout = int.MaxValue;
+                SmtpServer.Send(mail);
             }
             catch (Exception ex)
             {
