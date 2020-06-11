@@ -1755,6 +1755,13 @@
                     if (+to.toString().split('').pop() != 0) {
                         to = to + 1;
                     }
+
+                    var f = from % 10;
+                    if (f != 1) {
+                        var new_from = Math.floor(from / 10) * 10 + 1;
+                        from = new_from;
+                    }
+
                     range_instance.update({
                         step: step,
                         from: from,
