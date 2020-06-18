@@ -2499,7 +2499,7 @@
                     labels = [];
                 for (i = 0; i < data.climate_xs.length; i++) {
                     chartdata.push(parseFloat(data.climate_xs[i].value).toFixed(2));
-                    labels.push(data.climate_xs[i].year);
+                    labels.push(data.climate_xs[i].year.toString() + '-' + (data.climate_xs[i].year + 9).toString());
                 }
                 var chart1Data = {
                     labels: labels,

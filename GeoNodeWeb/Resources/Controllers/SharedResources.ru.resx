@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AirTemperature" xml:space="preserve">
-    <value>Tемпература воздуха</value>
+    <value>Tемпература воздуха (C°)</value>
   </data>
   <data name="April" xml:space="preserve">
     <value>Апрель</value>
@@ -256,7 +256,7 @@
     <value>Выделить</value>
   </data>
   <data name="Indexes" xml:space="preserve">
-    <value>Индексы</value>
+    <value>Агроклиматические индексы</value>
   </data>
   <data name="January" xml:space="preserve">
     <value>Январь</value>
