@@ -390,17 +390,23 @@
                                                             </label>
                                                             <input id="layerlakesOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
+                                                            <input type="checkbox" id="layerwmb_polygonShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerwmb_polygon">
+                                                                @SharedLocalizer["VHBLayer"]
+                                                            </label>
+                                                            <input id="layerwmb_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+
                                                             <input type="checkbox" id="layerwma_polygonShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerwma_polygon">
                                                                 @SharedLocalizer["VHULayer"]
                                                             </label>
                                                             <input id="layerwma_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
-                                                            <input type="checkbox" id="layerwmb_polygonShow" checked="checked" onchange="ChangeLayers()">
-                                                            <label class="form-check-label text-white" for="layerwmb_polygon">
-                                                                @SharedLocalizer["VHBLayer"]
+                                                            <input type="checkbox" id="layerwma_polygoncnShow" checked="checked" onchange="ChangeLayers()">
+                                                            <label class="form-check-label text-white" for="layerwma_polygoncn">
+                                                                @SharedLocalizer["VHUCNLayer"]
                                                             </label>
-                                                            <input id="layerwmb_polygonOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+                                                            <input id="layerwma_polygoncnOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
 
                                                             <input type="checkbox" id="layerClimateShow" checked="checked" onchange="ChangeLayers()">
                                                             <label class="form-check-label text-white" for="layerClimateShow">
@@ -991,6 +997,7 @@
             'VERSION': '1.1.1',
             tiled: true,
             "LAYERS": 'geonode:wma_polygon',
+            "STYLES": 'WMA_KZ',
             "exceptions": 'application/vnd.ogc.se_inimage',
             tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
         },
@@ -1001,6 +1008,26 @@
     });
     Layer_wma_polygon.set('name', 'wma_polygon');
     Layer_wma_polygon.setOpacity(0.80);
+
+    var url_wma_polygoncn = geoserver_url + 'geonode' + '/wms';
+    var Source_wma_polygoncn = new ol.source.TileWMS({
+        url: url_wma_polygoncn,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:wma_polygon',
+            "STYLES": 'WMA_China',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_wma_polygoncn = new ol.layer.Tile({
+        source: Source_wma_polygoncn
+    });
+    Layer_wma_polygoncn.set('name', 'wma_polygoncn');
+    Layer_wma_polygoncn.setOpacity(0.80);
 
     var Source_Select = new ol.source.Vector({});
     var Layer_Select = new ol.layer.Vector({
@@ -1122,6 +1149,7 @@
             Layer_kaspii_aral_3857,
             Layer_wmb_polygon,
             Layer_wma_polygon,
+            Layer_wma_polygoncn,
             Layer_Select,
             Layer_lakes,
             Layer_rivers,
@@ -2407,6 +2435,10 @@
             if (layer.get('name') == 'wma_polygon') {
                 layer.setVisible(document.getElementById("layerwma_polygonShow").checked);
                 layer.setOpacity($('#layerwma_polygonOpacity').val() / 100);
+            }
+            if (layer.get('name') == 'wma_polygoncn') {
+                layer.setVisible(document.getElementById("layerwma_polygoncnShow").checked);
+                layer.setOpacity($('#layerwma_polygoncnOpacity').val() / 100);
             }
             if (layer.get('name') == 'lakes') {
                 layer.setVisible(document.getElementById("layerlakesShow").checked);

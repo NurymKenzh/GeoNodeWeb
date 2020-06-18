@@ -445,10 +445,13 @@
     <value>ВХБ</value>
   </data>
   <data name="VHBLayer" xml:space="preserve">
-    <value>ВХУ китайской части бассейнов Ертис, Иле</value>
+    <value>ВХБ</value>
   </data>
   <data name="VHU" xml:space="preserve">
     <value>ВХУ</value>
+  </data>
+  <data name="VHUCNLayer" xml:space="preserve">
+    <value>ВХУ Китай</value>
   </data>
   <data name="VHULayer" xml:space="preserve">
     <value>ВХУ Казахстан</value>

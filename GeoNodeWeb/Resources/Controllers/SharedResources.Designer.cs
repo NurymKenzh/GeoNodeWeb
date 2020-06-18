@@ -1053,6 +1053,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string VHUCNLayer {
+            get {
+                return ResourceManager.GetString("VHUCNLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string ViewDataByMonth {
             get {
                 return ResourceManager.GetString("ViewDataByMonth", resourceCulture);

@@ -450,8 +450,11 @@
   <data name="VHU" xml:space="preserve">
     <value>VHU</value>
   </data>
+  <data name="VHUCNLayer" xml:space="preserve">
+    <value>VHU CN</value>
+  </data>
   <data name="VHULayer" xml:space="preserve">
-    <value>VHU</value>
+    <value>VHU KZ</value>
   </data>
   <data name="ViewDataByMonth" xml:space="preserve">
     <value>To view data by month ... Expand the list</value>
