@@ -6,19 +6,31 @@
 @inject IStringLocalizer<SharedResources> SharedLocalizer
 @inject IOptions<RequestLocalizationOptions> LocOptions
 @{
-    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    var cultureItems = new List<SelectListItem>
-{
-    new SelectListItem(){ Value = "kk", Text = "Қазақ", Selected = requestCulture.RequestCulture.Culture.TwoLetterISOLanguageName == "kk" },
-    new SelectListItem(){ Value = "ru", Text = "Русский", Selected = requestCulture.RequestCulture.Culture.TwoLetterISOLanguageName == "ru" },
-    new SelectListItem(){ Value = "en", Text = "English", Selected = requestCulture.RequestCulture.Culture.TwoLetterISOLanguageName == "en" }
-    };
+    //    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    //    var cultureItems = new List<SelectListItem>
+    //{
+    //    new SelectListItem(){ Value = "kk", Text = "Қазақ", Selected = requestCulture.RequestCulture.Culture.TwoLetterISOLanguageName == "kk" },
+    //    new SelectListItem(){ Value = "ru", Text = "Русский", Selected = requestCulture.RequestCulture.Culture.TwoLetterISOLanguageName == "ru" },
+    //    new SelectListItem(){ Value = "en", Text = "English", Selected = requestCulture.RequestCulture.Culture.TwoLetterISOLanguageName == "en" }
+    //    };
     var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value + Context.Request.QueryString.Value}";
 }
 
-<div>
+@*<div>
     <form id="selectLanguage" asp-controller="climate" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" class="form-horizontal" role="form">
         <label class="menu language-label text-white-50" asp-for="@requestCulture.RequestCulture.UICulture.Name">@SharedLocalizer["Language"]:</label>
         <select class="language-select" name="culture" onchange="this.form.submit();" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
     </form>
+</div>*@
+
+<div>
+    <a href='@Url.Action("SetLanguage", "climate", new { culture = "kk", returnUrl = returnUrl })' style="padding: 14px 5px 0px 2px; float: right;">
+        <img src="~/esnow/img/lang/kz.png" alt="Қазақ" title="Қазақ" />
+    </a>
+    <a href='@Url.Action("SetLanguage", "climate", new { culture = "ru", returnUrl = returnUrl })' style="padding: 14px 5px 0px 2px; float: right;">
+        <img src="~/esnow/img/lang/ru.png" alt="Русский" title="Русский" />
+    </a>
+    <a href='@Url.Action("SetLanguage", "climate", new { culture = "en", returnUrl = returnUrl })' style="padding: 14px 5px 0px 40px; float: right;">
+        <img src="~/esnow/img/lang/gb.png" alt="English" title="English" />
+    </a>
 </div>
