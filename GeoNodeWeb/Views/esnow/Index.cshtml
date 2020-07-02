@@ -8,209 +8,125 @@
 <script src="~/esnow/lib/jquery-ui/jquery-ui.js"></script>
 <link href="~/esnow/lib/ol/ol.css" rel="stylesheet" />
 <script src="~/esnow/lib/ol/ol.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.2/TweenMax.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" />
 
 <div class="container-fluid p-0">
-    <div class="row">
-        <main role="main" class="col-md-12 ml-sm-auto col-lg-12 p-0">
-            <div class="row justify-content-end mr-2">
-                <article>
-                    <nav id="sidebar" class="col-2 col-md-auto bg-light border-info">
-                        <div class="media">
-                            <div class="media-body text-info">
-                                <h5 class="mt-2">ESNOW</h5>
-                            </div>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <label class="font-weight-normal m-1 Snow">Год</label>
-                        <select name="YearSnow" class="custom-select custom-select-sm Snow" id="YearSnow" onchange="ChangeYear()"></select>
-                        <label class="font-weight-normal m-1 Snow">Месяц<i class="material-icons btn-sm Snow btn btn-default" id="legendSnow" value="Легенда" onclick="NDSILegend()">info_outline</i></label>
-                        <select name="MonthSnow" class="custom-select custom-select-sm Snow" id="MonthSnow" onchange="ChangeMonth()"></select>
-                        <label>
-                            <input type="checkbox" id="layerMODISShow" checked="checked" onchange="ChangeLayers()">
-                            День
-                        </label>
-                        <select class="custom-select custom-select-sm Snow" id="DaySnow" type="range" onchange="ChangeLayerMODIS()">
-                            @*@foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
-                        {
-                            <option value="@dateTime.ToString(" yyyy-MM-dd")">
-                                @dateTime.ToString("yyyy-MM-dd")
-                            </option>
-                        }*@
-                        </select>
-                        @*@{
-                        DateTime[] dates = ViewBag.DateTime;
-                    }*@
-                        <input id="layerMODISOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
-                        <div class="dropdown-divider"></div>
-                        <div data-spy="scroll" style="overflow:scroll;overflow-x:hidden;height:auto;">
-                            <div class="tree" id="accordion">
-                                <div class="card">
-                                    <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-chevron-down float-left"></i>Топографические слои</button>
-                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                                        <div class="card-body pt-1">
-                                            <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
-                                            <label class="form-check-label" for="KATO">
-                                                <small> Базовые слои</small>
-                                            </label>
-                                            <div class="media">
-                                                <select class="custom-select custom-select-sm Snow" id="layerBaseType" onchange="ChangeLayers()">
-                                                    <option value="OSM">OpenStreetMap</option>
-                                                    <option value="BingAerialWithLabels">Bing Aerial</option>
-                                                    <option value="BingRoadStatic">Bing Road (static)</option>
-                                                    <option value="BingRoadDynamic">Bing Road (dynamic)</option>
-                                                    <option value="HERENormalDay">HERE Normal Day</option>
-                                                    <option value="HERENormalDayTransit">HERE Normal Day Transit</option>
-                                                    <option value="HERETerrainDay">HERE Terrain Day</option>
-                                                    <option value="HEREHybridDay">HERE Hybrid Day</option>
-                                                    <option value="StamenWatercolor">Stamen Watercolor</option>
-                                                    <option value="StamenTerrain">Stamen Terrain</option>
-                                                    <option value="StamenToner">Stamen Toner</option>
-                                                    <option value="ArcGIS">ArcGIS</option>
-                                                    <option value="ThunderforestOpenCycleMap">Thunderforest OpenCycleMap</option>
-                                                    <option value="ThunderforestTransport">Thunderforest Transport</option>
-                                                    <option value="ThunderforestLandscape">Thunderforest Landscape</option>
-                                                    <option value="ThunderforestOutdoors">Thunderforest Outdoors</option>
-                                                    <option value="ThunderforestTransportDark">Thunderforest Transport Dark</option>
-                                                    <option value="ThunderforestSpinalMap">Thunderforest Spinal Map</option>
-                                                    <option value="ThunderforestPioneer">Thunderforest Pioneer</option>
-                                                    <option value="ThunderforestMobileAtlas">Thunderforest Mobile Atlas</option>
-                                                    <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
-                                                </select>
-                                            </div>
-
-                                            <input id="layerBaseOpacity" type="range" class="form-control-range" min="0" max="100" value="90" onchange="ChangeLayers()" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><i class="fa fa-chevron-down float-left"></i> Тематические слои</button>
-                                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
-                                        <div class="card-body pt-1">
-                                            <div class="form-check ">
-                                                <input class="form-check-input" type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
-                                                <label class="form-check-label" for="KATO">
-                                                    ВОДНЫЕ РЕСУРСЫ
-                                                </label>
-                                            </div>
-                                            @*<div class="form-check text-black-50">
-                                            <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
-                                            <label class="form-check-label" for="KATO">
-                                                <small> ВХБ</small>
-                                            </label>
-                                        </div>
-                                        <div class="form-check text-black-50">
-                                            <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
-                                            <label class="form-check-label" for="KATO">
-                                                <small> ВХУ</small>
-                                            </label>
-                                        </div>*@
-                                            <select id="gslayer" onchange="ChangeLayers('gslayer');">
-                                                @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
-                                                {
-                                                    <option value="@gSLayer.title_en">
-                                                        @gSLayer.supplemental_information_en
-                                                    </option>
-                                                }
-                                            </select>
-                                            @*<input type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">*@
-                                            @*<input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />*@
-                                            <input id="layerWMAOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
-                                            <div class="dropdown-divider"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropdown-divider"></div>
-
-                        <link href='//fonts.googleapis.com/css?family=Signika+Negative:300' rel='stylesheet' type='text/css'>
-                        <div id="demo" hidden="hidden">
-                            <div id="bg">
-                                <div id="text">Impossible with CSS Animation.</div>
-                            </div>
-                        </div>
-                        <div id="slider"></div>
-                        <div id="controls">
-                            <button id="pause">запуск</button>
-                            <button id="reverse">обратно</button>
-                            <button id="restart">рестарт</button>
-                            @*<label id="slidervalue" style="color: black;"></label>*@
-                            <div>
-                                Скорость:
-                                <label><input type="radio" name="speed" value="0.005" id="slow"> медленно</label>
-                                <label><input type="radio" name="speed" value="0.010" id="normal" checked> средне</label>
-                                <label><input type="radio" name="speed" value="0.015" id="fast"> быстро</label>
-                            </div>
-                        </div>
-
-                        <input id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()" />
-                        <select id="type" class="measure">
-                            <option value="length">Длина (линия)</option>
-                            <option value="area">Площадь (полигон)</option>
-                        </select>
-                        <div class="dropdown-divider"></div>
-                        <input id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()" />
-                        <input id="DownloadButton" type="button" value="Скачать растр" class="btn btn-primary btn-sm" onclick="DownloadLayer()" />
-                        <div class="dropdown-divider"></div>
-                        <div class="alert alert-info" role="alert">
-                            <input type="hidden" id="featureId" />
-                            <label id="WMAinfo" class="alert-link"></label>
-                            <button class="btn btn-outline-primary btn-sm btn-block" id="ChartsButton" value="Выделять" onclick="Charts()" data-toggle="tooltip" data-placement="top" title="Для построение Графика, сначало выберите объект на карте (ВХБ или БХУ)"><i class="fa  fa-bar-chart"></i> Графики</button>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                    </nav>
-
-                </article>
+    <!-- Wrapper -->
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <!-- close sidebar menu -->
+            <div class="dismiss">
+                <i class="fas fa-arrow-left"></i>
             </div>
-            <footer class="footer-classic fixed-bottom border-top border-light" style="background: #2d3246;">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="btn btn-primary btn-sm m-2">
-                                Notifications <span class="badge badge-light">4</span>
-                            </button>
-                        </div>
-                        <div class="col-6">
-                            <div class="progress mt-3">
-                                <div class="progress-bar align-bottom" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="10" aria-valuemax="100">25%</div>
+
+            <div class="logo">
+                <h3><a href="#">ESnow Menu</a></h3>
+            </div>
+            <div class="card-body p-2">
+                <form>
+                    <label class="m-0" for="SourceProduct">Satellite</label>
+                    <div class="input-group input-group-sm">
+                        <select class="form-control" id="SourceProduct" onchange="ChangeSourceProduct()">
+                            <option value="0">Terra MOD10A1</option>
+                            <option value="1">Aqua MYD10A1</option>
+                        </select>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <input type="checkbox" id="layerMODISShow" checked="checked">
                             </div>
-                        </div>
-                        <div class="col">
-                            <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
                         </div>
                     </div>
-                </div>
-            </footer>
-        </main>
-        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light"></div>
+                    <input id="layerMODISOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+                    <div class="form-group mb-0">
+                        <label class="m-0" for="DataSet">Dataset</label>
+                        <select class="form-control form-control-sm" id="DataSet">
+                            <option value="NDSI">NDSI_Snow_Cover</option>
+                            <option value="Anomaly">NDSI_Snow_Anomaly</option>
+                        </select>
+                    </div>
+                    <!-- Year for Terra -->
+                    <div class="form-group mt-1 mb-1 MOLT_MOD10">
+                        <label class="m-0" for="Year_MOLT_MOD10">Year</label>
+                        <select class="form-control form-control-sm" id="Year_MOLT_MOD10">
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                        </select>
+                    </div>
+                    <label class="m-0" for="DayOfYear_MOLT">Date</label>
+                    <!-- Day for Terra -->
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">-</span>
+                        </div>
+                        <select class="custom-select" id="DayOfYear_MOLT" aria-describedby="DayHelpBlock">
+                            <option value="1">001:02/01 - 08/01</option>
+                            <option value="2">002:08/01 - 08/16</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">+</span>
+                        </div>
+                    </div>
+                </form>
+            </div>           
+
+            <ul class="list-unstyled menu-elements">
+                <li class="">
+                    <a class="scroll-link" href="#"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li>
+                    <a class="scroll-link" href="#"><i class="fas fa-cog"></i> Chart page</a>
+                </li>
+                <li>
+                    <a href="#LayerSections" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" role="button" aria-controls="LayerSections">
+                        <i class="fas fa-sync"></i>Layer sections
+                    </a>
+                    <ul class="collapse list-unstyled" id="LayerSections">
+                        <li>
+                            <a class="scroll-link" href="#Layer1">Layer 1</a>
+                        </li>
+                        <li>
+                            <a class="scroll-link" href="#Layer2">Layer 2</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="to-top">
+                <a class="btn btn-primary btn-customized-3" href="#" role="button">
+                    <i class="fas fa-bar-chart"></i> Chart
+                </a>
+            </div>
+
+            <div class="dark-light-buttons">
+                <a class="btn btn-primary btn-customized-4 btn-customized-dark" href="#" role="button">Dark</a>
+                <a class="btn btn-primary btn-customized-4 btn-customized-light" href="#" role="button">Light</a>
+            </div>
+
+        </nav>
+        <!-- End sidebar -->
+        <!-- Dark overlay -->
+        <div class="overlay"></div>
+        <!-- Content -->
+        <div class="content">
+            <!-- open sidebar menu -->
+            <a class="btn btn-primary btn-customized open-menu" href="#" role="button">
+                <i class="fas fa-snowflake-o"></i> <span>Menu</span>
+            </a>
+            <!-- Map content -->
+            <!-- Footer -->
+        </div>
+
+        <!-- End content -->
     </div>
+    <!-- End wrapper -->
+    <div id="map" class="position-fixed col-md-12 col-lg-12 m-0 p-0 bg-light"></div>
 </div>
 <div id="ndsilegenddialog" title="Легенда" hidden="hidden" style="width: 200px;">
     <img src="~/lib/images/Logo Water G.jpg" style="width: 220px;" />
 </div>
 
-@*Animation*@
-<script>
-    var dates = new Array();
-    var atimes = '';
-</script>
-@foreach (DateTime date in (DateTime[])ViewBag.DateTime)
-{
-    <script>
-        dates.push('@date.ToString("yyyy-MM-dd")');
-    </script>
-}
-@foreach (DateTime date in (DateTime[])ViewBag.DateTime)
-{
-    if (date.Year < 2002)
-    {
-        <script>
-        atimes += '@date.ToString("yyyy-MM-dd"),';
-        </script>
-    }
-}
+
 
 @* Layers, Measure, map *@
 <script type="text/javascript">
@@ -651,489 +567,33 @@
     addInteraction();
 </script>
 
-@* GetYears, ChangeYear, ChangeMonth, ChangeLayerMODIS, ChangeLayers, map.on('singleclick'), Charts *@
+
+@* Menu *@
 <script>
-    //var dates = new Array();
-    //$('#dates option').each(function () {
-    //    dates.push($(this).val());
-    //});
-    //var input = document.getElementById('date'),
-    //    output = document.getElementById('DateLabel');
-    //input.oninput = function () {
-    //    output.innerHTML = dates[this.value];
-    //    ChangeLayerMODIS();
-    //};
-    //input.oninput();
-
-    function GetYears() {
-        $.ajax({
-            url: '@Url.Action("GetYears")',
-            type: 'POST',
-            success: function (data) {
-                $("#YearSnow").html('');
-                $.each(data.years, function() {
-                    $("#YearSnow").append($("<option />").val(this).text(this));
-                });
-                $("#YearSnow option:last").attr("selected", "selected");
-                ChangeYear();
-            },
-            error: function () {
-                console.log('Error years');
-            }
+    jQuery(document).ready(function () {
+        /*
+            Sidebar
+        */
+        $('.dismiss, .overlay').on('click', function () {
+            $('.sidebar').removeClass('active');
+            $('.overlay').removeClass('active');
         });
-    }
 
-    function ChangeYear() {
-        @*$.ajax({
-            url: '@Url.Action("GetMonths")',
-            data: {
-                year: $('#YearSnow').val()
-            },
-            type: 'POST',
-            success: function (data) {
-                $("#MonthSnow").html('');
-                $.each(data.months, function() {
-                    $("#MonthSnow").append($("<option />").val(this).text(this));
-                });
-                ChangeMonth();
-            },
-            error: function () {
-                console.log('Error months');
-            }
-        });*@
-        $("#MonthSnow").html('');
-        var months = [];
-        $.each(dates, function () {
-            var year = this.substr(0, 4),
-                month = parseInt(this.substr(5, 2)),
-                day = parseInt(this.substr(8, 2));
-            if (!months.includes(month) && $('#YearSnow').val() == year) {
-                months.push(month);
-            }
+        $('.open-menu').on('click', function (e) {
+            e.preventDefault();
+            $('.sidebar').addClass('active');
+            // close opened sub-menus
+            $('.collapse.show').toggleClass('show');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
         });
-        $.each(months, function () {
-            $("#MonthSnow").append($("<option />").val(this).text(this));
+        /* change sidebar style */
+        $('a.btn-customized-dark').on('click', function (e) {
+            e.preventDefault();
+            $('.sidebar').removeClass('light');
         });
-        ChangeMonth();
-    }
-
-    function ChangeMonth() {
-        @*$.ajax({
-            url: '@Url.Action("GetDays")',
-            data: {
-                year: $('#YearSnow').val(),
-                month: $('#MonthSnow').val()
-            },
-            type: 'POST',
-            success: function (data) {
-                $("#DaySnow").html('');
-                $.each(data.days, function() {
-                    $("#DaySnow").append($("<option />").val(this).text(this));
-                });
-                ChangeLayerMODIS();
-            },
-            error: function () {
-                console.log('Error days');
-            }
-        });*@
-        $("#DaySnow").html('');
-        var days = [];
-        $.each(dates, function () {
-            var year = this.substr(0, 4),
-                month = parseInt(this.substr(5, 2)),
-                day = parseInt(this.substr(8, 2));
-            if (!days.includes(day) && $('#YearSnow').val() == year && $('#MonthSnow').val() == month) {
-                days.push(day);
-            }
+        $('a.btn-customized-light').on('click', function (e) {
+            e.preventDefault();
+            $('.sidebar').addClass('light');
         });
-        $.each(days, function () {
-            $("#DaySnow").append($("<option />").val(this).text(this));
-        });
-        ChangeLayerMODIS();
-    }
-
-    function ChangeLayerMODIS() {
-        //console.log($('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2));
-        var Source_MODIS_New = new ol.source.TileWMS({
-            //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' +
-            //    $('#YearSnow').find(":selected").val() + '-' +
-            //    $('#MonthSnow').find(":selected").val() + '-' +
-            //    $('#DaySnow').find(":selected").val() + '&',
-            url: geoserver_url + geoserver_workspace_name + '/wms',
-            params: {
-                'FORMAT': 'image/png',
-                'VERSION': '1.1.1',
-                tiled: true,
-                "TIME": $('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2),
-                "STYLES": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
-                "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
-                "exceptions": 'application/vnd.ogc.se_inimage',
-                tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
-            },
-            serverType: 'geoserver'
-        });
-        Layer_MODIS.setSource(Source_MODIS_New);
-    }
-
-    function ChangeLayers(funct) {
-        map.getLayers().forEach(function (layer) {
-            if (layer.get('name') == 'Base') {
-                layer.setVisible(document.getElementById("layerBaseShow").checked);
-                layer.setOpacity($('#layerBaseOpacity').val() / 100);
-                if ($('#layerBaseType').val() == 'OSM') {
-                    layer.setSource(Source_OSM);
-                }
-                else if ($('#layerBaseType').val() == 'BingAerialWithLabels') {
-                    layer.setSource(Source_BingAerialWithLabels);
-                }
-                else if ($('#layerBaseType').val() == 'BingRoadStatic') {
-                    layer.setSource(Source_BingRoadStatic);
-                }
-                else if ($('#layerBaseType').val() == 'BingRoadDynamic') {
-                    layer.setSource(Source_BingRoadDynamic);
-                }
-                else if ($('#layerBaseType').val() == 'HERENormalDay') {
-                    layer.setSource(Source_HERENormalDay);
-                }
-                else if ($('#layerBaseType').val() == 'HERENormalDayTransit') {
-                    layer.setSource(Source_HERENormalDayTransit);
-                }
-                else if ($('#layerBaseType').val() == 'HERETerrainDay') {
-                    layer.setSource(Source_HERETerrainDay);
-                }
-                else if ($('#layerBaseType').val() == 'HEREHybridDay') {
-                    layer.setSource(Source_HEREHybridDay);
-                }
-                else if ($('#layerBaseType').val() == 'StamenWatercolor') {
-                    layer.setSource(Source_StamenWatercolor);
-                }
-                else if ($('#layerBaseType').val() == 'StamenTerrain') {
-                    layer.setSource(Source_StamenTerrain);
-                }
-                else if ($('#layerBaseType').val() == 'StamenToner') {
-                    layer.setSource(Source_StamenToner);
-                }
-                else if ($('#layerBaseType').val() == 'ArcGIS') {
-                    layer.setSource(Source_ArcGIS);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestOpenCycleMap') {
-                    layer.setSource(Source_ThunderforestOpenCycleMap);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestTransport') {
-                    layer.setSource(Source_ThunderforestTransport);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestLandscape') {
-                    layer.setSource(Source_ThunderforestLandscape);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestOutdoors') {
-                    layer.setSource(Source_ThunderforestOutdoors);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestTransportDark') {
-                    layer.setSource(Source_ThunderforestTransportDark);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestSpinalMap') {
-                    layer.setSource(Source_ThunderforestSpinalMap);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestPioneer') {
-                    layer.setSource(Source_ThunderforestPioneer);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestMobileAtlas') {
-                    layer.setSource(Source_ThunderforestMobileAtlas);
-                }
-                else if ($('#layerBaseType').val() == 'ThunderforestNeighbourhood') {
-                    layer.setSource(Source_ThunderforestNeighbourhood);
-                }
-            }
-            if (layer.get('name') == 'MODIS') {
-                layer.setVisible(document.getElementById("layerMODISShow").checked);
-                layer.setOpacity($('#layerMODISOpacity').val() / 100)
-            }
-            if (layer.get('name') == 'WMA') {
-                var Source_WMA_New = new ol.source.TileWMS({
-                    url: geoserver_url + 'geonode' + '/wms',
-                    params: {
-                        'FORMAT': 'image/png',
-                        'VERSION': '1.1.1',
-                        tiled: true,
-                        "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
-                        "exceptions": 'application/vnd.ogc.se_inimage',
-                        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
-                    },
-                    serverType: 'geoserver'
-                });
-                Layer_WMA.setSource(Source_WMA_New);
-
-                layer.setVisible(document.getElementById("layerWMAShow").checked);
-                layer.setOpacity($('#layerWMAOpacity').val() / 100);
-
-                if (funct == 'gslayer') {
-                    Source_Select.clear();
-                    $('#WMAinfo').html('');
-                    $('#ChartsButton').hide();
-                    $('#featureId').val(null);
-                }
-            }
-        })
-    }
-
-    map.on('singleclick', function (evt) {
-        if (tool != 'select') {
-            return;
-        }
-        $('#featureId').val(null);
-        Source_Select.clear();
-        $('#WMAinfo').html('');
-        $('#ChartsButton').hide();
-        var viewResolution = (map.getView().getResolution());
-        var url = Layer_WMA.getSource().getGetFeatureInfoUrl(
-            evt.coordinate, viewResolution, 'EPSG:3857',
-            {
-                'INFO_FORMAT': 'text/javascript'
-            });
-        if (url) {
-            var parser = new ol.format.GeoJSON();
-            $.ajax({
-                jsonp: false,
-                jsonpCallback: 'getJson',
-                type: 'GET',
-                url: url + "&format_options=callback:getJson",
-                async: false,
-                dataType: 'jsonp',
-                error: function (xhr, status, error) {
-                    console.log('error');
-                    $('#featureId').val(-1);
-                },
-            }).then(function (response) {
-                featureId = -1;
-                var result = parser.readFeatures(response);
-                if (result.length > 0) {
-                    $('#featureId').val(result[0].get('Id'));
-                    if ($('#gslayer').find(":selected").val() == 'wma_polygon') {
-                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' км<sup>2</sup>)');
-                    }
-                    else if ($('#gslayer').find(":selected").val() == 'wma_height') {
-                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('area_km').toFixed(2) + ' км<sup>2</sup>)');
-                    }
-                    $('#ChartsButton').show();
-
-                    var polyFeature = new ol.Feature({
-                        geometry: new ol.geom.MultiPolygon(response.features[0].geometry.coordinates)
-                    });
-                    Source_Select.addFeature(polyFeature);
-                }
-            });
-        }
     });
-
-    function Charts() {
-        if ($('#featureId').val() > -1) {
-            var urlC = '@Url.Action("Charts", "esnow")';
-            var urlC = '/esnow/Charts?Id=' + $('#featureId').val() + '&LayerName=' + $('#gslayer').find(":selected").val();
-            var win = window.open(urlC, '_blank');
-            win.focus();
-        }
-    };
-</script>
-
-@* SelectTool, MeasureTool *@
-<script>
-    var tool = '';
-    function SelectTool() {
-        if (tool == 'select') {
-            return;
-        }
-        tool = 'select';
-        map.removeInteraction(draw);
-        Source_Measure.clear();
-        $(".ol-overlay-container").remove();
-        $('.measure').hide();
-        $('.select').show();
-        $('#ChartsButton').hide();
-        $('#WMAinfo').html('');
-        $('#SelectButton').addClass('btn-info');
-        $('#SelectButton').removeClass('btn-secondary');
-        $('#MeasureButton').removeClass('btn-secondary');
-        $('#MeasureButton').addClass('btn-info');
-    }
-    function MeasureTool() {
-        if (tool == 'measure') {
-            return;
-        }
-        tool = 'measure';
-        addInteraction();
-        $('.measure').show();
-        $('.select').hide();
-        $('#MeasureButton').addClass('btn-dark');
-        $('#MeasureButton').removeClass('btn-primary');
-        $('#SelectButton').removeClass('btn-dark');
-        $('#SelectButton').addClass('btn-primary');
-        Source_Select.clear();
-    }
-</script>
-
-@* DownloadLayer *@
-<script>
-    function DownloadLayer() {
-        var download_url = geoserver_url + geoserver_workspace_name + '/wms?' +
-            'service=WMS&version=1.1.0&request=GetMap&layers=' +
-            geoserver_workspace_name +
-            '%3ASANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT&bbox=39.1622186743878%2C39.9996233923096%2C139.999617505142%2C59.9999999946118&width=29086&height=5769&srs=EPSG%3A4326&time=' +
-            $('#YearSnow').find(":selected").val() + '-' +
-            $('#MonthSnow').find(":selected").val() + '-' +
-            $('#DaySnow').find(":selected").val() +
-            '&format=image%2Ftiff';
-        window.location.href = download_url;
-    }
-</script>
-
-@* Animation *@
-<script>
-    var $text = $("#text"),
-        $pause = $("#pause"),
-        $reverse = $("#reverse"),
-        $restart = $("#restart"),
-        $speed = $("input[name='speed']"),
-        $slider = $("#slider"),
-        //"tl" is the timeline we'll add our tweens to. Then we can easily control the whole sequence as one object.
-        tl = new TimelineLite({ onUpdate: updateSlider, onComplete: onComplete, onReverseComplete: onComplete, paused: true });
-    tl.timeScale(parseFloat($speed.val()));
-
-    function updateSlider() {
-        $('#slidervalue').text('v: ' + (tl.progress() * dates.length).toFixed(0));
-        var changed = false;
-        if ($('#YearSnow').val() != dates[(tl.progress() * dates.length).toFixed(0)].substr(0, 4)) {
-            $('#YearSnow').val(dates[(tl.progress() * dates.length).toFixed(0)].substr(0, 4));
-            ChangeYear();
-            //changed = true;
-            //console.log('year');
-        }
-        if ($('#MonthSnow').val() != parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(5, 2))) {
-            $('#MonthSnow').val(parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(5, 2)));
-            ChangeMonth();
-            //changed = true;
-            //console.log('month');
-        }
-        if ($('#DaySnow').val() != parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(8, 2))) {
-            $('#DaySnow').val(parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(8, 2)));
-            ChangeLayerMODIS();
-            //console.log('day');
-            //if (changed) {
-            //    ChangeYear();
-            //}
-        }
-        $slider.slider("value", tl.progress() * 100);
-    }
-    function onComplete() {
-        tl.pause();
-        $pause.html("запуск");
-    }
-
-    //do a simple split of the text so we can animate each character (doesn't require the advanced features of SplitText, so we just use split() and join())
-    $text.html("<span>" + $text.html().split("").join("</span><span>").split("<span> </span>").join("<span>&nbsp;</span>") + "</span>");
-
-    //set a perspective on the container
-    TweenLite.set($text, { perspective: 500 });
-
-    //all of the animation is created in this one line:
-    tl.staggerTo($("#text span"), 4, { transformOrigin: "50% 50% -30px", rotationY: -360, rotationX: 360, rotation: 360, ease: Elastic.easeInOut }, 0.02);
-
-    //slider and button controls from here on...
-    var isPaused;
-
-    $slider.slider({
-        range: false,
-        min: 0,
-        max: 100,
-        step: .1,
-        slide: function (event, ui) {
-            tl.progress(ui.value / dates.length).pause();
-            if (isPaused) $pause.html("продолжить");
-
-        },
-        start: function (event, ui) {
-            isPaused = tl.paused();
-        },
-        stop: function (event, ui) {
-            if (!isPaused) tl.resume();
-        }
-    });
-
-    $pause.click(function () {
-        if (tl.paused()) {
-            if (tl.progress() === 1 || (tl.progress() === 0 && tl.reversed())) {
-                tl.restart();
-            } else {
-                tl.resume();
-            }
-            $pause.html("пауза");
-        } else {
-            tl.pause();
-            $pause.html("продолжить");
-        }
-    });
-
-    $reverse.click(function () {
-        if (tl.progress() === 0) {
-            if (tl.reversed()) {
-                tl.play();
-            } else {
-                tl.reverse(0);
-            }
-            $pause.html("пауза");
-        } else {
-            tl.reversed(!tl.reversed()).resume();
-            $pause.html("пауза");
-        }
-    });
-
-    $restart.click(function () {
-        tl.restart();
-        $pause.html("пауза");
-    });
-
-    $speed.change(function (v, val) {
-        tl.timeScale(parseFloat($(this).val()));
-        if (tl.progress() === 1) {
-            tl.restart();
-            $pause.html("пауза");
-        } else if (tl.paused()) {
-            tl.resume();
-            $pause.html("пауза");
-        }
-    });
-</script>
-
-@* $(document).ready *@
-<script>
-    $(document).ready(function () {
-        SelectTool();
-        GetYears();
-    });
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $(".menu").click(function () {
-            $("article").slideToggle("slow");
-        });
-        $('#YearSnow option:last').attr("selected", "selected");
-        //ChangeYearSnow();
-    });
-</script>
-
-<script>
-    function NDSILegend() {
-        $("#ndsilegenddialog").dialog({
-            width: 690,
-            height: 500
-        });
-    }
-
-    function AnomalyLegend() {
-        $("#anomlegenddialog").dialog({
-            width: 690,
-            height: 500
-        });
-    }
 </script>

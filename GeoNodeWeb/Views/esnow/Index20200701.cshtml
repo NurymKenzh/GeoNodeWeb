@@ -1,0 +1,1139 @@
+﻿@using GeoNodeWeb.Controllers
+@{
+    ViewData["Title"] = "Карта";
+    Layout = "~/Views/Shared/_LayoutEsnow.cshtml";
+}
+
+<link href="~/esnow/lib/jquery-ui/jquery-ui.css" rel="stylesheet" />
+<script src="~/esnow/lib/jquery-ui/jquery-ui.js"></script>
+<link href="~/esnow/lib/ol/ol.css" rel="stylesheet" />
+<script src="~/esnow/lib/ol/ol.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.2/TweenMax.min.js"></script>
+
+<div class="container-fluid p-0">
+    <div class="row">
+        <main role="main" class="col-md-12 ml-sm-auto col-lg-12 p-0">
+            <div class="row justify-content-end mr-2">
+                <article>
+                    <nav id="sidebar" class="col-2 col-md-auto bg-light border-info">
+                        <div class="media">
+                            <div class="media-body text-info">
+                                <h5 class="mt-2">ESNOW</h5>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <label class="font-weight-normal m-1 Snow">Год</label>
+                        <select name="YearSnow" class="custom-select custom-select-sm Snow" id="YearSnow" onchange="ChangeYear()"></select>
+                        <label class="font-weight-normal m-1 Snow">Месяц<i class="material-icons btn-sm Snow btn btn-default" id="legendSnow" value="Легенда" onclick="NDSILegend()">info_outline</i></label>
+                        <select name="MonthSnow" class="custom-select custom-select-sm Snow" id="MonthSnow" onchange="ChangeMonth()"></select>
+                        <label>
+                            <input type="checkbox" id="layerMODISShow" checked="checked" onchange="ChangeLayers()">
+                            День
+                        </label>
+                        <select class="custom-select custom-select-sm Snow" id="DaySnow" type="range" onchange="ChangeLayerMODIS()">
+                            @*@foreach (DateTime dateTime in (DateTime[])ViewBag.DateTime)
+                        {
+                            <option value="@dateTime.ToString(" yyyy-MM-dd")">
+                                @dateTime.ToString("yyyy-MM-dd")
+                            </option>
+                        }*@
+                        </select>
+                        @*@{
+                        DateTime[] dates = ViewBag.DateTime;
+                    }*@
+                        <input id="layerMODISOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
+                        <div class="dropdown-divider"></div>
+                        <div data-spy="scroll" style="overflow:scroll;overflow-x:hidden;height:auto;">
+                            <div class="tree" id="accordion">
+                                <div class="card">
+                                    <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-chevron-down float-left"></i>Топографические слои</button>
+                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                        <div class="card-body pt-1">
+                                            <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
+                                            <label class="form-check-label" for="KATO">
+                                                <small> Базовые слои</small>
+                                            </label>
+                                            <div class="media">
+                                                <select class="custom-select custom-select-sm Snow" id="layerBaseType" onchange="ChangeLayers()">
+                                                    <option value="OSM">OpenStreetMap</option>
+                                                    <option value="BingAerialWithLabels">Bing Aerial</option>
+                                                    <option value="BingRoadStatic">Bing Road (static)</option>
+                                                    <option value="BingRoadDynamic">Bing Road (dynamic)</option>
+                                                    <option value="HERENormalDay">HERE Normal Day</option>
+                                                    <option value="HERENormalDayTransit">HERE Normal Day Transit</option>
+                                                    <option value="HERETerrainDay">HERE Terrain Day</option>
+                                                    <option value="HEREHybridDay">HERE Hybrid Day</option>
+                                                    <option value="StamenWatercolor">Stamen Watercolor</option>
+                                                    <option value="StamenTerrain">Stamen Terrain</option>
+                                                    <option value="StamenToner">Stamen Toner</option>
+                                                    <option value="ArcGIS">ArcGIS</option>
+                                                    <option value="ThunderforestOpenCycleMap">Thunderforest OpenCycleMap</option>
+                                                    <option value="ThunderforestTransport">Thunderforest Transport</option>
+                                                    <option value="ThunderforestLandscape">Thunderforest Landscape</option>
+                                                    <option value="ThunderforestOutdoors">Thunderforest Outdoors</option>
+                                                    <option value="ThunderforestTransportDark">Thunderforest Transport Dark</option>
+                                                    <option value="ThunderforestSpinalMap">Thunderforest Spinal Map</option>
+                                                    <option value="ThunderforestPioneer">Thunderforest Pioneer</option>
+                                                    <option value="ThunderforestMobileAtlas">Thunderforest Mobile Atlas</option>
+                                                    <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
+                                                </select>
+                                            </div>
+
+                                            <input id="layerBaseOpacity" type="range" class="form-control-range" min="0" max="100" value="90" onchange="ChangeLayers()" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <button class="btn btn-light btn-sm" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><i class="fa fa-chevron-down float-left"></i> Тематические слои</button>
+                                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
+                                        <div class="card-body pt-1">
+                                            <div class="form-check ">
+                                                <input class="form-check-input" type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
+                                                <label class="form-check-label" for="KATO">
+                                                    ВОДНЫЕ РЕСУРСЫ
+                                                </label>
+                                            </div>
+                                            @*<div class="form-check text-black-50">
+                                            <input class="WMALevel" type="radio" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">
+                                            <label class="form-check-label" for="KATO">
+                                                <small> ВХБ</small>
+                                            </label>
+                                        </div>
+                                        <div class="form-check text-black-50">
+                                            <input class="WMALevel" type="radio" name="WMA" value="layerWMA2" id="layerWMAShow" onclick="ChangeLayers()">
+                                            <label class="form-check-label" for="KATO">
+                                                <small> ВХУ</small>
+                                            </label>
+                                        </div>*@
+                                            <select id="gslayer" onchange="ChangeLayers('gslayer');">
+                                                @foreach (GSLayer gSLayer in (GSLayer[])ViewBag.GSLayers)
+                                                {
+                                                    <option value="@gSLayer.title_en">
+                                                        @gSLayer.supplemental_information_en
+                                                    </option>
+                                                }
+                                            </select>
+                                            @*<input type="checkbox" name="WMA" value="layerWMAShow" id="layerWMAShow" onclick="ChangeLayers()" checked="checked">*@
+                                            @*<input id="layerWMAOpacity" type="range" min="0" max="100" value="80" oninput="ChangeLayers()" />*@
+                                            <input id="layerWMAOpacity" type="range" class="form-control-range m-1" min="0" max="100" value="80" oninput="ChangeLayers()" />
+                                            <div class="dropdown-divider"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+
+                        <link href='//fonts.googleapis.com/css?family=Signika+Negative:300' rel='stylesheet' type='text/css'>
+                        <div id="demo" hidden="hidden">
+                            <div id="bg">
+                                <div id="text">Impossible with CSS Animation.</div>
+                            </div>
+                        </div>
+                        <div id="slider"></div>
+                        <div id="controls">
+                            <button id="pause">запуск</button>
+                            <button id="reverse">обратно</button>
+                            <button id="restart">рестарт</button>
+                            @*<label id="slidervalue" style="color: black;"></label>*@
+                            <div>
+                                Скорость:
+                                <label><input type="radio" name="speed" value="0.005" id="slow"> медленно</label>
+                                <label><input type="radio" name="speed" value="0.010" id="normal" checked> средне</label>
+                                <label><input type="radio" name="speed" value="0.015" id="fast"> быстро</label>
+                            </div>
+                        </div>
+
+                        <input id="MeasureButton" type="button" value="Измерять" class="btn btn-primary btn-sm" onclick="MeasureTool()" />
+                        <select id="type" class="measure">
+                            <option value="length">Длина (линия)</option>
+                            <option value="area">Площадь (полигон)</option>
+                        </select>
+                        <div class="dropdown-divider"></div>
+                        <input id="SelectButton" type="button" value="Выделять" class="btn btn-primary btn-sm" onclick="SelectTool()" />
+                        <input id="DownloadButton" type="button" value="Скачать растр" class="btn btn-primary btn-sm" onclick="DownloadLayer()" />
+                        <div class="dropdown-divider"></div>
+                        <div class="alert alert-info" role="alert">
+                            <input type="hidden" id="featureId" />
+                            <label id="WMAinfo" class="alert-link"></label>
+                            <button class="btn btn-outline-primary btn-sm btn-block" id="ChartsButton" value="Выделять" onclick="Charts()" data-toggle="tooltip" data-placement="top" title="Для построение Графика, сначало выберите объект на карте (ВХБ или БХУ)"><i class="fa  fa-bar-chart"></i> Графики</button>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                    </nav>
+
+                </article>
+            </div>
+            <footer class="footer-classic fixed-bottom border-top border-light" style="background: #2d3246;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary btn-sm m-2">
+                                Notifications <span class="badge badge-light">4</span>
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <div class="progress mt-3">
+                                <div class="progress-bar align-bottom" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="10" aria-valuemax="100">25%</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="text-light float-right mt-3">&copy; @DateTime.Now.Year.ToString() - GeoNode</small>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light"></div>
+    </div>
+</div>
+<div id="ndsilegenddialog" title="Легенда" hidden="hidden" style="width: 200px;">
+    <img src="~/lib/images/Logo Water G.jpg" style="width: 220px;" />
+</div>
+
+@*Animation*@
+<script>
+    var dates = new Array();
+    var atimes = '';
+</script>
+@foreach (DateTime date in (DateTime[])ViewBag.DateTime)
+{
+    <script>
+        dates.push('@date.ToString("yyyy-MM-dd")');
+    </script>
+}
+@foreach (DateTime date in (DateTime[])ViewBag.DateTime)
+{
+    if (date.Year < 2002)
+    {
+        <script>
+        atimes += '@date.ToString("yyyy-MM-dd"),';
+        </script>
+    }
+}
+
+@* Layers, Measure, map *@
+<script type="text/javascript">
+    var geoserver_url = "@ViewBag.GeoServerUrl",
+        geoserver_workspace_name = "esnow";
+
+    // Measure
+    var Source_Measure = new ol.source.Vector();
+    var Layer_Measure = new ol.layer.Vector({
+        source: Source_Measure,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#ffcc33',
+                width: 2
+            }),
+            image: new ol.style.Circle({
+                radius: 7,
+                fill: new ol.style.Fill({
+                    color: '#ffcc33'
+                })
+            })
+        })
+    });
+    var sketch;
+    var helpTooltipElement;
+    var helpTooltip;
+    var measureTooltipElement;
+    var measureTooltip;
+    var continuePolygonMsg = 'Нажмите, чтобы продолжить рисование многоугольника';
+    var continueLineMsg = 'Нажмите, чтобы продолжить рисование линии';
+    var pointerMoveHandler = function (evt) {
+        if (evt.dragging) {
+            return;
+        }
+        var helpMsg = 'Нажмите, чтобы начать рисование';
+        if (sketch) {
+            var geom = sketch.getGeometry();
+            if (geom instanceof ol.geom.Polygon) {
+                helpMsg = continuePolygonMsg;
+            } else if (geom instanceof ol.geom.LineString) {
+                helpMsg = continueLineMsg;
+            }
+        }
+        helpTooltipElement.innerHTML = helpMsg;
+        helpTooltip.setPosition(evt.coordinate);
+        helpTooltipElement.classList.remove('hidden');
+    };
+
+    var Source_Select = new ol.source.Vector({});
+    var Layer_Select = new ol.layer.Vector({
+        source: Source_Select,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: [0, 0, 255, 1]
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 2
+            })
+        })
+    });
+
+    Layer_Select.set('name', 'WMA');
+
+    var HEREappId = 'SLdBasp4s1oq2oUbVGxy';
+    var HEREappCode = 'D9-h9iVhjgUB_9eUlFETXA';
+
+    var Source_OSM = new ol.source.OSM();
+    var Layer_Base = new ol.layer.Tile({
+        source: Source_OSM
+    });
+    Layer_Base.set('name', 'Base');
+    Layer_Base.setOpacity(0.80);
+
+    Source_BingAerialWithLabels = new ol.source.BingMaps({
+        key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
+        imagerySet: 'AerialWithLabels',
+    });
+    Source_BingRoadStatic = new ol.source.BingMaps({
+        key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
+        imagerySet: 'Road',
+    });
+    Source_BingRoadDynamic = new ol.source.BingMaps({
+        key: 'AmYNYRGlIrw_kppWvrIhfzY1v046b4Ft5nopz6Av94XDvTTo8xTkHCEaZ_zMwCOJ',
+        imagerySet: 'RoadOnDemand',
+    });
+
+    var urlTpl = 'https://{1-4}.{base}.maps.cit.api.here.com' +
+        '/{type}/2.1/maptile/newest/{scheme}/{z}/{x}/{y}/256/png' +
+        '?app_id={app_id}&app_code={app_code}';
+    function HEREcreateUrl(tpl, HERElayerDesc) {
+        return tpl
+            .replace('{base}', HERElayerDesc.base)
+            .replace('{type}', HERElayerDesc.type)
+            .replace('{scheme}', HERElayerDesc.scheme)
+            .replace('{app_id}', HERElayerDesc.app_id)
+            .replace('{app_code}', HERElayerDesc.app_code);
+    };
+
+    var HERElayerDescNormalDay = {
+        base: 'base',
+        type: 'maptile',
+        scheme: 'normal.day',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HERENormalDay = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescNormalDay),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' +
+            '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var HERElayerDescNormalDayTransit = {
+        base: 'base',
+        type: 'maptile',
+        scheme: 'normal.day.transit',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HERENormalDayTransit = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescNormalDayTransit),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' +
+            '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var HERElayerDescTerrainDay = {
+        base: 'aerial',
+        type: 'maptile',
+        scheme: 'terrain.day',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HERETerrainDay = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescTerrainDay),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' +
+            '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var HERElayerDescHybridDay = {
+        base: 'aerial',
+        type: 'maptile',
+        scheme: 'hybrid.day',
+        app_id: HEREappId,
+        app_code: HEREappCode
+    };
+    var Source_HEREHybridDay = new ol.source.XYZ({
+        url: HEREcreateUrl(urlTpl, HERElayerDescHybridDay),
+        attributions: 'Map Tiles &copy; ' + new Date().getFullYear() + ' ' + '<a href="http://developer.here.com">HERE</a>'
+    });
+
+    var Source_StamenWatercolor = new ol.source.Stamen({
+        layer: 'watercolor'
+    });
+
+    var Source_StamenTerrain = new ol.source.Stamen({
+        layer: 'terrain'
+    });
+
+    var Source_StamenToner = new ol.source.Stamen({
+        layer: 'toner'
+    });
+
+    var Source_ArcGIS = new ol.source.XYZ({
+        attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
+            'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+            'World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+    });
+
+    var Source_ThunderforestOpenCycleMap = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestTransport = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/transport/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestLandscape = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestOutdoors = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestTransportDark = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestSpinalMap = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestPioneer = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestMobileAtlas = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var Source_ThunderforestNeighbourhood = new ol.source.XYZ({
+        url: 'https://{a-c}.tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png' +
+            '?apikey=6746f4299ea3479aba8726b09f049c1b'
+    });
+
+    var url_MODIS = geoserver_url + geoserver_workspace_name + '/wms';
+    var Source_MODIS = new ol.source.TileWMS({
+        url: url_MODIS,
+        //params: {
+        //    'FORMAT': 'image/png',
+        //    'VERSION': '1.1.1',
+        //    //tiled: true,
+        //    "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT_3857',
+        //    "exceptions": 'application/vnd.ogc.se_inimage',
+        //    //tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        //    tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
+        //},
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "TIME": '2000-02-26',
+            "STYLES": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
+            "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_MODIS = new ol.layer.Tile({
+        source: Source_MODIS
+    });
+    Layer_MODIS.set('name', 'MODIS');
+    Layer_MODIS.setOpacity(0.80);
+
+    var url_WMA = geoserver_url + 'geonode' + '/wms';
+    var Source_WMA = new ol.source.TileWMS({
+        url: url_WMA,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_WMA = new ol.layer.Tile({
+        source: Source_WMA
+    });
+    Layer_WMA.set('name', 'WMA');
+    Layer_WMA.setOpacity(0.80);
+
+    //console.log(atimes);
+
+    //var url_Animator = geoserver_url + geoserver_workspace_name + '/wms/animate'; //?' + 'aparam=time&avalues=2000-02-26,2000-03-05,2000-03-13,2000-03-21,2000-03-29' + '&'
+    //var Source_Animator = new ol.source.ImageWMS({
+    //    url: url_Animator,
+    //    params: {
+    //        'FORMAT': 'image/gif;subtype=animated',
+    //        //FORMAT_OPTIONS: 'antialias:none;gif_loop_continuosly:true;gif_frames_delay:100',
+    //        'VERSION': '1.1.1',
+    //        //tiled: false,
+    //        "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
+    //        //"exceptions": 'application/vnd.ogc.se_inimage',
+    //        //tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+    //        TRANSPARENT: 'true',
+    //        REQUEST: 'getmap',
+    //        SERVICE: 'animate',
+    //        VERSION: '1.1.1',
+    //        aparam: 'time',
+    //        avalues: '2000-02-26,2000-03-05,2000-03-13,2000-03-21,2000-03-29' //atimes
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_Animator = new ol.layer.Image({
+    //    source: Source_Animator
+    //});
+    //Layer_Animator.set('name', 'Animator');
+    //Layer_Animator.setOpacity(0.80);
+
+    var map = new ol.Map({
+        target: 'map',
+        controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
+            new ol.control.ScaleLine()
+        ]),
+        layers: [
+            Layer_Base,
+            Layer_MODIS,
+            //Layer_Animator,
+            Layer_WMA,
+            Layer_Select,
+            Layer_Measure],
+        view: new ol.View({
+            //projection: 'EPSG:4326',
+            center: ol.proj.fromLonLat([66.902, 48.714]),
+            //center: [0, 0],
+            zoom: 5,
+            maxZoom: 10
+        })
+    });
+
+    map.on('pointermove', pointerMoveHandler);
+    map.getViewport().addEventListener('mouseout', function () {
+        helpTooltipElement.classList.add('hidden');
+    });
+    var typeSelect = document.getElementById('type');
+    var draw;
+    var formatLength = function (line) {
+        var length = ol.sphere.getLength(line);
+        var output;
+        if (length > 100) {
+            output = (Math.round(length / 1000 * 100) / 100) +
+                ' ' + 'км';
+        } else {
+            output = (Math.round(length * 100) / 100) +
+                ' ' + 'м';
+        }
+        return output;
+    };
+    var formatArea = function (polygon) {
+        var area = ol.sphere.getArea(polygon);
+        var output;
+        if (area > 10000) {
+            output = (Math.round(area / 1000000 * 100) / 100) +
+                ' ' + 'км<sup>2</sup>';
+        } else {
+            output = (Math.round(area * 100) / 100) +
+                ' ' + 'м<sup>2</sup>';
+        }
+        return output;
+    };
+    function addInteraction() {
+        var type = (typeSelect.value == 'area' ? 'Polygon' : 'LineString');
+        draw = new ol.interaction.Draw({
+            source: Source_Measure,
+            type: type,
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.2)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(0, 0, 0, 0.5)',
+                    lineDash: [10, 10],
+                    width: 2
+                }),
+                image: new ol.style.Circle({
+                    radius: 5,
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0, 0, 0, 0.7)'
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255, 255, 255, 0.2)'
+                    })
+                })
+            })
+        });
+        map.addInteraction(draw);
+
+        createMeasureTooltip();
+        createHelpTooltip();
+
+        var listener;
+        draw.on('drawstart', function (evt) {
+            // set sketch
+            sketch = evt.feature;
+            var tooltipCoord = evt.coordinate;
+
+            listener = sketch.getGeometry().on('change', function (evt) {
+                var geom = evt.target;
+                var output;
+                if (geom instanceof ol.geom.Polygon) {
+                    output = formatArea(geom);
+                    tooltipCoord = geom.getInteriorPoint().getCoordinates();
+                } else if (geom instanceof ol.geom.LineString) {
+                    output = formatLength(geom);
+                    tooltipCoord = geom.getLastCoordinate();
+                }
+                measureTooltipElement.innerHTML = output;
+                measureTooltip.setPosition(tooltipCoord);
+            });
+        });
+
+        draw.on('drawend', function () {
+            measureTooltipElement.className = 'ol-tooltip ol-tooltip-static';
+            measureTooltip.setOffset([0, -7]);
+            // unset sketch
+            sketch = null;
+            // unset tooltip so that a new one can be created
+            measureTooltipElement = null;
+            createMeasureTooltip();
+            ol.Observable.unByKey(listener);
+        });
+    }
+    function createHelpTooltip() {
+        if (helpTooltipElement) {
+            helpTooltipElement.parentNode.removeChild(helpTooltipElement);
+        }
+        helpTooltipElement = document.createElement('div');
+        helpTooltipElement.className = 'ol-tooltip hidden';
+        helpTooltip = new ol.Overlay({
+            element: helpTooltipElement,
+            offset: [15, 0],
+            positioning: 'center-left'
+        });
+        map.addOverlay(helpTooltip);
+    }
+    function createMeasureTooltip() {
+        if (measureTooltipElement) {
+            measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+        }
+        measureTooltipElement = document.createElement('div');
+        measureTooltipElement.className = 'ol-tooltip ol-tooltip-measure';
+        measureTooltip = new ol.Overlay({
+            element: measureTooltipElement,
+            offset: [0, -15],
+            positioning: 'bottom-center'
+        });
+        map.addOverlay(measureTooltip);
+    }
+    typeSelect.onchange = function () {
+        map.removeInteraction(draw);
+        addInteraction();
+    };
+    addInteraction();
+</script>
+
+@* GetYears, ChangeYear, ChangeMonth, ChangeLayerMODIS, ChangeLayers, map.on('singleclick'), Charts *@
+<script>
+    //var dates = new Array();
+    //$('#dates option').each(function () {
+    //    dates.push($(this).val());
+    //});
+    //var input = document.getElementById('date'),
+    //    output = document.getElementById('DateLabel');
+    //input.oninput = function () {
+    //    output.innerHTML = dates[this.value];
+    //    ChangeLayerMODIS();
+    //};
+    //input.oninput();
+
+    function GetYears() {
+        $.ajax({
+            url: '@Url.Action("GetYears")',
+            type: 'POST',
+            success: function (data) {
+                $("#YearSnow").html('');
+                $.each(data.years, function() {
+                    $("#YearSnow").append($("<option />").val(this).text(this));
+                });
+                $("#YearSnow option:last").attr("selected", "selected");
+                ChangeYear();
+            },
+            error: function () {
+                console.log('Error years');
+            }
+        });
+    }
+
+    function ChangeYear() {
+        @*$.ajax({
+            url: '@Url.Action("GetMonths")',
+            data: {
+                year: $('#YearSnow').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                $("#MonthSnow").html('');
+                $.each(data.months, function() {
+                    $("#MonthSnow").append($("<option />").val(this).text(this));
+                });
+                ChangeMonth();
+            },
+            error: function () {
+                console.log('Error months');
+            }
+        });*@
+        $("#MonthSnow").html('');
+        var months = [];
+        $.each(dates, function () {
+            var year = this.substr(0, 4),
+                month = parseInt(this.substr(5, 2)),
+                day = parseInt(this.substr(8, 2));
+            if (!months.includes(month) && $('#YearSnow').val() == year) {
+                months.push(month);
+            }
+        });
+        $.each(months, function () {
+            $("#MonthSnow").append($("<option />").val(this).text(this));
+        });
+        ChangeMonth();
+    }
+
+    function ChangeMonth() {
+        @*$.ajax({
+            url: '@Url.Action("GetDays")',
+            data: {
+                year: $('#YearSnow').val(),
+                month: $('#MonthSnow').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                $("#DaySnow").html('');
+                $.each(data.days, function() {
+                    $("#DaySnow").append($("<option />").val(this).text(this));
+                });
+                ChangeLayerMODIS();
+            },
+            error: function () {
+                console.log('Error days');
+            }
+        });*@
+        $("#DaySnow").html('');
+        var days = [];
+        $.each(dates, function () {
+            var year = this.substr(0, 4),
+                month = parseInt(this.substr(5, 2)),
+                day = parseInt(this.substr(8, 2));
+            if (!days.includes(day) && $('#YearSnow').val() == year && $('#MonthSnow').val() == month) {
+                days.push(day);
+            }
+        });
+        $.each(days, function () {
+            $("#DaySnow").append($("<option />").val(this).text(this));
+        });
+        ChangeLayerMODIS();
+    }
+
+    function ChangeLayerMODIS() {
+        //console.log($('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2));
+        var Source_MODIS_New = new ol.source.TileWMS({
+            //url: geoserver_url + geoserver_workspace_name + '/wms?' + 'time=' +
+            //    $('#YearSnow').find(":selected").val() + '-' +
+            //    $('#MonthSnow').find(":selected").val() + '-' +
+            //    $('#DaySnow').find(":selected").val() + '&',
+            url: geoserver_url + geoserver_workspace_name + '/wms',
+            params: {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                tiled: true,
+                "TIME": $('#YearSnow').find(":selected").val() + '-' + ('0' + $('#MonthSnow').find(":selected").val()).slice(-2) + '-' +  ('0' + $('#DaySnow').find(":selected").val()).slice(-2),
+                "STYLES": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
+                "LAYERS": geoserver_workspace_name + ':SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT',
+                "exceptions": 'application/vnd.ogc.se_inimage',
+                tilesOrigin: 4359518.24116768 + "," + 4865990.74586705
+            },
+            serverType: 'geoserver'
+        });
+        Layer_MODIS.setSource(Source_MODIS_New);
+    }
+
+    function ChangeLayers(funct) {
+        map.getLayers().forEach(function (layer) {
+            if (layer.get('name') == 'Base') {
+                layer.setVisible(document.getElementById("layerBaseShow").checked);
+                layer.setOpacity($('#layerBaseOpacity').val() / 100);
+                if ($('#layerBaseType').val() == 'OSM') {
+                    layer.setSource(Source_OSM);
+                }
+                else if ($('#layerBaseType').val() == 'BingAerialWithLabels') {
+                    layer.setSource(Source_BingAerialWithLabels);
+                }
+                else if ($('#layerBaseType').val() == 'BingRoadStatic') {
+                    layer.setSource(Source_BingRoadStatic);
+                }
+                else if ($('#layerBaseType').val() == 'BingRoadDynamic') {
+                    layer.setSource(Source_BingRoadDynamic);
+                }
+                else if ($('#layerBaseType').val() == 'HERENormalDay') {
+                    layer.setSource(Source_HERENormalDay);
+                }
+                else if ($('#layerBaseType').val() == 'HERENormalDayTransit') {
+                    layer.setSource(Source_HERENormalDayTransit);
+                }
+                else if ($('#layerBaseType').val() == 'HERETerrainDay') {
+                    layer.setSource(Source_HERETerrainDay);
+                }
+                else if ($('#layerBaseType').val() == 'HEREHybridDay') {
+                    layer.setSource(Source_HEREHybridDay);
+                }
+                else if ($('#layerBaseType').val() == 'StamenWatercolor') {
+                    layer.setSource(Source_StamenWatercolor);
+                }
+                else if ($('#layerBaseType').val() == 'StamenTerrain') {
+                    layer.setSource(Source_StamenTerrain);
+                }
+                else if ($('#layerBaseType').val() == 'StamenToner') {
+                    layer.setSource(Source_StamenToner);
+                }
+                else if ($('#layerBaseType').val() == 'ArcGIS') {
+                    layer.setSource(Source_ArcGIS);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestOpenCycleMap') {
+                    layer.setSource(Source_ThunderforestOpenCycleMap);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestTransport') {
+                    layer.setSource(Source_ThunderforestTransport);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestLandscape') {
+                    layer.setSource(Source_ThunderforestLandscape);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestOutdoors') {
+                    layer.setSource(Source_ThunderforestOutdoors);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestTransportDark') {
+                    layer.setSource(Source_ThunderforestTransportDark);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestSpinalMap') {
+                    layer.setSource(Source_ThunderforestSpinalMap);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestPioneer') {
+                    layer.setSource(Source_ThunderforestPioneer);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestMobileAtlas') {
+                    layer.setSource(Source_ThunderforestMobileAtlas);
+                }
+                else if ($('#layerBaseType').val() == 'ThunderforestNeighbourhood') {
+                    layer.setSource(Source_ThunderforestNeighbourhood);
+                }
+            }
+            if (layer.get('name') == 'MODIS') {
+                layer.setVisible(document.getElementById("layerMODISShow").checked);
+                layer.setOpacity($('#layerMODISOpacity').val() / 100)
+            }
+            if (layer.get('name') == 'WMA') {
+                var Source_WMA_New = new ol.source.TileWMS({
+                    url: geoserver_url + 'geonode' + '/wms',
+                    params: {
+                        'FORMAT': 'image/png',
+                        'VERSION': '1.1.1',
+                        tiled: true,
+                        "LAYERS": 'geonode:' + $('#gslayer').find(":selected").val(),
+                        "exceptions": 'application/vnd.ogc.se_inimage',
+                        tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+                    },
+                    serverType: 'geoserver'
+                });
+                Layer_WMA.setSource(Source_WMA_New);
+
+                layer.setVisible(document.getElementById("layerWMAShow").checked);
+                layer.setOpacity($('#layerWMAOpacity').val() / 100);
+
+                if (funct == 'gslayer') {
+                    Source_Select.clear();
+                    $('#WMAinfo').html('');
+                    $('#ChartsButton').hide();
+                    $('#featureId').val(null);
+                }
+            }
+        })
+    }
+
+    map.on('singleclick', function (evt) {
+        if (tool != 'select') {
+            return;
+        }
+        $('#featureId').val(null);
+        Source_Select.clear();
+        $('#WMAinfo').html('');
+        $('#ChartsButton').hide();
+        var viewResolution = (map.getView().getResolution());
+        var url = Layer_WMA.getSource().getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {
+                'INFO_FORMAT': 'text/javascript'
+            });
+        if (url) {
+            var parser = new ol.format.GeoJSON();
+            $.ajax({
+                jsonp: false,
+                jsonpCallback: 'getJson',
+                type: 'GET',
+                url: url + "&format_options=callback:getJson",
+                async: false,
+                dataType: 'jsonp',
+                error: function (xhr, status, error) {
+                    console.log('error');
+                    $('#featureId').val(-1);
+                },
+            }).then(function (response) {
+                featureId = -1;
+                var result = parser.readFeatures(response);
+                if (result.length > 0) {
+                    $('#featureId').val(result[0].get('Id'));
+                    if ($('#gslayer').find(":selected").val() == 'wma_polygon') {
+                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('AreaInSkm').toFixed(2) + ' км<sup>2</sup>)');
+                    }
+                    else if ($('#gslayer').find(":selected").val() == 'wma_height') {
+                        $('#WMAinfo').html(result[0].get('NameWMB_Ru') + ', ' + result[0].get('CodeWMA') + ' (' + result[0].get('area_km').toFixed(2) + ' км<sup>2</sup>)');
+                    }
+                    $('#ChartsButton').show();
+
+                    var polyFeature = new ol.Feature({
+                        geometry: new ol.geom.MultiPolygon(response.features[0].geometry.coordinates)
+                    });
+                    Source_Select.addFeature(polyFeature);
+                }
+            });
+        }
+    });
+
+    function Charts() {
+        if ($('#featureId').val() > -1) {
+            var urlC = '@Url.Action("Charts", "esnow")';
+            var urlC = '/esnow/Charts?Id=' + $('#featureId').val() + '&LayerName=' + $('#gslayer').find(":selected").val();
+            var win = window.open(urlC, '_blank');
+            win.focus();
+        }
+    };
+</script>
+
+@* SelectTool, MeasureTool *@
+<script>
+    var tool = '';
+    function SelectTool() {
+        if (tool == 'select') {
+            return;
+        }
+        tool = 'select';
+        map.removeInteraction(draw);
+        Source_Measure.clear();
+        $(".ol-overlay-container").remove();
+        $('.measure').hide();
+        $('.select').show();
+        $('#ChartsButton').hide();
+        $('#WMAinfo').html('');
+        $('#SelectButton').addClass('btn-info');
+        $('#SelectButton').removeClass('btn-secondary');
+        $('#MeasureButton').removeClass('btn-secondary');
+        $('#MeasureButton').addClass('btn-info');
+    }
+    function MeasureTool() {
+        if (tool == 'measure') {
+            return;
+        }
+        tool = 'measure';
+        addInteraction();
+        $('.measure').show();
+        $('.select').hide();
+        $('#MeasureButton').addClass('btn-dark');
+        $('#MeasureButton').removeClass('btn-primary');
+        $('#SelectButton').removeClass('btn-dark');
+        $('#SelectButton').addClass('btn-primary');
+        Source_Select.clear();
+    }
+</script>
+
+@* DownloadLayer *@
+<script>
+    function DownloadLayer() {
+        var download_url = geoserver_url + geoserver_workspace_name + '/wms?' +
+            'service=WMS&version=1.1.0&request=GetMap&layers=' +
+            geoserver_workspace_name +
+            '%3ASANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT&bbox=39.1622186743878%2C39.9996233923096%2C139.999617505142%2C59.9999999946118&width=29086&height=5769&srs=EPSG%3A4326&time=' +
+            $('#YearSnow').find(":selected").val() + '-' +
+            $('#MonthSnow').find(":selected").val() + '-' +
+            $('#DaySnow').find(":selected").val() +
+            '&format=image%2Ftiff';
+        window.location.href = download_url;
+    }
+</script>
+
+@* Animation *@
+<script>
+    var $text = $("#text"),
+        $pause = $("#pause"),
+        $reverse = $("#reverse"),
+        $restart = $("#restart"),
+        $speed = $("input[name='speed']"),
+        $slider = $("#slider"),
+        //"tl" is the timeline we'll add our tweens to. Then we can easily control the whole sequence as one object.
+        tl = new TimelineLite({ onUpdate: updateSlider, onComplete: onComplete, onReverseComplete: onComplete, paused: true });
+    tl.timeScale(parseFloat($speed.val()));
+
+    function updateSlider() {
+        $('#slidervalue').text('v: ' + (tl.progress() * dates.length).toFixed(0));
+        var changed = false;
+        if ($('#YearSnow').val() != dates[(tl.progress() * dates.length).toFixed(0)].substr(0, 4)) {
+            $('#YearSnow').val(dates[(tl.progress() * dates.length).toFixed(0)].substr(0, 4));
+            ChangeYear();
+            //changed = true;
+            //console.log('year');
+        }
+        if ($('#MonthSnow').val() != parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(5, 2))) {
+            $('#MonthSnow').val(parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(5, 2)));
+            ChangeMonth();
+            //changed = true;
+            //console.log('month');
+        }
+        if ($('#DaySnow').val() != parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(8, 2))) {
+            $('#DaySnow').val(parseInt(dates[(tl.progress() * dates.length).toFixed(0)].substr(8, 2)));
+            ChangeLayerMODIS();
+            //console.log('day');
+            //if (changed) {
+            //    ChangeYear();
+            //}
+        }
+        $slider.slider("value", tl.progress() * 100);
+    }
+    function onComplete() {
+        tl.pause();
+        $pause.html("запуск");
+    }
+
+    //do a simple split of the text so we can animate each character (doesn't require the advanced features of SplitText, so we just use split() and join())
+    $text.html("<span>" + $text.html().split("").join("</span><span>").split("<span> </span>").join("<span>&nbsp;</span>") + "</span>");
+
+    //set a perspective on the container
+    TweenLite.set($text, { perspective: 500 });
+
+    //all of the animation is created in this one line:
+    tl.staggerTo($("#text span"), 4, { transformOrigin: "50% 50% -30px", rotationY: -360, rotationX: 360, rotation: 360, ease: Elastic.easeInOut }, 0.02);
+
+    //slider and button controls from here on...
+    var isPaused;
+
+    $slider.slider({
+        range: false,
+        min: 0,
+        max: 100,
+        step: .1,
+        slide: function (event, ui) {
+            tl.progress(ui.value / dates.length).pause();
+            if (isPaused) $pause.html("продолжить");
+
+        },
+        start: function (event, ui) {
+            isPaused = tl.paused();
+        },
+        stop: function (event, ui) {
+            if (!isPaused) tl.resume();
+        }
+    });
+
+    $pause.click(function () {
+        if (tl.paused()) {
+            if (tl.progress() === 1 || (tl.progress() === 0 && tl.reversed())) {
+                tl.restart();
+            } else {
+                tl.resume();
+            }
+            $pause.html("пауза");
+        } else {
+            tl.pause();
+            $pause.html("продолжить");
+        }
+    });
+
+    $reverse.click(function () {
+        if (tl.progress() === 0) {
+            if (tl.reversed()) {
+                tl.play();
+            } else {
+                tl.reverse(0);
+            }
+            $pause.html("пауза");
+        } else {
+            tl.reversed(!tl.reversed()).resume();
+            $pause.html("пауза");
+        }
+    });
+
+    $restart.click(function () {
+        tl.restart();
+        $pause.html("пауза");
+    });
+
+    $speed.change(function (v, val) {
+        tl.timeScale(parseFloat($(this).val()));
+        if (tl.progress() === 1) {
+            tl.restart();
+            $pause.html("пауза");
+        } else if (tl.paused()) {
+            tl.resume();
+            $pause.html("пауза");
+        }
+    });
+</script>
+
+@* $(document).ready *@
+<script>
+    $(document).ready(function () {
+        SelectTool();
+        GetYears();
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $(".menu").click(function () {
+            $("article").slideToggle("slow");
+        });
+        $('#YearSnow option:last').attr("selected", "selected");
+        //ChangeYearSnow();
+    });
+</script>
+
+<script>
+    function NDSILegend() {
+        $("#ndsilegenddialog").dialog({
+            width: 690,
+            height: 500
+        });
+    }
+
+    function AnomalyLegend() {
+        $("#anomlegenddialog").dialog({
+            width: 690,
+            height: 500
+        });
+    }
+</script>

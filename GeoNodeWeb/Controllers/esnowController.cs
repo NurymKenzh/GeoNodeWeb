@@ -99,38 +99,38 @@ namespace GeoNodeWeb.Controllers
 
         public IActionResult Index()
         {
-            using (var connection = new NpgsqlConnection(geoserverConnection))
-            {
-                connection.Open();
-                var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
-                ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
-                //ViewBag.Years = datetime
-                //    .Select(d => d.Year)
-                //    .Distinct()
-                //    .OrderBy(y => y)
-                //    .ToArray();
-            }
-            //using (var connection = new NpgsqlConnection(postgresConnection))
+            //using (var connection = new NpgsqlConnection(geoserverConnection))
             //{
             //    connection.Open();
-            //    var datasetcalculationlayer = connection.Query<datasetcalculationlayer>($"SELECT layer_id, layer_alias FROM public.\"esnow_datasetcalculationlayer\"");
-            //    ViewBag.CalculationLayers = datasetcalculationlayer.OrderBy(l => l.layer_id).ToArray();
+            //    var datetime = connection.Query<DateTime>($"SELECT datetime FROM public.\"SANMOST_MOD10A2006_MAXIMUM_SNOW_EXTENT\"");
+            //    ViewBag.DateTime = datetime.OrderBy(d => d).ToArray();
+            //    //ViewBag.Years = datetime
+            //    //    .Select(d => d.Year)
+            //    //    .Distinct()
+            //    //    .OrderBy(y => y)
+            //    //    .ToArray();
             //}
-            using (var connection = new NpgsqlConnection(geoportalConnection))
-            {
-                connection.Open();
-                var GSLayers = connection.Query<GSLayer>($"SELECT resourcebase_ptr_id, title_en, supplemental_information_en FROM public.layers_layer");
-                using (var connection2 = new NpgsqlConnection(postgresConnection))
-                {
-                    connection2.Open();
-                    var esnow_datasetcalculationlayers = connection2.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
-                    ViewBag.GSLayers = GSLayers
-                        .Where(g => esnow_datasetcalculationlayers.Select(l => l.layer_id).Contains(g.resourcebase_ptr_id))
-                        .OrderBy(l => l.resourcebase_ptr_id)
-                        .ToArray();
-                }
-            }
-            ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerUrlServer"].ToString() : Startup.Configuration["GeoServerUrlDebug"].ToString();
+            ////using (var connection = new NpgsqlConnection(postgresConnection))
+            ////{
+            ////    connection.Open();
+            ////    var datasetcalculationlayer = connection.Query<datasetcalculationlayer>($"SELECT layer_id, layer_alias FROM public.\"esnow_datasetcalculationlayer\"");
+            ////    ViewBag.CalculationLayers = datasetcalculationlayer.OrderBy(l => l.layer_id).ToArray();
+            ////}
+            //using (var connection = new NpgsqlConnection(geoportalConnection))
+            //{
+            //    connection.Open();
+            //    var GSLayers = connection.Query<GSLayer>($"SELECT resourcebase_ptr_id, title_en, supplemental_information_en FROM public.layers_layer");
+            //    using (var connection2 = new NpgsqlConnection(postgresConnection))
+            //    {
+            //        connection2.Open();
+            //        var esnow_datasetcalculationlayers = connection2.Query<esnow_datasetcalculationlayer>($"SELECT id, layer_id FROM public.esnow_datasetcalculationlayer;");
+            //        ViewBag.GSLayers = GSLayers
+            //            .Where(g => esnow_datasetcalculationlayers.Select(l => l.layer_id).Contains(g.resourcebase_ptr_id))
+            //            .OrderBy(l => l.resourcebase_ptr_id)
+            //            .ToArray();
+            //    }
+            //}
+            //ViewBag.GeoServerUrl = server ? Startup.Configuration["GeoServerUrlServer"].ToString() : Startup.Configuration["GeoServerUrlDebug"].ToString();
             return View();
         }
 
