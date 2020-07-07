@@ -9,6 +9,9 @@
 <link href="~/esnow/lib/ol/ol.css" rel="stylesheet" />
 <script src="~/esnow/lib/ol/ol.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" />
+@*jBox*@
+<link href="~/esnow/lib/vendor/jBox/dist/jBox.all.css" rel="stylesheet" />
+<script src="~/esnow/lib/vendor/jBox/dist/jBox.all.js"></script>
 
 <div class="container-fluid p-0">
     <!-- Wrapper -->
@@ -25,11 +28,41 @@
             </div>
             <div class="card-body p-2">
                 <form>
-                    <label class="m-0" for="SourceProduct">Satellite</label>
+                    <label class="m-0" for="SourceProduct">Satellite</label>                    
                     <div class="input-group input-group-sm">
-                        <select class="form-control" id="SourceProduct" onchange="ChangeSourceProduct()">
+                        <select class="form-control" id="SourceProduct">
                             <option value="0">Terra MOD10A1</option>
                             <option value="1">Aqua MYD10A1</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <a href="#" target="_blank">
+                                    <i class="SomeInfo fa fa-info-circle" InfoTitle="Some Information"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div><!-- for Dataset -->
+                    <label class="m-0" for="DataSet">Dataset</label>
+                    <div class="input-group input-group-sm">
+                        <select class="form-control" id="DataSet">
+                            <option value="NDSI">NDSI_Snow_Cover</option>
+                            <option value="Anomaly">NDSI_Snow_Anomaly</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <a href="#" target="_blank">
+                                    <i class="SomeInfo fa fa-info-circle" InfoTitle="Some Information"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <input id="layerMODISOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
+                    <!-- Year -->
+                    <label class="m-0" for="Year_MOLT_MOD10">Year</label>
+                    <div class="input-group input-group-sm">
+                        <select class="form-control" id="Year_MOLT_MOD10">
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
                         </select>
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -37,38 +70,30 @@
                             </div>
                         </div>
                     </div>
-                    <input id="layerMODISOpacity" type="range" class="form-control-range" min="0" max="100" value="80" oninput="ChangeLayers()" />
-                    <div class="form-group mb-0">
-                        <label class="m-0" for="DataSet">Dataset</label>
-                        <select class="form-control form-control-sm" id="DataSet">
-                            <option value="NDSI">NDSI_Snow_Cover</option>
-                            <option value="Anomaly">NDSI_Snow_Anomaly</option>
-                        </select>
-                    </div>
-                    <!-- Year for Terra -->
-                    <div class="form-group mt-1 mb-1 MOLT_MOD10">
-                        <label class="m-0" for="Year_MOLT_MOD10">Year</label>
-                        <select class="form-control form-control-sm" id="Year_MOLT_MOD10">
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                        </select>
-                    </div>
                     <label class="m-0" for="DayOfYear_MOLT">Date</label>
-                    <!-- Day for Terra -->
+                    <!-- Day -->
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">-</span>
+                            <span class="input-group-text">
+                                <a href="#" target="_blank">
+                                    <i class="fa fa-chevron-left"></i>
+                                </a>
+                            </span>
                         </div>
                         <select class="custom-select" id="DayOfYear_MOLT" aria-describedby="DayHelpBlock">
                             <option value="1">001:02/01 - 08/01</option>
                             <option value="2">002:08/01 - 08/16</option>
                         </select>
                         <div class="input-group-append">
-                            <span class="input-group-text">+</span>
+                            <span class="input-group-text">
+                                <a href="#" target="_blank">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </span>
                         </div>
                     </div>
                 </form>
-            </div>           
+            </div>
 
             <ul class="list-unstyled menu-elements">
                 <li class="">
@@ -595,5 +620,44 @@
             e.preventDefault();
             $('.sidebar').addClass('light');
         });
+    });
+</script>
+
+@*tooltips, modal windows*@
+<script>
+    $(document).ready(function () {
+        // Map Title
+        new jBox('Modal', {
+            id: 'modal-maptitle',
+            attach: '#MapTitleBtn',
+            width: 260,
+            blockScroll: false,
+            animation: 'flip',
+            closeButton: false,
+            position: {
+                x: 'right',
+                y: 'top'
+            },
+            offset: {
+                x: -10,
+                y: 70
+            },
+            content: '<div class="card-body text-white text-center p-0"><h4 class="card-title">Satellite</h5><p class="card-text mb-1">Dataset</p><p class="card-text">YYYY. JDay: DD/MM - DD/MM</p></div >',
+            overlay: false,
+            repositionOnOpen: false
+        }).open();
+        // Tooltip below to the right
+        new jBox('Tooltip', {
+            theme: 'TooltipDark',
+            zIndex: 'auto',
+            attach: '.SomeInfo',
+            getTitle: 'InfoTitle',
+            position: {
+                x: 'right',
+                y: 'center'
+            },
+            outside: 'x' // Horizontal Tooltips need to change their outside position
+        });
+
     });
 </script>

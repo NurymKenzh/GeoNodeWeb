@@ -22,6 +22,10 @@
     border: 1px solid #fff;
     background: #fafafa;
 }
+#modal-maptitle .jBox-container {
+    border: 1px solid #fff;
+    background: #4a89dc;
+}
 .jBox-content {
   padding: 5px 5px;
   overflow-x: hidden;
