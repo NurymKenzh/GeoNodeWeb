@@ -28,7 +28,7 @@
             </div>
             <div class="card-body p-2">
                 <form>
-                    <label class="m-0" for="SourceProduct">Satellite</label>                    
+                    <label class="m-0" for="SourceProduct">Satellite</label>
                     <div class="input-group input-group-sm">
                         <select class="form-control" id="SourceProduct">
                             <option value="0">Terra MOD10A1</option>
@@ -50,13 +50,13 @@
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
-                                <a href="#" target="_blank">
-                                    <i class="SomeInfo fa fa-info-circle" InfoTitle="Full Information"></i>
+                                <a href="#" id="LegendBtn" class="target-click">
+                                    <i class="SomeInfo fa fa-tag" InfoTitle="Legend"></i>
                                 </a>
                             </span>
                         </div>
                     </div>
-                    <input id="layerMODISOpacity" type="range" class="form-control-range" min="0" max="100" value="80"/>
+                    <input id="layerMODISOpacity" type="range" class="form-control-range" min="0" max="100" value="80" />
                     <!-- Year -->
                     <label class="m-0" for="Year_MOLT_MOD10">Year</label>
                     <div class="input-group input-group-sm">
@@ -116,7 +116,6 @@
                     </ul>
                 </li>
             </ul>
-
             <div class="to-top">
                 <a class="btn btn-primary btn-customized-3" href="#" role="button">
                     <i class="fas fa-bar-chart"></i> Chart
@@ -127,7 +126,6 @@
                 <a class="btn btn-primary btn-customized-4 btn-customized-dark" href="#" role="button">Dark</a>
                 <a class="btn btn-primary btn-customized-4 btn-customized-light" href="#" role="button">Light</a>
             </div>
-
         </nav>
         <!-- End sidebar -->
         <!-- Dark overlay -->
@@ -139,13 +137,12 @@
                 <i class="fas fa-snowflake-o"></i> <span>Menu</span>
             </a>
             <!-- Map content -->
+            <div id="map" class="position-fixed col-md-12 col-lg-12 m-0 p-0 bg-light"></div>
             <!-- Footer -->
         </div>
-
         <!-- End content -->
     </div>
-    <!-- End wrapper -->
-    <div id="map" class="position-fixed col-md-12 col-lg-12 m-0 p-0 bg-light"></div>
+    <!-- End wrapper -->    
 </div>
 <div id="ndsilegenddialog" title="Легенда" hidden="hidden" style="width: 200px;">
     <img src="~/lib/images/Logo Water G.jpg" style="width: 220px;" />
@@ -646,6 +643,30 @@
             overlay: false,
             repositionOnOpen: false
         }).open();
+        // Map Legend
+        new jBox('Modal', {
+            attach: '#LegendBtn',
+            id: 'modal-maptitle',
+            minWidth: 100,
+            zIndex: 'auto',
+            closeButton: true,
+            overlay: false,
+            reload: 'strict',
+            animation: 'flip',
+            adjustPosition: false,
+            closeButton: true,
+            position: {
+                x: 'right',
+                y: 'bottom'
+            },
+            offset: {
+                x: -10,
+                y: -20
+            },
+            onOpen: function () {
+                this.setContent('<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/logo/ESnow.svg"></div>');
+            }
+        }).open();   
         // Tooltip below to the right
         new jBox('Tooltip', {
             theme: 'TooltipDark',
