@@ -1423,6 +1423,7 @@
         $('#Indexes1').removeClass('active');
         $('#Indexes2').removeClass('active');
         $('#Indexes3').removeClass('active');
+        $('#Indexes4').removeClass('active');
         $('#' + element).addClass('active');
         //ChangeLayerClimate();
         //ChangePeriod();
@@ -1447,7 +1448,17 @@
             $('#Month11').attr('disabled', true);
             $('#Month12').attr('disabled', true);
         }
-        else {
+        else if (element == 'Indexes4' || element == 'Indexes5' || element == 'Indexes6' || element == 'Indexes7' || element == 'Indexes8' || element == 'Indexes9' || element == 'Indexes10') {
+            $('#Year').prop('checked', true);
+            $('#Year').attr('disabled', false);
+            $('#Month').attr('disabled', true);
+            $('#Season').attr('disabled', true);
+            $('#Month01').attr('disabled', false);
+            $('#Month02').attr('disabled', false);
+            $('#Month03').attr('disabled', false);
+            $('#Month11').attr('disabled', false);
+            $('#Month12').attr('disabled', false);
+        } else {
             $('#Year').attr('disabled', false);
             $('#Season').attr('disabled', false);
             $('#Month01').attr('disabled', false);
@@ -1643,7 +1654,10 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
-
+        // tas_gt_
+        if (SubParameter.includes('tas_gt_')) {
+            layerClimate = SubParameter + '_' + 'h' + '_' + RCP + '_' + Decade;
+        }
         $('#InfoTitle').text('');
         $('#Layerdescription').text('');
         $('#divInfo').attr('data-original-title', '');
@@ -1758,6 +1772,12 @@
         }
         else if (SubParameter == 'spei_pd_avg') {
             $("#legend").attr("src", "/esnow/img/legend/SPEI.svg");
+        }
+        else if (SubParameter == 'tas_gt_00_count' || SubParameter == 'tas_gt_05_count' || SubParameter == 'tas_gt_10_count' || SubParameter == 'tas_gt_15_count') {
+            $("#legend").attr("src", "/esnow/img/legend/TAS_GT_COUNT.svg");
+        }
+        else if (SubParameter == 'tas_gt_05_sum' || SubParameter == 'tas_gt_10_sum' || SubParameter == 'tas_gt_15_sum') {
+            $("#legend").attr("src", "/esnow/img/legend/TAS_GT_SUM.svg");
         }
     };
 
@@ -1910,6 +1930,10 @@
         }
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
+        // tas_gt_
+        if (SubParameter.includes('tas_gt_')) {
+            layerClimate = SubParameter + '_' + 'h' + '_' + RCP + '_' + Decade;
         }
 
         //var date = dates[$('#date').val()];
@@ -2180,6 +2204,10 @@
                         }
                         else {
                             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+                        }
+                        // tas_gt_
+                        if (SubParameter.includes('tas_gt_')) {
+                            layerClimate = SubParameter + '_' + 'h' + '_' + RCP + '_' + Decade;
                         }
                         var seasonmonth = "";
                         if (Period == 's') {
@@ -2630,6 +2658,10 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
+        // tas_gt_
+        if (SubParameter.includes('tas_gt_')) {
+            layerClimate = SubParameter + '_' + 'h' + '_' + RCP + '_' + Decade;
+        }
 
         var table = $('#downloadtas').val();
         if ($('#Precipitation').is(':checked')) {
@@ -2690,6 +2722,10 @@
         }
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
+        }
+        // tas_gt_
+        if (SubParameter.includes('tas_gt_')) {
+            layerClimate = SubParameter + '_' + 'h' + '_' + RCP + '_' + Decade;
         }
         $.ajax({
             url: '@Url.Action("GetLayerInfo")',

@@ -435,6 +435,27 @@
   <data name="Table" xml:space="preserve">
     <value />
   </data>
+  <data name="tas_gt_00_count" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_05_count" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_05_sum" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_10_count" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_10_sum" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_15_count" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_15_sum" xml:space="preserve">
+    <value />
+  </data>
   <data name="Test" xml:space="preserve">
     <value />
   </data>

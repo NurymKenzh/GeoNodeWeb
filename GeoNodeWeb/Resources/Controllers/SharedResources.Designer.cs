@@ -1017,6 +1017,69 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string tas_gt_00_count {
+            get {
+                return ResourceManager.GetString("tas_gt_00_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_05_count {
+            get {
+                return ResourceManager.GetString("tas_gt_05_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_05_sum {
+            get {
+                return ResourceManager.GetString("tas_gt_05_sum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_10_count {
+            get {
+                return ResourceManager.GetString("tas_gt_10_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_10_sum {
+            get {
+                return ResourceManager.GetString("tas_gt_10_sum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_15_count {
+            get {
+                return ResourceManager.GetString("tas_gt_15_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_15_sum {
+            get {
+                return ResourceManager.GetString("tas_gt_15_sum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Test {
             get {
                 return ResourceManager.GetString("Test", resourceCulture);
