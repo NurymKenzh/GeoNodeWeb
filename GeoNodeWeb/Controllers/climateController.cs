@@ -1298,9 +1298,11 @@ namespace GeoNodeWeb.Controllers
             int year_start = climate_rasterstats.Min(c => c.date.Year),
                 year_finish = climate_rasterstats.Max(c => c.date.Year);
             List<int> years = new List<int>();
+            List<string> periods = new List<string>();
             for (int year = year_start; year <= year_finish; year += 10)
             {
                 years.Add(year);
+                periods.Add($"{year.ToString()} - {(year + 9).ToString()}");
                 climate_rasterstat climate_rasterstat = climate_rasterstats.FirstOrDefault(c => c.date.Year == year);
                 if (climate_rasterstat == null)
                 {
@@ -1335,6 +1337,7 @@ namespace GeoNodeWeb.Controllers
             return Json(new
             {
                 years,
+                periods,
                 max,
                 min,
                 median,
@@ -1418,6 +1421,7 @@ namespace GeoNodeWeb.Controllers
             int year_start = climate_rasterstats.Min(c => c.date.Year),
                 year_finish = climate_rasterstats.Max(c => c.date.Year);
             List<int> years = new List<int>();
+            List<string> periods = new List<string>();
             int yearsCount = (year_finish - year_start) / 10 + 1;
             decimal?[,] max = new decimal?[4, yearsCount],
                 min = new decimal?[4, yearsCount],
@@ -1425,6 +1429,7 @@ namespace GeoNodeWeb.Controllers
             for (int year = year_start, i = 0; year <= year_finish; year += 10, i++)
             {
                 years.Add(year);
+                periods.Add($"{year.ToString()} - {(year + 9).ToString()}");
                 for (int season = 0; season <= 3; season++)
                 {
                     climate_rasterstat climate_rasterstat = climate_rasterstats
@@ -1463,6 +1468,7 @@ namespace GeoNodeWeb.Controllers
             return Json(new
             {
                 years,
+                periods,
                 max,
                 min,
                 median,
@@ -1551,6 +1557,7 @@ namespace GeoNodeWeb.Controllers
                 year_finish = climate_rasterstats.Max(c => c.date.Year);
             }
             List<int> years = new List<int>();
+            List<string> periods = new List<string>();
             int yearsCount = (year_finish - year_start) / 10 + 1;
             decimal?[,] max = new decimal?[12, yearsCount],
                 min = new decimal?[12, yearsCount],
@@ -1558,6 +1565,7 @@ namespace GeoNodeWeb.Controllers
             for (int year = year_start, i = 0; year <= year_finish; year += 10, i++)
             {
                 years.Add(year);
+                periods.Add($"{year.ToString()} - {(year + 9).ToString()}");
                 for (int month = 0; month <= 11; month++)
                 {
                     climate_rasterstat climate_rasterstat = climate_rasterstats
@@ -1611,6 +1619,7 @@ namespace GeoNodeWeb.Controllers
             return Json(new
             {
                 years,
+                periods,
                 max,
                 min,
                 median,

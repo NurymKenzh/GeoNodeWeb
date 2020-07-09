@@ -1030,7 +1030,7 @@
                     data.median[i] = parseFloat(data.median[i]).toFixed(2);
                 }
                 var chart1Data = {
-                    labels: data.years,
+                    labels: data.periods,
                     datasets: [{
                         label: $('#Maximum').val(),
                         backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -1161,7 +1161,7 @@
                     }
                 }
                 var chart2Data = {
-                    labels: data.years,
+                    labels: data.periods,
                     datasets: []
                 };
                 for (var i = 0; i < data.max.length; ++i) {
@@ -1333,7 +1333,7 @@
                     }
                 }
                 var chart3Data = {
-                    labels: data.years,
+                    labels: data.periods,
                     datasets: []
                 };
                 for (var i = 0; i < data.max.length; ++i) {
