@@ -218,6 +218,13 @@
                                 <option value="gtk_pd_avg">@SharedLocalizer["AridityIndices"]</option>
                                 <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
                                 <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
+                                <option value="tas_gt_00_count">@SharedLocalizer["tas_gt_00_count"]</option>
+                                <option value="tas_gt_05_count">@SharedLocalizer["tas_gt_05_count"]</option>
+                                <option value="tas_gt_05_sum">@SharedLocalizer["tas_gt_05_sum"]</option>
+                                <option value="tas_gt_10_count">@SharedLocalizer["tas_gt_10_count"]</option>
+                                <option value="tas_gt_10_sum">@SharedLocalizer["tas_gt_10_sum"]</option>
+                                <option value="tas_gt_15_count">@SharedLocalizer["tas_gt_15_count"]</option>
+                                <option value="tas_gt_15_sum">@SharedLocalizer["tas_gt_15_sum"]</option>
                             </select>
                             <select class="form-control" id="RCP1" onchange="ChangeLayerClimate1()">
                                 <option value="rcp45">rcp 4.5</option>
@@ -282,6 +289,13 @@
                                 <option value="gtk_pd_avg">@SharedLocalizer["AridityIndices"]</option>
                                 <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
                                 <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
+                                <option value="tas_gt_00_count">@SharedLocalizer["tas_gt_00_count"]</option>
+                                <option value="tas_gt_05_count">@SharedLocalizer["tas_gt_05_count"]</option>
+                                <option value="tas_gt_05_sum">@SharedLocalizer["tas_gt_05_sum"]</option>
+                                <option value="tas_gt_10_count">@SharedLocalizer["tas_gt_10_count"]</option>
+                                <option value="tas_gt_10_sum">@SharedLocalizer["tas_gt_10_sum"]</option>
+                                <option value="tas_gt_15_count">@SharedLocalizer["tas_gt_15_count"]</option>
+                                <option value="tas_gt_15_sum">@SharedLocalizer["tas_gt_15_sum"]</option>
                             </select>
                             <select class="form-control" id="RCP2" onchange="ChangeLayerClimate2()">
                                 <option value="rcp45">rcp 4.5</option>
@@ -398,6 +412,13 @@
                                                     <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
                                                     <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
                                                     <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
+                                                    <option value="tas_gt_00_count">@SharedLocalizer["tas_gt_00_count"]</option>
+                                                    <option value="tas_gt_05_count">@SharedLocalizer["tas_gt_05_count"]</option>
+                                                    <option value="tas_gt_05_sum">@SharedLocalizer["tas_gt_05_sum"]</option>
+                                                    <option value="tas_gt_10_count">@SharedLocalizer["tas_gt_10_count"]</option>
+                                                    <option value="tas_gt_10_sum">@SharedLocalizer["tas_gt_10_sum"]</option>
+                                                    <option value="tas_gt_15_count">@SharedLocalizer["tas_gt_15_count"]</option>
+                                                    <option value="tas_gt_15_sum">@SharedLocalizer["tas_gt_15_sum"]</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -2001,6 +2022,10 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
+        // tas_gt_
+        if (SubParameter.includes('tas_gt_')) {
+            layerClimate = SubParameter + '_' + 'h' + '_' + RCP + '_' + Decade;
+        }
 
         //change legend
         if (SubParameter == 'tasmax_pd_avg' || SubParameter == 'tas_pd_avg' || SubParameter == 'tasmin_pd_avg') {
@@ -2047,6 +2072,12 @@
         }
         else if (SubParameter == 'spei_pd_avg') {
             $("#legend1").attr("src", "/esnow/img/legend/SPEI.svg");
+        }
+        else if (SubParameter == 'tas_gt_00_count' || SubParameter == 'tas_gt_05_count' || SubParameter == 'tas_gt_10_count' || SubParameter == 'tas_gt_15_count') {
+            $("#legend1").attr("src", "/esnow/img/legend/TAS_GT_COUNT.svg");
+        }
+        else if (SubParameter == 'tas_gt_05_sum' || SubParameter == 'tas_gt_10_sum' || SubParameter == 'tas_gt_15_sum') {
+            $("#legend1").attr("src", "/esnow/img/legend/TAS_GT_SUM.svg");
         }
 
         $('#mapinfo1').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));
@@ -2130,6 +2161,10 @@
         else {
             layerClimate = SubParameter + '_' + Period + '_' + RCP + '_' + Decade;
         }
+        // tas_gt_
+        if (SubParameter.includes('tas_gt_')) {
+            layerClimate = SubParameter + '_' + 'h' + '_' + RCP + '_' + Decade;
+        }
 
         //change legend
         if (SubParameter == 'tasmax_pd_avg' || SubParameter == 'tas_pd_avg' || SubParameter == 'tasmin_pd_avg') {
@@ -2176,6 +2211,12 @@
         }
         else if (SubParameter == 'spei_pd_avg') {
             $("#legend2").attr("src", "/esnow/img/legend/SPEI.svg");
+        }
+        else if (SubParameter == 'tas_gt_00_count' || SubParameter == 'tas_gt_05_count' || SubParameter == 'tas_gt_10_count' || SubParameter == 'tas_gt_15_count') {
+            $("#legend1").attr("src", "/esnow/img/legend/TAS_GT_COUNT.svg");
+        }
+        else if (SubParameter == 'tas_gt_05_sum' || SubParameter == 'tas_gt_10_sum' || SubParameter == 'tas_gt_15_sum') {
+            $("#legend1").attr("src", "/esnow/img/legend/TAS_GT_SUM.svg");
         }
 
         $('#mapinfo2').text($('#ClimateTimeline').val().split(';')[0] + ' - ' + (parseInt($('#ClimateTimeline').val().split(';')[0]) + parseInt(Decade) - 1));

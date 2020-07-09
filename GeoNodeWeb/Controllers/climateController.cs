@@ -1238,6 +1238,11 @@ namespace GeoNodeWeb.Controllers
                 string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
                 layer_name = $"{SubParameter_}_y_{RCP}_{Decade}_mm";
             }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
+            }
 
             List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
             using (var connection = new NpgsqlConnection(geoportalProdConnection))
@@ -1361,6 +1366,11 @@ namespace GeoNodeWeb.Controllers
             {
                 string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
                 layer_name = $"{SubParameter_}_s_{RCP}_{Decade}_mm";
+            }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
             }
 
             List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
@@ -1492,6 +1502,11 @@ namespace GeoNodeWeb.Controllers
             {
                 string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
                 layer_name = $"{SubParameter_}_m_{RCP}_{Decade}_mm";
+            }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
             }
 
             List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
@@ -1644,6 +1659,11 @@ namespace GeoNodeWeb.Controllers
                 string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
                 layer_name = $"{SubParameter_}_y_{RCP}_{Decade}_mm";
             }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
+            }
 
             List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
             using (var connection = new NpgsqlConnection(geoportalProdConnection))
@@ -1751,6 +1771,11 @@ namespace GeoNodeWeb.Controllers
             {
                 string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
                 layer_name = $"{SubParameter_}_s_{RCP}_{Decade}_mm";
+            }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
             }
 
             List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
@@ -1896,6 +1921,11 @@ namespace GeoNodeWeb.Controllers
             {
                 string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
                 layer_name = $"{SubParameter_}_m_{RCP}_{Decade}_mm";
+            }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
             }
 
             List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
