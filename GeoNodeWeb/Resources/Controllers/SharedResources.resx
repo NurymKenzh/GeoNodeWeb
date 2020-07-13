@@ -441,10 +441,22 @@
   <data name="tas_gt_00_countShort" xml:space="preserve">
     <value />
   </data>
+  <data name="tas_gt_00_count_dlt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_00_count_dltShort" xml:space="preserve">
+    <value />
+  </data>
   <data name="tas_gt_05_count" xml:space="preserve">
     <value />
   </data>
   <data name="tas_gt_05_countShort" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_05_count_dlt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_05_count_dltShort" xml:space="preserve">
     <value />
   </data>
   <data name="tas_gt_05_sum" xml:space="preserve">
@@ -453,10 +465,22 @@
   <data name="tas_gt_05_sumShort" xml:space="preserve">
     <value />
   </data>
+  <data name="tas_gt_05_sum_dlt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_05_sum_dltShort" xml:space="preserve">
+    <value />
+  </data>
   <data name="tas_gt_10_count" xml:space="preserve">
     <value />
   </data>
   <data name="tas_gt_10_countShort" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_10_count_dlt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_10_count_dltShort" xml:space="preserve">
     <value />
   </data>
   <data name="tas_gt_10_sum" xml:space="preserve">
@@ -465,16 +489,34 @@
   <data name="tas_gt_10_sumShort" xml:space="preserve">
     <value />
   </data>
+  <data name="tas_gt_10_sum_dlt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_10_sum_dltShort" xml:space="preserve">
+    <value />
+  </data>
   <data name="tas_gt_15_count" xml:space="preserve">
     <value />
   </data>
   <data name="tas_gt_15_countShort" xml:space="preserve">
     <value />
   </data>
+  <data name="tas_gt_15_count_dlt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_15_count_dltShort" xml:space="preserve">
+    <value />
+  </data>
   <data name="tas_gt_15_sum" xml:space="preserve">
     <value />
   </data>
   <data name="tas_gt_15_sumShort" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_15_sum_dlt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tas_gt_15_sum_dltShort" xml:space="preserve">
     <value />
   </data>
   <data name="Test" xml:space="preserve">

@@ -1026,6 +1026,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string tas_gt_00_count_dlt {
+            get {
+                return ResourceManager.GetString("tas_gt_00_count_dlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_00_count_dltShort {
+            get {
+                return ResourceManager.GetString("tas_gt_00_count_dltShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string tas_gt_00_countShort {
             get {
                 return ResourceManager.GetString("tas_gt_00_countShort", resourceCulture);
@@ -1038,6 +1056,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string tas_gt_05_count {
             get {
                 return ResourceManager.GetString("tas_gt_05_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_05_count_dlt {
+            get {
+                return ResourceManager.GetString("tas_gt_05_count_dlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_05_count_dltShort {
+            get {
+                return ResourceManager.GetString("tas_gt_05_count_dltShort", resourceCulture);
             }
         }
         
@@ -1062,6 +1098,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string tas_gt_05_sum_dlt {
+            get {
+                return ResourceManager.GetString("tas_gt_05_sum_dlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_05_sum_dltShort {
+            get {
+                return ResourceManager.GetString("tas_gt_05_sum_dltShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string tas_gt_05_sumShort {
             get {
                 return ResourceManager.GetString("tas_gt_05_sumShort", resourceCulture);
@@ -1074,6 +1128,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string tas_gt_10_count {
             get {
                 return ResourceManager.GetString("tas_gt_10_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_10_count_dlt {
+            get {
+                return ResourceManager.GetString("tas_gt_10_count_dlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_10_count_dltShort {
+            get {
+                return ResourceManager.GetString("tas_gt_10_count_dltShort", resourceCulture);
             }
         }
         
@@ -1098,6 +1170,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string tas_gt_10_sum_dlt {
+            get {
+                return ResourceManager.GetString("tas_gt_10_sum_dlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_10_sum_dltShort {
+            get {
+                return ResourceManager.GetString("tas_gt_10_sum_dltShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string tas_gt_10_sumShort {
             get {
                 return ResourceManager.GetString("tas_gt_10_sumShort", resourceCulture);
@@ -1116,6 +1206,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string tas_gt_15_count_dlt {
+            get {
+                return ResourceManager.GetString("tas_gt_15_count_dlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_15_count_dltShort {
+            get {
+                return ResourceManager.GetString("tas_gt_15_count_dltShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string tas_gt_15_countShort {
             get {
                 return ResourceManager.GetString("tas_gt_15_countShort", resourceCulture);
@@ -1128,6 +1236,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string tas_gt_15_sum {
             get {
                 return ResourceManager.GetString("tas_gt_15_sum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_15_sum_dlt {
+            get {
+                return ResourceManager.GetString("tas_gt_15_sum_dlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tas_gt_15_sum_dltShort {
+            get {
+                return ResourceManager.GetString("tas_gt_15_sum_dltShort", resourceCulture);
             }
         }
         
