@@ -1430,14 +1430,23 @@
         $('#Indexes8').removeClass('active');
         $('#Indexes9').removeClass('active');
         $('#Indexes10').removeClass('active');
+        $('#Indexes11').removeClass('active');
+        $('#Indexes12').removeClass('active');
+        $('#Indexes13').removeClass('active');
+        $('#Indexes14').removeClass('active');
+        $('#Indexes15').removeClass('active');
+        $('#Indexes16').removeClass('active');
+        $('#Indexes17').removeClass('active');
         $('#' + element).addClass('active');
         //ChangeLayerClimate();
         //ChangePeriod();
-        if (['tasmax_pd_avg', 'tas_pd_avg', 'tasmin_pd_avg', 'pr_pd_avg', 'et_pd_avg'].includes(SubParameter)) {
+        if (['tasmax_pd_avg', 'tas_pd_avg', 'tasmin_pd_avg', 'pr_pd_avg', 'et_pd_avg',
+            'tas_gt_00_count', 'tas_gt_05_count', 'tas_gt_05_sum', 'tas_gt_10_count', 'tas_gt_10_sum', 'tas_gt_15_count', 'tas_gt_15_sum'].includes(SubParameter)) {
             diff = false;
             $('#Difference').removeClass('btn-primary');
         }
-        if (['tasmax_dlt_avg', 'tas_dlt_avg', 'tasmin_dlt_avg', 'pr_dlt_avg_mm', 'et_dlt_avg'].includes(SubParameter)) {
+        if (['tasmax_dlt_avg', 'tas_dlt_avg', 'tasmin_dlt_avg', 'pr_dlt_avg_mm', 'et_dlt_avg',
+            'tas_gt_00_count_dlt', 'tas_gt_05_count_dlt', 'tas_gt_05_sum_dlt', 'tas_gt_10_count_dlt', 'tas_gt_10_sum_dlt', 'tas_gt_15_count_dlt', 'tas_gt_15_sum_dlt'].includes(SubParameter)) {
             diff = true;
             $('#Difference').addClass('btn-primary');
         }
@@ -1454,7 +1463,8 @@
             $('#Month11').attr('disabled', true);
             $('#Month12').attr('disabled', true);
         }
-        else if (element == 'Indexes4' || element == 'Indexes5' || element == 'Indexes6' || element == 'Indexes7' || element == 'Indexes8' || element == 'Indexes9' || element == 'Indexes10') {
+        else if (element == 'Indexes4' || element == 'Indexes5' || element == 'Indexes6' || element == 'Indexes7' || element == 'Indexes8' || element == 'Indexes9' || element == 'Indexes10'
+            || element == 'Indexes11' || element == 'Indexes12' || element == 'Indexes13' || element == 'Indexes14' || element == 'Indexes15' || element == 'Indexes16' || element == 'Indexes17') {
             $('#Year').prop('checked', true);
             $('#Year').attr('disabled', false);
             $('#Month').attr('disabled', true);
@@ -1601,6 +1611,34 @@
                 $('#Evapotranspiration1').removeClass('active');
                 ChangeSubParameter('et_dlt_avg', 'Evapotranspiration2');
             }
+            if (SubParameter == 'tas_gt_00_count') {
+                $('#Indexes4').removeClass('active');
+                ChangeSubParameter('tas_gt_00_count_dlt', 'Indexes11');
+            }
+            if (SubParameter == 'tas_gt_05_count') {
+                $('#Indexes5').removeClass('active');
+                ChangeSubParameter('tas_gt_05_count_dlt', 'Indexes12');
+            }
+            if (SubParameter == 'tas_gt_05_sum') {
+                $('#Indexes6').removeClass('active');
+                ChangeSubParameter('tas_gt_05_sum_dlt', 'Indexes13');
+            }
+            if (SubParameter == 'tas_gt_10_count') {
+                $('#Indexes7').removeClass('active');
+                ChangeSubParameter('tas_gt_10_count_dlt', 'Indexes14');
+            }
+            if (SubParameter == 'tas_gt_10_sum') {
+                $('#Indexes8').removeClass('active');
+                ChangeSubParameter('tas_gt_10_sum_dlt', 'Indexes15');
+            }
+            if (SubParameter == 'tas_gt_15_count') {
+                $('#Indexes9').removeClass('active');
+                ChangeSubParameter('tas_gt_15_count_dlt', 'Indexes16');
+            }
+            if (SubParameter == 'tas_gt_15_sum') {
+                $('#Indexes10').removeClass('active');
+                ChangeSubParameter('tas_gt_15_sum_dlt', 'Indexes17');
+            }
         }
         else {
             $('#Difference').removeClass('btn-primary');
@@ -1624,6 +1662,34 @@
             if (SubParameter == 'et_dlt_avg') {
                 $('#Evapotranspiration2').removeClass('active');
                 ChangeSubParameter('et_pd_avg', 'Evapotranspiration1');
+            }
+            if (SubParameter == 'tas_gt_00_count_dlt') {
+                $('#Indexes11').removeClass('active');
+                ChangeSubParameter('tas_gt_00_count', 'Indexes4');
+            }
+            if (SubParameter == 'tas_gt_05_count_dlt') {
+                $('#Indexes12').removeClass('active');
+                ChangeSubParameter('tas_gt_05_count', 'Indexes5');
+            }
+            if (SubParameter == 'tas_gt_05_sum_dlt') {
+                $('#Indexes13').removeClass('active');
+                ChangeSubParameter('tas_gt_05_sum', 'Indexes6');
+            }
+            if (SubParameter == 'tas_gt_10_count_dlt') {
+                $('#Indexes14').removeClass('active');
+                ChangeSubParameter('tas_gt_10_count', 'Indexes7');
+            }
+            if (SubParameter == 'tas_gt_10_sum_dlt') {
+                $('#Indexes15').removeClass('active');
+                ChangeSubParameter('tas_gt_10_sum', 'Indexes8');
+            }
+            if (SubParameter == 'tas_gt_15_count_dlt') {
+                $('#Indexes16').removeClass('active');
+                ChangeSubParameter('tas_gt_15_count', 'Indexes9');
+            }
+            if (SubParameter == 'tas_gt_15_sum_dlt') {
+                $('#Indexes17').removeClass('active');
+                ChangeSubParameter('tas_gt_15_sum', 'Indexes10');
             }
         }
     }
