@@ -1851,6 +1851,12 @@
         else if (SubParameter == 'tas_gt_05_sum' || SubParameter == 'tas_gt_10_sum' || SubParameter == 'tas_gt_15_sum') {
             $("#legend").attr("src", "/esnow/img/legend/TAS_GT_SUM.svg");
         }
+        else if (SubParameter == 'tas_gt_00_count_dlt' || SubParameter == 'tas_gt_05_count_dlt' || SubParameter == 'tas_gt_10_count_dlt' || SubParameter == 'tas_gt_15_count_dlt') {
+            $("#legend").attr("src", "/esnow/img/legend/TAS_GT_COUNT_Dlt.svg");
+        }
+        else if (SubParameter == 'tas_gt_05_sum_dlt' || SubParameter == 'tas_gt_10_sum_dlt' || SubParameter == 'tas_gt_15_sum_dlt') {
+            $("#legend").attr("src", "/esnow/img/legend/TAS_GT_SUM_Dlt.svg");
+        }
     };
 
     function CreateDateSlider() {
