@@ -23,7 +23,11 @@ namespace DBCache
                 "SELECT id, name, dt, point, value FROM public.climate_tasmax;" +
                 "SELECT id, name, dt, point, value FROM public.climate_tasmax_dlt;" +
                 "SELECT id, name, dt, point, value FROM public.climate_tasmin;" +
-                "SELECT id, name, dt, point, value FROM public.climate_tasmin_dlt;";
+                "SELECT id, name, dt, point, value FROM public.climate_tasmin_dlt;" +
+                "SELECT id, name, dt, point, value FROM public.climate_tas_gt_count;" +
+                "SELECT id, name, dt, point, value FROM public.climate_tas_gt_count_dlt;" +
+                "SELECT id, name, dt, point, value FROM public.climate_tas_gt_sum;" +
+                "SELECT id, name, dt, point, value FROM public.climate_tas_gt_sum_dlt;";
             connection.Query(query);
             connection.Close();
             Console.WriteLine($"{DateTime.Now.ToString()} >> finished creating cache!");
