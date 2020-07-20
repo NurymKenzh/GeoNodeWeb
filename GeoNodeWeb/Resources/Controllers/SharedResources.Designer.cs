@@ -783,6 +783,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string OtherTasGt {
+            get {
+                return ResourceManager.GetString("OtherTasGt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Parameter {
             get {
                 return ResourceManager.GetString("Parameter", resourceCulture);

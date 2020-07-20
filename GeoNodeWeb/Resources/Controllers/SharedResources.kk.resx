@@ -357,6 +357,9 @@
   <data name="Other" xml:space="preserve">
     <value>Басқа</value>
   </data>
+  <data name="OtherTasGt" xml:space="preserve">
+    <value>Өсіп келе жатқан маусымға жылу беру</value>
+  </data>
   <data name="Parameter" xml:space="preserve">
     <value>Параметр</value>
   </data>
@@ -436,88 +439,88 @@
     <value>Кесте</value>
   </data>
   <data name="tas_gt_00_count" xml:space="preserve">
-    <value>TAS GT COUNT 0°</value>
+    <value>Температура кезеңінің ұзақтығы&gt; 0 ° С, күн</value>
   </data>
   <data name="tas_gt_00_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 0°</value>
+    <value>T&gt; 0 ° C бар күндер саны</value>
   </data>
   <data name="tas_gt_00_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 0° (ауытқуы)</value>
+    <value>Вегетация кезеңінің температурасының өзгеруі&gt; 0 ° С;</value>
   </data>
   <data name="tas_gt_00_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 0° (ауытқуы)</value>
+    <value>Күндер санының өзгеруі T&gt; 0 ° C</value>
   </data>
   <data name="tas_gt_05_count" xml:space="preserve">
-    <value>TAS GT COUNT 5°</value>
+    <value>Вегетация кезеңінің температурасы&gt; 5 ° С, күн</value>
   </data>
   <data name="tas_gt_05_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 5°</value>
+    <value>T&gt; 5 ° C бар күндер саны</value>
   </data>
   <data name="tas_gt_05_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 5° (ауытқуы)</value>
+    <value>Температурасы 5 ° С болған кезде вегетациялық уақыттың өзгеруі;</value>
   </data>
   <data name="tas_gt_05_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 5° (ауытқуы)</value>
+    <value>Күндер санының өзгеруі T&gt; 5 ° C</value>
   </data>
   <data name="tas_gt_05_sum" xml:space="preserve">
-    <value>TAS GT SUM 5°</value>
+    <value>Орташа тәуліктік температурасы бар кезеңдегі белсенді ауа температураларының қосындысы&gt; 5 ° С</value>
   </data>
   <data name="tas_gt_05_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 5°</value>
+    <value>Белсенді қосынды T&gt; 5 ° C</value>
   </data>
   <data name="tas_gt_05_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 5° (ауытқуы)</value>
+    <value>Орташа тәуліктік температура кезеңіндегі белсенді ауа температурасының қосындысының өзгеруі&gt; 5 ° С</value>
   </data>
   <data name="tas_gt_05_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 5° (ауытқуы)</value>
+    <value>Белсенді T мөлшерінің өзгеруі&gt; 5 ° C</value>
   </data>
   <data name="tas_gt_10_count" xml:space="preserve">
-    <value>TAS GT COUNT 10°</value>
+    <value>Температурасы 10 ° С болатын вегетациялық кезеңнің ұзақтығы, күндер</value>
   </data>
   <data name="tas_gt_10_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 10°</value>
+    <value>T&gt; 10 ° C бар күндер саны</value>
   </data>
   <data name="tas_gt_10_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 10° (ауытқуы)</value>
+    <value>Температурасы 10 ° С болған кезде вегетациялық уақыттың өзгеруі;</value>
   </data>
   <data name="tas_gt_10_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 10° (ауытқуы)</value>
+    <value>Күндер санының өзгеруі T&gt; 10 ° C</value>
   </data>
   <data name="tas_gt_10_sum" xml:space="preserve">
-    <value>TAS GT SUM 10°</value>
+    <value>Орташа тәуліктік температурасы бар кезеңдегі белсенді ауа температураларының қосындысы&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_10_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 10°</value>
+    <value>Белсенді қосынды T&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_10_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 10° (ауытқуы)</value>
+    <value>Орташа тәуліктік температура кезеңіндегі белсенді ауа температурасының қосындысының өзгеруі&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_10_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 10° (ауытқуы)</value>
+    <value>Белсенді T қосындысының өзгеруі&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_15_count" xml:space="preserve">
-    <value>TAS GT COUNT 15°</value>
+    <value>Өсіру кезеңінің ұзақтығы температура&gt; 15 ° С, күн</value>
   </data>
   <data name="tas_gt_15_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 15°</value>
+    <value>T&gt; 15 ° C бар күндер саны</value>
   </data>
   <data name="tas_gt_15_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 15° (ауытқуы)</value>
+    <value>Өсіру кезеңінің ұзақтығының температурасы 15 ° С-мен өзгеруі;</value>
   </data>
   <data name="tas_gt_15_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 15° (ауытқуы)</value>
+    <value>Күндер санының өзгеруі T&gt; 15 ° C</value>
   </data>
   <data name="tas_gt_15_sum" xml:space="preserve">
-    <value>TAS GT SUM 15°</value>
+    <value>Орташа тәуліктік температура кезеңіндегі белсенді ауа температураларының қосындысы&gt; 15 ° С</value>
   </data>
   <data name="tas_gt_15_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 15°</value>
+    <value>Белсенді қосынды T&gt; 15 ° С</value>
   </data>
   <data name="tas_gt_15_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 15° (ауытқуы)</value>
+    <value>Орташа тәуліктік температура кезеңіндегі белсенді ауа температурасының қосындысының өзгеруі&gt; 15 ° С</value>
   </data>
   <data name="tas_gt_15_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 15° (ауытқуы)</value>
+    <value>Белсенді T мөлшерінің өзгеруі&gt; 15 ° С</value>
   </data>
   <data name="Test" xml:space="preserve">
     <value>Тест</value>

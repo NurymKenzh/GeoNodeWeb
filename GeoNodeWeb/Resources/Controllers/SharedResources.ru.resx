@@ -357,6 +357,9 @@
   <data name="Other" xml:space="preserve">
     <value>Другие</value>
   </data>
+  <data name="OtherTasGt" xml:space="preserve">
+    <value>Теплообеспеченность вегетационного периода</value>
+  </data>
   <data name="Parameter" xml:space="preserve">
     <value>Параметр</value>
   </data>
@@ -436,88 +439,88 @@
     <value>Таблица</value>
   </data>
   <data name="tas_gt_00_count" xml:space="preserve">
-    <value>TAS GT COUNT 0°</value>
+    <value>Продолжительность периода с температурой &gt; 0°С, дни</value>
   </data>
   <data name="tas_gt_00_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 0°</value>
+    <value>Количество дней с Т &gt;0°С</value>
   </data>
   <data name="tas_gt_00_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 0° (откл.)</value>
+    <value>Изменение продолжительности вегетационного периода с температурой &gt; 0°С;  </value>
   </data>
   <data name="tas_gt_00_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 0° (откл.)</value>
+    <value>Изменение количества дней с Т &gt; 0°С</value>
   </data>
   <data name="tas_gt_05_count" xml:space="preserve">
-    <value>TAS GT COUNT 5°</value>
+    <value>Продолжительность вегетационного периода с температурой &gt; 5°С, дни</value>
   </data>
   <data name="tas_gt_05_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 5°</value>
+    <value>Количество дней с Т &gt; 5°С</value>
   </data>
   <data name="tas_gt_05_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 5° (откл.)</value>
+    <value>Изменение продолжительности вегетационного периода с температурой &gt; 5°С;  </value>
   </data>
   <data name="tas_gt_05_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 5° (откл.)</value>
+    <value>Изменение количества дней с Т &gt; 5°С</value>
   </data>
   <data name="tas_gt_05_sum" xml:space="preserve">
-    <value>TAS GT SUM 5°</value>
+    <value>Сумма активных температур воздуха за период со среднесуточной температурой &gt; 5°С</value>
   </data>
   <data name="tas_gt_05_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 5°</value>
+    <value>Сумма активных T &gt; 5°С</value>
   </data>
   <data name="tas_gt_05_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 5° (откл.)</value>
+    <value>Изменение суммы активных температур воздуха за период со среднесуточной температурой &gt; 5°С</value>
   </data>
   <data name="tas_gt_05_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 5° (откл.)</value>
+    <value>Изменение суммы активных T &gt;5°С</value>
   </data>
   <data name="tas_gt_10_count" xml:space="preserve">
-    <value>TAS GT COUNT 10°</value>
+    <value>Продолжительность вегетационного периода с температурой &gt; 10°С, дни</value>
   </data>
   <data name="tas_gt_10_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 10°</value>
+    <value>Количество дней с Т &gt; 10°С</value>
   </data>
   <data name="tas_gt_10_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 10° (откл.)</value>
+    <value>Изменение продолжительности вегетационного периода с температурой &gt; 10°С;  </value>
   </data>
   <data name="tas_gt_10_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 10° (откл.)</value>
+    <value>Изменение количества дней с Т &gt;10°С</value>
   </data>
   <data name="tas_gt_10_sum" xml:space="preserve">
-    <value>TAS GT SUM 10°</value>
+    <value>Сумма активных температур воздуха за период со среднесуточной температурой &gt; 10°С</value>
   </data>
   <data name="tas_gt_10_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 10°</value>
+    <value>Сумма активных T &gt; 10°С</value>
   </data>
   <data name="tas_gt_10_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 10° (откл.)</value>
+    <value>Изменение суммы активных температур воздуха за период со среднесуточной температурой &gt; 10°С</value>
   </data>
   <data name="tas_gt_10_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 10° (откл.)</value>
+    <value>Изменение суммы активных T &gt;10°С</value>
   </data>
   <data name="tas_gt_15_count" xml:space="preserve">
-    <value>TAS GT COUNT 15°</value>
+    <value>Продолжительность вегетационного периода с температурой &gt; 15°С, дни</value>
   </data>
   <data name="tas_gt_15_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 15°</value>
+    <value>Количество дней с Т &gt;15°С</value>
   </data>
   <data name="tas_gt_15_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 15° (откл.)</value>
+    <value>Изменение продолжительности вегетационного периода с температурой &gt; 15°С;  </value>
   </data>
   <data name="tas_gt_15_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 15° (откл.)</value>
+    <value>Изменение количества дней с Т &gt;15°С</value>
   </data>
   <data name="tas_gt_15_sum" xml:space="preserve">
-    <value>TAS GT SUM 15°</value>
+    <value>Сумма активных температур воздуха за период со среднесуточной температурой &gt; 15°С</value>
   </data>
   <data name="tas_gt_15_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 15°</value>
+    <value>Сумма активных T &gt; 15°С</value>
   </data>
   <data name="tas_gt_15_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 15° (откл.)</value>
+    <value>Изменение суммы активных температур воздуха за период со среднесуточной температурой &gt; 15°С</value>
   </data>
   <data name="tas_gt_15_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 15° (откл.)</value>
+    <value>Изменение суммы активных T &gt;15°С</value>
   </data>
   <data name="Test" xml:space="preserve">
     <value>Тест</value>

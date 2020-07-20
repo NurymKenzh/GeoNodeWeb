@@ -1334,6 +1334,7 @@
             SubParameter = 'tasmax_pd_avg';
             ChangeSubParameter(SubParameter, 'Temperature1');
             $('.download-tas').show();
+            $('#other').text('@Html.Raw(SharedLocalizer["Other"])');
         }
         else if ($('#Precipitation').is(':checked')) {
             $('.Temperature').hide();
@@ -1348,6 +1349,7 @@
             SubParameter = 'pr_pd_avg';
             ChangeSubParameter(SubParameter, 'Precipitation1');
             $('.download-pr').show();
+            $('#other').text('@Html.Raw(SharedLocalizer["Other"])');
         }
         else if ($('#Evapotranspiration').is(':checked')) {
             $('.Temperature').hide();
@@ -1362,6 +1364,7 @@
             SubParameter = 'et_pd_avg';
             ChangeSubParameter(SubParameter, 'Evapotranspiration1');
             $('.download-et').show();
+            $('#other').text('@Html.Raw(SharedLocalizer["Other"])');
         }
         else if ($('#Indexes').is(':checked')) {
             $('.Temperature').hide();
@@ -1376,6 +1379,7 @@
             SubParameter = 'gtk_pd_avg';
             ChangeSubParameter(SubParameter, 'Indexes1');
             $('.download-indexes').show();
+            $('#other').text('@Html.Raw(SharedLocalizer["OtherTasGt"])');
         }
         //else if ($('#SPI').is(':checked')) {
         //    $('.Temperature').hide();

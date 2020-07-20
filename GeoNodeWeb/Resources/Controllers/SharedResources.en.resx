@@ -357,6 +357,9 @@
   <data name="Other" xml:space="preserve">
     <value>Other</value>
   </data>
+  <data name="OtherTasGt" xml:space="preserve">
+    <value>Heat supply for the growing season</value>
+  </data>
   <data name="Parameter" xml:space="preserve">
     <value>Parameter</value>
   </data>
@@ -436,88 +439,88 @@
     <value>Table</value>
   </data>
   <data name="tas_gt_00_count" xml:space="preserve">
-    <value>TAS GT COUNT 0°</value>
+    <value>Duration of the period with temperature&gt; 0 ° С, days</value>
   </data>
   <data name="tas_gt_00_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 0°</value>
+    <value>Number of days with T&gt; 0 ° C</value>
   </data>
   <data name="tas_gt_00_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 0° (deviations)</value>
+    <value>Change in the duration of the growing season with temperatures&gt; 0 ° С;</value>
   </data>
   <data name="tas_gt_00_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 0° (deviations)</value>
+    <value>Change in the number of days with T&gt; 0 ° C</value>
   </data>
   <data name="tas_gt_05_count" xml:space="preserve">
-    <value>TAS GT COUNT 5°</value>
+    <value>Duration of the growing season with a temperature&gt; 5 ° С, days</value>
   </data>
   <data name="tas_gt_05_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 5°</value>
+    <value>Number of days with T&gt; 5 ° C</value>
   </data>
   <data name="tas_gt_05_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 5° (deviations)</value>
+    <value>Change in the duration of the growing season with temperatures&gt; 5 ° С;</value>
   </data>
   <data name="tas_gt_05_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 5° (deviations)</value>
+    <value>Change in the number of days with T&gt; 5 ° C</value>
   </data>
   <data name="tas_gt_05_sum" xml:space="preserve">
-    <value>TAS GT SUM 5°</value>
+    <value>The sum of active air temperatures for the period with an average daily temperature&gt; 5 ° С</value>
   </data>
   <data name="tas_gt_05_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 5°</value>
+    <value>The sum of active T&gt; 5 ° C</value>
   </data>
   <data name="tas_gt_05_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 5° (deviations)</value>
+    <value>Change in the sum of active air temperatures for a period with an average daily temperature&gt; 5 ° С</value>
   </data>
   <data name="tas_gt_05_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 5° (deviations)</value>
+    <value>Change in the amount of active T&gt; 5 ° C</value>
   </data>
   <data name="tas_gt_10_count" xml:space="preserve">
-    <value>TAS GT COUNT 10°</value>
+    <value>Duration of the growing season with a temperature&gt; 10 ° С, days</value>
   </data>
   <data name="tas_gt_10_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 10°</value>
+    <value>Number of days with T&gt; 10 ° C</value>
   </data>
   <data name="tas_gt_10_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 10° (deviations)</value>
+    <value>Change in the duration of the growing season with temperatures&gt; 10 ° С;</value>
   </data>
   <data name="tas_gt_10_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 10° (deviations)</value>
+    <value>Change in the number of days with T&gt; 10 ° C</value>
   </data>
   <data name="tas_gt_10_sum" xml:space="preserve">
-    <value>TAS GT SUM 10°</value>
+    <value>The sum of active air temperatures for the period with an average daily temperature&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_10_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 10°</value>
+    <value>The sum of active T&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_10_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 10° (deviations)</value>
+    <value>Change in the sum of active air temperatures for a period with an average daily temperature&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_10_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 10° (deviations)</value>
+    <value>Change in the sum of active T&gt; 10 ° С</value>
   </data>
   <data name="tas_gt_15_count" xml:space="preserve">
-    <value>TAS GT COUNT 15°</value>
+    <value>Duration of the growing season with a temperature&gt; 15 ° С, days</value>
   </data>
   <data name="tas_gt_15_countShort" xml:space="preserve">
-    <value>TAS GT COUNT 15°</value>
+    <value>Number of days with T&gt; 15 ° C</value>
   </data>
   <data name="tas_gt_15_count_dlt" xml:space="preserve">
-    <value>TAS GT COUNT 15° (deviations)</value>
+    <value>Change in the duration of the growing season with temperatures&gt; 15 ° С;</value>
   </data>
   <data name="tas_gt_15_count_dltShort" xml:space="preserve">
-    <value>TAS GT COUNT 15° (deviations)</value>
+    <value>Change in the number of days with T&gt; 15 ° C</value>
   </data>
   <data name="tas_gt_15_sum" xml:space="preserve">
-    <value>TAS GT SUM 15°</value>
+    <value>The sum of active air temperatures for the period with an average daily temperature&gt; 15 ° С</value>
   </data>
   <data name="tas_gt_15_sumShort" xml:space="preserve">
-    <value>TAS GT SUM 15°</value>
+    <value>The sum of active T&gt; 15 ° C</value>
   </data>
   <data name="tas_gt_15_sum_dlt" xml:space="preserve">
-    <value>TAS GT SUM 15° (deviations)</value>
+    <value>Change in the sum of active air temperatures for a period with an average daily temperature&gt; 15 ° С</value>
   </data>
   <data name="tas_gt_15_sum_dltShort" xml:space="preserve">
-    <value>TAS GT SUM 15° (deviations)</value>
+    <value>Change in the sum of active T&gt; 15 ° С</value>
   </data>
   <data name="Test" xml:space="preserve">
     <value>Test</value>
