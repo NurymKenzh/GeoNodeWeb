@@ -581,6 +581,38 @@ namespace GeoNodeWeb.Controllers
                         }
                         break;
                 }
+                if (rname.Contains("tas_gt") && rname.Contains("count") && !rname.Contains("dlt"))
+                {
+                    table = "climate_tas_gt_count";
+                    rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[1] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[6] + "_" + 
+                        rname.Split('_')[4] + "_" + rname.Split('_')[5];
+                }
+                if (rname.Contains("tas_gt") && rname.Contains("count") && rname.Contains("dlt"))
+                {
+                    table = "climate_tas_gt_count_dlt";
+                    rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[1] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[4] + "_" + 
+                        rname.Split('_')[7] + "_" + rname.Split('_')[5] + "_" + rname.Split('_')[6];
+                }
+                if (rname.Contains("tas_gt") && rname.Contains("sum") && !rname.Contains("dlt"))
+                {
+                    table = "climate_tas_gt_sum";
+                    rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[1] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[6] + "_" + 
+                        rname.Split('_')[4] + "_" + rname.Split('_')[5];
+                }
+                if (rname.Contains("tas_gt") && rname.Contains("sum") && rname.Contains("dlt"))
+                {
+                    table = "climate_tas_gt_sum_dlt";
+                    rnameDB = rname.Split('_')[0] + "_" + rname.Split('_')[1] + "_" + rname.Split('_')[2] + "_" + rname.Split('_')[3] + "_" + rname.Split('_')[4] + "_" +
+                        rname.Split('_')[7] + "_" + rname.Split('_')[5] + "_" + rname.Split('_')[6];
+                }
+                if(rnameDB.Contains("00"))
+                {
+                    rnameDB = rnameDB.Replace("00", "0");
+                }
+                if (rnameDB.Contains("05"))
+                {
+                    rnameDB = rnameDB.Replace("05", "5");
+                }
                 connection.Open();
                 string query = $"SELECT name, dt, value" +
                     $" FROM public.{table}" +
@@ -717,6 +749,20 @@ namespace GeoNodeWeb.Controllers
                 tables.Add("climate_gtk");
                 tables.Add("climate_spi");
                 tables.Add("climate_spei");
+                tables.Add("climate_tas_gt_00_count");
+                tables.Add("climate_tas_gt_05_count");
+                tables.Add("climate_tas_gt_05_sum");
+                tables.Add("climate_tas_gt_10_count");
+                tables.Add("climate_tas_gt_10_sum");
+                tables.Add("climate_tas_gt_15_count");
+                tables.Add("climate_tas_gt_15_sum");
+                tables.Add("climate_tas_gt_00_count_dlt");
+                tables.Add("climate_tas_gt_05_count_dlt");
+                tables.Add("climate_tas_gt_05_sum_dlt");
+                tables.Add("climate_tas_gt_10_count_dlt");
+                tables.Add("climate_tas_gt_10_sum_dlt");
+                tables.Add("climate_tas_gt_15_count_dlt");
+                tables.Add("climate_tas_gt_15_sum_dlt");
                 List<string> parameters = new List<string>();
                 try
                 {
@@ -841,9 +887,22 @@ namespace GeoNodeWeb.Controllers
                     string point = points.FirstOrDefault();
                     foreach (string table in tables)
                     {
-                        if(table == "climate_gtk")
+                        string table_ = table;
+                        if (table.Contains("tas_gt") && table.Contains("count") && !table.Contains("dlt"))
                         {
-
+                            table_ = "climate_tas_gt_count";
+                        }
+                        if (table.Contains("tas_gt") && table.Contains("count") && table.Contains("dlt"))
+                        {
+                            table_ = "climate_tas_gt_count_dlt";
+                        }
+                        if (table.Contains("tas_gt") && table.Contains("sum") && !table.Contains("dlt"))
+                        {
+                            table_ = "climate_tas_gt_sum";
+                        }
+                        if (table.Contains("tas_gt") && table.Contains("sum") && table.Contains("dlt"))
+                        {
+                            table_ = "climate_tas_gt_sum_dlt";
                         }
                         //string query = $"SELECT dt, name, value" +
                         //    $" FROM public.{table}" +
@@ -854,13 +913,13 @@ namespace GeoNodeWeb.Controllers
                         //    $" (SELECT MIN(ST_Distance(point, ST_GeomFromEWKT('SRID=4326;POINT({pointx.ToString()} {pointy.ToString()})')))" +
                         //    $" FROM public.climate_coords) LIMIT 1);";
                         string query = $"SELECT dt, name, value" +
-                            $" FROM public.{table}" +
+                            $" FROM public.{table_}" +
                             $" WHERE point = ST_GeomFromEWKT('{point}');";
                         var climate_xsQ = connection.Query<climate_x>(query, commandTimeout: 600);
                         foreach (string parameter in parameters)
                         {
                             string parameter_ = "";
-                            if (table.Contains("dlt"))
+                            if (!table.Contains("tas_gt") && table.Contains("dlt"))
                             {
                                 parameter_ = $"{table.Replace("climate_", "")}_{parameter}";
                                 if (table == "climate_pr_dlt")
@@ -880,6 +939,40 @@ namespace GeoNodeWeb.Controllers
                                 if (ps.Length == 5)
                                 {
                                     parameter_ = $"{table.Replace("climate_", "")}_{ps[1]}_{ps[0]}_{ps[3]}_{ps[4]}_h_{ps[2]}";
+                                }
+                            }
+                            else if (table.Contains("tas_gt") && !table.Contains("dlt"))
+                            {
+                                string[] ps = parameter.Split('_');
+                                parameter_ = $"{table.Replace("climate_", "")}_pd_{parameter}";
+                                if (ps.Length == 4)
+                                {
+                                    parameter_ = $"{table.Replace("climate_", "")}_{ps[3]}_h_{ps[2]}";
+                                }
+                                if (parameter_.Contains("00"))
+                                {
+                                    parameter_ = parameter_.Replace("00", "0");
+                                }
+                                if (parameter_.Contains("05"))
+                                {
+                                    parameter_ = parameter_.Replace("05", "5");
+                                }
+                            }
+                            else if (table.Contains("tas_gt") && table.Contains("dlt"))
+                            {
+                                string[] ps = parameter.Split('_');
+                                parameter_ = $"{table.Replace("climate_", "")}_pd_{parameter}";
+                                if (ps.Length == 4)
+                                {
+                                    parameter_ = $"{table.Replace("climate_", "")}_{ps[3]}_h_{ps[2]}";
+                                }
+                                if (parameter_.Contains("00"))
+                                {
+                                    parameter_ = parameter_.Replace("00", "0");
+                                }
+                                if (parameter_.Contains("05"))
+                                {
+                                    parameter_ = parameter_.Replace("05", "5");
                                 }
                             }
                             else
@@ -985,7 +1078,7 @@ namespace GeoNodeWeb.Controllers
 
         private string GetColumn(string parameter)
         {
-            if(parameter.Contains("_y_"))
+            if(parameter.Contains("_y_") || parameter.Contains("_h_"))
             {
                 return _sharedLocalizer["Year"];
             }
@@ -1038,7 +1131,7 @@ namespace GeoNodeWeb.Controllers
 
         private int GetColumnIndex(string parameter)
         {
-            if(parameter.Contains("_y_"))
+            if(parameter.Contains("_y_")||parameter.Contains("_h_"))
             {
                 return 1;
             }
@@ -1132,6 +1225,48 @@ namespace GeoNodeWeb.Controllers
                     break;
                 case "climate_spei":
                     r = _sharedLocalizer["SPEI"];
+                    break;
+                case "climate_tas_gt_00_count":
+                    r = _sharedLocalizer["tas_gt_00_count"];
+                    break;
+                case "climate_tas_gt_05_count":
+                    r = _sharedLocalizer["tas_gt_05_count"];
+                    break;
+                case "climate_tas_gt_05_sum":
+                    r = _sharedLocalizer["tas_gt_05_sum"];
+                    break;
+                case "climate_tas_gt_10_count":
+                    r = _sharedLocalizer["tas_gt_10_count"];
+                    break;
+                case "climate_tas_gt_10_sum":
+                    r = _sharedLocalizer["tas_gt_10_sum"];
+                    break;
+                case "climate_tas_gt_15_count":
+                    r = _sharedLocalizer["tas_gt_15_count"];
+                    break;
+                case "climate_tas_gt_15_sum":
+                    r = _sharedLocalizer["tas_gt_15_sum"];
+                    break;
+                case "climate_tas_gt_00_count_dlt":
+                    r = _sharedLocalizer["tas_gt_00_count_dlt"];
+                    break;
+                case "climate_tas_gt_05_count_dlt":
+                    r = _sharedLocalizer["tas_gt_05_count_dlt"];
+                    break;
+                case "climate_tas_gt_05_sum_dlt":
+                    r = _sharedLocalizer["tas_gt_05_sum_dlt"];
+                    break;
+                case "climate_tas_gt_10_count_dlt":
+                    r = _sharedLocalizer["tas_gt_10_count_dlt"];
+                    break;
+                case "climate_tas_gt_10_sum_dlt":
+                    r = _sharedLocalizer["tas_gt_10_sum_dlt"];
+                    break;
+                case "climate_tas_gt_15_count_dlt":
+                    r = _sharedLocalizer["tas_gt_15_count_dlt"];
+                    break;
+                case "climate_tas_gt_15_sum_dlt":
+                    r = _sharedLocalizer["tas_gt_15_sum_dlt"];
                     break;
             }
             //switch (parameter.Split('_')[3])
