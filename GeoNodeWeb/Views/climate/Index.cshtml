@@ -2113,6 +2113,18 @@
 
         $('#InfoYears').text(date + ' - ' + range_instance.result.to.toString());
 
+        if (date < 2001) {
+            $('#InfoInfo').text('');
+        }
+        else {
+            if ($('#RCP45').is(':checked')) {
+                $('#InfoInfo').text('RCP 4.5');
+            }
+            if ($('#RCP85').is(':checked')) {
+                $('#InfoInfo').text('RCP 8.5');
+            }
+        }
+
         TableRasters(clickX, clickY, range_instance.result.from);
     }
 
