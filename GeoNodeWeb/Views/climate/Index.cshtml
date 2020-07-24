@@ -2126,6 +2126,14 @@
         }
 
         TableRasters(clickX, clickY, range_instance.result.from);
+        var seasonmonth = "";
+        if (Period == 's') {
+            seasonmonth += Season;
+        }
+        if (Period == 'm') {
+            seasonmonth += Month;
+        }
+        ChartRasters(layerClimate, seasonmonth, clickX, clickY, -1);
     }
 
     function addSpecialAreas($slider) {
