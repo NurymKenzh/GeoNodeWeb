@@ -2247,7 +2247,12 @@
                 {
                     'INFO_FORMAT': 'text/javascript'
                 });
-            if (url_wma_polygon) {
+            var url_wma_polygoncn = Layer_wma_polygoncn.getSource().getGetFeatureInfoUrl(
+                evt.coordinate, viewResolution, 'EPSG:3857',
+                {
+                    'INFO_FORMAT': 'text/javascript'
+                });
+            if (url_wma_polygon || url_wma_polygoncn) {
                 var parser = new ol.format.GeoJSON();
                 $.ajax({
                     jsonp: false,
@@ -2286,6 +2291,47 @@
                         content.innerHTML = '<p>' + $('#VHB').val() + ' - ' + name + '</p><code>' + $('#VHU').val() + ' - ' + result[0].get('CodeWMA') + '</code>'
                             + '<br /><button type="button" class="btn btn-outline-primary btn-sm"  onclick="Charts()"><i class="fa fa-bar-chart-o"></i></button>';
                         overlay.setPosition(evt.coordinate);
+                    }
+                    else {
+                        $.ajax({
+                            jsonp: false,
+                            jsonpCallback: 'getJson',
+                            type: 'GET',
+                            url: url_wma_polygoncn + "&format_options=callback:getJson",
+                            async: false,
+                            dataType: 'jsonp',
+                            error: function (xhr, status, error) {
+                                console.log('error');
+                            },
+                        }).then(function (responsecn) {
+                            featureId = -1;
+                            var result = parser.readFeatures(responsecn);
+                            if (result.length > 0) {
+                                var polyFeature = new ol.Feature({
+                                    geometry: new ol.geom.MultiPolygon(responsecn.features[0].geometry.coordinates)
+                                });
+                                Source_Select.addFeature(polyFeature);
+                                featureId = result[0].get('OBJECTID');
+                                $('#featureId').val(result[0].get('OBJECTID'));
+                            }
+                            if (featureId >= 0) {
+                                $('#chartSpan').text('1');
+                                var name = '';
+                                if ($('#Language').val() == "ru") {
+                                    name = result[0].get('NameWMB_Ru');
+                                }
+                                else if ($('#Language').val() == "en") {
+                                    name = result[0].get('NameWMB_En');
+                                }
+                                else {
+                                    name = result[0].get('NameWMB_Kz');
+                                }
+                                //var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(evt.coordinate));
+                                content.innerHTML = '<p>' + $('#VHB').val() + ' - ' + name + '</p><code>' + $('#VHU').val() + ' - ' + result[0].get('CodeWMA') + '</code>'
+                                    + '<br /><button type="button" class="btn btn-outline-primary btn-sm"  onclick="Charts()"><i class="fa fa-bar-chart-o"></i></button>';
+                                overlay.setPosition(evt.coordinate);
+                            }
+                        });
                     }
                 });
             }
