@@ -953,6 +953,25 @@
     Layer_pr_pd_avg_m_rcp45_10.set('name', 'pr_pd_avg_m_rcp45_10');
     Layer_pr_pd_avg_m_rcp45_10.setOpacity(0.80);
 
+    var url_kazakhstan_nic1 = geoserver_url + 'geonode' + '/wms';
+    var Source_kazakhstan_nic1 = new ol.source.TileWMS({
+        url: url_kazakhstan_nic1,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:kazakhstan_nic1',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_kazakhstan_nic1 = new ol.layer.Tile({
+        source: Source_kazakhstan_nic1
+    });
+    Layer_kazakhstan_nic1.set('name', 'kazakhstan_nic1');
+    Layer_kazakhstan_nic1.setOpacity(0.80);
+
     var url_Climate = geoserver_url + geoserver_workspace_name + '/wms';
     var Source_Climate = new ol.source.TileWMS({
         url: url_Climate,
@@ -1167,6 +1186,7 @@
         layers: [
             Layer_Base,
             Layer_Climate,
+            Layer_kazakhstan_nic1,
             Layer_kaspii_aral_3857,
             Layer_wmb_polygon,
             Layer_wma_polygon,
