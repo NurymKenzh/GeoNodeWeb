@@ -324,6 +324,33 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string DecadeAverage10 {
+            get {
+                return ResourceManager.GetString("DecadeAverage10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DecadeAverage20 {
+            get {
+                return ResourceManager.GetString("DecadeAverage20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DecadeAverage30 {
+            get {
+                return ResourceManager.GetString("DecadeAverage30", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string DecadeAverageYears {
             get {
                 return ResourceManager.GetString("DecadeAverageYears", resourceCulture);

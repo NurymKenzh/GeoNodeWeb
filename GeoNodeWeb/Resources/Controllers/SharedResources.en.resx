@@ -204,6 +204,15 @@
   <data name="DecadeAverage" xml:space="preserve">
     <value>Decade Average</value>
   </data>
+  <data name="DecadeAverage10" xml:space="preserve">
+    <value>Average over decades</value>
+  </data>
+  <data name="DecadeAverage20" xml:space="preserve">
+    <value>Average over twenty years</value>
+  </data>
+  <data name="DecadeAverage30" xml:space="preserve">
+    <value>Average over thirty</value>
+  </data>
   <data name="DecadeAverageYears" xml:space="preserve">
     <value>Decade Average 1951-1960 (RCP 4.5)</value>
   </data>

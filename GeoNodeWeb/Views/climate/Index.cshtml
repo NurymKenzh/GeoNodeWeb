@@ -2095,7 +2095,7 @@
             });
             Layer_Climate.setSource(Source_Climate_New);
         }
-        
+
         if ((Decade == '10' && range_instance.result.from == 2001)
             || (Decade == '20' && (range_instance.result.from == 1991 || range_instance.result.from == 2001))
             || (Decade == '30' && (range_instance.result.from == 1981 || range_instance.result.from == 1991 || range_instance.result.from == 2001))) {
@@ -2202,13 +2202,30 @@
         if (RCP == 'rcp85') {
             rcp_label = 'RCP 8.5'
         }
-        if (range_instance.result.from < 2010) {
-            $('#table_title').text($('#DecadeAverage').val() + ' ' + date_label);
+        if (Decade == '10') {
+            if (range_instance.result.from < 2010) {
+                $('#table_title').text('@Html.Raw(SharedLocalizer["DecadeAverage10"])' + ' ' + date_label);
+            }
+            else {
+                $('#table_title').text('@Html.Raw(SharedLocalizer["DecadeAverage10"])' + ' ' + date_label + ' (' + rcp_label + ')');
+            }
         }
-        else {
-            $('#table_title').text($('#DecadeAverage').val() + ' ' + date_label + ' (' + rcp_label + ')');
+        else if (Decade == '20') {
+            if (range_instance.result.from < 2010) {
+                $('#table_title').text('@Html.Raw(SharedLocalizer["DecadeAverage20"])' + ' ' + date_label);
+            }
+            else {
+                $('#table_title').text('@Html.Raw(SharedLocalizer["DecadeAverage20"])' + ' ' + date_label + ' (' + rcp_label + ')');
+            }
         }
-        
+        else if (Decade == '30') {
+            if (range_instance.result.from < 2010) {
+                $('#table_title').text('@Html.Raw(SharedLocalizer["DecadeAverage30"])' + ' ' + date_label);
+            }
+            else {
+                $('#table_title').text('@Html.Raw(SharedLocalizer["DecadeAverage30"])' + ' ' + date_label + ' (' + rcp_label + ')');
+            }
+        }
     }
 </script>
 
@@ -2696,7 +2713,7 @@
                     labels = [];
                 for (i = 0; i < data.climate_xs.length; i++) {
                     chartdata.push(parseFloat(data.climate_xs[i].value).toFixed(2));
-                    labels.push(data.climate_xs[i].year.toString() + '-' + (data.climate_xs[i].year + 9).toString());
+                    labels.push(data.climate_xs[i].year.toString() + '-' + (data.climate_xs[i].year + 9 + parseInt(Decade) - 10).toString());
                 }
                 var chart1Data = {
                     labels: labels,

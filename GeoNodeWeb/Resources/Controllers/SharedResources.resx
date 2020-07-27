@@ -204,6 +204,15 @@
   <data name="DecadeAverage" xml:space="preserve">
     <value />
   </data>
+  <data name="DecadeAverage10" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DecadeAverage20" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DecadeAverage30" xml:space="preserve">
+    <value />
+  </data>
   <data name="DecadeAverageYears" xml:space="preserve">
     <value />
   </data>

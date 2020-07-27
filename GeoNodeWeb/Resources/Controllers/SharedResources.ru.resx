@@ -204,6 +204,15 @@
   <data name="DecadeAverage" xml:space="preserve">
     <value>Среднее значение по десятилетиям</value>
   </data>
+  <data name="DecadeAverage10" xml:space="preserve">
+    <value>Среднее значение по десятилетиям</value>
+  </data>
+  <data name="DecadeAverage20" xml:space="preserve">
+    <value>Среднее значение по двадцатилетиям</value>
+  </data>
+  <data name="DecadeAverage30" xml:space="preserve">
+    <value>Среднее значение по тридцатилетиям</value>
+  </data>
   <data name="DecadeAverageYears" xml:space="preserve">
     <value>Среднее значение по десятилетиям 1951-1960 (RCP 4.5)</value>
   </data>

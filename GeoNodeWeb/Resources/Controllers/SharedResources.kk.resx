@@ -204,6 +204,15 @@
   <data name="DecadeAverage" xml:space="preserve">
     <value>Онжылдықтың орташа мәні</value>
   </data>
+  <data name="DecadeAverage10" xml:space="preserve">
+    <value>Орташа онжылдықтар ішінде</value>
+  </data>
+  <data name="DecadeAverage20" xml:space="preserve">
+    <value>Орташа жиырма жылдан асады</value>
+  </data>
+  <data name="DecadeAverage30" xml:space="preserve">
+    <value>Орташа отыздан асады</value>
+  </data>
   <data name="DecadeAverageYears" xml:space="preserve">
     <value>Орташа онжылдық 1951-1960 (RCP 4.5)</value>
   </data>
