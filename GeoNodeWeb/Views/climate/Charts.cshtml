@@ -394,6 +394,7 @@
                                         <button type="button" class="btn-default" onclick="Chart1Show(); Table1Show();">@SharedLocalizer["Year"]</button>
                                         <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">@SharedLocalizer["Season"]</button>
                                         <button type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">@SharedLocalizer["Month"]</button>
+                                        <button type="button" class="btn-default" onclick="Chart4Show(); Table4Show();">@SharedLocalizer["Monthly"]</button>
                                     </div>
                                     <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Min-max">
                                         <button type="button" class="btn-danger" onclick="ShowMax()">@SharedLocalizer["Maximum"]</button>
@@ -820,6 +821,72 @@
                                     <canvas class="my-4 w-100 chartjs-render-monitor" id="chart3Canvas" width="900" height="380"></canvas>
                                 </div>
                             </div>
+                            <div class="row mb-3" id="chartbody4">
+                                <div class="col-md-3 order-md-2 mt-2">
+                                    <fieldset class="scheduler-border">
+                                        <legend class="scheduler-border"> @SharedLocalizer["ChartOptions"] </legend>
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="chart4SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
+                                                <select class="form-control form-control-sm" id="chart4SubParameter">
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"]</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"]</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"]</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"]</option>
+                                                    <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
+                                                    <option value="gtk_pd_avg">@SharedLocalizer["AridityIndices"]</option>
+                                                    <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
+                                                    <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="chart4Decade">@SharedLocalizer["Periodicity"]:</label>
+                                                <select class="form-control form-control-sm text-lowercase" id="chart4Decade" onchange="chart4UpdateDates()">
+                                                    <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="chart4RCP">RCP:</label>
+                                                <select class="form-control form-control-sm" id="chart4RCP">
+                                                    <option value="rcp45">rcp 4.5</option>
+                                                    <option value="rcp85">rcp 8.5</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="chart4Date">@SharedLocalizer["Year"]:</label>
+                                                <select class="form-control form-control-sm" id="chart4Date">
+                                                    <option value="1951">1951-1960</option>
+                                                    <option value="1961">1961-1970</option>
+                                                    <option value="1971">1971-1980</option>
+                                                    <option value="1981">1981-1990</option>
+                                                    <option value="1991">1991-2000</option>
+                                                    <option value="2001">2001-2010</option>
+                                                    <option value="2011">2011-2020</option>
+                                                    <option value="2021">2021-2030</option>
+                                                    <option value="2031">2031-2040</option>
+                                                    <option value="2041">2041-2050</option>
+                                                    <option value="2051">2051-2060</option>
+                                                    <option value="2061">2061-2070</option>
+                                                    <option value="2071">2071-2080</option>
+                                                    <option value="2081">2081-2090</option>
+                                                    <option value="2091">2091-2100</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                        <input type="button" class="btn btn-outline-primary btn-sm" value="@SharedLocalizer["Refresh"]" onclick="Chart4()" />
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-9">
+                                    <canvas class="my-4 w-100 chartjs-render-monitor" id="chart4Canvas" width="900" height="380"></canvas>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade active show" id="tables" role="tabpanel" aria-labelledby="tables-tab">
                             @*<p class="card-text text-secondary">Averages for the decade 1981–2010</p>*@
@@ -911,6 +978,36 @@
                                     </thead>
                                 </table>
                             </div>
+                            <div id="table4" class="table-responsive">
+                                <h4 id="table4title"></h4>
+                                <table id="rasterdata4" class="table table-striped"
+                                       data-toggle="table"
+                                       data-buttons="btn btn-sm"
+                                       data-buttons-class="primary"
+                                       data-search="true"
+                                       data-detail-view="true"
+                                       data-detail-view-icon="false"
+                                       data-show-fullscreen="true"
+                                       data-show-refresh="true"
+                                       data-show-columns="true"
+                                       data-show-print="true"
+                                       data-show-export="true">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th data-field="period"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Period"]</th>
+                                            <th data-field="month"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Month"]</th>
+                                            <th data-field="max"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Maximum"]</th>
+                                            <th data-field="min"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Minimum"]</th>
+                                            <th data-field="median"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Median"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -923,7 +1020,8 @@
 <script>
     var chart1 = null,
         chart2 = null,
-        chart3 = null;
+        chart3 = null,
+        chart4 = null;
 
     function chart1UpdateDates() {
         $('input:checkbox[name="chart1Dates"][value="1951"]').prop('checked', true);
@@ -1448,6 +1546,106 @@
             }
         });
     };
+
+    function Chart4(objectid, type = 'line') {
+        var Id = objectid;
+        if (objectid == null) {
+            Id = @ViewBag.Id;
+        }
+        var monthMaxColors = 'rgba(0, 112, 255, 0.5)',
+            monthMinColors = 'rgba(191, 255, 255, 0.5)',
+            monthMedianColors = 'rgba(77, 189, 255, 0.5)';
+        $.ajax({
+            url: '@Url.Action("GetChart4")',
+            data: {
+                Id: Id,
+                SubParameter: $('#chart4SubParameter').val(),
+                Decade: $('#chart4Decade').val(),
+                RCP: $('#chart4RCP').val(),
+                Date: $('#chart4Date').val()
+            },
+            type: 'POST',
+            success: function (data) {
+                Table4(Id, $('#chart4SubParameter').val(), $('#chart4Decade').val(), $('#chart4RCP').val(), $('#chart4Date').val());
+
+                $('#ChartTitle').text($('#VHB').val() + ' - ' + data.wmbname + ' (' + $('#VHU').val() + ' - ' + data.wmacode + ')');
+                for (var i = 0; i < data.max.length; ++i) {
+                        data.max[i] = parseFloat(data.max[i]).toFixed(2);
+                }
+                for (var i = 0; i < data.min.length; ++i) {
+                        data.min[i] = parseFloat(data.min[i]).toFixed(2);
+                }
+                for (var i = 0; i < data.median.length; ++i) {
+                        data.median[i] = parseFloat(data.median[i]).toFixed(2);
+                }
+                var chart4Data = {
+                    labels: data.periods,
+                    datasets: []
+                };
+                if (data.max.length > 0) {
+                    chart4Data.datasets.push({
+                        label: $('#Maximum').val(),
+                        backgroundColor: monthMaxColors,
+                        borderColor: 'rgba(8, 0, 97, 1)',
+                        borderWidth: 1,
+                        stack: 'max',
+                        data: data.max
+                    });
+                }
+                if (data.min.length > 0) {
+                    chart4Data.datasets.push({
+                        label: $('#Minimum').val(),
+                        backgroundColor: monthMinColors,
+                        borderColor: 'rgba(8, 0, 97, 1)',
+                        borderWidth: 1,
+                        stack: 'min',
+                        data: data.min
+                    });
+                }
+                if (data.median.length > 0) {
+                    chart4Data.datasets.push({
+                        label: $('#Median').val(),
+                        backgroundColor: monthMedianColors,
+                        borderColor: 'rgba(8, 0, 97, 1)',
+                        borderWidth: 1,
+                        stack: 'median',
+                        data: data.median
+                    });
+                }
+                var ctx4 = document.getElementById('chart4Canvas').getContext('2d');
+                if (chart4 != null) {
+                    chart4.destroy();
+                }
+                chart4 = new Chart(ctx4, {
+                    type: type,
+                    data: chart4Data,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            fontSize: 20,
+                            fontColor: '#000',
+                            text: $("#chart3SubParameter option:selected ").text() + ' (' + $("#chart3Decade option:selected").text() + '/' + $("#chart3RCP option:selected").text() + ')'
+                        },
+                        tooltips: {
+						    mode: 'index',
+						    intersect: false
+					    }
+                    }
+                });
+                ShowMedian();
+                if ($('#chart4SubParameter').val() == 'tasmax_pd_avg') {
+                    ShowMax();
+                }
+            },
+            error: function () {
+            }
+        });
+    };
+
     //add event listener to button
     function saveAsPDF() {
         html2canvas(document.getElementById("chartContainer"), {
@@ -1464,7 +1662,7 @@
     }
 </script>
 
-@* Table1, Table2, Table3 *@
+@* Table1, Table2, Table3, Table4 *@
 
 <script>
     function Table1(Id, SubParameter, Decade, RCP, Dates) {
@@ -1597,6 +1795,49 @@
             }
         });
     }
+
+    function Table4(Id, SubParameter, Decade, RCP, Date) {
+        $('#table4title').text($("#chart4SubParameter option:selected ").text() + ' (' + $("#chart3Decade option:selected").text() + '/' + $("#chart3RCP option:selected").text() + ')');
+        $.ajax({
+            url: '@Url.Action("GetTable4")',
+            data: {
+                Id: Id,
+                SubParameter: SubParameter,
+                Decade: Decade,
+                RCP: RCP,
+                Date: Date
+            },
+            //async: false,
+            type: 'POST',
+            success: function (data) {
+                raster_data = data.raster_table_for_chart_bs;
+                for (var i = 0; i < raster_data.length; ++i) {
+                    if (raster_data[i].max) {
+                        raster_data[i].max = raster_data[i].max.toFixed(2);
+                    }
+                    if (raster_data[i].min) {
+                        raster_data[i].min = raster_data[i].min.toFixed(2);
+                    }
+                    if (raster_data[i].median) {
+                        raster_data[i].median = raster_data[i].median.toFixed(2);
+                    }
+                }
+                $(function () {
+                    $('#rasterdata4').bootstrapTable('destroy').bootstrapTable({
+                        data: raster_data,
+                        iconSize: "sm",
+                        exportOptions: {
+                            preventInjection: false
+                        }
+                    });
+                    $('#rasterdata4').bootstrapTable('load', raster_data);
+                })
+            },
+            error: function () {
+                console.log('Error TableRasters');
+            }
+        });
+    }
 </script>
 
 @* wms *@
@@ -1681,6 +1922,7 @@
         Chart1($("#wma").val());
         Chart2($("#wma").val());
         Chart3($("#wma").val());
+        Chart4($("#wma").val());
     }
 </script>
 
@@ -1692,6 +1934,7 @@
         Chart1();
         Chart2();
         Chart3();
+        Chart4();
         //Table1($("#CoordX").val(), $("#CoordY").val());
     });
     //$(function () {
@@ -2478,16 +2721,25 @@
         $('#chartbody1').show();
         $('#chartbody2').hide();
         $('#chartbody3').hide();
+        $('#chartbody4').hide();
     }
     function Chart2Show() {
         $('#chartbody1').hide();
         $('#chartbody2').show();
         $('#chartbody3').hide();
+        $('#chartbody4').hide();
     }
     function Chart3Show() {
         $('#chartbody1').hide();
         $('#chartbody2').hide();
         $('#chartbody3').show();
+        $('#chartbody4').hide();
+    }
+    function Chart4Show() {
+        $('#chartbody1').hide();
+        $('#chartbody2').hide();
+        $('#chartbody3').hide();
+        $('#chartbody4').show();
     }
 </script>
 
@@ -2497,16 +2749,25 @@
         $('#table1').show();
         $('#table2').hide();
         $('#table3').hide();
+        $('#table4').hide();
     }
     function Table2Show() {
         $('#table1').hide();
         $('#table2').show();
         $('#table3').hide();
+        $('#table4').hide();
     }
     function Table3Show() {
         $('#table1').hide();
         $('#table2').hide();
         $('#table3').show();
+        $('#table4').hide();
+    }
+    function Table4Show() {
+        $('#table1').hide();
+        $('#table2').hide();
+        $('#table3').hide();
+        $('#table4').show();
     }
 </script>
 
@@ -2570,6 +2831,16 @@
             }
         }
         chart3.update();
+
+        for (var i = 0; i < chart4.data.datasets.length; ++i) {
+            if (chart4.data.datasets[i].label.toLowerCase().includes('максимум')) {
+                chart4.data.datasets[i].hidden = false;
+            }
+            else {
+                chart4.data.datasets[i].hidden = true;
+            }
+        }
+        chart4.update();
     }
 
     function ShowMin() {
@@ -2634,6 +2905,16 @@
             }
         }
         chart3.update();
+
+        for (var i = 0; i < chart4.data.datasets.length; ++i) {
+            if (chart4.data.datasets[i].label.toLowerCase().includes('медиана')) {
+                chart4.data.datasets[i].hidden = false;
+            }
+            else {
+                chart4.data.datasets[i].hidden = true;
+            }
+        }
+        chart4.update();
     }
 </script>
 

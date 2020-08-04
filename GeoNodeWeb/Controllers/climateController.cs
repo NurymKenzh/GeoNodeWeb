@@ -1779,6 +1779,158 @@ namespace GeoNodeWeb.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetChart4(int Id,
+            string SubParameter,
+            string Decade,
+            string RCP,
+            int Date)
+        {
+            string layer_name = $"{SubParameter}_m_{RCP}_{Decade}";
+
+            // Отклонения осадков в мм
+            if (SubParameter == "pr_dlt_avg_mm")
+            {
+                string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
+                layer_name = $"{SubParameter_}_m_{RCP}_{Decade}_mm";
+            }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
+            }
+
+            List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
+            {
+                connection.Open();
+                string query = $"SELECT date, data" +
+                    $" FROM public.climate_rasterstats" +
+                    $" WHERE layer_name = '{layer_name}'" +
+                    $" AND feature_id = {Id.ToString()}" +
+                    $" ORDER BY date;";
+                var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
+                climate_rasterstats = climate_rasterstats_DB
+                    .Where(c => c.date.Year == Date)
+                    .OrderBy(c => c.date.Month)
+                    .ToList();
+                connection.Close();
+            }
+
+            string wmbname = "",
+                wmacode = "";
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
+            {
+                connection.Open();
+                var nameRu = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameEn = connection.Query<string>($"SELECT \"NameWMB_En\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var nameKk = connection.Query<string>($"SELECT \"NameWMB_Kz\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                string language = new RequestLocalizationOptions().DefaultRequestCulture.Culture.Name;
+                if (language == "ru")
+                {
+                    wmbname = nameRu.FirstOrDefault();
+                }
+                else if (language == "en")
+                {
+                    wmbname = nameEn.FirstOrDefault();
+                }
+                else
+                {
+                    wmbname = nameKk.FirstOrDefault();
+                }
+                wmacode = code.FirstOrDefault();
+                connection.Close();
+            }
+
+            decimal?[] max = new decimal?[12],
+                min = new decimal?[12],
+                median = new decimal?[12];
+            List<string> periods = new List<string>();
+            periods.Add(_sharedLocalizer["January"]);
+            periods.Add(_sharedLocalizer["February"]);
+            periods.Add(_sharedLocalizer["March"]);
+            periods.Add(_sharedLocalizer["April"]);
+            periods.Add(_sharedLocalizer["May"]);
+            periods.Add(_sharedLocalizer["June"]);
+            periods.Add(_sharedLocalizer["July"]);
+            periods.Add(_sharedLocalizer["August"]);
+            periods.Add(_sharedLocalizer["September"]);
+            periods.Add(_sharedLocalizer["October"]);
+            periods.Add(_sharedLocalizer["November"]);
+            periods.Add(_sharedLocalizer["December"]);
+            for (int month = 0; month <= 11; month++)
+            {
+                climate_rasterstat climate_rasterstat = climate_rasterstats
+                    .FirstOrDefault(c => c.date.Month == month + 1);
+                if (climate_rasterstat == null)
+                {
+                    max[month] = null;
+                    min[month] = null;
+                    median[month] = null;
+                }
+                else
+                {
+                    var data = JObject.Parse(climate_rasterstat.data);
+                    foreach (JProperty property in data.Properties())
+                    {
+                        if (property.Name == "max")
+                        {
+                            decimal? d = null;
+                            try
+                            {
+                                d = Convert.ToDecimal(property.Value);
+                            }
+                            catch { }
+                            max[month] = d;
+                        }
+                        if (property.Name == "min")
+                        {
+                            decimal? d = null;
+                            try
+                            {
+                                d = Convert.ToDecimal(property.Value);
+                            }
+                            catch { }
+                            min[month] = d;
+                        }
+                        if (property.Name == "median")
+                        {
+                            decimal? d = null;
+                            try
+                            {
+                                d = Convert.ToDecimal(property.Value);
+                            }
+                            catch { }
+                            median[month] = d;
+                        }
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                periods,
+                max,
+                min,
+                median,
+                wmbname,
+                wmacode
+            });
+        }
+
+        [HttpPost]
         public ActionResult GetTable1(int Id,
             string SubParameter,
             string Decade,
@@ -2197,6 +2349,142 @@ namespace GeoNodeWeb.Controllers
                         raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
                     }
                 }
+            }
+
+            return Json(new
+            {
+                raster_table_for_chart_bs
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetTable4(int Id,
+            string SubParameter,
+            string Decade,
+            string RCP,
+            int Date)
+        {
+            string layer_name = $"{SubParameter}_m_{RCP}_{Decade}";
+            List<raster_table_for_chart> raster_table_for_chart_bs = new List<raster_table_for_chart>();
+
+            // Отклонения осадков в мм
+            if (SubParameter == "pr_dlt_avg_mm")
+            {
+                string SubParameter_ = SubParameter.Substring(0, SubParameter.Length - 3);
+                layer_name = $"{SubParameter_}_m_{RCP}_{Decade}_mm";
+            }
+            // tas_gt_
+            if (SubParameter.IndexOf("tas_gt_") >= 0)
+            {
+                layer_name = $"{SubParameter}_h_{RCP}_{Decade}";
+            }
+
+            List<climate_rasterstat> climate_rasterstats = new List<climate_rasterstat>();
+            using (var connection = new NpgsqlConnection(geoportalProdConnection))
+            {
+                connection.Open();
+                string query = $"SELECT date, data" +
+                    $" FROM public.climate_rasterstats" +
+                    $" WHERE layer_name = '{layer_name}'" +
+                    $" AND feature_id = {Id.ToString()}" +
+                    $" ORDER BY date;";
+                var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
+                climate_rasterstats = climate_rasterstats_DB
+                    .Where(c => c.date.Year == Date)
+                    .OrderBy(c => c.date.Month)
+                    .ToList();
+                connection.Close();
+            }
+            
+            using (var connection = new NpgsqlConnection(geodataProdConnection))
+            {
+                connection.Open();
+                var name = connection.Query<string>($"SELECT \"NameWMB_Ru\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                var code = connection.Query<string>($"SELECT \"CodeWMA\" " +
+                    $"FROM public.wma_polygon " +
+                    $"WHERE \"OBJECTID\" = {Id.ToString()} " +
+                    $"LIMIT 1;");
+                connection.Close();
+            }
+
+            decimal?[] max = new decimal?[12],
+                min = new decimal?[12],
+                median = new decimal?[12];
+            for (int month = 0; month <= 11; month++)
+            {
+                climate_rasterstat climate_rasterstat = climate_rasterstats
+                    .FirstOrDefault(c => c.date.Month == month + 1);
+                if (climate_rasterstat == null)
+                {
+                    max[month] = null;
+                    min[month] = null;
+                    median[month] = null;
+                }
+                else
+                {
+                    var data = JObject.Parse(climate_rasterstat.data);
+                    foreach (JProperty property in data.Properties())
+                    {
+                        if (property.Name == "max")
+                        {
+                            decimal? d = null;
+                            try
+                            {
+                                d = Convert.ToDecimal(property.Value);
+                            }
+                            catch { }
+                            max[month] = d;
+                        }
+                        if (property.Name == "min")
+                        {
+                            decimal? d = null;
+                            try
+                            {
+                                d = Convert.ToDecimal(property.Value);
+                            }
+                            catch { }
+                            min[month] = d;
+                        }
+                        if (property.Name == "median")
+                        {
+                            decimal? d = null;
+                            try
+                            {
+                                d = Convert.ToDecimal(property.Value);
+                            }
+                            catch { }
+                            median[month] = d;
+                        }
+                    }
+                }
+            }
+
+            int decade = Convert.ToInt32(Decade);
+            List<string> months = new List<string>
+            { _sharedLocalizer["January"], _sharedLocalizer["February"], _sharedLocalizer["March"], _sharedLocalizer["April"], _sharedLocalizer["May"], _sharedLocalizer["June"],
+              _sharedLocalizer["July"], _sharedLocalizer["August"], _sharedLocalizer["September"], _sharedLocalizer["October"], _sharedLocalizer["November"], _sharedLocalizer["December"]};
+            for (int i = 0; i < 12; i++)
+            {
+                raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
+                for (int k = 0; k < months.Count; k++)
+                {
+                    if (i == k)
+                    {
+                        raster_table_for_chart_b_new.month = months[k];
+                    }
+                }
+
+                raster_table_for_chart_b_new.year = Date;
+                raster_table_for_chart_b_new.min = min[i];
+                raster_table_for_chart_b_new.max = max[i];
+                raster_table_for_chart_b_new.median = median[i];
+
+                raster_table_for_chart_b_new.period = raster_table_for_chart_b_new.year.ToString() + " - " + (raster_table_for_chart_b_new.year + decade - 1).ToString();
+
+                raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
             }
 
             return Json(new

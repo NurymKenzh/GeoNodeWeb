@@ -351,6 +351,9 @@
   <data name="Month" xml:space="preserve">
     <value>Месяц</value>
   </data>
+  <data name="Monthly" xml:space="preserve">
+    <value>По месяцам</value>
+  </data>
   <data name="Months" xml:space="preserve">
     <value>Месяцы</value>
   </data>
