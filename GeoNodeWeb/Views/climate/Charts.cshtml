@@ -395,6 +395,7 @@
                                         <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">@SharedLocalizer["Season"]</button>
                                         <button type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">@SharedLocalizer["Month"]</button>
                                         <button type="button" class="btn-default" onclick="Chart4Show(); Table4Show();">@SharedLocalizer["Monthly"]</button>
+                                        <button type="button" class="btn-default" onclick="Chart5Show(); Table5Show();">@SharedLocalizer["BySeasons"]</button>
                                     </div>
                                     <div class="btn-group btn-group-sm ml-2" role="group" aria-label="Min-max">
                                         <button type="button" class="btn-danger" onclick="ShowMax()">@SharedLocalizer["Maximum"]</button>
@@ -929,6 +930,114 @@
                                     <canvas class="my-4 w-100 chartjs-render-monitor" id="chart4Canvas" width="900" height="380"></canvas>
                                 </div>
                             </div>
+                            <div class="row mb-3" id="chartbody5">
+                                <div class="col-md-3 order-md-2 mt-2">
+                                    <fieldset class="scheduler-border">
+                                        <legend class="scheduler-border"> @SharedLocalizer["ChartOptions"] </legend>
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="chart5SubParameter">@SharedLocalizer["ClimateParameter"]:</label>
+                                                <select class="form-control form-control-sm" id="chart5SubParameter">
+                                                    <option value="tasmax_pd_avg">@SharedLocalizer["MaxTemperature"]</option>
+                                                    <option value="tas_pd_avg">@SharedLocalizer["AverageTemperature"]</option>
+                                                    <option value="tasmin_pd_avg">@SharedLocalizer["MinTemperature"]</option>
+                                                    <option value="pr_pd_avg">@SharedLocalizer["Precipitation"]</option>
+                                                    <option value="pr_dlt_avg_mm">@SharedLocalizer["AveragePrecipitationDev"]</option>
+                                                    <option value="et_pd_avg">@SharedLocalizer["Evapotranspiration"]</option>
+                                                    <option value="et_dlt_avg">@SharedLocalizer["EvapotranspirationDev"]</option>
+                                                    <option value="tasmax_dlt_avg">@SharedLocalizer["MaxTemperatureDev"]</option>
+                                                    <option value="tas_dlt_avg">@SharedLocalizer["AverageTemperatureDev"]</option>
+                                                    <option value="tasmin_dlt_avg">@SharedLocalizer["MinTemperatureDev"]</option>
+                                                    <option value="gtk_pd_avg">@SharedLocalizer["AridityIndices"]</option>
+                                                    <option value="spi_pd_avg">@SharedLocalizer["SPI"]</option>
+                                                    <option value="spei_pd_avg">@SharedLocalizer["SPEI"]</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="chart5Decade">@SharedLocalizer["Periodicity"]:</label>
+                                                <select class="form-control form-control-sm text-lowercase" id="chart5Decade" onchange="chart5UpdateDates()">
+                                                    <option class="text-lowercase" value="10">10 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="20">20 @SharedLocalizer["YearsOld"]</option>
+                                                    <option class="text-lowercase" value="30">30 @SharedLocalizer["YearsOld"]</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="chart5RCP">RCP:</label>
+                                                <select class="form-control form-control-sm" id="chart5RCP">
+                                                    <option value="rcp45">rcp 4.5</option>
+                                                    <option value="rcp85">rcp 8.5</option>
+                                                </select>
+                                            </div>
+                                            <div id="yearCheckboxesChart5" class="form-group">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox1951" name="chart5Dates" value="1951" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox1951">1951-1960</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox1961" name="chart5Dates" value="1961" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox1961">1961-1970</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox1971" name="chart5Dates" value="1971" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox1971">1971-1980</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox1981" name="chart5Dates" value="1981" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox1981">1981-1990</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox1991" name="chart5Dates" value="1991" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox1991">1991-2000</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2001" name="chart5Dates" value="2001" disabled>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2001">2001-2010</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2011" name="chart5Dates" value="2011" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2011">2011-2020</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2021" name="chart5Dates" value="2021" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2021">2021-2030</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2031" name="chart5Dates" value="2031" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2031">2031-2040</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2041" name="chart5Dates" value="2041" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2041">2041-2050</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2051" name="chart5Dates" value="2051" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2051">2051-2060</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2061" name="chart5Dates" value="2061" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2061">2061-2070</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2071" name="chart5Dates" value="2071" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2071">2071-2080</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2081" name="chart5Dates" value="2081" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2081">2081-2090</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart5inlineCheckbox2091" name="chart5Dates" value="2091" checked>
+                                                    <label class="form-check-label" for="chart5inlineCheckbox2091">2091-2100</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <input type="button" class="btn btn-outline-primary btn-sm" value="@SharedLocalizer["Refresh"]" onclick="Chart5()" />
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-9">
+                                    <canvas class="my-4 w-100 chartjs-render-monitor" id="chart5Canvas" width="900" height="380"></canvas>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade active show" id="tables" role="tabpanel" aria-labelledby="tables-tab">
                             @*<p class="card-text text-secondary">Averages for the decade 1981–2010</p>*@
@@ -1050,6 +1159,36 @@
                                     </thead>
                                 </table>
                             </div>
+                            <div id="table5" class="table-responsive">
+                                <h4 id="table5title"></h4>
+                                <table id="rasterdata5" class="table table-striped"
+                                       data-toggle="table"
+                                       data-buttons="btn btn-sm"
+                                       data-buttons-class="primary"
+                                       data-search="true"
+                                       data-detail-view="true"
+                                       data-detail-view-icon="false"
+                                       data-show-fullscreen="true"
+                                       data-show-refresh="true"
+                                       data-show-columns="true"
+                                       data-show-print="true"
+                                       data-show-export="true">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th data-field="period"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Period"]</th>
+                                            <th data-field="month"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Month"]</th>
+                                            <th data-field="max"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Maximum"]</th>
+                                            <th data-field="min"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Minimum"]</th>
+                                            <th data-field="median"
+                                                data-detail-formatter="idDetailMonth">@SharedLocalizer["Median"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1063,7 +1202,8 @@
     var chart1 = null,
         chart2 = null,
         chart3 = null,
-        chart4 = null;
+        chart4 = null,
+        chart5 = null;
 
     function chart1UpdateDates() {
         $('input:checkbox[name="chart1Dates"][value="1951"]').prop('checked', true);
@@ -1214,6 +1354,44 @@
             $('input:checkbox[name="chart4Dates"][value="2091"]').prop("disabled", true);
             $('input:checkbox[name="chart4Dates"][value="2081"]').prop('checked', false);
             $('input:checkbox[name="chart4Dates"][value="2081"]').prop("disabled", true);
+        }
+    }
+
+    function chart5UpdateDates() {
+        $('input:checkbox[name="chart5Dates"][value="1951"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="1961"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="1971"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="1981"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="1991"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2011"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2021"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2031"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2041"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2051"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2061"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2071"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2081"]').prop('checked', true);
+        $('input:checkbox[name="chart5Dates"][value="2091"]').prop('checked', true);
+
+        $('input:checkbox[name="chart5Dates"][value="1991"]').removeAttr('disabled');
+        $('input:checkbox[name="chart5Dates"][value="1981"]').removeAttr('disabled');
+        $('input:checkbox[name="chart5Dates"][value="2091"]').removeAttr('disabled');
+        $('input:checkbox[name="chart5Dates"][value="2081"]').removeAttr('disabled');
+        if ($('#chart5Decade').val() == 20) {
+            $('input:checkbox[name="chart5Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart5Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart5Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart5Dates"][value="2091"]').prop("disabled", true);
+        }
+        if ($('#chart5Decade').val() == 30) {
+            $('input:checkbox[name="chart5Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart5Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart5Dates"][value="1981"]').prop('checked', false);
+            $('input:checkbox[name="chart5Dates"][value="1981"]').prop("disabled", true);
+            $('input:checkbox[name="chart5Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart5Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart5Dates"][value="2081"]').prop('checked', false);
+            $('input:checkbox[name="chart5Dates"][value="2081"]').prop("disabled", true);
         }
     }
 
@@ -1739,6 +1917,118 @@
         });
     };
 
+    function Chart5(objectid, type = 'line') {
+        var Id = objectid;
+        if (objectid == null) {
+            Id = @ViewBag.Id;
+        }
+        var chart5Dates = [];
+        $("input:checkbox[name=chart5Dates]:checked").each(function () {
+            chart5Dates.push(parseInt($(this).val()));
+        });
+        $.ajax({
+            url: '@Url.Action("GetChart5")',
+            data: {
+                Id: Id,
+                SubParameter: $('#chart5SubParameter').val(),
+                Decade: $('#chart5Decade').val(),
+                RCP: $('#chart5RCP').val(),
+                Dates: chart5Dates
+            },
+            type: 'POST',
+            success: function (data) {
+                Table5(Id, $('#chart5SubParameter').val(), $('#chart5Decade').val(), $('#chart5RCP').val(), chart5Dates);
+
+                $('#ChartTitle').text($('#VHB').val() + ' - ' + data.wmbname + ' (' + $('#VHU').val() + ' - ' + data.wmacode + ')');
+                for (var i = 0; i < data.max.length; ++i) {
+                    for (var j = 0; j < data.max[i].length; ++j) {
+                        data.max[i][j] = parseFloat(data.max[i][j]).toFixed(2);
+                    }
+                }
+                for (var i = 0; i < data.min.length; ++i) {
+                    for (var j = 0; j < data.min[i].length; ++j) {
+                        data.min[i][j] = parseFloat(data.min[i][j]).toFixed(2);
+                    }
+                }
+                for (var i = 0; i < data.median.length; ++i) {
+                    for (var j = 0; j < data.median[i].length; ++j) {
+                        data.median[i][j] = parseFloat(data.median[i][j]).toFixed(2);
+                    }
+                }
+                var chart5Data = {
+                    labels: data.periods,
+                    datasets: []
+                };
+                for (var i = 0; i < data.max.length; ++i) {
+                    var color = dynamicColors();
+                    chart5Data.datasets.push({
+                        label: $('#Maximum').val() + ' (' + chart5Dates[i] + ' - ' + (parseInt(chart5Dates[i]) + 9).toString() + ')',
+                        backgroundColor: color,
+                        borderColor: color,
+                        borderWidth: 1,
+                        stack: 'max',
+                        data: data.max[i],
+                        fill: false
+                    });
+                }
+                for (var i = 0; i < data.min.length; ++i) {
+                    var color = dynamicColors();
+                    chart5Data.datasets.push({
+                        label: $('#Minimum').val() + ' (' + chart5Dates[i] + ' - ' + (parseInt(chart5Dates[i]) + 9).toString() + ')',
+                        backgroundColor: color,
+                        borderColor: color,
+                        borderWidth: 1,
+                        stack: 'min',
+                        data: data.min[i],
+                        fill: false
+                    });
+                }
+                for (var i = 0; i < data.median.length; ++i) {
+                    var color = dynamicColors();
+                    chart5Data.datasets.push({
+                        label: $('#Median').val() + ' (' + chart5Dates[i] + ' - ' + (parseInt(chart5Dates[i]) + 9).toString() + ')',
+                        backgroundColor: color,
+                        borderColor: color,
+                        borderWidth: 1,
+                        stack: 'median',
+                        data: data.median[i],
+                        fill: false
+                    });
+                }
+                var ctx5 = document.getElementById('chart5Canvas').getContext('2d');
+                if (chart5 != null) {
+                    chart5.destroy();
+                }
+                chart5 = new Chart(ctx5, {
+                    type: type,
+                    data: chart5Data,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            fontSize: 20,
+                            fontColor: '#000',
+                            text: $("#chart5SubParameter option:selected ").text() + ' (' + $("#chart5Decade option:selected").text() + '/' + $("#chart5RCP option:selected").text() + ')'
+                        },
+                        tooltips: {
+						    mode: 'index',
+						    intersect: false
+					    }
+                    }
+                });
+                ShowMedian();
+                if ($('#chart5SubParameter').val() == 'tasmax_pd_avg') {
+                    ShowMax();
+                }
+            },
+            error: function () {
+            }
+        });
+    };
+
     function dynamicColors() {
         var r = Math.floor(Math.random() * 255);
         var g = Math.floor(Math.random() * 255);
@@ -1897,7 +2187,7 @@
     }
 
     function Table4(Id, SubParameter, Decade, RCP, Dates) {
-        $('#table4title').text($("#chart4SubParameter option:selected ").text() + ' (' + $("#chart3Decade option:selected").text() + '/' + $("#chart3RCP option:selected").text() + ')');
+        $('#table4title').text($("#chart4SubParameter option:selected ").text() + ' (' + $("#chart4Decade option:selected").text() + '/' + $("#chart4RCP option:selected").text() + ')');
         $.ajax({
             url: '@Url.Action("GetTable4")',
             data: {
@@ -1931,6 +2221,49 @@
                         }
                     });
                     $('#rasterdata4').bootstrapTable('load', raster_data);
+                })
+            },
+            error: function () {
+                console.log('Error TableRasters');
+            }
+        });
+    }
+
+    function Table5(Id, SubParameter, Decade, RCP, Dates) {
+        $('#table5title').text($("#chart5SubParameter option:selected ").text() + ' (' + $("#chart5Decade option:selected").text() + '/' + $("#chart5RCP option:selected").text() + ')');
+        $.ajax({
+            url: '@Url.Action("GetTable5")',
+            data: {
+                Id: Id,
+                SubParameter: SubParameter,
+                Decade: Decade,
+                RCP: RCP,
+                Dates: Dates
+            },
+            //async: false,
+            type: 'POST',
+            success: function (data) {
+                raster_data = data.raster_table_for_chart_bs;
+                for (var i = 0; i < raster_data.length; ++i) {
+                    if (raster_data[i].max) {
+                        raster_data[i].max = raster_data[i].max.toFixed(2);
+                    }
+                    if (raster_data[i].min) {
+                        raster_data[i].min = raster_data[i].min.toFixed(2);
+                    }
+                    if (raster_data[i].median) {
+                        raster_data[i].median = raster_data[i].median.toFixed(2);
+                    }
+                }
+                $(function () {
+                    $('#rasterdata5').bootstrapTable('destroy').bootstrapTable({
+                        data: raster_data,
+                        iconSize: "sm",
+                        exportOptions: {
+                            preventInjection: false
+                        }
+                    });
+                    $('#rasterdata5').bootstrapTable('load', raster_data);
                 })
             },
             error: function () {
@@ -2023,6 +2356,7 @@
         Chart2($("#wma").val());
         Chart3($("#wma").val());
         Chart4($("#wma").val());
+        Chart5($("#wma").val());
     }
 </script>
 
@@ -2035,6 +2369,7 @@
         Chart2();
         Chart3();
         Chart4();
+        Chart5();
         //Table1($("#CoordX").val(), $("#CoordY").val());
     });
     //$(function () {
@@ -2822,24 +3157,35 @@
         $('#chartbody2').hide();
         $('#chartbody3').hide();
         $('#chartbody4').hide();
+        $('#chartbody5').hide();
     }
     function Chart2Show() {
         $('#chartbody1').hide();
         $('#chartbody2').show();
         $('#chartbody3').hide();
         $('#chartbody4').hide();
+        $('#chartbody5').hide();
     }
     function Chart3Show() {
         $('#chartbody1').hide();
         $('#chartbody2').hide();
         $('#chartbody3').show();
         $('#chartbody4').hide();
+        $('#chartbody5').hide();
     }
     function Chart4Show() {
         $('#chartbody1').hide();
         $('#chartbody2').hide();
         $('#chartbody3').hide();
         $('#chartbody4').show();
+        $('#chartbody5').hide();
+    }
+    function Chart5Show() {
+        $('#chartbody1').hide();
+        $('#chartbody2').hide();
+        $('#chartbody3').hide();
+        $('#chartbody4').hide();
+        $('#chartbody5').show();
     }
 </script>
 
@@ -2850,24 +3196,35 @@
         $('#table2').hide();
         $('#table3').hide();
         $('#table4').hide();
+        $('#table5').hide();
     }
     function Table2Show() {
         $('#table1').hide();
         $('#table2').show();
         $('#table3').hide();
         $('#table4').hide();
+        $('#table5').hide();
     }
     function Table3Show() {
         $('#table1').hide();
         $('#table2').hide();
         $('#table3').show();
         $('#table4').hide();
+        $('#table5').hide();
     }
     function Table4Show() {
         $('#table1').hide();
         $('#table2').hide();
         $('#table3').hide();
         $('#table4').show();
+        $('#table5').hide();
+    }
+    function Table5Show() {
+        $('#table1').hide();
+        $('#table2').hide();
+        $('#table3').hide();
+        $('#table4').hide();
+        $('#table5').show();
     }
 </script>
 
@@ -2950,6 +3307,25 @@
             }
         }
         chart4.update();
+
+        for (var i = 0; i < chart5.data.datasets.length; ++i) {
+            if (chart5.data.datasets[i].label.toLowerCase().includes($('#Maximum').val().toLowerCase())) {
+                chart5.data.datasets[i].hidden = false;
+            }
+            else {
+                chart5.data.datasets[i].hidden = true;
+            }
+        }
+        var show = false;
+        for (var i = 0; i < chart5.data.datasets.length; ++i) {
+            if (show) {
+                chart5.data.datasets[i].hidden = true;
+            }
+            if (!chart5.data.datasets[i].hidden) {
+                show = true;
+            }
+        }
+        chart5.update();
     }
 
     function ShowMin() {
@@ -3033,6 +3409,25 @@
             }
         }
         chart4.update();
+
+        for (var i = 0; i < chart5.data.datasets.length; ++i) {
+            if (chart5.data.datasets[i].label.toLowerCase().includes($('#Median').val().toLowerCase())) {
+                chart5.data.datasets[i].hidden = false;
+            }
+            else {
+                chart5.data.datasets[i].hidden = true;
+            }
+        }
+        var show = false;
+        for (var i = 0; i < chart5.data.datasets.length; ++i) {
+            if (show) {
+                chart5.data.datasets[i].hidden = true;
+            }
+            if (!chart5.data.datasets[i].hidden) {
+                show = true;
+            }
+        }
+        chart5.update();
     }
 </script>
 
