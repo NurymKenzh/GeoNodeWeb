@@ -859,25 +859,67 @@
                                                     <option value="rcp85">rcp 8.5</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="chart4Date">@SharedLocalizer["Year"]:</label>
-                                                <select class="form-control form-control-sm" id="chart4Date">
-                                                    <option value="1951">1951-1960</option>
-                                                    <option value="1961">1961-1970</option>
-                                                    <option value="1971">1971-1980</option>
-                                                    <option value="1981">1981-1990</option>
-                                                    <option value="1991">1991-2000</option>
-                                                    <option value="2001">2001-2010</option>
-                                                    <option value="2011">2011-2020</option>
-                                                    <option value="2021">2021-2030</option>
-                                                    <option value="2031">2031-2040</option>
-                                                    <option value="2041">2041-2050</option>
-                                                    <option value="2051">2051-2060</option>
-                                                    <option value="2061">2061-2070</option>
-                                                    <option value="2071">2071-2080</option>
-                                                    <option value="2081">2081-2090</option>
-                                                    <option value="2091">2091-2100</option>
-                                                </select>
+                                            <div id="yearCheckboxesChart4" class="form-group">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox1951" name="chart4Dates" value="1951" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox1951">1951-1960</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox1961" name="chart4Dates" value="1961" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox1961">1961-1970</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox1971" name="chart4Dates" value="1971" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox1971">1971-1980</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox1981" name="chart4Dates" value="1981" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox1981">1981-1990</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox1991" name="chart4Dates" value="1991" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox1991">1991-2000</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2001" name="chart4Dates" value="2001" disabled>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2001">2001-2010</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2011" name="chart4Dates" value="2011" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2011">2011-2020</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2021" name="chart4Dates" value="2021" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2021">2021-2030</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2031" name="chart4Dates" value="2031" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2031">2031-2040</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2041" name="chart4Dates" value="2041" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2041">2041-2050</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2051" name="chart4Dates" value="2051" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2051">2051-2060</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2061" name="chart4Dates" value="2061" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2061">2061-2070</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2071" name="chart4Dates" value="2071" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2071">2071-2080</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2081" name="chart4Dates" value="2081" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2081">2081-2090</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="chart4inlineCheckbox2091" name="chart4Dates" value="2091" checked>
+                                                    <label class="form-check-label" for="chart4inlineCheckbox2091">2091-2100</label>
+                                                </div>
                                             </div>
                                         </form>
                                         <input type="button" class="btn btn-outline-primary btn-sm" value="@SharedLocalizer["Refresh"]" onclick="Chart4()" />
@@ -1079,23 +1121,23 @@
 
         $('input:checkbox[name="chart2Dates"][value="1991"]').removeAttr('disabled');
         $('input:checkbox[name="chart2Dates"][value="1981"]').removeAttr('disabled');
-        $('input:checkbox[name="chart1Dates"][value="2091"]').removeAttr('disabled');
-        $('input:checkbox[name="chart1Dates"][value="2081"]').removeAttr('disabled');
+        $('input:checkbox[name="chart2Dates"][value="2091"]').removeAttr('disabled');
+        $('input:checkbox[name="chart2Dates"][value="2081"]').removeAttr('disabled');
         if ($('#chart2Decade').val() == 20) {
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop("disabled", true);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart2Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart2Dates"][value="2091"]').prop("disabled", true);
         }
         if ($('#chart2Decade').val() == 30) {
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart2Dates"][value="1991"]').prop("disabled", true);
             $('input:checkbox[name="chart2Dates"][value="1981"]').prop('checked', false);
             $('input:checkbox[name="chart2Dates"][value="1981"]').prop("disabled", true);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
-            $('input:checkbox[name="chart1Dates"][value="2081"]').prop('checked', false);
-            $('input:checkbox[name="chart1Dates"][value="2081"]').prop("disabled", true);
+            $('input:checkbox[name="chart2Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart2Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart2Dates"][value="2081"]').prop('checked', false);
+            $('input:checkbox[name="chart2Dates"][value="2081"]').prop("disabled", true);
         }
     }
 
@@ -1117,23 +1159,61 @@
 
         $('input:checkbox[name="chart3Dates"][value="1991"]').removeAttr('disabled');
         $('input:checkbox[name="chart3Dates"][value="1981"]').removeAttr('disabled');
-        $('input:checkbox[name="chart1Dates"][value="2091"]').removeAttr('disabled');
-        $('input:checkbox[name="chart1Dates"][value="2081"]').removeAttr('disabled');
+        $('input:checkbox[name="chart3Dates"][value="2091"]').removeAttr('disabled');
+        $('input:checkbox[name="chart3Dates"][value="2081"]').removeAttr('disabled');
         if ($('#chart3Decade').val() == 20) {
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop("disabled", true);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart3Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart3Dates"][value="2091"]').prop("disabled", true);
         }
         if ($('#chart3Decade').val() == 30) {
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop('checked', false);
             $('input:checkbox[name="chart3Dates"][value="1991"]').prop("disabled", true);
             $('input:checkbox[name="chart3Dates"][value="1981"]').prop('checked', false);
             $('input:checkbox[name="chart3Dates"][value="1981"]').prop("disabled", true);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop('checked', false);
-            $('input:checkbox[name="chart1Dates"][value="2091"]').prop("disabled", true);
-            $('input:checkbox[name="chart1Dates"][value="2081"]').prop('checked', false);
-            $('input:checkbox[name="chart1Dates"][value="2081"]').prop("disabled", true);
+            $('input:checkbox[name="chart3Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart3Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart3Dates"][value="2081"]').prop('checked', false);
+            $('input:checkbox[name="chart3Dates"][value="2081"]').prop("disabled", true);
+        }
+    }
+
+    function chart4UpdateDates() {
+        $('input:checkbox[name="chart4Dates"][value="1951"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="1961"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="1971"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="1981"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="1991"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2011"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2021"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2031"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2041"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2051"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2061"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2071"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2081"]').prop('checked', true);
+        $('input:checkbox[name="chart4Dates"][value="2091"]').prop('checked', true);
+
+        $('input:checkbox[name="chart4Dates"][value="1991"]').removeAttr('disabled');
+        $('input:checkbox[name="chart4Dates"][value="1981"]').removeAttr('disabled');
+        $('input:checkbox[name="chart4Dates"][value="2091"]').removeAttr('disabled');
+        $('input:checkbox[name="chart4Dates"][value="2081"]').removeAttr('disabled');
+        if ($('#chart4Decade').val() == 20) {
+            $('input:checkbox[name="chart4Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart4Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart4Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart4Dates"][value="2091"]').prop("disabled", true);
+        }
+        if ($('#chart4Decade').val() == 30) {
+            $('input:checkbox[name="chart4Dates"][value="1991"]').prop('checked', false);
+            $('input:checkbox[name="chart4Dates"][value="1991"]').prop("disabled", true);
+            $('input:checkbox[name="chart4Dates"][value="1981"]').prop('checked', false);
+            $('input:checkbox[name="chart4Dates"][value="1981"]').prop("disabled", true);
+            $('input:checkbox[name="chart4Dates"][value="2091"]').prop('checked', false);
+            $('input:checkbox[name="chart4Dates"][value="2091"]').prop("disabled", true);
+            $('input:checkbox[name="chart4Dates"][value="2081"]').prop('checked', false);
+            $('input:checkbox[name="chart4Dates"][value="2081"]').prop("disabled", true);
         }
     }
 
@@ -1552,9 +1632,10 @@
         if (objectid == null) {
             Id = @ViewBag.Id;
         }
-        var monthMaxColors = 'rgba(0, 112, 255, 0.5)',
-            monthMinColors = 'rgba(191, 255, 255, 0.5)',
-            monthMedianColors = 'rgba(77, 189, 255, 0.5)';
+        var chart4Dates = [];
+        $("input:checkbox[name=chart4Dates]:checked").each(function () {
+            chart4Dates.push(parseInt($(this).val()));
+        });
         $.ajax({
             url: '@Url.Action("GetChart4")',
             data: {
@@ -1562,54 +1643,66 @@
                 SubParameter: $('#chart4SubParameter').val(),
                 Decade: $('#chart4Decade').val(),
                 RCP: $('#chart4RCP').val(),
-                Date: $('#chart4Date').val()
+                Dates: chart4Dates
             },
             type: 'POST',
             success: function (data) {
-                Table4(Id, $('#chart4SubParameter').val(), $('#chart4Decade').val(), $('#chart4RCP').val(), $('#chart4Date').val());
+                Table4(Id, $('#chart4SubParameter').val(), $('#chart4Decade').val(), $('#chart4RCP').val(), chart4Dates);
 
                 $('#ChartTitle').text($('#VHB').val() + ' - ' + data.wmbname + ' (' + $('#VHU').val() + ' - ' + data.wmacode + ')');
                 for (var i = 0; i < data.max.length; ++i) {
-                        data.max[i] = parseFloat(data.max[i]).toFixed(2);
+                    for (var j = 0; j < data.max[i].length; ++j) {
+                        data.max[i][j] = parseFloat(data.max[i][j]).toFixed(2);
+                    }
                 }
                 for (var i = 0; i < data.min.length; ++i) {
-                        data.min[i] = parseFloat(data.min[i]).toFixed(2);
+                    for (var j = 0; j < data.min[i].length; ++j) {
+                        data.min[i][j] = parseFloat(data.min[i][j]).toFixed(2);
+                    }
                 }
                 for (var i = 0; i < data.median.length; ++i) {
-                        data.median[i] = parseFloat(data.median[i]).toFixed(2);
+                    for (var j = 0; j < data.median[i].length; ++j) {
+                        data.median[i][j] = parseFloat(data.median[i][j]).toFixed(2);
+                    }
                 }
                 var chart4Data = {
                     labels: data.periods,
                     datasets: []
                 };
-                if (data.max.length > 0) {
+                for (var i = 0; i < data.max.length; ++i) {
+                    var color = dynamicColors();
                     chart4Data.datasets.push({
-                        label: $('#Maximum').val(),
-                        backgroundColor: monthMaxColors,
-                        borderColor: 'rgba(8, 0, 97, 1)',
+                        label: $('#Maximum').val() + ' (' + chart4Dates[i] + ' - ' + (parseInt(chart4Dates[i]) + 9).toString() + ')',
+                        backgroundColor: color,
+                        borderColor: color,
                         borderWidth: 1,
                         stack: 'max',
-                        data: data.max
+                        data: data.max[i],
+                        fill: false
                     });
                 }
-                if (data.min.length > 0) {
+                for (var i = 0; i < data.min.length; ++i) {
+                    var color = dynamicColors();
                     chart4Data.datasets.push({
-                        label: $('#Minimum').val(),
-                        backgroundColor: monthMinColors,
-                        borderColor: 'rgba(8, 0, 97, 1)',
+                        label: $('#Minimum').val() + ' (' + chart4Dates[i] + ' - ' + (parseInt(chart4Dates[i]) + 9).toString() + ')',
+                        backgroundColor: color,
+                        borderColor: color,
                         borderWidth: 1,
                         stack: 'min',
-                        data: data.min
+                        data: data.min[i],
+                        fill: false
                     });
                 }
-                if (data.median.length > 0) {
+                for (var i = 0; i < data.median.length; ++i) {
+                    var color = dynamicColors();
                     chart4Data.datasets.push({
-                        label: $('#Median').val(),
-                        backgroundColor: monthMedianColors,
-                        borderColor: 'rgba(8, 0, 97, 1)',
+                        label: $('#Median').val() + ' (' + chart4Dates[i] + ' - ' + (parseInt(chart4Dates[i]) + 9).toString() + ')',
+                        backgroundColor: color,
+                        borderColor: color,
                         borderWidth: 1,
                         stack: 'median',
-                        data: data.median
+                        data: data.median[i],
+                        fill: false
                     });
                 }
                 var ctx4 = document.getElementById('chart4Canvas').getContext('2d');
@@ -1628,7 +1721,7 @@
                             display: true,
                             fontSize: 20,
                             fontColor: '#000',
-                            text: $("#chart3SubParameter option:selected ").text() + ' (' + $("#chart3Decade option:selected").text() + '/' + $("#chart3RCP option:selected").text() + ')'
+                            text: $("#chart4SubParameter option:selected ").text() + ' (' + $("#chart4Decade option:selected").text() + '/' + $("#chart4RCP option:selected").text() + ')'
                         },
                         tooltips: {
 						    mode: 'index',
@@ -1644,6 +1737,13 @@
             error: function () {
             }
         });
+    };
+
+    function dynamicColors() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
     };
 
     //add event listener to button
@@ -1796,7 +1896,7 @@
         });
     }
 
-    function Table4(Id, SubParameter, Decade, RCP, Date) {
+    function Table4(Id, SubParameter, Decade, RCP, Dates) {
         $('#table4title').text($("#chart4SubParameter option:selected ").text() + ' (' + $("#chart3Decade option:selected").text() + '/' + $("#chart3RCP option:selected").text() + ')');
         $.ajax({
             url: '@Url.Action("GetTable4")',
@@ -1805,7 +1905,7 @@
                 SubParameter: SubParameter,
                 Decade: Decade,
                 RCP: RCP,
-                Date: Date
+                Dates: Dates
             },
             //async: false,
             type: 'POST',
@@ -2803,7 +2903,7 @@
 <script>
     function ShowMax() {
         for (var i = 0; i < chart1.data.datasets.length; ++i) {
-            if (chart1.data.datasets[i].label.toLowerCase().includes('максимум')) {
+            if (chart1.data.datasets[i].label.toLowerCase().includes($('#Maximum').val().toLowerCase())) {
                 chart1.data.datasets[i].hidden = false;
             }
             else {
@@ -2813,7 +2913,7 @@
         chart1.update();
 
         for (var i = 0; i < chart2.data.datasets.length; ++i) {
-            if (chart2.data.datasets[i].label.toLowerCase().includes('максимум')) {
+            if (chart2.data.datasets[i].label.toLowerCase().includes($('#Maximum').val().toLowerCase())) {
                 chart2.data.datasets[i].hidden = false;
             }
             else {
@@ -2823,7 +2923,7 @@
         chart2.update();
 
         for (var i = 0; i < chart3.data.datasets.length; ++i) {
-            if (chart3.data.datasets[i].label.toLowerCase().includes('максимум')) {
+            if (chart3.data.datasets[i].label.toLowerCase().includes($('#Maximum').val().toLowerCase())) {
                 chart3.data.datasets[i].hidden = false;
             }
             else {
@@ -2833,11 +2933,20 @@
         chart3.update();
 
         for (var i = 0; i < chart4.data.datasets.length; ++i) {
-            if (chart4.data.datasets[i].label.toLowerCase().includes('максимум')) {
+            if (chart4.data.datasets[i].label.toLowerCase().includes($('#Maximum').val().toLowerCase())) {
                 chart4.data.datasets[i].hidden = false;
             }
             else {
                 chart4.data.datasets[i].hidden = true;
+            }
+        }
+        var show = false;
+        for (var i = 0; i < chart4.data.datasets.length; ++i) {
+            if (show) {
+                chart4.data.datasets[i].hidden = true;
+            }
+            if (!chart4.data.datasets[i].hidden) {
+                show = true;
             }
         }
         chart4.update();
@@ -2845,7 +2954,7 @@
 
     function ShowMin() {
         for (var i = 0; i < chart1.data.datasets.length; ++i) {
-            if (chart1.data.datasets[i].label.toLowerCase().includes('минимум')) {
+            if (chart1.data.datasets[i].label.toLowerCase().includes($('#Minimum').val().toLowerCase())) {
                 chart1.data.datasets[i].hidden = false;
             }
             else {
@@ -2855,7 +2964,7 @@
         chart1.update();
 
         for (var i = 0; i < chart2.data.datasets.length; ++i) {
-            if (chart2.data.datasets[i].label.toLowerCase().includes('минимум')) {
+            if (chart2.data.datasets[i].label.toLowerCase().includes($('#Minimum').val().toLowerCase())) {
                 chart2.data.datasets[i].hidden = false;
             }
             else {
@@ -2865,7 +2974,7 @@
         chart2.update();
 
         for (var i = 0; i < chart3.data.datasets.length; ++i) {
-            if (chart3.data.datasets[i].label.toLowerCase().includes('минимум')) {
+            if (chart3.data.datasets[i].label.toLowerCase().includes($('#Minimum').val().toLowerCase())) {
                 chart3.data.datasets[i].hidden = false;
             }
             else {
@@ -2877,7 +2986,7 @@
 
     function ShowMedian() {
         for (var i = 0; i < chart1.data.datasets.length; ++i) {
-            if (chart1.data.datasets[i].label.toLowerCase().includes('медиана')) {
+            if (chart1.data.datasets[i].label.toLowerCase().includes($('#Median').val().toLowerCase())) {
                 chart1.data.datasets[i].hidden = false;
             }
             else {
@@ -2887,7 +2996,7 @@
         chart1.update();
 
         for (var i = 0; i < chart2.data.datasets.length; ++i) {
-            if (chart2.data.datasets[i].label.toLowerCase().includes('медиана')) {
+            if (chart2.data.datasets[i].label.toLowerCase().includes($('#Median').val().toLowerCase())) {
                 chart2.data.datasets[i].hidden = false;
             }
             else {
@@ -2897,7 +3006,7 @@
         chart2.update();
 
         for (var i = 0; i < chart3.data.datasets.length; ++i) {
-            if (chart3.data.datasets[i].label.toLowerCase().includes('медиана')) {
+            if (chart3.data.datasets[i].label.toLowerCase().includes($('#Median').val().toLowerCase())) {
                 chart3.data.datasets[i].hidden = false;
             }
             else {
@@ -2907,11 +3016,20 @@
         chart3.update();
 
         for (var i = 0; i < chart4.data.datasets.length; ++i) {
-            if (chart4.data.datasets[i].label.toLowerCase().includes('медиана')) {
+            if (chart4.data.datasets[i].label.toLowerCase().includes($('#Median').val().toLowerCase())) {
                 chart4.data.datasets[i].hidden = false;
             }
             else {
                 chart4.data.datasets[i].hidden = true;
+            }
+        }
+        var show = false;
+        for (var i = 0; i < chart4.data.datasets.length; ++i) {
+            if (show) {
+                chart4.data.datasets[i].hidden = true;
+            }
+            if (!chart4.data.datasets[i].hidden) {
+                show = true;
             }
         }
         chart4.update();

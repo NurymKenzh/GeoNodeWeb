@@ -1783,7 +1783,7 @@ namespace GeoNodeWeb.Controllers
             string SubParameter,
             string Decade,
             string RCP,
-            int Date)
+            int[] Dates)
         {
             string layer_name = $"{SubParameter}_m_{RCP}_{Decade}";
 
@@ -1810,7 +1810,7 @@ namespace GeoNodeWeb.Controllers
                     $" ORDER BY date;";
                 var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
                 climate_rasterstats = climate_rasterstats_DB
-                    .Where(c => c.date.Year == Date)
+                    .Where(c => Dates.Contains(c.date.Year))
                     .OrderBy(c => c.date.Month)
                     .ToList();
                 connection.Close();
@@ -1854,9 +1854,9 @@ namespace GeoNodeWeb.Controllers
                 connection.Close();
             }
 
-            decimal?[] max = new decimal?[12],
-                min = new decimal?[12],
-                median = new decimal?[12];
+            decimal?[,] max = new decimal?[Dates.Count(), 12],
+                min = new decimal?[Dates.Count(), 12],
+                median = new decimal?[Dates.Count(), 12];
             List<string> periods = new List<string>();
             periods.Add(_sharedLocalizer["January"]);
             periods.Add(_sharedLocalizer["February"]);
@@ -1870,50 +1870,54 @@ namespace GeoNodeWeb.Controllers
             periods.Add(_sharedLocalizer["October"]);
             periods.Add(_sharedLocalizer["November"]);
             periods.Add(_sharedLocalizer["December"]);
-            for (int month = 0; month <= 11; month++)
+            for(int idate = 0; idate < Dates.Count(); idate++)
             {
-                climate_rasterstat climate_rasterstat = climate_rasterstats
-                    .FirstOrDefault(c => c.date.Month == month + 1);
-                if (climate_rasterstat == null)
+                int date = Dates[idate];
+                for (int month = 0; month <= 11; month++)
                 {
-                    max[month] = null;
-                    min[month] = null;
-                    median[month] = null;
-                }
-                else
-                {
-                    var data = JObject.Parse(climate_rasterstat.data);
-                    foreach (JProperty property in data.Properties())
+                    climate_rasterstat climate_rasterstat = climate_rasterstats
+                        .FirstOrDefault(c => c.date.Month == month + 1 && c.date.Year == date);
+                    if (climate_rasterstat == null)
                     {
-                        if (property.Name == "max")
+                        max[idate, month] = null;
+                        min[idate, month] = null;
+                        median[idate, month] = null;
+                    }
+                    else
+                    {
+                        var data = JObject.Parse(climate_rasterstat.data);
+                        foreach (JProperty property in data.Properties())
                         {
-                            decimal? d = null;
-                            try
+                            if (property.Name == "max")
                             {
-                                d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
+                                max[idate, month] = d;
                             }
-                            catch { }
-                            max[month] = d;
-                        }
-                        if (property.Name == "min")
-                        {
-                            decimal? d = null;
-                            try
+                            if (property.Name == "min")
                             {
-                                d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
+                                min[idate, month] = d;
                             }
-                            catch { }
-                            min[month] = d;
-                        }
-                        if (property.Name == "median")
-                        {
-                            decimal? d = null;
-                            try
+                            if (property.Name == "median")
                             {
-                                d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
+                                median[idate, month] = d;
                             }
-                            catch { }
-                            median[month] = d;
                         }
                     }
                 }
@@ -2362,7 +2366,7 @@ namespace GeoNodeWeb.Controllers
             string SubParameter,
             string Decade,
             string RCP,
-            int Date)
+            int[] Dates)
         {
             string layer_name = $"{SubParameter}_m_{RCP}_{Decade}";
             List<raster_table_for_chart> raster_table_for_chart_bs = new List<raster_table_for_chart>();
@@ -2390,7 +2394,7 @@ namespace GeoNodeWeb.Controllers
                     $" ORDER BY date;";
                 var climate_rasterstats_DB = connection.Query<climate_rasterstat>(query);
                 climate_rasterstats = climate_rasterstats_DB
-                    .Where(c => c.date.Year == Date)
+                    .Where(c => Dates.Contains(c.date.Year))
                     .OrderBy(c => c.date.Month)
                     .ToList();
                 connection.Close();
@@ -2410,53 +2414,57 @@ namespace GeoNodeWeb.Controllers
                 connection.Close();
             }
 
-            decimal?[] max = new decimal?[12],
-                min = new decimal?[12],
-                median = new decimal?[12];
-            for (int month = 0; month <= 11; month++)
+            decimal?[,] max = new decimal?[Dates.Count(), 12],
+                min = new decimal?[Dates.Count(), 12],
+                median = new decimal?[Dates.Count(), 12];
+            for (int idate = 0; idate < Dates.Count(); idate++)
             {
-                climate_rasterstat climate_rasterstat = climate_rasterstats
-                    .FirstOrDefault(c => c.date.Month == month + 1);
-                if (climate_rasterstat == null)
+                int date = Dates[idate];
+                for (int month = 0; month <= 11; month++)
                 {
-                    max[month] = null;
-                    min[month] = null;
-                    median[month] = null;
-                }
-                else
-                {
-                    var data = JObject.Parse(climate_rasterstat.data);
-                    foreach (JProperty property in data.Properties())
+                    climate_rasterstat climate_rasterstat = climate_rasterstats
+                        .FirstOrDefault(c => c.date.Month == month + 1 && c.date.Year == date);
+                    if (climate_rasterstat == null)
                     {
-                        if (property.Name == "max")
+                        max[idate, month] = null;
+                        min[idate, month] = null;
+                        median[idate, month] = null;
+                    }
+                    else
+                    {
+                        var data = JObject.Parse(climate_rasterstat.data);
+                        foreach (JProperty property in data.Properties())
                         {
-                            decimal? d = null;
-                            try
+                            if (property.Name == "max")
                             {
-                                d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
+                                max[idate, month] = d;
                             }
-                            catch { }
-                            max[month] = d;
-                        }
-                        if (property.Name == "min")
-                        {
-                            decimal? d = null;
-                            try
+                            if (property.Name == "min")
                             {
-                                d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
+                                min[idate, month] = d;
                             }
-                            catch { }
-                            min[month] = d;
-                        }
-                        if (property.Name == "median")
-                        {
-                            decimal? d = null;
-                            try
+                            if (property.Name == "median")
                             {
-                                d = Convert.ToDecimal(property.Value);
+                                decimal? d = null;
+                                try
+                                {
+                                    d = Convert.ToDecimal(property.Value);
+                                }
+                                catch { }
+                                median[idate, month] = d;
                             }
-                            catch { }
-                            median[month] = d;
                         }
                     }
                 }
@@ -2466,25 +2474,29 @@ namespace GeoNodeWeb.Controllers
             List<string> months = new List<string>
             { _sharedLocalizer["January"], _sharedLocalizer["February"], _sharedLocalizer["March"], _sharedLocalizer["April"], _sharedLocalizer["May"], _sharedLocalizer["June"],
               _sharedLocalizer["July"], _sharedLocalizer["August"], _sharedLocalizer["September"], _sharedLocalizer["October"], _sharedLocalizer["November"], _sharedLocalizer["December"]};
-            for (int i = 0; i < 12; i++)
+            for (int idate = 0; idate < Dates.Count(); idate++)
             {
-                raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
-                for (int k = 0; k < months.Count; k++)
+                int date = Dates[idate];
+                for (int i = 0; i < 12; i++)
                 {
-                    if (i == k)
+                    raster_table_for_chart raster_table_for_chart_b_new = new raster_table_for_chart();
+                    for (int k = 0; k < months.Count; k++)
                     {
-                        raster_table_for_chart_b_new.month = months[k];
+                        if (i == k)
+                        {
+                            raster_table_for_chart_b_new.month = months[k];
+                        }
                     }
+
+                    raster_table_for_chart_b_new.year = date;
+                    raster_table_for_chart_b_new.min = min[idate, i];
+                    raster_table_for_chart_b_new.max = max[idate, i];
+                    raster_table_for_chart_b_new.median = median[idate, i];
+
+                    raster_table_for_chart_b_new.period = raster_table_for_chart_b_new.year.ToString() + " - " + (raster_table_for_chart_b_new.year + decade - 1).ToString();
+
+                    raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
                 }
-
-                raster_table_for_chart_b_new.year = Date;
-                raster_table_for_chart_b_new.min = min[i];
-                raster_table_for_chart_b_new.max = max[i];
-                raster_table_for_chart_b_new.median = median[i];
-
-                raster_table_for_chart_b_new.period = raster_table_for_chart_b_new.year.ToString() + " - " + (raster_table_for_chart_b_new.year + decade - 1).ToString();
-
-                raster_table_for_chart_bs.Add(raster_table_for_chart_b_new);
             }
 
             return Json(new
