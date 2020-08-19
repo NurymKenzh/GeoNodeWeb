@@ -159,6 +159,9 @@
   <data name="BaseLayers" xml:space="preserve">
     <value>Негізгі қабаттар</value>
   </data>
+  <data name="BySeasons" xml:space="preserve">
+    <value>Жыл мезгілдері бойынша</value>
+  </data>
   <data name="Chart" xml:space="preserve">
     <value>Кесте</value>
   </data>

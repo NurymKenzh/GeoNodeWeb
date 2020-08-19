@@ -159,6 +159,9 @@
   <data name="BaseLayers" xml:space="preserve">
     <value>Базовые слои</value>
   </data>
+  <data name="BySeasons" xml:space="preserve">
+    <value>По сезонам</value>
+  </data>
   <data name="Chart" xml:space="preserve">
     <value>График</value>
   </data>

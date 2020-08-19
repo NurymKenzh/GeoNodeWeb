@@ -159,6 +159,9 @@
   <data name="BaseLayers" xml:space="preserve">
     <value>Base layers</value>
   </data>
+  <data name="BySeasons" xml:space="preserve">
+    <value>By seasons</value>
+  </data>
   <data name="Chart" xml:space="preserve">
     <value>Schedule</value>
   </data>
