@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace Modis
@@ -52,12 +53,20 @@ namespace Modis
 
             while (true)
             {
+                DateTime startDate = modisProducts.Max(m => m.StartDate);
                 foreach (ModisProduct modisProduct in modisProducts)
                 {
-                    ModisDownload(modisProduct);
+                    DateTime startDateCurrent = ModisDownload(modisProduct);
+                    if (startDate < startDateCurrent)
+                    {
+                        startDate = startDateCurrent;
+                    }
                 }
-                //Log("Sleep 1 hour");
-                //Thread.Sleep(1000 * 60 * 60 * 1);
+                if (startDate == DateTime.Today)
+                {
+                    Log("Sleep 1 hour");
+                    Thread.Sleep(1000 * 60 * 60 * 1);
+                }
             }
         }
 
@@ -102,14 +111,14 @@ namespace Modis
             }
         }
 
-        private static void ModisDownload(
+        private static DateTime ModisDownload(
             ModisProduct ModisProduct)
         {
             EmptyDownloadingDir();
+            DateTime DateStart = GetStartDate(ModisProduct).AddDays(1),
+                DateFinish = GetFinishDate(DateStart);
             try
             {
-                DateTime DateStart = GetStartDate(ModisProduct).AddDays(1),
-                    DateFinish = GetFinishDate(DateStart);
                 string arguments = 
                     $"-U {ModisUser} -P {ModisPassword}" +
                     $" -r -u https://n5eil01u.ecs.nsidc.org" +
@@ -128,6 +137,7 @@ namespace Modis
                 Log(exception.Message + ": " + exception.InnerException?.Message);
             }
             EmptyDownloadingDir();
+            return DateStart;
         }
 
         private static void MoveDownloadedFiles()
@@ -176,6 +186,10 @@ namespace Modis
                         StartDate = GetFileDate(Path.GetFileName(file));
                     }
                 }
+            }
+            if (StartDate > DateTime.Today)
+            {
+                StartDate = DateTime.Today;
             }
             return StartDate;
         }
