@@ -18,8 +18,8 @@ namespace Modis
         const string ModisUser = "sandugash_2004",
             ModisPassword = "Arina2009",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-            DownloadingDir = @"R:\MODISDownloading",
-            DownloadedDir = @"D:\MODIS",
+            DownloadingDir = @"C:\MODIS\Downloading",
+            DownloadedDir = @"C:\MODIS\Downloaded",
             CMDPath = @"C:\Windows\system32\cmd.exe";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
@@ -115,7 +115,7 @@ namespace Modis
             ModisProduct ModisProduct)
         {
             EmptyDownloadingDir();
-            DateTime DateStart = GetStartDate(ModisProduct).AddDays(1),
+            DateTime DateStart = GetStartDate(ModisProduct),
                 DateFinish = GetFinishDate(DateStart);
             try
             {
@@ -183,7 +183,7 @@ namespace Modis
                 {
                     if (GetFileDate(Path.GetFileName(file)) > StartDate)
                     {
-                        StartDate = GetFileDate(Path.GetFileName(file));
+                        StartDate = GetFileDate(Path.GetFileName(file)).AddDays(1);
                     }
                 }
             }
