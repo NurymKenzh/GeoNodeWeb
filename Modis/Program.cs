@@ -21,6 +21,12 @@ namespace Modis
             DownloadingDir = @"C:\MODIS\Downloading",
             DownloadedDir = @"C:\MODIS\Downloaded",
             CMDPath = @"C:\Windows\system32\cmd.exe";
+        //const string ModisUser = "caesarmod",
+        //    ModisPassword = "caesar023Earthdata",
+        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
+        //    DownloadingDir = @"R:\MODISDownloading",
+        //    DownloadedDir = @"D:\MODIS",
+        //    CMDPath = @"C:\Windows\system32\cmd.exe";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
 
@@ -183,9 +189,13 @@ namespace Modis
                 {
                     if (GetFileDate(Path.GetFileName(file)) > StartDate)
                     {
-                        StartDate = GetFileDate(Path.GetFileName(file)).AddDays(1);
+                        StartDate = GetFileDate(Path.GetFileName(file));
                     }
                 }
+            }
+            if (StartDate > ModisProduct.StartDate)
+            {
+                StartDate = StartDate.AddDays(1);
             }
             if (StartDate > DateTime.Today)
             {
