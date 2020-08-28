@@ -56,8 +56,8 @@ namespace Modis
                 {
                     ModisDownload(modisProduct);
                 }
-                Log("Sleep 1 hour");
-                Thread.Sleep(1000 * 60 * 60 * 1);
+                //Log("Sleep 1 hour");
+                //Thread.Sleep(1000 * 60 * 60 * 1);
             }
         }
 
