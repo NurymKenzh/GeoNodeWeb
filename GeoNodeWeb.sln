@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoNodeWeb", "GeoNodeWeb\GeoNodeWeb.csproj", "{F00DC8AC-A2E3-47AA-AE49-ED494758CAAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBCache", "DBCache\DBCache.csproj", "{C2ADEE30-EEE7-4849-93DC-EB33AAA796C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBCache", "DBCache\DBCache.csproj", "{C2ADEE30-EEE7-4849-93DC-EB33AAA796C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modis", "Modis\Modis.csproj", "{763AEA51-349C-4DEE-98B6-3D38C687A2C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C2ADEE30-EEE7-4849-93DC-EB33AAA796C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2ADEE30-EEE7-4849-93DC-EB33AAA796C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2ADEE30-EEE7-4849-93DC-EB33AAA796C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{763AEA51-349C-4DEE-98B6-3D38C687A2C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{763AEA51-349C-4DEE-98B6-3D38C687A2C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{763AEA51-349C-4DEE-98B6-3D38C687A2C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{763AEA51-349C-4DEE-98B6-3D38C687A2C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
