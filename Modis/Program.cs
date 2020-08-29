@@ -81,6 +81,11 @@ namespace Modis
                     ModisDownload(modisProduct, dateNext);
                 }
                 SaveNextDate();
+                if (dateNext == DateTime.Today)
+                {
+                    Log("Sleep 1 hour");
+                    Thread.Sleep(1000 * 60 * 60 * 1);
+                }
             }
         }
 
