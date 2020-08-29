@@ -61,20 +61,6 @@ namespace Modis
 
             while (true)
             {
-                //DateTime startDateMin = modisProducts.Max(m => m.StartDate);
-                //foreach (ModisProduct modisProduct in modisProducts)
-                //{
-                //    DateTime startDateCurrent = ModisDownload(modisProduct);
-                //    if (startDateMin < startDateCurrent)
-                //    {
-                //        startDateMin = startDateCurrent;
-                //    }
-                //}
-                //if (startDateMin == DateTime.Today)
-                //{
-                //    Log("Sleep 1 hour");
-                //    Thread.Sleep(1000 * 60 * 60 * 1);
-                //}
                 DateTime dateNext = GetNextDate();
                 foreach (ModisProduct modisProduct in modisProducts)
                 {
@@ -134,9 +120,11 @@ namespace Modis
             ModisProduct ModisProduct,
             DateTime date)
         {
+            if (ModisProduct.StartDate > date)
+            {
+                return;
+            }
             EmptyDownloadingDir();
-            //DateTime DateStart = GetStartDate(ModisProduct),
-            //    DateFinish = GetFinishDate(DateStart);
             try
             {
                 string arguments = 
@@ -157,7 +145,6 @@ namespace Modis
                 Log(exception.Message + ": " + exception.InnerException?.Message);
             }
             EmptyDownloadingDir();
-            //return DateStart;
         }
 
         private static void MoveDownloadedFiles()
