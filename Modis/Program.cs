@@ -15,18 +15,19 @@ namespace Modis
             public DateTime StartDate;
         }
 
-        const string ModisUser = "sandugash_2004",
-            ModisPassword = "Arina2009",
-            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-            DownloadingDir = @"C:\MODIS\Downloading",
-            DownloadedDir = @"C:\MODIS\Downloaded",
-            CMDPath = @"C:\Windows\system32\cmd.exe";
-        //const string ModisUser = "caesarmod",
-        //    ModisPassword = "caesar023Earthdata",
+        //const string ModisUser = "sandugash_2004",
+        //    ModisPassword = "Arina2009",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-        //    DownloadingDir = @"R:\MODISDownloading",
-        //    DownloadedDir = @"D:\MODIS",
+        //    DownloadingDir = @"C:\MODIS\Downloading",
+        //    DownloadedDir = @"C:\MODIS\Downloaded",
         //    CMDPath = @"C:\Windows\system32\cmd.exe";
+        const string ModisUser = "caesarmod",
+            ModisPassword = "caesar023Earthdata",
+            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
+            DownloadingDir = @"R:\MODISDownloading",
+            DownloadedDir = @"D:\MODIS",
+            CMDPath = @"C:\Windows\system32\cmd.exe",
+            LastDateFile = "!last_date.txt";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
 
@@ -59,20 +60,26 @@ namespace Modis
 
             while (true)
             {
-                DateTime startDate = modisProducts.Max(m => m.StartDate);
+                //DateTime startDateMin = modisProducts.Max(m => m.StartDate);
+                //foreach (ModisProduct modisProduct in modisProducts)
+                //{
+                //    DateTime startDateCurrent = ModisDownload(modisProduct);
+                //    if (startDateMin < startDateCurrent)
+                //    {
+                //        startDateMin = startDateCurrent;
+                //    }
+                //}
+                //if (startDateMin == DateTime.Today)
+                //{
+                //    Log("Sleep 1 hour");
+                //    Thread.Sleep(1000 * 60 * 60 * 1);
+                //}
+                DateTime dateNext = GetNextDate();
                 foreach (ModisProduct modisProduct in modisProducts)
                 {
-                    DateTime startDateCurrent = ModisDownload(modisProduct);
-                    if (startDate < startDateCurrent)
-                    {
-                        startDate = startDateCurrent;
-                    }
+                    ModisDownload(modisProduct, dateNext);
                 }
-                if (startDate == DateTime.Today)
-                {
-                    Log("Sleep 1 hour");
-                    Thread.Sleep(1000 * 60 * 60 * 1);
-                }
+                SaveNextDate();
             }
         }
 
@@ -117,12 +124,13 @@ namespace Modis
             }
         }
 
-        private static DateTime ModisDownload(
-            ModisProduct ModisProduct)
+        private static void ModisDownload(
+            ModisProduct ModisProduct,
+            DateTime date)
         {
             EmptyDownloadingDir();
-            DateTime DateStart = GetStartDate(ModisProduct),
-                DateFinish = GetFinishDate(DateStart);
+            //DateTime DateStart = GetStartDate(ModisProduct),
+            //    DateFinish = GetFinishDate(DateStart);
             try
             {
                 string arguments = 
@@ -132,8 +140,8 @@ namespace Modis
                     $" -s {ModisProduct.Source}" +
                     $" -p {ModisProduct.Product}" +
                     $" -t {ModisSpans}" +
-                    $" -f {DateStart.ToString("yyyy-MM-dd")}" +
-                    $" -e {DateFinish.ToString("yyyy-MM-dd")}" +
+                    $" -f {date.ToString("yyyy-MM-dd")}" +
+                    $" -e {date.ToString("yyyy-MM-dd")}" +
                     $" {DownloadingDir}";
                 GDALExecute("modis_download.py", "", arguments);
                 MoveDownloadedFiles();
@@ -143,21 +151,21 @@ namespace Modis
                 Log(exception.Message + ": " + exception.InnerException?.Message);
             }
             EmptyDownloadingDir();
-            return DateStart;
+            //return DateStart;
         }
 
         private static void MoveDownloadedFiles()
         {
-            try
+            foreach (string file in Directory.EnumerateFiles(DownloadingDir, "*.hdf*"))
             {
-                foreach (string file in Directory.EnumerateFiles(DownloadingDir, "*.hdf*"))
+                try
                 {
                     File.Move(file, Path.Combine(DownloadedDir, Path.GetFileName(file)));
                 }
-            }
-            catch (Exception exception)
-            {
-                Log(exception.Message + ": " + exception.InnerException?.Message);
+                catch (Exception exception)
+                {
+                    Log(exception.Message + ": " + exception.InnerException?.Message);
+                }
             }
         }
 
@@ -178,6 +186,35 @@ namespace Modis
             {
                 Log(exception.Message + ": " + exception.InnerException?.Message);
             }
+        }
+
+        private static DateTime GetNextDate()
+        {
+            DateTime dateLast = modisProducts.Min(m => m.StartDate);
+            string lastDateFile = Path.Combine(DownloadedDir, LastDateFile);
+            if (File.Exists(lastDateFile))
+            {
+                string s_lastDate = File.ReadAllText(lastDateFile),
+                    s_year = s_lastDate.Split('-')[0],
+                    s_month = s_lastDate.Split('-')[1],
+                    s_day = s_lastDate.Split('-')[2];
+                int year = Convert.ToInt32(s_year),
+                    month = Convert.ToInt32(s_month),
+                    day = Convert.ToInt32(s_day);
+                DateTime lastDateFromFile = new DateTime(year, month, day);
+                if (lastDateFromFile >= dateLast)
+                {
+                    dateLast = lastDateFromFile.AddDays(1);
+                }
+            }
+            return dateLast;
+        }
+
+        private static void SaveNextDate()
+        {
+            DateTime dateLast = GetNextDate();
+            string lastDateFile = Path.Combine(DownloadedDir, LastDateFile);
+            File.WriteAllText(lastDateFile, dateLast.ToString("yyyy-MM-dd"));
         }
 
         private static DateTime GetStartDate(ModisProduct ModisProduct)
@@ -204,11 +241,6 @@ namespace Modis
             return StartDate;
         }
 
-        private static string GetFileProduct(string File)
-        {
-            return $"{File.Split('.')[0]}.{File.Split('.')[3]}";
-        }
-
         private static DateTime GetFinishDate(DateTime StartDate)
         {
             DateTime FinishDate = StartDate.AddDays(10);
@@ -228,6 +260,11 @@ namespace Modis
                 dayofyear = Convert.ToInt32(s_dayofyear);
             DateTime Date = new DateTime(year, 1, 1).AddDays(dayofyear - 1);
             return Date;
+        }
+
+        private static string GetFileProduct(string File)
+        {
+            return $"{File.Split('.')[0]}.{File.Split('.')[3]}";
         }
 
         private static void Log(string log)
