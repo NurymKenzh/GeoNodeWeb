@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Modis
 {
@@ -13,22 +15,25 @@ namespace Modis
             public string Source;
             public string Product;
             public DateTime StartDate;
+            public string[] DataSets;
         }
 
-        const string ModisUser = "sandugash_2004",
-            ModisPassword = "Arina2009",
-            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-            DownloadingDir = @"C:\MODIS\Downloading",
-            DownloadedDir = @"C:\MODIS\Downloaded",
-            CMDPath = @"C:\Windows\system32\cmd.exe",
-            LastDateFile = "!last_date.txt";
-        //const string ModisUser = "caesarmod",
-        //    ModisPassword = "caesar023Earthdata",
+        //const string ModisUser = "sandugash_2004",
+        //    ModisPassword = "Arina2009",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-        //    DownloadingDir = @"R:\MODISDownloading",
-        //    DownloadedDir = @"D:\MODIS",
+        //    DownloadingDir = @"C:\MODIS\Downloading",
+        //    DownloadedDir = @"C:\MODIS\Downloaded",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
-        //    LastDateFile = "!last_date.txt";
+        //    LastDateFile = "!last_date.txt",
+        //    MosaicDir = @"C:\MODIS\Mosaic";
+        const string ModisUser = "caesarmod",
+            ModisPassword = "caesar023Earthdata",
+            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
+            DownloadingDir = @"R:\MODISDownloading",
+            DownloadedDir = @"D:\MODIS",
+            CMDPath = @"C:\Windows\system32\cmd.exe",
+            LastDateFile = "!last_date.txt",
+            MosaicDir = @"R:\MODISMosaic";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
 
@@ -38,40 +43,73 @@ namespace Modis
             {
                 Source = "SAN/MOST",
                 Product = "MOD10A1.006",
-                StartDate = new DateTime(2000, 2, 24)
+                StartDate = new DateTime(2000, 2, 24),
+                DataSets = new string[7]
+                {
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
+                }
             };
             modisProducts[1] = new ModisProduct()
             {
                 Source = "SAN/MOST",
                 Product = "MOD10A2.006",
-                StartDate = new DateTime(2000, 2, 24)
+                StartDate = new DateTime(2000, 2, 24),
+                DataSets = new string[2] 
+                { 
+                    "MaxSnowExtent",
+                    "SnowCover"
+                }
             };
             modisProducts[2] = new ModisProduct()
             {
                 Source = "SAN/MOSA",
                 Product = "MYD10A1.006",
-                StartDate = new DateTime(2002, 7, 4)
+                StartDate = new DateTime(2002, 7, 4),
+                DataSets = new string[7]
+                {
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
+                }
             };
             modisProducts[3] = new ModisProduct()
             {
                 Source = "SAN/MOSA",
                 Product = "MYD10A2.006",
-                StartDate = new DateTime(2002, 7, 4)
+                StartDate = new DateTime(2002, 7, 4),
+                DataSets = new string[2]
+                {
+                    "MaxSnowExtent",
+                    "SnowCover"
+                }
             };
 
             while (true)
             {
-                DateTime dateNext = GetNextDate();
-                foreach (ModisProduct modisProduct in modisProducts)
-                {
-                    ModisDownload(modisProduct, dateNext);
-                }
-                SaveNextDate();
-                if (dateNext == DateTime.Today)
-                {
-                    Log("Sleep 1 hour");
-                    Thread.Sleep(1000 * 60 * 60 * 1);
-                }
+                //DateTime dateNext = GetNextDate();
+                //foreach (ModisProduct modisProduct in modisProducts)
+                //{
+                //    ModisDownload(modisProduct, dateNext);
+                //}
+                //SaveNextDate();
+
+                ModisMosaic();
+
+                //if (dateNext == DateTime.Today)
+                //{
+                //    Log("Sleep 1 hour");
+                //    Thread.Sleep(1000 * 60 * 60 * 1);
+                //}
             }
         }
 
@@ -210,55 +248,132 @@ namespace Modis
             File.WriteAllText(lastDateFile, dateLast.ToString("yyyy-MM-dd"));
         }
 
-        private static DateTime GetStartDate(ModisProduct ModisProduct)
+        // edit: если уже есть файл tif (в ГеоСервере?), то файл не создавать
+        private static void CreateListFiles()
         {
-            DateTime StartDate = ModisProduct.StartDate;
-            foreach (string file in Directory.EnumerateFiles(DownloadedDir, "*.hdf"))
+            foreach (string file in Directory.EnumerateFiles(DownloadedDir, "*.hdf*"))
             {
-                if (GetFileProduct(Path.GetFileName(file)) == ModisProduct.Product)
+                string product = Path.GetFileName(file).Split('.')[0],
+                    date = Path.GetFileName(file).Split('.')[1],
+                    listFile = Path.Combine(DownloadedDir, $"{product}.{date}.txt");
+                if (!File.Exists(listFile))
                 {
-                    if (GetFileDate(Path.GetFileName(file)) > StartDate)
-                    {
-                        StartDate = GetFileDate(Path.GetFileName(file));
-                    }
+                    File.WriteAllLines(listFile, Directory.EnumerateFiles(DownloadedDir, $"{product}.{date}*.hdf*"));
                 }
             }
-            if (StartDate > ModisProduct.StartDate)
-            {
-                StartDate = StartDate.AddDays(1);
-            }
-            if (StartDate > DateTime.Today)
-            {
-                StartDate = DateTime.Today;
-            }
-            return StartDate;
         }
 
-        private static DateTime GetFinishDate(DateTime StartDate)
+        private static void ModisMosaic()
         {
-            DateTime FinishDate = StartDate.AddDays(10);
-            if (FinishDate > DateTime.Today)
+            CreateListFiles();
+            List<Task> taskList = new List<Task>();
+            foreach (string listFile in Directory.EnumerateFiles(DownloadedDir, "*.txt"))
             {
-                FinishDate = DateTime.Today;
+                if (listFile.Contains(LastDateFile))
+                {
+                    continue;
+                }
+                taskList.Add(Task.Factory.StartNew(() => ModisMosaicTask(listFile)));
             }
-            return FinishDate;
+            Task.WaitAll(taskList.ToArray());
         }
 
-        private static DateTime GetFileDate(string File)
+        private static void ModisMosaicTask(string ListFile)
         {
-            string date = File.Split('.')[1].Replace("A", ""),
-                s_year = date.Substring(0, 4),
-                s_dayofyear = date.Substring(4, 3);
-            int year = Convert.ToInt32(s_year),
-                dayofyear = Convert.ToInt32(s_dayofyear);
-            DateTime Date = new DateTime(year, 1, 1).AddDays(dayofyear - 1);
-            return Date;
+            string s_productShort = Path.GetFileName(ListFile).Split('.')[0];
+            ModisProduct modisProduct = new ModisProduct();
+            foreach (ModisProduct modisProductCurrent in modisProducts)
+            {
+                if (modisProductCurrent.Product.Contains(s_productShort))
+                {
+                    modisProduct = modisProductCurrent;
+                    break;
+                }
+            }
+            for (int i = 0; i < modisProduct.DataSets.Count(); i++)
+            {
+                string indexes = "";
+                for (int j = 0; j < modisProduct.DataSets.Count(); j++)
+                {
+                    if (j == i)
+                    {
+                        indexes += "1 ";
+                    }
+                    else
+                    {
+                        indexes += "0 ";
+                    }
+                }
+                string index = (i).ToString().PadLeft(2, '0'),
+                    tif = $"{modisProduct.Source.Split('/')[1]}_{modisProduct.Product.Replace(".", "")}_B{index}_{modisProduct.DataSets[i]}.tif",
+                    arguments = $"-o {tif}" +
+                        $" -s \"{indexes.Trim()}\"" +
+                        $" \"{ListFile}\"";
+                GDALExecute(
+                    "modis_mosaic.py",
+                    MosaicDir,
+                    arguments);
+            }
+            File.Delete(ListFile);
         }
 
-        private static string GetFileProduct(string File)
+        private static void ModisConvert()
         {
-            return $"{File.Split('.')[0]}.{File.Split('.')[3]}";
+            foreach(string file in Directory.EnumerateFiles(MosaicDir, "*.tif"))
+            {
+
+            }
         }
+
+        //private static DateTime GetStartDate(ModisProduct ModisProduct)
+        //{
+        //    DateTime StartDate = ModisProduct.StartDate;
+        //    foreach (string file in Directory.EnumerateFiles(DownloadedDir, "*.hdf"))
+        //    {
+        //        if (GetFileProduct(Path.GetFileName(file)) == ModisProduct.Product)
+        //        {
+        //            if (GetFileDate(Path.GetFileName(file)) > StartDate)
+        //            {
+        //                StartDate = GetFileDate(Path.GetFileName(file));
+        //            }
+        //        }
+        //    }
+        //    if (StartDate > ModisProduct.StartDate)
+        //    {
+        //        StartDate = StartDate.AddDays(1);
+        //    }
+        //    if (StartDate > DateTime.Today)
+        //    {
+        //        StartDate = DateTime.Today;
+        //    }
+        //    return StartDate;
+        //}
+
+        //private static DateTime GetFinishDate(DateTime StartDate)
+        //{
+        //    DateTime FinishDate = StartDate.AddDays(10);
+        //    if (FinishDate > DateTime.Today)
+        //    {
+        //        FinishDate = DateTime.Today;
+        //    }
+        //    return FinishDate;
+        //}
+
+        //private static DateTime GetFileDate(string File)
+        //{
+        //    string date = File.Split('.')[1].Replace("A", ""),
+        //        s_year = date.Substring(0, 4),
+        //        s_dayofyear = date.Substring(4, 3);
+        //    int year = Convert.ToInt32(s_year),
+        //        dayofyear = Convert.ToInt32(s_dayofyear);
+        //    DateTime Date = new DateTime(year, 1, 1).AddDays(dayofyear - 1);
+        //    return Date;
+        //}
+
+        //private static string GetFileProduct(string File)
+        //{
+        //    return $"{File.Split('.')[0]}.{File.Split('.')[3]}";
+        //}
 
         private static void Log(string log)
         {
