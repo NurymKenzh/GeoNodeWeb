@@ -19,26 +19,30 @@ namespace Modis
             public int[] ExtractDataSetIndexes;
         }
 
-        //const string ModisUser = "sandugash_2004",
-        //    ModisPassword = "Arina2009",
-        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-        //    DownloadingDir = @"C:\MODIS\Downloading",
-        //    DownloadedDir = @"C:\MODIS\Downloaded",
-        //    CMDPath = @"C:\Windows\system32\cmd.exe",
-        //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"C:\MODIS\Mosaic",
-        //    ConvertDir = @"C:\MODIS\Convert",
-        //    ModisProjection = "3857";
-        const string ModisUser = "caesarmod",
-            ModisPassword = "caesar023Earthdata",
-            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-            DownloadingDir = @"R:\MODIS\Downloading",
-            DownloadedDir = @"D:\MODIS",
+        const string ModisUser = "sandugash_2004",
+            ModisPassword = "Arina2009",
+            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+            DownloadingDir = @"C:\MODIS\Downloading",
+            DownloadedDir = @"C:\MODIS\Downloaded",
             CMDPath = @"C:\Windows\system32\cmd.exe",
             LastDateFile = "!last_date.txt",
-            MosaicDir = @"R:\MODIS\Mosaic",
-            ConvertDir = @"R:\MODIS\Convert",
-            ModisProjection = "3857";
+            MosaicDir = @"C:\MODIS\Mosaic",
+            ConvertDir = @"C:\MODIS\Convert",
+            ModisProjection = "4326",
+            GeoServerWorkspace = "MODIS",
+            GeoServer = @"C:\GeoServer\data_dir\data\MODIS"; //----------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //const string ModisUser = "caesarmod",
+        //    ModisPassword = "caesar023Earthdata",
+        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+        //    DownloadingDir = @"R:\MODIS\Downloading",
+        //    DownloadedDir = @"D:\MODIS",
+        //    CMDPath = @"C:\Windows\system32\cmd.exe",
+        //    LastDateFile = "!last_date.txt",
+        //    MosaicDir = @"R:\MODIS\Mosaic",
+        //    ConvertDir = @"R:\MODIS\Convert",
+        //    ModisProjection = "4326",
+        //    GeoServerWorkspace = "MODIS",
+        //    GeoServer = @"D:\GeoServer\data_dir\data\MODIS";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
 
@@ -59,7 +63,7 @@ namespace Modis
                     "orbitpnt",
                     "granulepnt"
                 },
-                ExtractDataSetIndexes = new int[5] { 0, 1, 2, 3, 4}
+                ExtractDataSetIndexes = new int[0] { }
             };
             modisProducts[1] = new ModisProduct()
             {
@@ -88,7 +92,7 @@ namespace Modis
                     "orbitpnt",
                     "granulepnt"
                 },
-                ExtractDataSetIndexes = new int[5] { 0, 1, 2, 3, 4 }
+                ExtractDataSetIndexes = new int[0] { }
             };
             modisProducts[3] = new ModisProduct()
             {
@@ -105,21 +109,21 @@ namespace Modis
 
             while (true)
             {
-                //DateTime dateNext = GetNextDate();
-                //foreach (ModisProduct modisProduct in modisProducts)
-                //{
-                //    ModisDownload(modisProduct, dateNext);
-                //}
-                //SaveNextDate();
+                DateTime dateNext = GetNextDate();
+                foreach (ModisProduct modisProduct in modisProducts)
+                {
+                    ModisDownload(modisProduct, dateNext);
+                }
+                SaveNextDate();
 
-                ModisMosaic();
-                ModisConvert();
+                //ModisMosaic();
+                //ModisConvert();
 
-                //if (dateNext == DateTime.Today)
-                //{
-                //    Log("Sleep 1 hour");
-                //    Thread.Sleep(1000 * 60 * 60 * 1);
-                //}
+                if (dateNext == DateTime.Today)
+                {
+                    Log("Sleep 1 hour");
+                    Thread.Sleep(1000 * 60 * 60 * 1);
+                }
             }
         }
 
@@ -352,6 +356,22 @@ namespace Modis
                 arguments);
             File.Delete(TifFile);
             File.Delete(xml);
+        }
+
+        private static void ModisPublish()
+        {
+            List<Task> taskList = new List<Task>();
+            foreach (string file in Directory.EnumerateFiles(ConvertDir, "*.tif"))
+            {
+                //taskList.Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
+
+            }
+            //Task.WaitAll(taskList.ToArray());
+        }
+
+        private static void ModisPublishTask(string TifFile)
+        {
+
         }
 
         //private static DateTime GetStartDate(ModisProduct ModisProduct)
