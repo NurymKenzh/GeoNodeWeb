@@ -16,6 +16,7 @@ namespace Modis
             public string Product;
             public DateTime StartDate;
             public string[] DataSets;
+            public int[] ExtractDataSetIndexes;
         }
 
         //const string ModisUser = "sandugash_2004",
@@ -25,15 +26,19 @@ namespace Modis
         //    DownloadedDir = @"C:\MODIS\Downloaded",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
         //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"C:\MODIS\Mosaic";
+        //    MosaicDir = @"C:\MODIS\Mosaic",
+        //    ConvertDir = @"C:\MODIS\Convert",
+        //    ModisProjection = "3857";
         const string ModisUser = "caesarmod",
             ModisPassword = "caesar023Earthdata",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04",
-            DownloadingDir = @"R:\MODISDownloading",
+            DownloadingDir = @"R:\MODIS\Downloading",
             DownloadedDir = @"D:\MODIS",
             CMDPath = @"C:\Windows\system32\cmd.exe",
             LastDateFile = "!last_date.txt",
-            MosaicDir = @"R:\MODISMosaic";
+            MosaicDir = @"R:\MODIS\Mosaic",
+            ConvertDir = @"R:\MODIS\Convert",
+            ModisProjection = "3857";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
 
@@ -53,7 +58,8 @@ namespace Modis
                     "SnowAlbedo",
                     "orbitpnt",
                     "granulepnt"
-                }
+                },
+                ExtractDataSetIndexes = new int[5] { 0, 1, 2, 3, 4}
             };
             modisProducts[1] = new ModisProduct()
             {
@@ -64,7 +70,8 @@ namespace Modis
                 { 
                     "MaxSnowExtent",
                     "SnowCover"
-                }
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 }
             };
             modisProducts[2] = new ModisProduct()
             {
@@ -80,7 +87,8 @@ namespace Modis
                     "SnowAlbedo",
                     "orbitpnt",
                     "granulepnt"
-                }
+                },
+                ExtractDataSetIndexes = new int[5] { 0, 1, 2, 3, 4 }
             };
             modisProducts[3] = new ModisProduct()
             {
@@ -91,7 +99,8 @@ namespace Modis
                 {
                     "MaxSnowExtent",
                     "SnowCover"
-                }
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 }
             };
 
             while (true)
@@ -104,6 +113,7 @@ namespace Modis
                 //SaveNextDate();
 
                 ModisMosaic();
+                ModisConvert();
 
                 //if (dateNext == DateTime.Today)
                 //{
@@ -292,6 +302,10 @@ namespace Modis
             }
             for (int i = 0; i < modisProduct.DataSets.Count(); i++)
             {
+                if (!modisProduct.ExtractDataSetIndexes.Contains(i))
+                {
+                    continue;
+                }
                 string indexes = "";
                 for (int j = 0; j < modisProduct.DataSets.Count(); j++)
                 {
@@ -319,10 +333,25 @@ namespace Modis
 
         private static void ModisConvert()
         {
-            foreach(string file in Directory.EnumerateFiles(MosaicDir, "*.tif"))
+            List<Task> taskList = new List<Task>();
+            foreach (string file in Directory.EnumerateFiles(MosaicDir, "*.tif"))
             {
-
+                taskList.Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
             }
+            Task.WaitAll(taskList.ToArray());
+        }
+
+        private static void ModisConvertTask(string TifFile)
+        {
+            string xml = TifFile + ".xml",
+                    tifReprojected = $"{Path.GetFileNameWithoutExtension(TifFile)}_{ModisProjection}",
+                    arguments = $"-v -s \"( 1 )\" -o {tifReprojected} -e {ModisProjection} \"{TifFile}\"";
+            GDALExecute(
+                "modis_convert.py",
+                ConvertDir,
+                arguments);
+            File.Delete(TifFile);
+            File.Delete(xml);
         }
 
         //private static DateTime GetStartDate(ModisProduct ModisProduct)
