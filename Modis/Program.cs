@@ -32,7 +32,7 @@ namespace Modis
             GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
             GeoServerWorkspace = "MODIS",
             GeoServerUser = "admin",
-            GeoServerPassword = "HdpjwZjfL7MnrK-Kcp!@uaZY",
+            GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/";
         //const string ModisUser = "caesarmod",
         //    ModisPassword = "caesar023Earthdata",
@@ -205,6 +205,21 @@ namespace Modis
             catch (Exception exception)
             {
                 throw new Exception(exception.ToString(), exception?.InnerException);
+            }
+        }
+
+        private static void CurlBatExecute(string Parameter)
+        {
+            try
+            {
+                string bat = Path.ChangeExtension(Path.GetRandomFileName(), ".bat");
+                File.WriteAllText(Path.Combine(DownloadingDir, bat), "curl" + Parameter);
+                Process.Start(Path.Combine(DownloadingDir, bat)).WaitForExit();
+                File.Delete(Path.Combine(DownloadingDir, bat));
+            }
+            catch (Exception exception)
+            {
+                Log($"{exception.ToString()}: {exception?.InnerException}");
             }
         }
 
@@ -417,15 +432,16 @@ namespace Modis
 
         private static void ModisPublish()
         {
-            List<Task> taskList = new List<Task>();
+            //List<Task> taskList = new List<Task>();
             foreach (string file in Directory.EnumerateFiles(ConvertDir, "*.tif"))
             {
                 File.Move(
                     file,
                     Path.Combine(GeoServerDir, Path.GetFileName(file)));
-                taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                //taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
             }
-            Task.WaitAll(taskList.ToArray());
+            //Task.WaitAll(taskList.ToArray());
         }
 
         private static void ModisPublishTask(string TifFile)
@@ -438,14 +454,14 @@ namespace Modis
                 $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
                 $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
                 $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
-            CurlExecute(publishParameters);
+            CurlBatExecute(publishParameters);
             // layer
             publishParameters = $" -v -u" +
                 $" {GeoServerUser}:{GeoServerPassword}" +
                 $" -PUT -H \"Content-type: text/xml\"" +
                 $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
                 $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
-            CurlExecute(publishParameters);
+            CurlBatExecute(publishParameters);
             // style
             string[] a_layerName = layerName.Split('_');
             string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}";
@@ -454,7 +470,7 @@ namespace Modis
                 $" -X PUT -H \"Content-type: text/xml\"" +
                 $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
                 $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
-            CurlExecute(publishParameters);
+            CurlBatExecute(publishParameters);
         }
 
         //private static DateTime GetStartDate(ModisProduct ModisProduct)
