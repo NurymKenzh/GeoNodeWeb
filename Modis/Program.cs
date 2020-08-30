@@ -29,8 +29,11 @@ namespace Modis
             MosaicDir = @"C:\MODIS\Mosaic",
             ConvertDir = @"C:\MODIS\Convert",
             ModisProjection = "4326",
+            GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
             GeoServerWorkspace = "MODIS",
-            GeoServer = @"C:\GeoServer\data_dir\data\MODIS"; //----------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            GeoServerUser = "admin",
+            GeoServerPassword = "HdpjwZjfL7MnrK-Kcp!@uaZY",
+            GeoServerURL = "http://localhost:8080/geoserver/";
         //const string ModisUser = "caesarmod",
         //    ModisPassword = "caesar023Earthdata",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
@@ -41,8 +44,11 @@ namespace Modis
         //    MosaicDir = @"R:\MODIS\Mosaic",
         //    ConvertDir = @"R:\MODIS\Convert",
         //    ModisProjection = "4326",
+        //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
         //    GeoServerWorkspace = "MODIS",
-        //    GeoServer = @"D:\GeoServer\data_dir\data\MODIS";
+        //    GeoServerUser = "admin",
+        //    GeoServerPassword = "geoserver",
+        //    GeoServerURL = "http://localhost:8080/geoserver/";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
 
@@ -116,8 +122,9 @@ namespace Modis
                 }
                 SaveNextDate();
 
-                //ModisMosaic();
-                //ModisConvert();
+                ModisMosaic();
+                ModisConvert();
+                ModisPublish();
 
                 if (dateNext == DateTime.Today)
                 {
@@ -158,6 +165,39 @@ namespace Modis
                 Log(error);
                 process.WaitForExit();
                 if (!string.IsNullOrEmpty(error))
+                {
+                    //throw new Exception(error);
+                }
+            }
+            catch (Exception exception)
+            {
+                //throw new Exception(exception.ToString(), exception?.InnerException);
+                Log($"{exception.ToString()}: {exception?.InnerException}");
+            }
+        }
+
+        private static void CurlExecute(
+            string Parameters)
+        {
+            Process process = new Process();
+            try
+            {
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.FileName = CMDPath;
+                process.Start();
+
+                process.StandardInput.WriteLine($"curl {Parameters}");
+                process.StandardInput.WriteLine("exit");
+
+                string output = process.StandardOutput.ReadToEnd();
+                Log(output);
+                string error = process.StandardError.ReadToEnd();
+                Log(error);
+                process.WaitForExit();
+                if (error.ToLower().Contains("error"))
                 {
                     throw new Exception(error);
                 }
@@ -262,77 +302,91 @@ namespace Modis
             File.WriteAllText(lastDateFile, dateLast.ToString("yyyy-MM-dd"));
         }
 
-        // edit: если уже есть файл tif (в ГеоСервере?), то файл не создавать
         private static void CreateListFiles()
         {
-            foreach (string file in Directory.EnumerateFiles(DownloadedDir, "*.hdf*"))
+            string[] GeoServerFiles = Directory.EnumerateFiles(GeoServerDir, "*.tif*").ToArray();
+            foreach (string file in Directory.EnumerateFiles(DownloadedDir, "*.hdf"))
             {
+                string fileDate = GetHDFDate(file),
+                    fileProduct = GetHDFProduct(file);
+                if (GeoServerFiles.Count(g => g.Contains(fileDate) && g.Contains(fileProduct.Replace(".",""))) > 0)
+                {
+                    continue;
+                }
                 string product = Path.GetFileName(file).Split('.')[0],
                     date = Path.GetFileName(file).Split('.')[1],
                     listFile = Path.Combine(DownloadedDir, $"{product}.{date}.txt");
                 if (!File.Exists(listFile))
                 {
-                    File.WriteAllLines(listFile, Directory.EnumerateFiles(DownloadedDir, $"{product}.{date}*.hdf*"));
+                    File.WriteAllLines(listFile, Directory.EnumerateFiles(DownloadedDir, $"{product}.{date}*.hdf*").Select(f => Path.GetFileName(f)));
                 }
             }
         }
 
         private static void ModisMosaic()
         {
-            CreateListFiles();
-            List<Task> taskList = new List<Task>();
-            foreach (string listFile in Directory.EnumerateFiles(DownloadedDir, "*.txt"))
+            try
             {
-                if (listFile.Contains(LastDateFile))
+                CreateListFiles();
+                List<Task> taskList = new List<Task>();
+                foreach (string listFile in Directory.EnumerateFiles(DownloadedDir, "*.txt"))
                 {
-                    continue;
+                    if (listFile.Contains(LastDateFile))
+                    {
+                        continue;
+                    }
+                    taskList.Add(Task.Factory.StartNew(() => ModisMosaicTask(listFile)));
                 }
-                taskList.Add(Task.Factory.StartNew(() => ModisMosaicTask(listFile)));
+                Task.WaitAll(taskList.ToArray());
             }
-            Task.WaitAll(taskList.ToArray());
+            catch { }
         }
 
         private static void ModisMosaicTask(string ListFile)
         {
-            string s_productShort = Path.GetFileName(ListFile).Split('.')[0];
-            ModisProduct modisProduct = new ModisProduct();
-            foreach (ModisProduct modisProductCurrent in modisProducts)
+            try
             {
-                if (modisProductCurrent.Product.Contains(s_productShort))
+                string s_productShort = Path.GetFileName(ListFile).Split('.')[0];
+                ModisProduct modisProduct = new ModisProduct();
+                foreach (ModisProduct modisProductCurrent in modisProducts)
                 {
-                    modisProduct = modisProductCurrent;
-                    break;
-                }
-            }
-            for (int i = 0; i < modisProduct.DataSets.Count(); i++)
-            {
-                if (!modisProduct.ExtractDataSetIndexes.Contains(i))
-                {
-                    continue;
-                }
-                string indexes = "";
-                for (int j = 0; j < modisProduct.DataSets.Count(); j++)
-                {
-                    if (j == i)
+                    if (modisProductCurrent.Product.Contains(s_productShort))
                     {
-                        indexes += "1 ";
-                    }
-                    else
-                    {
-                        indexes += "0 ";
+                        modisProduct = modisProductCurrent;
+                        break;
                     }
                 }
-                string index = (i).ToString().PadLeft(2, '0'),
-                    tif = $"{modisProduct.Source.Split('/')[1]}_{modisProduct.Product.Replace(".", "")}_B{index}_{modisProduct.DataSets[i]}.tif",
-                    arguments = $"-o {tif}" +
-                        $" -s \"{indexes.Trim()}\"" +
-                        $" \"{ListFile}\"";
-                GDALExecute(
-                    "modis_mosaic.py",
-                    MosaicDir,
-                    arguments);
+                for (int i = 0; i < modisProduct.DataSets.Count(); i++)
+                {
+                    if (!modisProduct.ExtractDataSetIndexes.Contains(i))
+                    {
+                        continue;
+                    }
+                    string indexes = "";
+                    for (int j = 0; j < modisProduct.DataSets.Count(); j++)
+                    {
+                        if (j == i)
+                        {
+                            indexes += "1 ";
+                        }
+                        else
+                        {
+                            indexes += "0 ";
+                        }
+                    }
+                    string index = (i).ToString().PadLeft(2, '0'),
+                        tif = $"{modisProduct.Source.Split('/')[1]}_{modisProduct.Product.Replace(".", "")}_B{index}_{modisProduct.DataSets[i]}.tif",
+                        arguments = $"-o {tif}" +
+                            $" -s \"{indexes.Trim()}\"" +
+                            $" \"{ListFile}\"";
+                    GDALExecute(
+                        "modis_mosaic.py",
+                        MosaicDir,
+                        arguments);
+                }
+                File.Delete(ListFile);
             }
-            File.Delete(ListFile);
+            catch { }
         }
 
         private static void ModisConvert()
@@ -356,6 +410,9 @@ namespace Modis
                 arguments);
             File.Delete(TifFile);
             File.Delete(xml);
+            //File.Move(
+            //    Path.Combine(ConvertDir, Path.ChangeExtension(tifReprojected, ".tif")),
+            //    Path.Combine(GeoServerDir, Path.ChangeExtension(tifReprojected, ".tif")));
         }
 
         private static void ModisPublish()
@@ -363,15 +420,41 @@ namespace Modis
             List<Task> taskList = new List<Task>();
             foreach (string file in Directory.EnumerateFiles(ConvertDir, "*.tif"))
             {
-                //taskList.Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
-
+                File.Move(
+                    file,
+                    Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
             }
-            //Task.WaitAll(taskList.ToArray());
+            Task.WaitAll(taskList.ToArray());
         }
 
         private static void ModisPublishTask(string TifFile)
         {
-
+            string layerName = Path.GetFileNameWithoutExtension(TifFile);
+            // store
+            string publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -POST -H \"Content-type: text/xml\"" +
+                $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
+                $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
+                $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
+            CurlExecute(publishParameters);
+            // layer
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
+                $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
+            CurlExecute(publishParameters);
+            // style
+            string[] a_layerName = layerName.Split('_');
+            string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}";
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -X PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
+                $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
+            CurlExecute(publishParameters);
         }
 
         //private static DateTime GetStartDate(ModisProduct ModisProduct)
@@ -408,8 +491,9 @@ namespace Modis
         //    return FinishDate;
         //}
 
-        //private static DateTime GetFileDate(string File)
+        //private static DateTime GetHDFDate(string File)
         //{
+        //    File = Path.GetFileName(File);
         //    string date = File.Split('.')[1].Replace("A", ""),
         //        s_year = date.Substring(0, 4),
         //        s_dayofyear = date.Substring(4, 3);
@@ -419,10 +503,17 @@ namespace Modis
         //    return Date;
         //}
 
-        //private static string GetFileProduct(string File)
-        //{
-        //    return $"{File.Split('.')[0]}.{File.Split('.')[3]}";
-        //}
+        private static string GetHDFDate(string File)
+        {
+            File = Path.GetFileName(File);
+            return File.Split('.')[1].Replace("A", "");
+        }
+
+        private static string GetHDFProduct(string File)
+        {
+            File = Path.GetFileName(File);
+            return $"{File.Split('.')[0]}.{File.Split('.')[3]}";
+        }
 
         private static void Log(string log)
         {
