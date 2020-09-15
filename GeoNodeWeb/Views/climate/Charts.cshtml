@@ -392,7 +392,7 @@
                                 <div class="btn-group mr-2">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Period">
                                         <button type="button" class="btn-default" onclick="Chart1Show(); Table1Show();">@SharedLocalizer["Year"]</button>
-                                        <button type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">@SharedLocalizer["Season"]</button>
+                                        <button hidden="hidden" type="button" class="btn-default" onclick="Chart2Show(); Table2Show();">@SharedLocalizer["Season"]</button>
                                         <button hidden="hidden" type="button" class="btn-default" onclick="Chart3Show(); Table3Show();">@SharedLocalizer["Month"]</button>
                                         <button type="button" class="btn-default" onclick="Chart4Show(); Table4Show();">@SharedLocalizer["Monthly"]</button>
                                         <button type="button" class="btn-default" onclick="Chart5Show(); Table5Show();">@SharedLocalizer["BySeasons"]</button>
@@ -531,7 +531,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-3" id="chartbody2">
+                            <div class="row mb-3" id="chartbody2" hidden="hidden">
                                 <div class="col-md-3 order-md-2 mt-2">
                                     <fieldset class="scheduler-border">
                                         <legend class="scheduler-border"> @SharedLocalizer["ChartOptions"] </legend>

@@ -2051,6 +2051,11 @@ namespace GeoNodeWeb.Controllers
                     }
                     climate_rasterstat climate_rasterstat = climate_rasterstats
                         .FirstOrDefault(c => c.date.Month == iseason + 1 && c.date.Year == date);
+                    if (SubParameter == "et_pd_avg" || SubParameter == "et_dlt_avg" || SubParameter == "spi_pd_avg" || SubParameter == "spei_pd_avg")
+                    {
+                        climate_rasterstat = climate_rasterstats
+                        .FirstOrDefault(c => c.date.Month == season && c.date.Year == date);
+                    }
                     if (climate_rasterstat == null)
                     {
                         max[idate, iseason] = null;
