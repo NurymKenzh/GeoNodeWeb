@@ -1,0 +1,284 @@
+﻿@using GeoNodeWeb.Controllers
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@{
+    ViewData["Title"] = SharedLocalizer["Map"];
+    Layout = "~/Views/Shared/_LayoutEraland.cshtml";
+}
+<link href="~/esnow/lib/сhart.js/dist/Chart.css" rel="stylesheet" />
+<script src="~/esnow/lib/moment.js/moment.js"></script>
+<script src="~/esnow/lib/сhart.js/dist/Chart.js"></script>
+
+<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" />
+<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+
+<style>
+    .popover-body {
+        min-width: 276px;
+    }
+</style>
+
+<div class="container-fluid p-0">
+    <div class="row">
+        <main role="main" class="sticky-top">
+            <div class="page-wrapper chiller-theme toggled">
+                <a id="show-sidebar" class="btn btn-sm btn-info" href="#">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <nav id="sidebar" class="sidebar-wrapper border-right border-light">
+                    <div class="sidebar-content">
+                        <!-- sidebar-header  -->
+                        <div class="sidebar-menu">
+                            <span class="text-white-50">@SharedLocalizer["Type"]</span>
+                            <br />
+                            <select id="type" onchange="ChangeEraland()">
+                                <option value="tpxxx">@SharedLocalizer["tpxxx"]</option>
+                                <option value="t2mxx">@SharedLocalizer["t2mxx"]</option>
+                                <option value="ssrox">@SharedLocalizer["ssrox"]</option>
+                                <option value="sroxx">@SharedLocalizer["sroxx"]</option>
+                                <option value="roxxx">@SharedLocalizer["roxxx"]</option>
+                                <option value="pevxx">@SharedLocalizer["pevxx"]</option>
+                                <option value="evavt">@SharedLocalizer["evavt"]</option>
+                                <option value="evatc">@SharedLocalizer["evatc"]</option>
+                                <option value="evaow">@SharedLocalizer["evaow"]</option>
+                                <option value="evabs">@SharedLocalizer["evabs"]</option>
+                                <option value="et0xx">@SharedLocalizer["et0xx"]</option>
+                                <option value="esxxx">@SharedLocalizer["esxxx"]</option>
+                                <option value="exxxx">@SharedLocalizer["exxxx"]</option>
+                            </select>
+                            <br />
+                            <span class="text-white-50">@SharedLocalizer["Month"]</span>
+                            <br />
+                            <select id="month" onchange="ChangeEraland()">
+                                <option value="01">@SharedLocalizer["January"]</option>
+                                <option value="02">@SharedLocalizer["February"]</option>
+                                <option value="03">@SharedLocalizer["March"]</option>
+                                <option value="04">@SharedLocalizer["April"]</option>
+                                <option value="05">@SharedLocalizer["May"]</option>
+                                <option value="06">@SharedLocalizer["June"]</option>
+                                <option value="07">@SharedLocalizer["July"]</option>
+                                <option value="08">@SharedLocalizer["August"]</option>
+                                <option value="09">@SharedLocalizer["September"]</option>
+                                <option value="10">@SharedLocalizer["October"]</option>
+                                <option value="11">@SharedLocalizer["November"]</option>
+                                <option value="12">@SharedLocalizer["December"]</option>
+                            </select>
+                            <br />
+                            <span class="text-white-50">@SharedLocalizer["Year"]</span>
+                            <br />
+                            <select id="year" onchange="ChangeEraland()">
+                                <option value="1981">@SharedLocalizer["1981"]</option>
+                                <option value="1982">@SharedLocalizer["1982"]</option>
+                                <option value="1983">@SharedLocalizer["1983"]</option>
+                                <option value="1984">@SharedLocalizer["1984"]</option>
+                                <option value="1985">@SharedLocalizer["1985"]</option>
+                                <option value="1986">@SharedLocalizer["1986"]</option>
+                                <option value="1987">@SharedLocalizer["1987"]</option>
+                                <option value="1988">@SharedLocalizer["1988"]</option>
+                                <option value="1989">@SharedLocalizer["1989"]</option>
+                                <option value="1990">@SharedLocalizer["1990"]</option>
+                                <option value="1991">@SharedLocalizer["1991"]</option>
+                                <option value="1992">@SharedLocalizer["1992"]</option>
+                                <option value="1993">@SharedLocalizer["1993"]</option>
+                                <option value="1994">@SharedLocalizer["1994"]</option>
+                                <option value="1995">@SharedLocalizer["1995"]</option>
+                                <option value="1996">@SharedLocalizer["1996"]</option>
+                                <option value="1997">@SharedLocalizer["1997"]</option>
+                                <option value="1998">@SharedLocalizer["1998"]</option>
+                                <option value="1999">@SharedLocalizer["1999"]</option>
+                                <option value="2000">@SharedLocalizer["2000"]</option>
+                                <option value="2001">@SharedLocalizer["2001"]</option>
+                                <option value="2002">@SharedLocalizer["2002"]</option>
+                                <option value="2003">@SharedLocalizer["2003"]</option>
+                                <option value="2004">@SharedLocalizer["2004"]</option>
+                                <option value="2005">@SharedLocalizer["2005"]</option>
+                                <option value="2006">@SharedLocalizer["2006"]</option>
+                                <option value="2007">@SharedLocalizer["2007"]</option>
+                                <option value="2008">@SharedLocalizer["2008"]</option>
+                                <option value="2009">@SharedLocalizer["2009"]</option>
+                                <option value="2010">@SharedLocalizer["2010"]</option>
+                                <option value="2011">@SharedLocalizer["2011"]</option>
+                                <option value="2012">@SharedLocalizer["2012"]</option>
+                                <option value="2013">@SharedLocalizer["2013"]</option>
+                                <option value="2014">@SharedLocalizer["2014"]</option>
+                                <option value="2015">@SharedLocalizer["2015"]</option>
+                                <option value="2016">@SharedLocalizer["2016"]</option>
+                                <option value="2017">@SharedLocalizer["2017"]</option>
+                                <option value="2018">@SharedLocalizer["2018"]</option>
+                                <option value="2019">@SharedLocalizer["2019"]</option>
+                                <option value="2020">@SharedLocalizer["2020"]</option>
+                            </select>
+                        </div>
+                        <!-- sidebar-menu  -->
+                    </div>
+
+                    <div class="card-body">
+                        <div class="col-md-auto" style="display: none" id="InfoMapContent">
+                        </div>
+                    </div>
+                    <!-- sidebar-content  -->
+                    <div class="sidebar-footer border-bottom border-light">
+
+                    </div>
+                </nav>
+                <!-- sidebar-wrapper  -->
+                <footer class="footer-classic fixed-bottom border-top border-light" style="background: #16344e; min-height: 63px;">
+                    <div class="container-fluid">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col">
+                                <div class="col">
+                                    <div class="input-group">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row align-items-center d-flex justify-content-center">
+
+                                </div>
+                            </div>
+                            <div class="col-md-auto">
+                                <small class="text-light float-right">&copy; @DateTime.Now.Year.ToString() - GeoNode - <a href="mailto:ingeokz@gmail.com">ingeokz@gmail.com</a></small>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+        <div id="map" class="position-fixed col-md-12 ml-sm-auto col-lg-12 p-0 bg-light" style="height: calc(100% - 120px);"></div>
+        <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup-content"></div>
+        </div>
+    </div>
+</div>
+
+<div style="display: none;">
+    <!-- Popup -->
+    <div id="popup" title="Welcome to OpenLayers"></div>
+</div>
+
+<script>
+    var Source_OSM = new ol.source.OSM();
+    var Layer_Base = new ol.layer.Tile({
+        source: Source_OSM
+    });
+    Layer_Base.set('name', 'Base');
+    Layer_Base.setOpacity(1.00);
+
+    var geoserver_url = 'http://elake.kagis.kz:8080/geoserver/',
+        geoserver_workspace_name = 'eraland',
+        eralandLayerName = 'eraland_' + $('#type').val() + '_m_' + $('#year').val() + $('#month').val() + '01';
+
+    var url_eraland = geoserver_url + geoserver_workspace_name + '/wms';
+    var Source_eraland = new ol.source.TileWMS({
+        url: url_eraland,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": geoserver_workspace_name + ':' + eralandLayerName
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_eraland = new ol.layer.Tile({
+        source: Source_eraland
+    });
+    Layer_eraland.set('name', 'eraland');
+    Layer_eraland.setOpacity(0.80);
+
+    var geoserver_url_geonode = "@ViewBag.GeoServerUrl";
+    var url_kazakhstan_nic1 = geoserver_url_geonode + 'geonode' + '/wms';
+    var Source_kazakhstan_nic1 = new ol.source.TileWMS({
+        url: url_kazakhstan_nic1,
+        params: {
+            'FORMAT': 'image/png',
+            'VERSION': '1.1.1',
+            tiled: true,
+            "LAYERS": 'geonode:kazakhstan_nic1',
+            "exceptions": 'application/vnd.ogc.se_inimage',
+            tilesOrigin: 39.1622186743878 + "," + 39.9996233923096
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_kazakhstan_nic1 = new ol.layer.Tile({
+        source: Source_kazakhstan_nic1
+    });
+    Layer_kazakhstan_nic1.set('name', 'kazakhstan_nic1');
+    Layer_kazakhstan_nic1.setOpacity(0.80);
+
+    var map = new ol.Map({
+        target: 'map',
+        controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
+            new ol.control.ScaleLine()
+        ]),
+        layers: [
+            Layer_Base,
+            Layer_eraland,
+            Layer_kazakhstan_nic1
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([66.902, 48.714]),
+            zoom: 5,
+            minZoom: 5,
+            extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
+        })
+    });
+
+    var popup = new ol.Overlay({
+        element: document.getElementById('popup'),
+    });
+    map.addOverlay(popup);
+
+    map.on('click', function (evt) {
+        var element = popup.getElement();
+        var coordinate = evt.coordinate;
+        var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(coordinate));
+
+        $(element).popover('dispose');
+        popup.setPosition(coordinate);
+        var viewResolution = (map.getView().getResolution());
+        var url = Layer_eraland.getSource().getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {
+                'INFO_FORMAT': 'text/javascript'
+            });
+        jQuery.ajax({
+            url: url,
+            dataType: 'jsonp',
+            jsonpCallback: 'parseResponse',
+            error: function () {
+            }
+        }).then(function (response) {
+            var parser = new ol.format.GeoJSON();
+            var result = parser.readFeatures(response);
+            if (result.length) {
+                $(element).popover({
+                    container: element,
+                    placement: 'top',
+                    animation: false,
+                    html: true,
+                    content: '<p>' + result[0].get('GRAY_INDEX').toFixed(2) + '</p><code>' + hdms + '</code>',
+                });
+                $(element).popover('show');
+            }
+        })
+    });
+
+    function ChangeEraland() {
+        eralandLayerName = 'eraland_' + $('#type').val() + '_m_' + $('#year').val() + $('#month').val() + '01';
+        Source_eraland = new ol.source.TileWMS({
+            url: url_eraland,
+            params: {
+                'FORMAT': 'image/png',
+                'VERSION': '1.1.1',
+                tiled: true,
+                "LAYERS": geoserver_workspace_name + ':' + eralandLayerName
+            },
+            serverType: 'geoserver'
+        });
+        Layer_eraland.setSource(Source_eraland);
+    };
+</script>
