@@ -144,9 +144,8 @@ namespace Modis
                 Mosaic = false,
                 ConvertHdf = true,
                 Norm = true,
-                //////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                AnomalyStartYear = 2002, // 2001
-                AnomalyEndYear = 2007 //2019
+                AnomalyStartYear = 2001,
+                AnomalyEndYear = 2019
             };
 
             while (true)
@@ -595,7 +594,7 @@ namespace Modis
                 File.Move(
                     file,
                     Path.Combine(GeoServerDir, Path.GetFileName(file)));
-                //taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
                 //ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
             }
             Task.WaitAll(taskList.ToArray());
@@ -641,8 +640,8 @@ namespace Modis
                     {
                         if (!Path.GetFileNameWithoutExtension(file).Contains("BASE") && !Path.GetFileNameWithoutExtension(file).Contains("Anomaly"))
                         {
-                            //taskList.Add(Task.Factory.StartNew(() => AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                            AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                            taskList.Add(Task.Factory.StartNew(() => AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                            //AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)));
                         }
                     }
                 }
