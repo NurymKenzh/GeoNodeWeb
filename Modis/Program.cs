@@ -17,100 +17,136 @@ namespace Modis
             public DateTime StartDate;
             public string[] DataSets;
             public int[] ExtractDataSetIndexes;
+            public bool Spans;
+            public bool Mosaic;
+            public bool ConvertHdf;
+            public bool Norm = false;
+            public int? AnomalyStartYear;
+            public int? AnomalyEndYear;
         }
 
-        const string ModisUser = "sandugash_2004",
-            ModisPassword = "Arina2009",
-            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-            DownloadingDir = @"C:\MODIS\Downloading",
-            DownloadedDir = @"C:\MODIS\Downloaded",
-            CMDPath = @"C:\Windows\system32\cmd.exe",
-            LastDateFile = "!last_date.txt",
-            MosaicDir = @"C:\MODIS\Mosaic",
-            ConvertDir = @"C:\MODIS\Convert",
-            ModisProjection = "4326",
-            GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
-            GeoServerWorkspace = "MODIS",
-            GeoServerUser = "admin",
-            GeoServerPassword = "geoserver",
-            GeoServerURL = "http://localhost:8080/geoserver/";
-        //const string ModisUser = "caesarmod",
-        //    ModisPassword = "caesar023Earthdata",
+        //const string ModisUser = "sandugash_2004",
+        //    ModisPassword = "Arina2009",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"R:\MODIS\Downloading",
-        //    DownloadedDir = @"D:\MODIS",
+        //    DownloadingDir = @"C:\MODIS\Downloading",
+        //    DownloadedDir = @"C:\MODIS\Downloaded",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
         //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"R:\MODIS\Mosaic",
-        //    ConvertDir = @"R:\MODIS\Convert",
+        //    MosaicDir = @"C:\MODIS\Mosaic",
+        //    ConvertDir = @"C:\MODIS\Convert",
         //    ModisProjection = "4326",
-        //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+        //    GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
         //    GeoServerWorkspace = "MODIS",
         //    GeoServerUser = "admin",
         //    GeoServerPassword = "geoserver",
         //    GeoServerURL = "http://localhost:8080/geoserver/";
+        const string ModisUser = "hvreren",
+            ModisPassword = "Querty123",
+            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+            DownloadingDir = @"R:\MODIS\Downloading",
+            DownloadedDir = @"D:\MODIS",
+            CMDPath = @"C:\Windows\system32\cmd.exe",
+            LastDateFile = "!last_date.txt",
+            MosaicDir = @"R:\MODIS\Mosaic",
+            ConvertDir = @"R:\MODIS\Convert",
+            ModisProjection = "4326",
+            GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+            GeoServerWorkspace = "MODIS",
+            GeoServerUser = "admin",
+            GeoServerPassword = "geoserver",
+            GeoServerURL = "http://localhost:8080/geoserver/";
 
-        static ModisProduct[] modisProducts = new ModisProduct[4];
+        static ModisProduct[] modisProducts = new ModisProduct[1];
 
         static void Main(string[] args)
         {
+            //modisProducts[0] = new ModisProduct()
+            //{
+            //    Source = "SAN/MOST",
+            //    Product = "MOD10A1.006",
+            //    StartDate = new DateTime(2000, 2, 24),
+            //    DataSets = new string[7]
+            //    {
+            //        "NDSISnowCover",
+            //        "NDSISnowCoverBasic",
+            //        "NDSISnowCoverAlgorithm",
+            //        "NDSI",
+            //        "SnowAlbedo",
+            //        "orbitpnt",
+            //        "granulepnt"
+            //    },
+            //    ExtractDataSetIndexes = new int[0] { },
+            //    Spans = true,
+            //    Mosaic = true,
+            //    ConvertHdf = false
+            //};
+            //modisProducts[1] = new ModisProduct()
+            //{
+            //    Source = "SAN/MOST",
+            //    Product = "MOD10A2.006",
+            //    StartDate = new DateTime(2000, 2, 24),
+            //    DataSets = new string[2]
+            //    {
+            //        "MaxSnowExtent",
+            //        "SnowCover"
+            //    },
+            //    ExtractDataSetIndexes = new int[2] { 0, 1 },
+            //    Spans = true,
+            //    Mosaic = true,
+            //    ConvertHdf = false
+            //};
+            //modisProducts[2] = new ModisProduct()
+            //{
+            //    Source = "SAN/MOSA",
+            //    Product = "MYD10A1.006",
+            //    StartDate = new DateTime(2002, 7, 4),
+            //    DataSets = new string[7]
+            //    {
+            //        "NDSISnowCover",
+            //        "NDSISnowCoverBasic",
+            //        "NDSISnowCoverAlgorithm",
+            //        "NDSI",
+            //        "SnowAlbedo",
+            //        "orbitpnt",
+            //        "granulepnt"
+            //    },
+            //    ExtractDataSetIndexes = new int[0] { },
+            //    Spans = true,
+            //    Mosaic = true,
+            //    ConvertHdf = false
+            //};
+            //modisProducts[3] = new ModisProduct()
+            //{
+            //    Source = "SAN/MOSA",
+            //    Product = "MYD10A2.006",
+            //    StartDate = new DateTime(2002, 7, 4),
+            //    DataSets = new string[2]
+            //    {
+            //        "MaxSnowExtent",
+            //        "SnowCover"
+            //    },
+            //    ExtractDataSetIndexes = new int[2] { 0, 1 },
+            //    Spans = true,
+            //    Mosaic = true,
+            //    ConvertHdf = false
+            //};
             modisProducts[0] = new ModisProduct()
             {
                 Source = "SAN/MOST",
-                Product = "MOD10A1.006",
+                Product = "MOD10C2.006",
                 StartDate = new DateTime(2000, 2, 24),
-                DataSets = new string[7]
+                DataSets = new string[1]
                 {
-                    "NDSISnowCover",
-                    "NDSISnowCoverBasic",
-                    "NDSISnowCoverAlgorithm",
-                    "NDSI",
-                    "SnowAlbedo",
-                    "orbitpnt",
-                    "granulepnt"
+                    "NDSI"
                 },
-                ExtractDataSetIndexes = new int[0] { }
-            };
-            modisProducts[1] = new ModisProduct()
-            {
-                Source = "SAN/MOST",
-                Product = "MOD10A2.006",
-                StartDate = new DateTime(2000, 2, 24),
-                DataSets = new string[2] 
-                { 
-                    "MaxSnowExtent",
-                    "SnowCover"
-                },
-                ExtractDataSetIndexes = new int[2] { 0, 1 }
-            };
-            modisProducts[2] = new ModisProduct()
-            {
-                Source = "SAN/MOSA",
-                Product = "MYD10A1.006",
-                StartDate = new DateTime(2002, 7, 4),
-                DataSets = new string[7]
-                {
-                    "NDSISnowCover",
-                    "NDSISnowCoverBasic",
-                    "NDSISnowCoverAlgorithm",
-                    "NDSI",
-                    "SnowAlbedo",
-                    "orbitpnt",
-                    "granulepnt"
-                },
-                ExtractDataSetIndexes = new int[0] { }
-            };
-            modisProducts[3] = new ModisProduct()
-            {
-                Source = "SAN/MOSA",
-                Product = "MYD10A2.006",
-                StartDate = new DateTime(2002, 7, 4),
-                DataSets = new string[2]
-                {
-                    "MaxSnowExtent",
-                    "SnowCover"
-                },
-                ExtractDataSetIndexes = new int[2] { 0, 1 }
+                ExtractDataSetIndexes = new int[1] { 0 },
+                Spans = false,
+                Mosaic = false,
+                ConvertHdf = true,
+                Norm = true,
+                //////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                AnomalyStartYear = 2002, // 2001
+                AnomalyEndYear = 2007 //2019
             };
 
             while (true)
@@ -123,8 +159,12 @@ namespace Modis
                 SaveNextDate();
 
                 ModisMosaic();
-                ModisConvert();
+                ModisConvertTif();
+                ModisConvertHdf();
+                ModisCrop();
+                ModisNorm();
                 ModisPublish();
+                Anomaly();
 
                 if (dateNext == DateTime.Today)
                 {
@@ -240,7 +280,7 @@ namespace Modis
                     $" -p mail@pymodis.com" +
                     $" -s {ModisProduct.Source}" +
                     $" -p {ModisProduct.Product}" +
-                    $" -t {ModisSpans}" +
+                    (ModisProduct.Spans ? $" -t {ModisSpans}" : "") +
                     $" -f {date.ToString("yyyy-MM-dd")}" +
                     $" -e {date.ToString("yyyy-MM-dd")}" +
                     $" {DownloadingDir}";
@@ -324,14 +364,14 @@ namespace Modis
             {
                 string fileDate = GetHDFDate(file),
                     fileProduct = GetHDFProduct(file);
-                if (GeoServerFiles.Count(g => g.Contains(fileDate) && g.Contains(fileProduct.Replace(".",""))) > 0)
+                if (GeoServerFiles.Count(g => g.Contains(fileDate) && g.Contains(fileProduct.Replace(".", ""))) > 0)
                 {
                     continue;
                 }
                 string product = Path.GetFileName(file).Split('.')[0],
                     date = Path.GetFileName(file).Split('.')[1],
                     listFile = Path.Combine(DownloadedDir, $"{product}.{date}.txt");
-                if (!File.Exists(listFile))
+                if (!File.Exists(listFile) && modisProducts.FirstOrDefault(m => m.Product.Split('.')[0] == product).Mosaic)
                 {
                     File.WriteAllLines(listFile, Directory.EnumerateFiles(DownloadedDir, $"{product}.{date}*.hdf*").Select(f => Path.GetFileName(f)));
                 }
@@ -404,7 +444,7 @@ namespace Modis
             catch { }
         }
 
-        private static void ModisConvert()
+        private static void ModisConvertTif()
         {
             List<Task> taskList = new List<Task>();
             foreach (string file in Directory.EnumerateFiles(MosaicDir, "*.tif"))
@@ -425,23 +465,140 @@ namespace Modis
                 arguments);
             File.Delete(TifFile);
             File.Delete(xml);
-            //File.Move(
-            //    Path.Combine(ConvertDir, Path.ChangeExtension(tifReprojected, ".tif")),
-            //    Path.Combine(GeoServerDir, Path.ChangeExtension(tifReprojected, ".tif")));
+        }
+
+        private static void ModisConvertHdf()
+        {
+            List<Task> taskList = new List<Task>();
+            string[] GeoServerFiles = Directory.EnumerateFiles(GeoServerDir, "*.tif*").ToArray();
+            foreach (string file in Directory.EnumerateFiles(DownloadedDir, "*.hdf"))
+            {
+                ModisProduct modisProduct = modisProducts.FirstOrDefault(m => m.Product.Contains(Path.GetFileNameWithoutExtension(file).Split('.')[0]));
+                if (modisProduct.ConvertHdf)
+                {
+                    string[] fileArray = Path.GetFileNameWithoutExtension(file).Split('.');
+                    string fileDate = GetHDFDate(file),
+                        fileProduct = $"{fileArray[0]}.{fileArray[2]}";
+                    if (GeoServerFiles.Count(g => g.Contains(fileDate) && g.Contains(fileProduct.Replace(".", ""))) > 0)
+                    {
+                        continue;
+                    }
+                    for (int i = 0; i < modisProduct.DataSets.Count(); i++)
+                    {
+                        int DataSetIndex = i;
+                        string indexes = "";
+                        if (!modisProduct.ExtractDataSetIndexes.Contains(i))
+                        {
+                            continue;
+                        }
+                        for (int j = 0; j < modisProduct.DataSets.Count(); j++)
+                        {
+                            if (j == i)
+                            {
+                                indexes += "1 ";
+                            }
+                            else
+                            {
+                                indexes += "0 ";
+                            }
+                        }
+                        taskList.Add(Task.Factory.StartNew(() => ModisConvertHdfTask(modisProduct, file, indexes.Trim(), DataSetIndex)));
+                    }
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+        }
+
+        private static void ModisConvertHdfTask(ModisProduct ModisProduct, string HdfFile, string indexes, int DataSetIndex)
+        {
+            string file = Path.GetFileNameWithoutExtension(HdfFile);
+            string[] filesArray = file.Split('.');
+            string tifReprojected = $"{filesArray[1]}" +
+                    $"_{ModisProduct.Source.Split('/')[1]}" +
+                    $"_{ModisProduct.Product.Replace(".", "")}" +
+                    $"_B{(DataSetIndex).ToString().PadLeft(2, '0')}" +
+                    $"_{ModisProduct.DataSets[DataSetIndex]}" +
+                    $"_{ModisProjection}",
+                arguments = $" -s \"( {indexes} )\" -o {tifReprojected} -e {ModisProjection} \"{HdfFile}\"";
+            GDALExecute(
+                "modis_convert.py",
+                DownloadedDir,
+                arguments);
+            string tifConverted = Directory.GetFiles(DownloadedDir, $"{tifReprojected}*.tif").FirstOrDefault();
+            File.Move(Path.Combine(DownloadedDir, Path.ChangeExtension(tifConverted, ".tif")),
+                Path.Combine(ConvertDir, Path.ChangeExtension(tifReprojected, ".tif")));
+        }
+
+        private static void ModisCrop()
+        {
+            List<Task> taskList = new List<Task>();
+            foreach (ModisProduct modisProduct in modisProducts)
+            {
+                if (!modisProduct.Spans)
+                {
+                    foreach (string file in Directory.EnumerateFiles(ConvertDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                    {
+                        taskList.Add(Task.Factory.StartNew(() => ModisCropTask(file)));
+                    }
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+        }
+
+        private static void ModisCropTask(string TifFile)
+        {
+            string arguments = $" {Path.GetFileName(TifFile)}" +
+                $" -projwin 43.990499 56.041399 88.340325 39.642653" +
+                $" {Path.ChangeExtension(Path.GetFileNameWithoutExtension(TifFile) + "_KZ", ".tif")}";
+            GDALExecute(
+                "gdal_translate",
+                ConvertDir,
+                arguments);
+            File.Delete(TifFile);
+        }
+
+        private static void ModisNorm()
+        {
+            List<Task> taskList = new List<Task>();
+            foreach (ModisProduct modisProduct in modisProducts)
+            {
+                if (modisProduct.Norm)
+                {
+                    foreach (string file in Directory.EnumerateFiles(ConvertDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                    {
+                        taskList.Add(Task.Factory.StartNew(() => ModisNormTask(file)));
+                    }
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+        }
+
+        private static void ModisNormTask(string TifFile)
+        {
+            string arguments = $" -A {Path.GetFileName(TifFile)}" +
+                $" --outfile={Path.GetFileNameWithoutExtension(TifFile)}_Norm.tif" +
+                $" --calc=\"A*(A<=100)\"";
+            GDALExecute(
+                "gdal_calc.py",
+                ConvertDir,
+                arguments);
+            File.Delete(TifFile);
+            File.Move(Path.Combine(ConvertDir, Path.GetFileNameWithoutExtension(TifFile) + "_Norm.tif"),
+                TifFile);
         }
 
         private static void ModisPublish()
         {
-            //List<Task> taskList = new List<Task>();
+            List<Task> taskList = new List<Task>();
             foreach (string file in Directory.EnumerateFiles(ConvertDir, "*.tif"))
             {
                 File.Move(
                     file,
                     Path.Combine(GeoServerDir, Path.GetFileName(file)));
                 //taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                //ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
             }
-            //Task.WaitAll(taskList.ToArray());
+            Task.WaitAll(taskList.ToArray());
         }
 
         private static void ModisPublishTask(string TifFile)
@@ -465,6 +622,116 @@ namespace Modis
             // style
             string[] a_layerName = layerName.Split('_');
             string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}";
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -X PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
+                $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
+            CurlBatExecute(publishParameters);
+        }
+
+        private static void Anomaly()
+        {
+            List<Task> taskList = new List<Task>();
+            foreach (ModisProduct modisProduct in modisProducts)
+            {
+                if (modisProduct.AnomalyStartYear != null)
+                {
+                    foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                    {
+                        if (!Path.GetFileNameWithoutExtension(file).Contains("BASE") && !Path.GetFileNameWithoutExtension(file).Contains("Anomaly"))
+                        {
+                            //taskList.Add(Task.Factory.StartNew(() => AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                            AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                        }
+                    }
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+        }
+
+        private static void AnomalyTask(ModisProduct ModisProduct, string TifFile)
+        {
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(TifFile),
+                anomalyFile = Path.Combine(GeoServerDir, Path.ChangeExtension(fileNameWithoutExtension + "_Anomaly", "tif")),
+                baseFile = Path.Combine(GeoServerDir, Path.ChangeExtension($"ABASE{fileNameWithoutExtension.Substring(5)}", "tif")),
+                letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
+            if (File.Exists(anomalyFile))
+            {
+                return;
+            }
+            // check if base layer for anomaly calculation already exists, if no then try to create it
+            string arguments = "";
+            if (!File.Exists(baseFile))
+            {
+                // check if base layers for base calculation already exist
+                bool baseExists = true;
+                for (int year = (int)ModisProduct.AnomalyStartYear; year <= (int)ModisProduct.AnomalyEndYear; year++)
+                {
+                    string baseYearFile = Path.Combine(GeoServerDir, Path.ChangeExtension(fileNameWithoutExtension.Remove(1, 4).Insert(1, year.ToString()), "tif"));
+                    if (!File.Exists(baseYearFile))
+                    {
+                        baseExists = false;
+                        break;
+                    }
+                }
+                if (!baseExists)
+                {
+                    return;
+                }
+
+                // create base file to day
+                for (int year = (int)ModisProduct.AnomalyStartYear; year <= (int)ModisProduct.AnomalyEndYear; year++)
+                {
+                    int letterIndex = year - (int)ModisProduct.AnomalyStartYear;
+                    string baseYearFile = Path.ChangeExtension(fileNameWithoutExtension.Remove(1, 4).Insert(1, year.ToString()), "tif");
+                    arguments += $" -{letters[letterIndex]} {Path.GetFileName(baseYearFile)}";
+                }
+                arguments += $" --outfile={Path.GetFileName(baseFile)}";
+                arguments += $" --calc=\"((";
+                for (int year = (int)ModisProduct.AnomalyStartYear; year <= (int)ModisProduct.AnomalyEndYear; year++)
+                {
+                    int letterIndex = year - (int)ModisProduct.AnomalyStartYear;
+                    arguments += $"{letters[letterIndex]}+";
+                }
+                arguments = arguments.Remove(arguments.Length - 1);
+                arguments += $")/{((int)ModisProduct.AnomalyEndYear - (int)ModisProduct.AnomalyStartYear + 1).ToString()})\"";
+                GDALExecute(
+                    "gdal_calc.py",
+                    GeoServerDir,
+                    arguments);
+            }
+            // calculate
+            //arguments = "--co COMPRESS=LZW";
+            arguments = $" -{letters[0]} {Path.GetFileName(baseFile)}";
+            arguments += $" -{letters[1]} {Path.GetFileName(TifFile)} ";
+            arguments += $"--outfile={Path.GetFileName(anomalyFile)} ";
+            arguments += $"--calc=\"(B-A)*0.01\"";
+            GDALExecute(
+                "gdal_calc.py",
+                GeoServerDir,
+                arguments);
+
+            // publish
+            string layerName = Path.GetFileNameWithoutExtension(anomalyFile);
+            // store
+            string publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -POST -H \"Content-type: text/xml\"" +
+                $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
+                $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
+                $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
+            CurlBatExecute(publishParameters);
+            // layer
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
+                $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
+            CurlBatExecute(publishParameters);
+            // style
+            string[] a_layerName = layerName.Split('_');
+            string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}_{a_layerName[7]}";
             publishParameters = $" -v -u" +
                 $" {GeoServerUser}:{GeoServerPassword}" +
                 $" -X PUT -H \"Content-type: text/xml\"" +
