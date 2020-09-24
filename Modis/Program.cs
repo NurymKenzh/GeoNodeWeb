@@ -56,106 +56,106 @@ namespace Modis
             GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/";
 
-        static ModisProduct[] modisProducts = new ModisProduct[1];
+        static ModisProduct[] modisProducts = new ModisProduct[4];
 
         static void Main(string[] args)
         {
-            //modisProducts[0] = new ModisProduct()
-            //{
-            //    Source = "SAN/MOST",
-            //    Product = "MOD10A1.006",
-            //    StartDate = new DateTime(2000, 2, 24),
-            //    DataSets = new string[7]
-            //    {
-            //        "NDSISnowCover",
-            //        "NDSISnowCoverBasic",
-            //        "NDSISnowCoverAlgorithm",
-            //        "NDSI",
-            //        "SnowAlbedo",
-            //        "orbitpnt",
-            //        "granulepnt"
-            //    },
-            //    ExtractDataSetIndexes = new int[0] { },
-            //    Spans = true,
-            //    Mosaic = true,
-            //    ConvertHdf = false
-            //};
-            //modisProducts[1] = new ModisProduct()
-            //{
-            //    Source = "SAN/MOST",
-            //    Product = "MOD10A2.006",
-            //    StartDate = new DateTime(2000, 2, 24),
-            //    DataSets = new string[2]
-            //    {
-            //        "MaxSnowExtent",
-            //        "SnowCover"
-            //    },
-            //    ExtractDataSetIndexes = new int[2] { 0, 1 },
-            //    Spans = true,
-            //    Mosaic = true,
-            //    ConvertHdf = false
-            //};
-            //modisProducts[2] = new ModisProduct()
-            //{
-            //    Source = "SAN/MOSA",
-            //    Product = "MYD10A1.006",
-            //    StartDate = new DateTime(2002, 7, 4),
-            //    DataSets = new string[7]
-            //    {
-            //        "NDSISnowCover",
-            //        "NDSISnowCoverBasic",
-            //        "NDSISnowCoverAlgorithm",
-            //        "NDSI",
-            //        "SnowAlbedo",
-            //        "orbitpnt",
-            //        "granulepnt"
-            //    },
-            //    ExtractDataSetIndexes = new int[0] { },
-            //    Spans = true,
-            //    Mosaic = true,
-            //    ConvertHdf = false
-            //};
-            //modisProducts[3] = new ModisProduct()
-            //{
-            //    Source = "SAN/MOSA",
-            //    Product = "MYD10A2.006",
-            //    StartDate = new DateTime(2002, 7, 4),
-            //    DataSets = new string[2]
-            //    {
-            //        "MaxSnowExtent",
-            //        "SnowCover"
-            //    },
-            //    ExtractDataSetIndexes = new int[2] { 0, 1 },
-            //    Spans = true,
-            //    Mosaic = true,
-            //    ConvertHdf = false
-            //};
             modisProducts[0] = new ModisProduct()
             {
                 Source = "SAN/MOST",
-                Product = "MOD10C2.006",
+                Product = "MOD10A1.006",
                 StartDate = new DateTime(2000, 2, 24),
-                DataSets = new string[1]
+                DataSets = new string[7]
                 {
-                    "NDSI"
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
                 },
-                ExtractDataSetIndexes = new int[1] { 0 },
-                Spans = false,
-                Mosaic = false,
-                ConvertHdf = true,
-                Norm = true,
-                AnomalyStartYear = 2001,
-                AnomalyEndYear = 2019
+                ExtractDataSetIndexes = new int[0] { },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false
             };
+            modisProducts[1] = new ModisProduct()
+            {
+                Source = "SAN/MOST",
+                Product = "MOD10A2.006",
+                StartDate = new DateTime(2000, 2, 24),
+                DataSets = new string[2]
+                {
+                    "MaxSnowExtent",
+                    "SnowCover"
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false
+            };
+            modisProducts[2] = new ModisProduct()
+            {
+                Source = "SAN/MOSA",
+                Product = "MYD10A1.006",
+                StartDate = new DateTime(2002, 7, 4),
+                DataSets = new string[7]
+                {
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
+                },
+                ExtractDataSetIndexes = new int[0] { },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false
+            };
+            modisProducts[3] = new ModisProduct()
+            {
+                Source = "SAN/MOSA",
+                Product = "MYD10A2.006",
+                StartDate = new DateTime(2002, 7, 4),
+                DataSets = new string[2]
+                {
+                    "MaxSnowExtent",
+                    "SnowCover"
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false
+            };
+            //modisProducts[0] = new ModisProduct()
+            //{
+            //    Source = "SAN/MOST",
+            //    Product = "MOD10C2.006",
+            //    StartDate = new DateTime(2000, 2, 24),
+            //    DataSets = new string[1]
+            //    {
+            //        "NDSI"
+            //    },
+            //    ExtractDataSetIndexes = new int[1] { 0 },
+            //    Spans = false,
+            //    Mosaic = false,
+            //    ConvertHdf = true,
+            //    Norm = true,
+            //    AnomalyStartYear = 2001,
+            //    AnomalyEndYear = 2019
+            //};
 
             while (true)
             {
-                DateTime dateNext = GetNextDate();
-                foreach (ModisProduct modisProduct in modisProducts)
-                {
-                    ModisDownload(modisProduct, dateNext);
-                }
-                SaveNextDate();
+                //DateTime dateNext = GetNextDate();
+                //foreach (ModisProduct modisProduct in modisProducts)
+                //{
+                //    ModisDownload(modisProduct, dateNext);
+                //}
+                //SaveNextDate();
 
                 ModisMosaic();
                 ModisConvertTif();
@@ -165,11 +165,11 @@ namespace Modis
                 ModisPublish();
                 Anomaly();
 
-                if (dateNext == DateTime.Today)
-                {
-                    Log("Sleep 1 hour");
-                    Thread.Sleep(1000 * 60 * 60 * 1);
-                }
+                //if (dateNext == DateTime.Today)
+                //{
+                //    Log("Sleep 1 hour");
+                //    Thread.Sleep(1000 * 60 * 60 * 1);
+                //}
             }
         }
 
@@ -594,7 +594,8 @@ namespace Modis
                 File.Move(
                     file,
                     Path.Combine(GeoServerDir, Path.GetFileName(file)));
-                taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                //taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
                 //ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
             }
             Task.WaitAll(taskList.ToArray());

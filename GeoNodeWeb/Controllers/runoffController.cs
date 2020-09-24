@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GeoNodeWeb.Controllers
 {
-    public class eralandController : Controller
+    public class runoffController : Controller
     {
         public IActionResult Index()
         {

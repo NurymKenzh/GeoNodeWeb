@@ -432,6 +432,42 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string esxxx {
+            get {
+                return ResourceManager.GetString("esxxx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string et0xx {
+            get {
+                return ResourceManager.GetString("et0xx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string evabs {
+            get {
+                return ResourceManager.GetString("evabs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string evaow {
+            get {
+                return ResourceManager.GetString("evaow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Evapotranspiration {
             get {
                 return ResourceManager.GetString("Evapotranspiration", resourceCulture);
@@ -468,9 +504,36 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string evatc {
+            get {
+                return ResourceManager.GetString("evatc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string evavt {
+            get {
+                return ResourceManager.GetString("evavt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Extra {
             get {
                 return ResourceManager.GetString("Extra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string exxxx {
+            get {
+                return ResourceManager.GetString("exxxx", resourceCulture);
             }
         }
         
@@ -855,6 +918,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string pevxx {
+            get {
+                return ResourceManager.GetString("pevxx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Precipitation {
             get {
                 return ResourceManager.GetString("Precipitation", resourceCulture);
@@ -912,6 +984,15 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string Rivers {
             get {
                 return ResourceManager.GetString("Rivers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string roxxx {
+            get {
+                return ResourceManager.GetString("roxxx", resourceCulture);
             }
         }
         
@@ -1044,9 +1125,36 @@ namespace GeoNodeWeb.Resources.Controllers {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string sroxx {
+            get {
+                return ResourceManager.GetString("sroxx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ssrox {
+            get {
+                return ResourceManager.GetString("ssrox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Summer {
             get {
                 return ResourceManager.GetString("Summer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string t2mxx {
+            get {
+                return ResourceManager.GetString("t2mxx", resourceCulture);
             }
         }
         
@@ -1317,6 +1425,24 @@ namespace GeoNodeWeb.Resources.Controllers {
         public static string Test {
             get {
                 return ResourceManager.GetString("Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string tpxxx {
+            get {
+                return ResourceManager.GetString("tpxxx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
         

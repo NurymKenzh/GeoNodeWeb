@@ -243,6 +243,18 @@
   <data name="Email" xml:space="preserve">
     <value>Электрондық пошта</value>
   </data>
+  <data name="esxxx" xml:space="preserve">
+    <value>Испарение со снежного покрова</value>
+  </data>
+  <data name="et0xx" xml:space="preserve">
+    <value>et0xx</value>
+  </data>
+  <data name="evabs" xml:space="preserve">
+    <value>evabs</value>
+  </data>
+  <data name="evaow" xml:space="preserve">
+    <value>evaow</value>
+  </data>
   <data name="Evapotranspiration" xml:space="preserve">
     <value>Буландыру транспирациясы (мм)</value>
   </data>
@@ -255,8 +267,17 @@
   <data name="EvapotranspirationShort" xml:space="preserve">
     <value>Эвапотранспирация</value>
   </data>
+  <data name="evatc" xml:space="preserve">
+    <value>Среднемесячное суммарное испарение (эвапотранспирация)</value>
+  </data>
+  <data name="evavt" xml:space="preserve">
+    <value>evavt</value>
+  </data>
   <data name="Extra" xml:space="preserve">
     <value>Қосымша</value>
+  </data>
+  <data name="exxxx" xml:space="preserve">
+    <value>exxxx</value>
   </data>
   <data name="February" xml:space="preserve">
     <value>Ақпан</value>
@@ -384,6 +405,9 @@
   <data name="Periodicity" xml:space="preserve">
     <value>Мерзімділік</value>
   </data>
+  <data name="pevxx" xml:space="preserve">
+    <value>pevxx</value>
+  </data>
   <data name="Precipitation" xml:space="preserve">
     <value>Жауын-шашын (мм)</value>
   </data>
@@ -404,6 +428,9 @@
   </data>
   <data name="Rivers" xml:space="preserve">
     <value>Өзендер</value>
+  </data>
+  <data name="roxxx" xml:space="preserve">
+    <value>Среднемесячный суммарный сток</value>
   </data>
   <data name="Season" xml:space="preserve">
     <value>Маусым</value>
@@ -447,8 +474,17 @@
   <data name="Spring" xml:space="preserve">
     <value>Көктем</value>
   </data>
+  <data name="sroxx" xml:space="preserve">
+    <value>Поверхностный сток</value>
+  </data>
+  <data name="ssrox" xml:space="preserve">
+    <value>Подземный сток</value>
+  </data>
   <data name="Summer" xml:space="preserve">
     <value>Жаз</value>
+  </data>
+  <data name="t2mxx" xml:space="preserve">
+    <value>t2mxx</value>
   </data>
   <data name="Table" xml:space="preserve">
     <value>Кесте</value>
@@ -539,6 +575,12 @@
   </data>
   <data name="Test" xml:space="preserve">
     <value>Тест</value>
+  </data>
+  <data name="tpxxx" xml:space="preserve">
+    <value>Суммарное количество осадков</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Тип</value>
   </data>
   <data name="Values" xml:space="preserve">
     <value>Құндылықтар</value>
