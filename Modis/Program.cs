@@ -1,8 +1,13 @@
-﻿using System;
+﻿using Dapper;
+using Microsoft.VisualBasic.CompilerServices;
+using Npgsql;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +28,8 @@ namespace Modis
             public bool Norm = false;
             public int? AnomalyStartYear;
             public int? AnomalyEndYear;
+            public bool Analize = false;
+            public int[] DayDividedDataSetIndexes;
         }
 
         //const string ModisUser = "sandugash_2004",
@@ -39,7 +46,9 @@ namespace Modis
         //    GeoServerWorkspace = "MODIS",
         //    GeoServerUser = "admin",
         //    GeoServerPassword = "geoserver",
-        //    GeoServerURL = "http://localhost:8080/geoserver/";
+        //    GeoServerURL = "http://localhost:8080/geoserver/",
+        //    AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
+        //    ExtractRasterValueByPoint = @"R:\MODIS\ExtractRasterValueByPoint.py";
         const string ModisUser = "hvreren",
             ModisPassword = "Querty123",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
@@ -54,7 +63,9 @@ namespace Modis
             GeoServerWorkspace = "MODIS",
             GeoServerUser = "admin",
             GeoServerPassword = "geoserver",
-            GeoServerURL = "http://localhost:8080/geoserver/";
+            GeoServerURL = "http://localhost:8080/geoserver/",
+            AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
+            ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
 
         static ModisProduct[] modisProducts = new ModisProduct[4];
 
@@ -93,7 +104,9 @@ namespace Modis
                 ExtractDataSetIndexes = new int[2] { 0, 1 },
                 Spans = true,
                 Mosaic = true,
-                ConvertHdf = false
+                ConvertHdf = false,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[1] { 1 }
             };
             modisProducts[2] = new ModisProduct()
             {
@@ -128,7 +141,9 @@ namespace Modis
                 ExtractDataSetIndexes = new int[2] { 0, 1 },
                 Spans = true,
                 Mosaic = true,
-                ConvertHdf = false
+                ConvertHdf = false,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[1] { 1 }
             };
             //modisProducts[0] = new ModisProduct()
             //{
@@ -157,13 +172,14 @@ namespace Modis
                 //}
                 //SaveNextDate();
 
-                ModisMosaic();
-                ModisConvertTif();
-                ModisConvertHdf();
-                ModisCrop();
-                ModisNorm();
-                ModisPublish();
-                Anomaly();
+                //ModisMosaic();
+                //ModisConvertTif();
+                //ModisConvertHdf();
+                //ModisCrop();
+                //ModisNorm();
+                //ModisPublish();
+                //Anomaly();
+                Analize();
 
                 //if (dateNext == DateTime.Today)
                 //{
@@ -173,12 +189,13 @@ namespace Modis
             }
         }
 
-        private static void GDALExecute(
+        private static string GDALExecute(
             string ModisFileName,
             string FolderToNavigate,
             params string[] Parameters)
         {
             Process process = new Process();
+            string output = "";
             try
             {
                 // run cmd.exe
@@ -198,7 +215,7 @@ namespace Modis
 
                 process.StandardInput.WriteLine(ModisFileName + " " + string.Join(" ", Parameters));
                 process.StandardInput.WriteLine("exit");
-                string output = process.StandardOutput.ReadToEnd();
+                output = process.StandardOutput.ReadToEnd();
                 Log(output);
                 string error = process.StandardError.ReadToEnd();
                 Log(error);
@@ -213,6 +230,7 @@ namespace Modis
                 //throw new Exception(exception.ToString(), exception?.InnerException);
                 Log($"{exception.ToString()}: {exception?.InnerException}");
             }
+            return output;
         }
 
         private static void CurlExecute(
@@ -740,6 +758,118 @@ namespace Modis
             CurlBatExecute(publishParameters);
         }
 
+        private static void Analize()
+        {
+            List<Task> taskList = new List<Task>();
+            foreach (ModisProduct modisProduct in modisProducts)
+            {
+                if (modisProduct.Analize)
+                {
+                    foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                    {
+                        taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                        //AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                    }
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+        }
+
+        private static void AnalizeTask(string TifFile)
+        {
+            string[] TifFileArray = Path.GetFileNameWithoutExtension(TifFile).Split('_');
+            string product = TifFileArray[2],
+                dataset = TifFileArray[4];
+            ModisProduct modisProduct = modisProducts.FirstOrDefault(m => m.Product.Replace(".", "") == product);
+            int datasetIndex = -1;
+            for (int i = 0; i < modisProduct.DataSets.Count(); i++)
+            {
+                if (modisProduct.DataSets[i] == dataset)
+                {
+                    datasetIndex = i;
+                    break;
+                }
+            }
+            DateTime dateFinish = GetTifDate(TifFile);
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            {
+                connection.Open();
+                string query = $"SELECT COUNT(*) FROM public.modispoints WHERE" +
+                    $" product = '{product}' AND" +
+                    $" dataset = '{dataset}' AND" +
+                    $" date = '{dateFinish.ToString("yyyy-MM-dd")}';";
+                var count = connection.Query<long>(query).FirstOrDefault();
+                connection.Close();
+                if (count > 0)
+                {
+                    return;
+                }
+            }
+
+            string arguments = $"{ExtractRasterValueByPoint}" +
+                $" {TifFile}" +
+                $" {AnalizeShp}" +
+                $" pointid",
+            output = GDALExecute(
+                "python",
+                GeoServerDir,
+                arguments);
+            bool dataStart = false;
+            string[] outputLines = output.Split(Environment.NewLine);
+            List<string> data = new List<string>();
+            for (int i = 0; i < outputLines.Count(); i++)
+            {
+                if (string.IsNullOrEmpty(outputLines[i]))
+                {
+                    dataStart = false;
+                }
+                if (dataStart)
+                {
+                    data.Add(outputLines[i]);
+                }
+                if (outputLines[i] == "Date pointid Values")
+                {
+                    dataStart = true;
+                }
+            }
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            {
+                connection.Open();
+                foreach (string line in data)
+                {
+                    int pointid = Convert.ToInt32(line.Split(' ')[1]);
+                    byte value = Convert.ToByte(line.Split(' ')[2]);
+                    if (modisProduct.DayDividedDataSetIndexes.Contains(datasetIndex))
+                    {
+                        BitArray bits = new BitArray(new byte[] { value }); //new BitArray(BitConverter.GetBytes(value).ToArray());
+                        for (int d = 0; d < bits.Count; d++)
+                        {
+                            DateTime date = dateFinish.AddDays(d - bits.Count + 1);
+                            int valuei = Convert.ToInt32(bits[d]);
+                            string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
+                                $"{pointid}, " +
+                                $"'{product}', " +
+                                $"'{dataset}', " +
+                                $"'{date.ToString("yyyy-MM-dd")}', " +
+                                $"{valuei});";
+                            connection.Query(query);
+                        }
+                    }
+                    else
+                    {
+                        string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
+                            $"{pointid}, " +
+                            $"'{product}', " +
+                            $"'{dataset}', " +
+                            $"'{dateFinish.ToString("yyyy-MM-dd")}', " +
+                            $"{value});";
+                        connection.Query(query);
+                    }
+                }
+                connection.Close();
+            }
+        }
+
         //private static DateTime GetStartDate(ModisProduct ModisProduct)
         //{
         //    DateTime StartDate = ModisProduct.StartDate;
@@ -796,6 +926,14 @@ namespace Modis
         {
             File = Path.GetFileName(File);
             return $"{File.Split('.')[0]}.{File.Split('.')[3]}";
+        }
+
+        private static DateTime GetTifDate(string File)
+        {
+            string[] fileArray = Path.GetFileNameWithoutExtension(File).Split('_');
+            string year = fileArray[0].Substring(1, 4),
+                yearday = fileArray[0].Substring(5, 3);
+            return new DateTime(Convert.ToInt32(year), 1, 1).AddDays(Convert.ToInt32(yearday) - 1);
         }
 
         private static void Log(string log)
