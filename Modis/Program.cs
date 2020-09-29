@@ -32,66 +32,66 @@ namespace Modis
             public int[] DayDividedDataSetIndexes;
         }
 
-        //const string ModisUser = "sandugash_2004",
-        //    ModisPassword = "Arina2009",
-        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"C:\MODIS\Downloading",
-        //    DownloadedDir = @"C:\MODIS\Downloaded",
-        //    CMDPath = @"C:\Windows\system32\cmd.exe",
-        //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"C:\MODIS\Mosaic",
-        //    ConvertDir = @"C:\MODIS\Convert",
-        //    ModisProjection = "4326",
-        //    GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
-        //    GeoServerWorkspace = "MODIS",
-        //    GeoServerUser = "admin",
-        //    GeoServerPassword = "geoserver",
-        //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
-        //    ExtractRasterValueByPoint = @"R:\MODIS\ExtractRasterValueByPoint.py";
-        const string ModisUser = "hvreren",
-            ModisPassword = "Querty123",
+        const string ModisUser = "sandugash_2004",
+            ModisPassword = "Arina2009",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-            DownloadingDir = @"R:\MODIS\Downloading",
-            DownloadedDir = @"D:\MODIS",
+            DownloadingDir = @"C:\MODIS\Downloading",
+            DownloadedDir = @"C:\MODIS\Downloaded",
             CMDPath = @"C:\Windows\system32\cmd.exe",
             LastDateFile = "!last_date.txt",
-            MosaicDir = @"R:\MODIS\Mosaic",
-            ConvertDir = @"R:\MODIS\Convert",
+            MosaicDir = @"C:\MODIS\Mosaic",
+            ConvertDir = @"C:\MODIS\Convert",
             ModisProjection = "4326",
-            GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+            GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
             GeoServerWorkspace = "MODIS",
             GeoServerUser = "admin",
             GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/",
-            AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
-            ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
+            AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
+            ExtractRasterValueByPoint = @"C:\MODIS\ExtractRasterValueByPoint.py";
+        //const string ModisUser = "hvreren",
+        //    ModisPassword = "Querty123",
+        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+        //    DownloadingDir = @"R:\MODIS\Downloading",
+        //    DownloadedDir = @"D:\MODIS",
+        //    CMDPath = @"C:\Windows\system32\cmd.exe",
+        //    LastDateFile = "!last_date.txt",
+        //    MosaicDir = @"R:\MODIS\Mosaic",
+        //    ConvertDir = @"R:\MODIS\Convert",
+        //    ModisProjection = "4326",
+        //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+        //    GeoServerWorkspace = "MODIS",
+        //    GeoServerUser = "admin",
+        //    GeoServerPassword = "geoserver",
+        //    GeoServerURL = "http://localhost:8080/geoserver/",
+        //    AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
+        //    ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
 
-        static ModisProduct[] modisProducts = new ModisProduct[4];
+        static ModisProduct[] modisProducts = new ModisProduct[3];
 
         static void Main(string[] args)
         {
+            //modisProducts[0] = new ModisProduct()
+            //{
+            //    Source = "SAN/MOST",
+            //    Product = "MOD10A1.006",
+            //    StartDate = new DateTime(2000, 2, 24),
+            //    DataSets = new string[7]
+            //    {
+            //        "NDSISnowCover",
+            //        "NDSISnowCoverBasic",
+            //        "NDSISnowCoverAlgorithm",
+            //        "NDSI",
+            //        "SnowAlbedo",
+            //        "orbitpnt",
+            //        "granulepnt"
+            //    },
+            //    ExtractDataSetIndexes = new int[0] { },
+            //    Spans = true,
+            //    Mosaic = true,
+            //    ConvertHdf = false
+            //};
             modisProducts[0] = new ModisProduct()
-            {
-                Source = "SAN/MOST",
-                Product = "MOD10A1.006",
-                StartDate = new DateTime(2000, 2, 24),
-                DataSets = new string[7]
-                {
-                    "NDSISnowCover",
-                    "NDSISnowCoverBasic",
-                    "NDSISnowCoverAlgorithm",
-                    "NDSI",
-                    "SnowAlbedo",
-                    "orbitpnt",
-                    "granulepnt"
-                },
-                ExtractDataSetIndexes = new int[0] { },
-                Spans = true,
-                Mosaic = true,
-                ConvertHdf = false
-            };
-            modisProducts[1] = new ModisProduct()
             {
                 Source = "SAN/MOST",
                 Product = "MOD10A2.006",
@@ -108,27 +108,27 @@ namespace Modis
                 Analize = true,
                 DayDividedDataSetIndexes = new int[1] { 1 }
             };
-            modisProducts[2] = new ModisProduct()
-            {
-                Source = "SAN/MOSA",
-                Product = "MYD10A1.006",
-                StartDate = new DateTime(2002, 7, 4),
-                DataSets = new string[7]
-                {
-                    "NDSISnowCover",
-                    "NDSISnowCoverBasic",
-                    "NDSISnowCoverAlgorithm",
-                    "NDSI",
-                    "SnowAlbedo",
-                    "orbitpnt",
-                    "granulepnt"
-                },
-                ExtractDataSetIndexes = new int[0] { },
-                Spans = true,
-                Mosaic = true,
-                ConvertHdf = false
-            };
-            modisProducts[3] = new ModisProduct()
+            //modisProducts[2] = new ModisProduct()
+            //{
+            //    Source = "SAN/MOSA",
+            //    Product = "MYD10A1.006",
+            //    StartDate = new DateTime(2002, 7, 4),
+            //    DataSets = new string[7]
+            //    {
+            //        "NDSISnowCover",
+            //        "NDSISnowCoverBasic",
+            //        "NDSISnowCoverAlgorithm",
+            //        "NDSI",
+            //        "SnowAlbedo",
+            //        "orbitpnt",
+            //        "granulepnt"
+            //    },
+            //    ExtractDataSetIndexes = new int[0] { },
+            //    Spans = true,
+            //    Mosaic = true,
+            //    ConvertHdf = false
+            //};
+            modisProducts[1] = new ModisProduct()
             {
                 Source = "SAN/MOSA",
                 Product = "MYD10A2.006",
@@ -145,47 +145,47 @@ namespace Modis
                 Analize = true,
                 DayDividedDataSetIndexes = new int[1] { 1 }
             };
-            //modisProducts[0] = new ModisProduct()
-            //{
-            //    Source = "SAN/MOST",
-            //    Product = "MOD10C2.006",
-            //    StartDate = new DateTime(2000, 2, 24),
-            //    DataSets = new string[1]
-            //    {
-            //        "NDSI"
-            //    },
-            //    ExtractDataSetIndexes = new int[1] { 0 },
-            //    Spans = false,
-            //    Mosaic = false,
-            //    ConvertHdf = true,
-            //    Norm = true,
-            //    AnomalyStartYear = 2001,
-            //    AnomalyEndYear = 2019
-            //};
+            modisProducts[2] = new ModisProduct()
+            {
+                Source = "SAN/MOST",
+                Product = "MOD10C2.006",
+                StartDate = new DateTime(2000, 2, 24),
+                DataSets = new string[1]
+                {
+                    "NDSI"
+                },
+                ExtractDataSetIndexes = new int[1] { 0 },
+                Spans = false,
+                Mosaic = false,
+                ConvertHdf = true,
+                Norm = true,
+                AnomalyStartYear = 2001,
+                AnomalyEndYear = 2019
+            };
 
             while (true)
             {
-                //DateTime dateNext = GetNextDate();
-                //foreach (ModisProduct modisProduct in modisProducts)
-                //{
-                //    ModisDownload(modisProduct, dateNext);
-                //}
-                //SaveNextDate();
+                DateTime dateNext = GetNextDate();
+                foreach (ModisProduct modisProduct in modisProducts)
+                {
+                    ModisDownload(modisProduct, dateNext);
+                }
+                SaveNextDate();
 
-                //ModisMosaic();
-                //ModisConvertTif();
-                //ModisConvertHdf();
-                //ModisCrop();
-                //ModisNorm();
-                //ModisPublish();
-                //Anomaly();
+                ModisMosaic();
+                ModisConvertTif();
+                ModisConvertHdf();
+                ModisCrop();
+                ModisNorm();
+                ModisPublish();
+                Anomaly();
                 Analize();
 
-                //if (dateNext == DateTime.Today)
-                //{
-                //    Log("Sleep 1 hour");
-                //    Thread.Sleep(1000 * 60 * 60 * 1);
-                //}
+                if (dateNext == DateTime.Today)
+                {
+                    Log("Sleep 1 hour");
+                    Thread.Sleep(1000 * 60 * 60 * 1);
+                }
             }
         }
 
@@ -364,6 +364,7 @@ namespace Modis
                     dateLast = lastDateFromFile.AddDays(1);
                 }
             }
+            // пройтись по всем скачанным продуктам и найти самую раннюю дату по последним датам продуктов, dateLast = этой дате
             return dateLast;
         }
 
