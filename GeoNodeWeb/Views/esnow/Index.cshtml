@@ -33,7 +33,7 @@
                 <form>
                     <label class="m-0" for="ModisLayer">@SharedLocalizer["Satellite"] / @SharedLocalizer["Dataset"]</label>
                     <div class="input-group input-group-sm">
-                        <select class="form-control" id="ModisLayer" onchange="DatasetChange()">
+                        <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
                             <option value="MOST_MOD10A2006_B00_MaxSnowExtent">Terra MOD10A2 / Max Snow Extent</option>
                             <option value="MOSA_MYD10A2006_B00_MaxSnowExtent">Aqua MYD10A2 / Max Snow Extent</option>
                             <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ">Terra MOD10C2 / NDSI</option>
@@ -212,6 +212,13 @@
     }
 </script>
 
+@* LegendChange *@
+<script>
+    function LegendChange() {
+        $("#legend").attr("src", "/esnow/img/legend/" + $('#ModisLayer').val() + ".svg");
+    }
+</script>
+
 @* Menu *@
 <script>
     jQuery(document).ready(function () {
@@ -286,7 +293,7 @@
                 y: -20
             },
             onOpen: function () {
-                this.setContent('<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/logo/ESnow.svg"></div>');
+                this.setContent('<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legend/MOST_MOD10A2006_B00_MaxSnowExtent.svg"></div>');
             }
         }).open();
         // Tooltip below to the right
