@@ -52,12 +52,12 @@ namespace Modis
         //const string ModisUser = "hvreren",
         //    ModisPassword = "Querty123",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"R:\MODIS\Downloading",
-        //    DownloadedDir = @"D:\MODIS",
+        //    DownloadingDir = @"D:\MODIS\Downloading",
+        //    DownloadedDir = @"D:\MODIS\Downloaded",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
         //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"R:\MODIS\Mosaic",
-        //    ConvertDir = @"R:\MODIS\Convert",
+        //    MosaicDir = @"D:\MODIS\Mosaic",
+        //    ConvertDir = @"D:\MODIS\Convert",
         //    ModisProjection = "4326",
         //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
         //    GeoServerWorkspace = "MODIS",
@@ -183,8 +183,8 @@ namespace Modis
 
                 if (dateNext == DateTime.Today)
                 {
-                    Log("Sleep 1 hour");
-                    Thread.Sleep(1000 * 60 * 60 * 1);
+                    Log("Sleep 4 hour");
+                    Thread.Sleep(1000 * 60 * 60 * 4);
                 }
             }
         }
@@ -364,13 +364,16 @@ namespace Modis
                     dateLast = lastDateFromFile.AddDays(1);
                 }
             }
-            // пройтись по всем скачанным продуктам и найти самую раннюю дату по последним датам продуктов, dateLast = этой дате
             return dateLast;
         }
 
         private static void SaveNextDate()
         {
             DateTime dateLast = GetNextDate();
+            if(dateLast == DateTime.Today)
+            {
+                dateLast = dateLast.AddDays(-30);
+            }
             string lastDateFile = Path.Combine(DownloadedDir, LastDateFile);
             File.WriteAllText(lastDateFile, dateLast.ToString("yyyy-MM-dd"));
         }
@@ -389,7 +392,8 @@ namespace Modis
                 string product = Path.GetFileName(file).Split('.')[0],
                     date = Path.GetFileName(file).Split('.')[1],
                     listFile = Path.Combine(DownloadedDir, $"{product}.{date}.txt");
-                if (!File.Exists(listFile) && modisProducts.FirstOrDefault(m => m.Product.Split('.')[0] == product).Mosaic)
+                ModisProduct modisProduct = modisProducts.FirstOrDefault(m => m.Product.Split('.')[0] == product);
+                if (!File.Exists(listFile) && modisProduct.Mosaic)
                 {
                     File.WriteAllLines(listFile, Directory.EnumerateFiles(DownloadedDir, $"{product}.{date}*.hdf*").Select(f => Path.GetFileName(f)));
                 }
@@ -464,12 +468,24 @@ namespace Modis
 
         private static void ModisConvertTif()
         {
-            List<Task> taskList = new List<Task>();
+            //List<Task> taskList = new List<Task>();
+            //List<List<Task>> taskListList = new List<List<Task>>();
+            //taskListList.Add(new List<Task>());
             foreach (string file in Directory.EnumerateFiles(MosaicDir, "*.tif"))
             {
-                taskList.Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
+                //taskList.Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
+                //if (taskListList.Last().Count() >= 10)
+                //{
+                //    taskListList.Add(new List<Task>());
+                //}
+                //taskListList.Last().Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
+                ModisConvertTask(file);
             }
-            Task.WaitAll(taskList.ToArray());
+            //Task.WaitAll(taskList.ToArray());
+            //foreach(var taskList in taskListList)
+            //{
+            //    Task.WaitAll(taskList.ToArray());
+            //}
         }
 
         private static void ModisConvertTask(string TifFile)
@@ -614,7 +630,7 @@ namespace Modis
                     file,
                     Path.Combine(GeoServerDir, Path.GetFileName(file)));
                 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                //taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
                 //ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
             }
             Task.WaitAll(taskList.ToArray());
