@@ -132,6 +132,10 @@
 <div id="ndsilegenddialog" title="Легенда" hidden="hidden" style="width: 200px;">
     <img src="~/lib/images/Logo Water G.jpg" style="width: 220px;" />
 </div>
+<div class="tab-content mt-n2" id="InfoMapTabContent">
+    <h3 id="clickX">0</h3>
+    <h3 id="clickY">0</h3>
+</div>
 
 @* Layers, Measure, map *@
 <script type="text/javascript">
@@ -217,6 +221,39 @@
     function LegendChange() {
         $("#legend").attr("src", "/esnow/img/legend/" + $('#ModisLayer').val() + ".svg");
     }
+</script>
+
+@* map.on('singleclick') *@
+<script>
+    var clickX = 0,
+        clickY = 0;
+    var InfoMapModal;
+    $(document).ready(function () {
+        InfoMapModal = new jBox('Modal', {
+            id: 'modal-info',
+            minWidth: 600,
+            maxHeight: 500,
+            adjustTracker: 'scroll',
+            zIndex: 'auto',
+            draggable: 'title',
+            closeOnClick: false,
+            closeButton: 'title',
+            animation: 'zoomIn',
+            overlay: false,
+            onOpen: function () {
+                // Add t
+                this.setContent($('#InfoMapTabContent'));
+                this.setTitle('@SharedLocalizer["Info"]');
+            },
+        });
+    });
+    map.on('singleclick', function (evt) {
+        clickX = ol.proj.toLonLat(evt.coordinate)[0];
+        clickY = ol.proj.toLonLat(evt.coordinate)[1];
+        $('#clickX').text(clickX);
+        $('#clickY').text(clickY);
+        InfoMapModal.open();
+    })
 </script>
 
 @* Menu *@
