@@ -1,0 +1,20 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="302" height="202" id="canvas_background" fill="#ffffff"/>
+  <g id="canvasGrid" display="none">
+   <rect id="svg_1" width="100%" height="100%" x="0" y="0" stroke-width="0" fill="url(#gridpattern)"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <defs>
+   <style>.cls-1{fill:#3f5d71;}.cls-2{fill:#fff;}.cls-3{fill:#b4d3e4;}.cls-4{fill:#7f7e7c;stroke:#fff;stroke-miterlimit:10;stroke-width:3px;}.cls-5{fill:#4b76b9;}</style>
+  </defs>
+  <rect fill="#fff" stroke-width="1.5" x="1.00115" y="0.99998" width="298.49914" height="196.99943" id="svg_21" stroke="#000"/>
+  <text fill="#000000" stroke="#000" stroke-width="0" x="23.50108" y="28.4999" id="svg_22" font-size="24" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve"/>
+  <text style="cursor: move;" fill="#000000" stroke-width="0" stroke-opacity="null" fill-opacity="null" x="-380.31954" y="25.04825" id="svg_53" font-size="24" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve" transform="matrix(0.5816128211050575,0,0,2.1780312121942735,231.11348548157332,11.811474607178855) " stroke="#000">MOST_MOD10A2006_B00_MaxSnowExtent</text>
+  <text style="cursor: move;" fill="#000000" stroke-width="0" stroke-opacity="null" fill-opacity="null" x="288.50033" y="253.99925" id="svg_54" font-size="24" font-family="Helvetica, Arial, sans-serif" text-anchor="start" xml:space="preserve" transform="matrix(0.7441762129237971,0,0,2.4263727073117596,-205.09204181225704,-441.3487501115742) " stroke="#000">Terra MOD10A2 / Max Snow Extent</text>
+ </g>
+</svg>
