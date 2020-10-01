@@ -32,40 +32,40 @@ namespace Modis
             public int[] DayDividedDataSetIndexes;
         }
 
-        const string ModisUser = "sandugash_2004",
-            ModisPassword = "Arina2009",
-            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-            DownloadingDir = @"C:\MODIS\Downloading",
-            DownloadedDir = @"C:\MODIS\Downloaded",
-            CMDPath = @"C:\Windows\system32\cmd.exe",
-            LastDateFile = "!last_date.txt",
-            MosaicDir = @"C:\MODIS\Mosaic",
-            ConvertDir = @"C:\MODIS\Convert",
-            ModisProjection = "4326",
-            GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
-            GeoServerWorkspace = "MODIS",
-            GeoServerUser = "admin",
-            GeoServerPassword = "geoserver",
-            GeoServerURL = "http://localhost:8080/geoserver/",
-            AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
-            ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py";
-        //const string ModisUser = "hvreren",
-        //    ModisPassword = "Querty123",
+        //const string ModisUser = "sandugash_2004",
+        //    ModisPassword = "Arina2009",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"D:\MODIS\Downloading",
-        //    DownloadedDir = @"D:\MODIS\Downloaded",
+        //    DownloadingDir = @"C:\MODIS\Downloading",
+        //    DownloadedDir = @"C:\MODIS\Downloaded",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
         //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"D:\MODIS\Mosaic",
-        //    ConvertDir = @"D:\MODIS\Convert",
+        //    MosaicDir = @"C:\MODIS\Mosaic",
+        //    ConvertDir = @"C:\MODIS\Convert",
         //    ModisProjection = "4326",
-        //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+        //    GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
         //    GeoServerWorkspace = "MODIS",
         //    GeoServerUser = "admin",
         //    GeoServerPassword = "geoserver",
         //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
-        //    ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
+        //    AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
+        //    ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py";
+        const string ModisUser = "hvreren",
+            ModisPassword = "Querty123",
+            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+            DownloadingDir = @"D:\MODIS\Downloading",
+            DownloadedDir = @"D:\MODIS\Downloaded",
+            CMDPath = @"C:\Windows\system32\cmd.exe",
+            LastDateFile = "!last_date.txt",
+            MosaicDir = @"D:\MODIS\Mosaic",
+            ConvertDir = @"D:\MODIS\Convert",
+            ModisProjection = "4326",
+            GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+            GeoServerWorkspace = "MODIS",
+            GeoServerUser = "admin",
+            GeoServerPassword = "geoserver",
+            GeoServerURL = "http://localhost:8080/geoserver/",
+            AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
+            ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
 
         static ModisProduct[] modisProducts = new ModisProduct[3];
 
@@ -674,12 +674,16 @@ namespace Modis
             {
                 if (modisProduct.AnomalyStartYear != null)
                 {
-                    foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                    DateTime dateTime = GetNextDate();
+                    if (dateTime.AddDays(-1).Year > modisProduct.AnomalyEndYear)
                     {
-                        if (!Path.GetFileNameWithoutExtension(file).Contains("BASE") && !Path.GetFileNameWithoutExtension(file).Contains("Anomaly"))
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            taskList.Add(Task.Factory.StartNew(() => AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                            //AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                            if (!Path.GetFileNameWithoutExtension(file).Contains("BASE") && !Path.GetFileNameWithoutExtension(file).Contains("Anomaly"))
+                            {
+                                taskList.Add(Task.Factory.StartNew(() => AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                //AnomalyTask(modisProduct, Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                            }
                         }
                     }
                 }
@@ -701,28 +705,33 @@ namespace Modis
             string arguments = "";
             if (!File.Exists(baseFile))
             {
-                // check if base layers for base calculation already exist
-                bool baseExists = true;
-                for (int year = (int)ModisProduct.AnomalyStartYear; year <= (int)ModisProduct.AnomalyEndYear; year++)
-                {
-                    string baseYearFile = Path.Combine(GeoServerDir, Path.ChangeExtension(fileNameWithoutExtension.Remove(1, 4).Insert(1, year.ToString()), "tif"));
-                    if (!File.Exists(baseYearFile))
-                    {
-                        baseExists = false;
-                        break;
-                    }
-                }
-                if (!baseExists)
-                {
-                    return;
-                }
+                //// check if base layers for base calculation already exist
+                //bool baseExists = true;
+                //for (int year = (int)ModisProduct.AnomalyStartYear; year <= (int)ModisProduct.AnomalyEndYear; year++)
+                //{
+                //    string baseYearFile = Path.Combine(GeoServerDir, Path.ChangeExtension(fileNameWithoutExtension.Remove(1, 4).Insert(1, year.ToString()), "tif"));
+                //    if (!File.Exists(baseYearFile))
+                //    {
+                //        baseExists = false;
+                //        break;
+                //    }
+                //}
+                //if (!baseExists)
+                //{
+                //    return;
+                //}
 
                 // create base file to day
+                int yearsCount = 0;
                 for (int year = (int)ModisProduct.AnomalyStartYear; year <= (int)ModisProduct.AnomalyEndYear; year++)
                 {
                     int letterIndex = year - (int)ModisProduct.AnomalyStartYear;
                     string baseYearFile = Path.ChangeExtension(fileNameWithoutExtension.Remove(1, 4).Insert(1, year.ToString()), "tif");
-                    arguments += $" -{letters[letterIndex]} {Path.GetFileName(baseYearFile)}";
+                    if (File.Exists(Path.Combine(GeoServerDir, baseYearFile)))
+                    {
+                        arguments += $" -{letters[letterIndex]} {Path.GetFileName(baseYearFile)}";
+                        yearsCount++;
+                    }
                 }
                 arguments += $" --outfile={Path.GetFileName(baseFile)}";
                 arguments += $" --calc=\"((";
@@ -732,7 +741,7 @@ namespace Modis
                     arguments += $"{letters[letterIndex]}+";
                 }
                 arguments = arguments.Remove(arguments.Length - 1);
-                arguments += $")/{((int)ModisProduct.AnomalyEndYear - (int)ModisProduct.AnomalyStartYear + 1).ToString()})\"";
+                arguments += $")/{yearsCount})\"";
                 GDALExecute(
                     "gdal_calc.py",
                     GeoServerDir,
@@ -743,38 +752,38 @@ namespace Modis
             arguments = $" -{letters[0]} {Path.GetFileName(baseFile)}";
             arguments += $" -{letters[1]} {Path.GetFileName(TifFile)} ";
             arguments += $"--outfile={Path.GetFileName(anomalyFile)} ";
-            arguments += $"--calc=\"(B-A)*0.01\"";
+            arguments += $"--calc=\"(B-A)*0.1\"";
             GDALExecute(
                 "gdal_calc.py",
                 GeoServerDir,
                 arguments);
 
-            // publish
-            string layerName = Path.GetFileNameWithoutExtension(anomalyFile);
-            // store
-            string publishParameters = $" -v -u" +
-                $" {GeoServerUser}:{GeoServerPassword}" +
-                $" -POST -H \"Content-type: text/xml\"" +
-                $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
-                $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
-                $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
-            CurlBatExecute(publishParameters);
-            // layer
-            publishParameters = $" -v -u" +
-                $" {GeoServerUser}:{GeoServerPassword}" +
-                $" -PUT -H \"Content-type: text/xml\"" +
-                $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
-                $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
-            CurlBatExecute(publishParameters);
-            // style
-            string[] a_layerName = layerName.Split('_');
-            string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}_{a_layerName[7]}";
-            publishParameters = $" -v -u" +
-                $" {GeoServerUser}:{GeoServerPassword}" +
-                $" -X PUT -H \"Content-type: text/xml\"" +
-                $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
-                $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
-            CurlBatExecute(publishParameters);
+            //// publish
+            //string layerName = Path.GetFileNameWithoutExtension(anomalyFile);
+            //// store
+            //string publishParameters = $" -v -u" +
+            //    $" {GeoServerUser}:{GeoServerPassword}" +
+            //    $" -POST -H \"Content-type: text/xml\"" +
+            //    $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
+            //    $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
+            //    $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
+            //CurlBatExecute(publishParameters);
+            //// layer
+            //publishParameters = $" -v -u" +
+            //    $" {GeoServerUser}:{GeoServerPassword}" +
+            //    $" -PUT -H \"Content-type: text/xml\"" +
+            //    $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
+            //    $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
+            //CurlBatExecute(publishParameters);
+            //// style
+            //string[] a_layerName = layerName.Split('_');
+            //string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}_{a_layerName[7]}";
+            //publishParameters = $" -v -u" +
+            //    $" {GeoServerUser}:{GeoServerPassword}" +
+            //    $" -X PUT -H \"Content-type: text/xml\"" +
+            //    $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
+            //    $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
+            //CurlBatExecute(publishParameters);
         }
 
         private static void Analize()
