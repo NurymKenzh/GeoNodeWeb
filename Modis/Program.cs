@@ -48,7 +48,7 @@ namespace Modis
             GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/",
             AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
-            ExtractRasterValueByPoint = @"C:\MODIS\ExtractRasterValueByPoint.py";
+            ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py";
         //const string ModisUser = "hvreren",
         //    ModisPassword = "Querty123",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
@@ -412,7 +412,8 @@ namespace Modis
                     {
                         continue;
                     }
-                    taskList.Add(Task.Factory.StartNew(() => ModisMosaicTask(listFile)));
+                    //taskList.Add(Task.Factory.StartNew(() => ModisMosaicTask(listFile)));
+                    ModisMosaicTask(listFile);
                 }
                 Task.WaitAll(taskList.ToArray());
             }
@@ -572,7 +573,8 @@ namespace Modis
                 {
                     foreach (string file in Directory.EnumerateFiles(ConvertDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                     {
-                        taskList.Add(Task.Factory.StartNew(() => ModisCropTask(file)));
+                        //taskList.Add(Task.Factory.StartNew(() => ModisCropTask(file)));
+                        ModisCropTask(file);
                     }
                 }
             }
@@ -824,8 +826,8 @@ namespace Modis
             }
 
             string arguments = $"{ExtractRasterValueByPoint}" +
-                $" {TifFile}" +
-                $" {AnalizeShp}" +
+                $" \"{TifFile}\"" +
+                $" \"{AnalizeShp}\"" +
                 $" pointid",
             output = GDALExecute(
                 "python",
