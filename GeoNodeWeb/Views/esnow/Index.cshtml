@@ -34,8 +34,8 @@
                     <label class="m-0" for="ModisLayer">@SharedLocalizer["Satellite"] / @SharedLocalizer["Dataset"]</label>
                     <div class="input-group input-group-sm">
                         <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
-                            <option value="MOST_MOD10A2006_B00_MaxSnowExtent">Terra MOD10A2 / Max Snow Extent</option>
-                            <option value="MOSA_MYD10A2006_B00_MaxSnowExtent">Aqua MYD10A2 / Max Snow Extent</option>
+                            <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">Terra MOD10A2 / Max Snow Extent</option>
+                            <option value="MOSA_MYD10A2006_B00_MaxSnowExtent_4326">Aqua MYD10A2 / Max Snow Extent</option>
                             <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ">Terra MOD10C2 / NDSI</option>
                             <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly">Terra MOD10C2 / NDSI (@SharedLocalizer["Anomaly"])</option>
                         </select>
@@ -68,7 +68,7 @@
                                 </a>
                             </span>
                         </div>
-                        <select class="custom-select" id="day" aria-describedby="DayHelpBlock"></select>
+                        <select class="custom-select" id="day" aria-describedby="DayHelpBlock" onchange="DayChange()"></select>
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <a href="#" target="_blank">
@@ -139,7 +139,8 @@
 
 @* Layers, Measure, map *@
 <script type="text/javascript">
-    var geoserverUrl = '@ViewBag.GeoServerUrl';
+    var geoserver_url = '@ViewBag.GeoServerUrl';
+    //geoserver_url = 'localhost:8080/geoserver/';
 
     var Source_OSM = new ol.source.OSM();
     var Layer_Base = new ol.layer.Tile({
@@ -148,13 +149,31 @@
     Layer_Base.set('name', 'Base');
     Layer_Base.setOpacity(0.80);
 
+    var url_modis = geoserver_url + 'MODIS' + '/wms';
+    var Source_modis = new ol.source.TileWMS({
+        url: url_modis,
+        params: {
+            'FORMAT': 'image/png',
+            //'VERSION': '1.1.1',
+            //tiled: true,
+            'LAYERS': 'MODIS:A2020241_MOST_MOD10A2006_B00_MaxSnowExtent_4326'
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_modis = new ol.layer.Tile({
+        source: Source_modis
+    });
+    Layer_modis.set('name', 'modis');
+    Layer_modis.setOpacity(0.80);
+
     var map = new ol.Map({
         target: 'map',
         controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
             new ol.control.ScaleLine()
         ]),
         layers: [
-            Layer_Base],
+            Layer_Base,
+            Layer_modis],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 5,
@@ -209,10 +228,15 @@
                     $('#day').append($('<option />').val(this).text(datestring + ' (' + this + ')'));
                 });
                 $('#day option:last').attr('selected', 'selected');
+                DayChange();
             },
             error: function () {
             }
         })
+    }
+
+    function DayChange() {
+        ModisLayerChange();
     }
 </script>
 
@@ -220,6 +244,36 @@
 <script>
     function LegendChange() {
         $("#legend").attr("src", "/esnow/img/legend/" + $('#ModisLayer').val() + ".svg");
+    }
+</script>
+
+@* ModisLayerChange *@
+<script>
+    function GetModisLayerName() {
+        var date = $('#day').val();
+        if (date.toString().length == 1) {
+            date = '0' + date.toString();
+        }
+        if (date.toString().length == 2) {
+            date = '0' + date.toString();
+        }
+        date = 'A' + $('#year').val() + date;
+        var name = date + '_' + $('#ModisLayer').val();
+        return name;
+    }
+
+    function ModisLayerChange() {
+        var layerName = GetModisLayerName();
+        console.log(layerName);
+        var Source_modis_new = new ol.source.TileWMS({
+            url: url_modis,
+            params: {
+                'FORMAT': 'image/png',
+                "LAYERS": 'MODIS:' + layerName,
+            },
+            serverType: 'geoserver'
+        });
+        Layer_modis.setSource(Source_modis_new);
     }
 </script>
 
