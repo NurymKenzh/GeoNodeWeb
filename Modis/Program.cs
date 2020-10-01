@@ -786,8 +786,8 @@ namespace Modis
                 {
                     foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                     {
-                        taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                        //AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                        //taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                        AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
                     }
                 }
             }
@@ -846,7 +846,7 @@ namespace Modis
                 {
                     data.Add(outputLines[i]);
                 }
-                if (outputLines[i] == "Date pointid Values")
+                if (outputLines[i].Contains("Date") && outputLines[i].Contains("pointid") && outputLines[i].Contains("Values"))
                 {
                     dataStart = true;
                 }
@@ -856,8 +856,8 @@ namespace Modis
                 connection.Open();
                 foreach (string line in data)
                 {
-                    int pointid = Convert.ToInt32(line.Split(' ')[1]);
-                    byte value = Convert.ToByte(line.Split(' ')[2]);
+                    int pointid = Convert.ToInt32(line.Split(' ')[1].Replace(",","").Replace(")", ""));
+                    byte value = Convert.ToByte(line.Split(' ')[2].Replace(",","").Replace(")", ""));
                     if (modisProduct.DayDividedDataSetIndexes.Contains(datasetIndex))
                     {
                         BitArray bits = new BitArray(new byte[] { value }); //new BitArray(BitConverter.GetBytes(value).ToArray());
