@@ -32,40 +32,51 @@ namespace Modis
             public int[] DayDividedDataSetIndexes;
         }
 
-        //const string ModisUser = "sandugash_2004",
-        //    ModisPassword = "Arina2009",
-        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"C:\MODIS\Downloading",
-        //    DownloadedDir = @"C:\MODIS\Downloaded",
-        //    CMDPath = @"C:\Windows\system32\cmd.exe",
-        //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"C:\MODIS\Mosaic",
-        //    ConvertDir = @"C:\MODIS\Convert",
-        //    ModisProjection = "4326",
-        //    GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
-        //    GeoServerWorkspace = "MODIS",
-        //    GeoServerUser = "admin",
-        //    GeoServerPassword = "geoserver",
-        //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
-        //    ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py";
-        const string ModisUser = "hvreren",
-            ModisPassword = "Querty123",
+        class PointData
+        {
+            public int pointid;
+            public string product;
+            public string dataset;
+            public DateTime date;
+            public int value;
+        }
+
+        const string ModisUser = "sandugash_2004",
+            ModisPassword = "Arina2009",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-            DownloadingDir = @"D:\MODIS\Downloading",
-            DownloadedDir = @"D:\MODIS\Downloaded",
+            DownloadingDir = @"C:\MODIS\Downloading",
+            DownloadedDir = @"C:\MODIS\Downloaded",
             CMDPath = @"C:\Windows\system32\cmd.exe",
             LastDateFile = "!last_date.txt",
-            MosaicDir = @"D:\MODIS\Mosaic",
-            ConvertDir = @"D:\MODIS\Convert",
+            MosaicDir = @"C:\MODIS\Mosaic",
+            ConvertDir = @"C:\MODIS\Convert",
             ModisProjection = "4326",
-            GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+            GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
             GeoServerWorkspace = "MODIS",
             GeoServerUser = "admin",
             GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/",
-            AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
-            ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
+            AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
+            ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py";
+        //const string ModisUser = "hvreren",
+        //    ModisPassword = "Querty123",
+        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+        //    DownloadingDir = @"D:\MODIS\Downloading",
+        //    DownloadedDir = @"D:\MODIS\Downloaded",
+        //    CMDPath = @"C:\Windows\system32\cmd.exe",
+        //    LastDateFile = "!last_date.txt",
+        //    MosaicDir = @"D:\MODIS\Mosaic",
+        //    ConvertDir = @"D:\MODIS\Convert",
+        //    ModisProjection = "4326",
+        //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+        //    GeoServerWorkspace = "MODIS",
+        //    GeoServerUser = "admin",
+        //    GeoServerPassword = "geoserver",
+        //    GeoServerURL = "http://localhost:8080/geoserver/",
+        //    AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
+        //    ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
+
+        static List<PointData> pointDatas = new List<PointData>();
 
         static ModisProduct[] modisProducts = new ModisProduct[3];
 
@@ -789,18 +800,33 @@ namespace Modis
         private static void Analize()
         {
             List<Task> taskList = new List<Task>();
+            pointDatas.Clear();
             foreach (ModisProduct modisProduct in modisProducts)
             {
                 if (modisProduct.Analize)
                 {
                     foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                     {
-                        //taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                        AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                        taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                        //AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
                     }
                 }
             }
             Task.WaitAll(taskList.ToArray());
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            {
+                foreach(PointData pointData in pointDatas)
+                {
+                    string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
+                        $"{pointData.pointid}, " +
+                        $"'{pointData.product}', " +
+                        $"'{pointData.dataset}', " +
+                        $"'{pointData.date.ToString("yyyy-MM-dd")}', " +
+                        $"{pointData.value});";
+                    connection.Query(query);
+                }
+            }
+            pointDatas.Clear();
         }
 
         private static void AnalizeTask(string TifFile)
@@ -860,41 +886,86 @@ namespace Modis
                     dataStart = true;
                 }
             }
-            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            //using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            //{
+            //    connection.Open();
+            //    foreach (string line in data)
+            //    {
+            //        int pointid = Convert.ToInt32(line.Split(' ')[1].Replace(",","").Replace(")", ""));
+            //        byte value = Convert.ToByte(line.Split(' ')[2].Replace(",","").Replace(")", ""));
+            //        if (modisProduct.DayDividedDataSetIndexes.Contains(datasetIndex))
+            //        {
+            //            BitArray bits = new BitArray(new byte[] { value }); //new BitArray(BitConverter.GetBytes(value).ToArray());
+            //            for (int d = 0; d < bits.Count; d++)
+            //            {
+            //                DateTime date = dateFinish.AddDays(d - bits.Count + 1);
+            //                int valuei = Convert.ToInt32(bits[d]);
+            //                string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
+            //                    $"{pointid}, " +
+            //                    $"'{product}', " +
+            //                    $"'{dataset}', " +
+            //                    $"'{date.ToString("yyyy-MM-dd")}', " +
+            //                    $"{valuei});";
+            //                connection.Query(query);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
+            //                $"{pointid}, " +
+            //                $"'{product}', " +
+            //                $"'{dataset}', " +
+            //                $"'{dateFinish.ToString("yyyy-MM-dd")}', " +
+            //                $"{value});";
+            //            connection.Query(query);
+            //        }
+            //    }
+            //    connection.Close();
+            //}
+            foreach (string line in data)
             {
-                connection.Open();
-                foreach (string line in data)
+                int pointid = Convert.ToInt32(line.Split(' ')[1].Replace(",", "").Replace(")", ""));
+                byte value = Convert.ToByte(line.Split(' ')[2].Replace(",", "").Replace(")", ""));
+                if (modisProduct.DayDividedDataSetIndexes.Contains(datasetIndex))
                 {
-                    int pointid = Convert.ToInt32(line.Split(' ')[1].Replace(",","").Replace(")", ""));
-                    byte value = Convert.ToByte(line.Split(' ')[2].Replace(",","").Replace(")", ""));
-                    if (modisProduct.DayDividedDataSetIndexes.Contains(datasetIndex))
+                    BitArray bits = new BitArray(new byte[] { value }); //new BitArray(BitConverter.GetBytes(value).ToArray());
+                    for (int d = 0; d < bits.Count; d++)
                     {
-                        BitArray bits = new BitArray(new byte[] { value }); //new BitArray(BitConverter.GetBytes(value).ToArray());
-                        for (int d = 0; d < bits.Count; d++)
-                        {
-                            DateTime date = dateFinish.AddDays(d - bits.Count + 1);
-                            int valuei = Convert.ToInt32(bits[d]);
-                            string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
-                                $"{pointid}, " +
-                                $"'{product}', " +
-                                $"'{dataset}', " +
-                                $"'{date.ToString("yyyy-MM-dd")}', " +
-                                $"{valuei});";
-                            connection.Query(query);
-                        }
-                    }
-                    else
-                    {
+                        DateTime date = dateFinish.AddDays(d - bits.Count + 1);
+                        int valuei = Convert.ToInt32(bits[d]);
                         string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
                             $"{pointid}, " +
                             $"'{product}', " +
                             $"'{dataset}', " +
-                            $"'{dateFinish.ToString("yyyy-MM-dd")}', " +
-                            $"{value});";
-                        connection.Query(query);
+                            $"'{date.ToString("yyyy-MM-dd")}', " +
+                            $"{valuei});";
+                        pointDatas.Add(new PointData()
+                        {
+                            pointid = pointid,
+                            product = product,
+                            dataset = dataset,
+                            date = date,
+                            value = valuei
+                        });
                     }
                 }
-                connection.Close();
+                else
+                {
+                    string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
+                        $"{pointid}, " +
+                        $"'{product}', " +
+                        $"'{dataset}', " +
+                        $"'{dateFinish.ToString("yyyy-MM-dd")}', " +
+                        $"{value});";
+                    pointDatas.Add(new PointData()
+                    {
+                        pointid = pointid,
+                        product = product,
+                        dataset = dataset,
+                        date = dateFinish,
+                        value = value
+                    });
+                }
             }
         }
 
