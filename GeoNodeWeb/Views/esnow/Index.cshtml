@@ -31,7 +31,7 @@
             </div>
             <div class="card-body p-2">
                 <form>
-                    <label class="m-0" for="ModisLayer">@SharedLocalizer["Satellite"] / @SharedLocalizer["Dataset"]</label>
+                    <label class="m-0" for="ModisLayer">@SharedLocalizer["Satellite"]</label>
                     <div class="input-group input-group-sm">
                         <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
                             <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">Terra MOD10A2 / Max Snow Extent</option>
@@ -43,6 +43,21 @@
                             <span class="input-group-text">
                                 <a href="#" target="_blank">
                                     <i class="SomeInfo fa fa-info-circle" InfoTitle="Full Information"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- for Dataset -->
+                    <label class="m-0" for="DataSet">@SharedLocalizer["Dataset"]</label>
+                    <div class="input-group input-group-sm">
+                        <select class="form-control" id="DataSet">
+                            <option value="NDVI">Max Snow Ext</option>
+                            <option value="SAVI">NDSI</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <a href="#" id="LegendBtn" class="target-click">
+                                    <i class="SomeInfo fa fa-tag" InfoTitle="Legend"></i>
                                 </a>
                             </span>
                         </div>
