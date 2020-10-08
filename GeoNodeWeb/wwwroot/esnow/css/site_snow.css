@@ -35,9 +35,9 @@
 /***** Sidebar *****/
 .sidebar {
     width: 260px;
-    height: 97vh;
+    height: 98vh;
     position: fixed;
-    top: 1.5vh;
+    top: 1vh;
     left: -265px;
     z-index: 999;
     background: #64A3F6;
@@ -71,7 +71,7 @@
     }
 
 .sidebar .logo {
-    padding: 20px 15px 5px 20px;
+    padding: 10px 5px 5px 10px;
     border-bottom: 1px solid #4a89dc;
     transition: all .3s;
 }
@@ -86,7 +86,7 @@
     }
 
 .sidebar ul.menu-elements {
-    padding: 10px 0;
+    padding: 5px 0;
     border-bottom: 1px solid #4a89dc;
     transition: all .3s;
 }
@@ -117,7 +117,7 @@
 }
 
 .sidebar ul ul a {
-    background: #4a89dc;
+    /*background: #4a89dc;*/
     padding-left: 30px;
     font-size: 14px;
 }
@@ -196,7 +196,7 @@
     }
 
     .sidebar.light ul ul a {
-        background: #ddd;
+        /*background: #ddd;*/
     }
 
     .sidebar.light ul ul li.active > a {
@@ -278,8 +278,8 @@
 
 .open-menu {
     position: fixed;
-    top: 25px;
-    left: 25px;
+    top: 20px;
+    left: 20px;
     z-index: 997;
     box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.2);
 }
@@ -489,76 +489,75 @@ a.btn-customized-4 {
     font-size: 1.34em !important;
 }
 
-.tree, .tree ul {
-    margin: 0;
-    padding: 0;
-    list-style: none
+.tree li {
+    list-style-type: none;
+    margin-left: 10px;
+    padding: 0px;
+    position: relative;
 }
 
-    .tree ul {
-        margin-left: 1em;
-        position: relative
-    }
-
-        .tree ul ul {
-            margin-left: .5em
-        }
-
-        .tree ul:before {
-            content: "";
-            display: block;
-            width: 0;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            border-left: 1px solid
-        }
-
-    .tree li {
-        margin: 0;
-        padding: 0 1em;
-        line-height: 2em;
-        color: #fff;
-        position: relative;
-    }
-
-    .tree ul li:before {
-        content: "";
-        display: block;
-        width: 10px;
-        height: 0;
-        border-top: 1px solid;
-        margin-top: -1px;
+    .tree li::before,
+    .tree li::after {
+        content: '';
+        left: -10px;
         position: absolute;
-        top: 1em;
-        left: 0
+        right: auto
     }
 
-    .tree ul li:last-child:before {
-        background: #64A3F6;
-        height: auto;
-        top: 1em;
-        bottom: 0
+    .tree li::before {
+        border-left: 1px solid #4a89dc;
+        bottom: 40px;
+        height: 100%;
+        top: 0;
+        width: 1px
     }
 
-.indicator {
-    margin-right: 5px;
+    .tree li::after {
+        border-top: 1px solid #4a89dc;
+        height: 15px;
+        top: 15px;
+        width: 10px
+    }   
+
+.tree > ul > li::before,
+.tree > ul > li::after {
+    border: 0
 }
 
-.tree li a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 14px;
+.tree li:last-child::before {
+    height: 27px
 }
 
-.tree li button, .tree li button:active, .tree li button:focus {
-    text-decoration: none;
-    font-size: 14px;
+[aria-expanded="false"] > .expanded,
+[aria-expanded="true"] > .collapsed {
+    display: none;
+}
+.tree ul li a {
+    display: block;
+    padding: 5px 5px;
     color: #fff;
-    border: none;
-    background: transparent;
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
-    outline: 0;
+}
+
+    .tree ul li a:hover,
+    .tree ul li a:focus,
+    .tree ul li.active > a:hover,
+    .tree ul li.active > a:focus {
+        outline: 0;
+        color: #fff;
+    }
+
+    .tree ul li a i {
+        margin-right: 5px;
+    }
+
+
+.tree ul li.active > a, a[aria-expanded="true"] {
+    background: #4a89dc;
+    color: #fff;
+}
+
+
+.tree ul tree a {
+    background: #64A3F6;
+    font-size: 14px;
 }

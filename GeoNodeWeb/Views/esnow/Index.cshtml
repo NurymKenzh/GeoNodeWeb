@@ -52,9 +52,8 @@
                     <div class="input-group input-group-sm">
                         <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
                             <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">Max Snow Extent</option>
-                            <option value="MOSA_MYD10A2006_B00_MaxSnowExtent_4326">Aqua MYD10A2 / Max Snow Extent</option>
-                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ">Terra MOD10C2 / NDSI</option>
-                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly">Terra MOD10C2 / NDSI (@SharedLocalizer["Anomaly"])</option>
+                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ">NDSI</option>
+                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly">NDSI (@SharedLocalizer["Anomaly"])</option>
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
@@ -101,68 +100,155 @@
                         </div>
                     </div>
                 </form>
-            </div>
-            
+            </div>            
             <ul class="list-unstyled menu-elements">
-                <li>
-                    <a href="#BaseMapSections" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" role="button" aria-controls="BaseMapSections">
-                        <i class="fas fa-sync"></i>Base Map sections
-                    </a>
-                    <ul class="collapse list-unstyled" id="BaseMapSections">
-                        <li>
-                            <a class="scroll-link" href="#BaseMap1">Base Map 1</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
+                <li class="tree">
                     <a href="#LayerSections" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" role="button" aria-controls="LayerSections">
-                        <i class="fas fa-sync"></i>Layers:
+                        <i class="fas fa-layer-group"></i>Layers:
                     </a>
                     <ul class="collapse list-unstyled" id="LayerSections">
                         <li>
-                            <ul class="scroll-link " id="tree1">
+                            <ul>
                                 <li>
-                                    Label
+                                    <a data-toggle="collapse" href="#LayerLabel" aria-expanded="false" aria-controls="LayerLabel">
+                                        <i class="collapsed"><i class="fas fa-plus-circle"></i></i>
+                                        <i class="expanded"><i class="fas fa-minus-circle"></i></i> Label
+                                    </a>
                                     <ul>
-                                        <li>
+                                        <li id="LayerLabel" class="collapse scroll-link">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
-                                                <label class="form-check-label" for="inlineCheckbox1"> Adm Label 1</label>
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                                                <label class="form-check-label" for="inlineCheckbox1">Admin Level 1</label>
                                             </div>
                                         </li>
-                                        <li>
+                                        <li id="LayerLabel" class="collapse">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked>
-                                                <label class="form-check-label" for="inlineCheckbox2"> Layer 2</label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" checked>
-                                                <label class="form-check-label" for="inlineCheckbox3"> Layer 3</label>
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                                <label class="form-check-label" for="inlineCheckbox2">Admin Level 2</label>
                                             </div>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
-                                    КАТО
+                                    <a data-toggle="collapse" href="#LayerShape" aria-expanded="false" aria-controls="LayerShape">
+                                        <i class="collapsed"><i class="fas fa-folder-plus"></i></i>
+                                        <i class="expanded"><i class="far fa-folder-open"></i></i> Shape
+                                    </a>
                                     <ul>
-                                        <li>Layer 1</li>
-                                        <li>Layer 2</li>
-                                        <li>Layer 3</li>
+                                        <li id="LayerShape" class="collapse scroll-link">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="ShapeCheckbox1" value="option1">
+                                                <label class="form-check-label" for="ShapeCheckbox1">Admin Level 1</label>
+                                            </div>
+                                        </li>
+                                        <li id="LayerShape" class="collapse">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="ShapeCheckbox2" value="option2">
+                                                <label class="form-check-label" for="ShapeCheckbox2">Admin Level 2</label>
+                                            </div>
+                                        </li>
                                     </ul>
+                                </li>
+                                <li>
+                                    <a data-toggle="collapse" href="#LayerMask" aria-expanded="false" aria-controls="LayerMask">
+                                        <i class="collapsed"><i class="fas fa-folder-plus"></i></i>
+                                        <i class="expanded"><i class="far fa-folder-open"></i></i> Mask
+                                    </a>
+                                    <ul>
+                                        <li id="LayerMask" class="collapse scroll-link">
+                                            <a data-toggle="collapse" href="#LayerAspect" aria-expanded="false" aria-controls="LayerAspect">
+                                                <i class="collapsed"><i class="fas fa-plus-circle"></i></i>
+                                                <i class="expanded"><i class="fas fa-minus-circle"></i></i> Aspect
+                                            </a>
+                                            <ul>
+                                                <li id="LayerAspect" class="collapse scroll-link">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" id="inlineAspect1" value="option1">
+                                                        <label class="form-check-label" for="inlineAspect1">Aspect Level 1</label>
+                                                    </div>
+                                                </li>
+                                                <li id="LayerAspect" class="collapse">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" id="inlineAspect2" value="option2">
+                                                        <label class="form-check-label" for="inlineAspect2">Aspect Level 2</label>
+                                                    </div>
+                                                </li>
+                                                <li id="LayerAspect" class="collapse">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" id="inlineAspect3" value="option3">
+                                                        <label class="form-check-label" for="inlineAspect3">Aspect Level 3</label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li id="LayerMask" class="collapse">
+                                            <a data-toggle="collapse" href="#LayerSrtm" aria-expanded="false" aria-controls="LayerSrtm">
+                                                <i class="collapsed"><i class="fas fa-plus-circle"></i></i>
+                                                <i class="expanded"><i class="fas fa-minus-circle"></i></i> SRTM
+                                            </a>
+                                            <ul>
+                                                <li id="LayerSrtm" class="collapse scroll-link">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" id="inlineSrtm1" value="option1">
+                                                        <label class="form-check-label" for="inlineSrtm1">SRTM Level 1</label>
+                                                    </div>
+                                                </li>
+                                                <li id="LayerSrtm" class="collapse">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" id="inlineSrtm2" value="option2">
+                                                        <label class="form-check-label" for="inlineSrtm2">SRTM Level 2</label>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="scroll-link" href="#BaseMap1">Other</a>
                                 </li>
                             </ul>
                         </li>
+
                     </ul>
-                    @*<ul class="collapse list-unstyled" id="LayerSections">
-                <li>
-                    <a class="scroll-link" href="#Layer1">Layer 1</a>
                 </li>
                 <li>
-                    <a class="scroll-link" href="#Layer2">Layer 2</a>
-                </li>
-            </ul>*@
+                    <a href="#BaseLayerSections" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" role="button" aria-controls="BaseLayerSections">
+                        <i class="fa fa-globe-americas"></i>Base Map Section
+                    </a>
+                    <div id="BaseLayerSections" class="collapse show" aria-labelledby="headingOne" data-parent="#BaseLayerSections">
+                        <div class="card-body p-2">
+                            <div class="input-group input-group-sm">
+                                <select class="custom-select" id="layerBaseType" onchange="ChangeLayers()">
+                                    <option value="OSM">OpenStreetMap</option>
+                                    <option value="BingAerialWithLabels">Bing Aerial</option>
+                                    <option value="BingRoadStatic">Bing Road (static)</option>
+                                    <option value="BingRoadDynamic">Bing Road (dynamic)</option>
+                                    <option value="HERENormalDay">HERE Normal Day</option>
+                                    <option value="HERENormalDayTransit">HERE Normal Day Transit</option>
+                                    <option value="HERETerrainDay">HERE Terrain Day</option>
+                                    <option value="HEREHybridDay" selected>HERE Hybrid Day</option>
+                                    <option value="StamenWatercolor">Stamen Watercolor</option>
+                                    <option value="StamenTerrain">Stamen Terrain</option>
+                                    <option value="StamenToner">Stamen Toner</option>
+                                    <option value="ArcGIS">ArcGIS</option>
+                                    <option value="ThunderforestOpenCycleMap">Thunderforest OpenCycleMap</option>
+                                    <option value="ThunderforestTransport">Thunderforest Transport</option>
+                                    <option value="ThunderforestLandscape">Thunderforest Landscape</option>
+                                    <option value="ThunderforestOutdoors">Thunderforest Outdoors</option>
+                                    <option value="ThunderforestSpinalMap">Thunderforest Spinal Map</option>
+                                    <option value="ThunderforestPioneer">Thunderforest Pioneer</option>
+                                    <option value="ThunderforestMobileAtlas">Thunderforest Mobile Atlas</option>
+                                    <option value="ThunderforestNeighbourhood">Thunderforest Neighbourhood</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" id="layerBaseShow" checked="checked" onchange="ChangeLayers()">
+                                    </div>
+                                </div>
+                            </div>
+                            <input id="layerBaseOpacity" type="range" class="form-control-range" min="0" max="100" value="100" oninput="ChangeLayers()" />
+                        </div>
+                    </div>
                 </li>
                 <li class="">
                     <a class="scroll-link" href="#"><i class="fas fa-home"></i> Home</a>
@@ -204,63 +290,6 @@
     <h3 id="clickY">0</h3>
 </div>
 
-@* Tree *@
-<script>
-    $.fn.extend({
-        treed: function (o) {
-            var openedClass = 'fa-folder-minus';
-            var closedClass = 'fa-folder-plus';
-            if (typeof o != 'undefined') {
-                if (typeof o.openedClass != 'undefined') {
-                    openedClass = o.openedClass;
-                }
-                if (typeof o.closedClass != 'undefined') {
-                    closedClass = o.closedClass;
-                }
-            };
-
-            //initialize each of the top levels
-            var tree = $(this);
-            tree.addClass("tree");
-            tree.find('li').has("ul").each(function () {
-                var branch = $(this); //li with children ul
-                branch.prepend("<i class='fa " + closedClass + "'></i>");
-                branch.addClass('branch');
-                branch.on('click', function (e) {
-                    if (this == e.target) {
-                        var icon = $(this).children('i:first');
-                        icon.toggleClass(openedClass + " " + closedClass);
-                        $(this).children().children().toggle();
-                    }
-                })
-                branch.children().children().toggle();
-            });
-            //fire event from the dynamically added icon
-            tree.find('.branch .fa').each(function () {
-                $(this).on('click', function () {
-                    $(this).closest('li').click();
-                });
-            });
-            //fire event to open branch if the li contains an anchor instead of text
-            tree.find('.branch>a').each(function () {
-                $(this).on('click', function (e) {
-                    $(this).closest('li').click();
-                    e.preventDefault();
-                });
-            });
-            //fire event to open branch if the li contains a button instead of text
-            tree.find('.branch>button').each(function () {
-                $(this).on('click', function (e) {
-                    $(this).closest('li').click();
-                    e.preventDefault();
-                });
-            });
-        }
-    });
-    //Initialization of treeviews
-
-    $('#tree1').treed();
-</script>
 
 @* Layers, Measure, map *@
 <script type="text/javascript">
@@ -492,26 +521,20 @@
         new jBox('Modal', {
             attach: '#LegendBtn',
             id: 'modal-maptitle',
-            minWidth: 100,
             zIndex: 'auto',
             closeButton: true,
             overlay: false,
-            reload: 'strict',
-            animation: 'flip',
-            adjustPosition: false,
+            animation: 'slide',
             closeButton: true,
+            draggable: true,
             position: {
                 x: 'right',
                 y: 'bottom'
             },
-            offset: {
-                x: -10,
-                y: -20
-            },
             onOpen: function () {
                 this.setContent('<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legend/MOST_MOD10A2006_B00_MaxSnowExtent.svg"></div>');
             }
-        }).open();
+        });
         // Tooltip below to the right
         new jBox('Tooltip', {
             theme: 'TooltipDark',
