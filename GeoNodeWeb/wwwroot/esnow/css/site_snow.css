@@ -34,11 +34,11 @@
 
 /***** Sidebar *****/
 .sidebar {
-    width: 250px;
-    height: 100vh;
+    width: 260px;
+    height: 97vh;
     position: fixed;
-    top: 57px;
-    left: -255px;
+    top: 1.5vh;
+    left: -265px;
     z-index: 999;
     background: #64A3F6;
     color: #fff;
@@ -278,8 +278,8 @@
 
 .open-menu {
     position: fixed;
-    top: 80px;
-    left: 20px;
+    top: 25px;
+    left: 25px;
     z-index: 997;
     box-shadow: 3px 3px 3px rgba(51, 51, 51, 0.2);
 }
@@ -485,5 +485,80 @@ a.btn-customized-4 {
 .ol-zoom {
     left: unset !important;
     right: 10px !important;
-    top: 150px !important;
+    top: 160px !important;
+    font-size: 1.34em !important;
+}
+
+.tree, .tree ul {
+    margin: 0;
+    padding: 0;
+    list-style: none
+}
+
+    .tree ul {
+        margin-left: 1em;
+        position: relative
+    }
+
+        .tree ul ul {
+            margin-left: .5em
+        }
+
+        .tree ul:before {
+            content: "";
+            display: block;
+            width: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            border-left: 1px solid
+        }
+
+    .tree li {
+        margin: 0;
+        padding: 0 1em;
+        line-height: 2em;
+        color: #fff;
+        position: relative;
+    }
+
+    .tree ul li:before {
+        content: "";
+        display: block;
+        width: 10px;
+        height: 0;
+        border-top: 1px solid;
+        margin-top: -1px;
+        position: absolute;
+        top: 1em;
+        left: 0
+    }
+
+    .tree ul li:last-child:before {
+        background: #64A3F6;
+        height: auto;
+        top: 1em;
+        bottom: 0
+    }
+
+.indicator {
+    margin-right: 5px;
+}
+
+.tree li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+}
+
+.tree li button, .tree li button:active, .tree li button:focus {
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+    border: none;
+    background: transparent;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    outline: 0;
 }

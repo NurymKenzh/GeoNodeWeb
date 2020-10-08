@@ -31,13 +31,13 @@
             </div>
             <div class="card-body p-2">
                 <form>
-                    <label class="m-0" for="ModisLayer">@SharedLocalizer["Satellite"]</label>
+                    <label class="m-0" for="DataSet">@SharedLocalizer["Dataset"]</label>
                     <div class="input-group input-group-sm">
-                        <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
-                            <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">Terra MOD10A2 / Max Snow Extent</option>
-                            <option value="MOSA_MYD10A2006_B00_MaxSnowExtent_4326">Aqua MYD10A2 / Max Snow Extent</option>
-                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ">Terra MOD10C2 / NDSI</option>
-                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly">Terra MOD10C2 / NDSI (@SharedLocalizer["Anomaly"])</option>
+                        <select class="form-control" id="DataSet">
+                            <option>Terra Modis 8-day</option>
+                            <option>Aqua Modis 8-day</option>
+                            <option>Terra Daily Tile</option>
+                            <option>Aqua Daily Tile</option>
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
@@ -48,11 +48,13 @@
                         </div>
                     </div>
                     <!-- for Dataset -->
-                    <label class="m-0" for="DataSet">@SharedLocalizer["Dataset"]</label>
+                    <label class="m-0" for="ModisLayer">Product</label>
                     <div class="input-group input-group-sm">
-                        <select class="form-control" id="DataSet">
-                            <option value="NDVI">Max Snow Ext</option>
-                            <option value="SAVI">NDSI</option>
+                        <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
+                            <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">Max Snow Extent</option>
+                            <option value="MOSA_MYD10A2006_B00_MaxSnowExtent_4326">Aqua MYD10A2 / Max Snow Extent</option>
+                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ">Terra MOD10C2 / NDSI</option>
+                            <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly">Terra MOD10C2 / NDSI (@SharedLocalizer["Anomaly"])</option>
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
@@ -66,7 +68,10 @@
                     <!-- Year -->
                     <label class="m-0" for="year">@SharedLocalizer["Year"]</label>
                     <div class="input-group input-group-sm">
-                        <select class="form-control" id="year" onchange="YearChange()"></select>
+                        <select class="form-control" id="year" onchange="YearChange()">
+                            <option>2020</option>
+                            <option>2019</option>
+                        </select>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <input type="checkbox" id="layerMODISShow" checked="checked">
@@ -83,7 +88,10 @@
                                 </a>
                             </span>
                         </div>
-                        <select class="custom-select" id="day" aria-describedby="DayHelpBlock" onchange="DayChange()"></select>
+                        <select class="custom-select" id="day" aria-describedby="DayHelpBlock" onchange="DayChange()">
+                            <option>280 : 09/29 - 10/06</option>
+                            <option>272 : 09/21 - 09/28</option>
+                        </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <a href="#" target="_blank">
@@ -94,26 +102,70 @@
                     </div>
                 </form>
             </div>
-
+            
             <ul class="list-unstyled menu-elements">
-                <li class="">
-                    <a class="scroll-link" href="#"><i class="fas fa-home"></i> Home</a>
-                </li>
                 <li>
-                    <a class="scroll-link" href="#"><i class="fas fa-cog"></i> Chart page</a>
+                    <a href="#BaseMapSections" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" role="button" aria-controls="BaseMapSections">
+                        <i class="fas fa-sync"></i>Base Map sections
+                    </a>
+                    <ul class="collapse list-unstyled" id="BaseMapSections">
+                        <li>
+                            <a class="scroll-link" href="#BaseMap1">Base Map 1</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#LayerSections" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" role="button" aria-controls="LayerSections">
-                        <i class="fas fa-sync"></i>Layer sections
+                        <i class="fas fa-sync"></i>Layers:
                     </a>
                     <ul class="collapse list-unstyled" id="LayerSections">
                         <li>
-                            <a class="scroll-link" href="#Layer1">Layer 1</a>
-                        </li>
-                        <li>
-                            <a class="scroll-link" href="#Layer2">Layer 2</a>
+                            <ul class="scroll-link " id="tree1">
+                                <li>
+                                    Label
+                                    <ul>
+                                        <li>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
+                                                <label class="form-check-label" for="inlineCheckbox1"> Adm Label 1</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked>
+                                                <label class="form-check-label" for="inlineCheckbox2"> Layer 2</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" checked>
+                                                <label class="form-check-label" for="inlineCheckbox3"> Layer 3</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    КАТО
+                                    <ul>
+                                        <li>Layer 1</li>
+                                        <li>Layer 2</li>
+                                        <li>Layer 3</li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
+                    @*<ul class="collapse list-unstyled" id="LayerSections">
+                <li>
+                    <a class="scroll-link" href="#Layer1">Layer 1</a>
+                </li>
+                <li>
+                    <a class="scroll-link" href="#Layer2">Layer 2</a>
+                </li>
+            </ul>*@
+                </li>
+                <li class="">
+                    <a class="scroll-link" href="#"><i class="fas fa-home"></i> Home</a>
                 </li>
             </ul>
             <div class="to-top">
@@ -137,7 +189,7 @@
                 <i class="fas fa-snowflake-o"></i> <span>@SharedLocalizer["Menu"]</span>
             </a>
             <!-- Map content -->
-            <div id="map" class="position-fixed col-md-12 col-lg-12 m-0 p-0 bg-light" style="height: 94vh;"></div>
+            <div id="map" class="position-fixed col-md-12 col-lg-12 m-0 p-0 bg-light" style="height: 100vh;"></div>
             <!-- Footer -->
         </div>
         <!-- End content -->
@@ -151,6 +203,64 @@
     <h3 id="clickX">0</h3>
     <h3 id="clickY">0</h3>
 </div>
+
+@* Tree *@
+<script>
+    $.fn.extend({
+        treed: function (o) {
+            var openedClass = 'fa-folder-minus';
+            var closedClass = 'fa-folder-plus';
+            if (typeof o != 'undefined') {
+                if (typeof o.openedClass != 'undefined') {
+                    openedClass = o.openedClass;
+                }
+                if (typeof o.closedClass != 'undefined') {
+                    closedClass = o.closedClass;
+                }
+            };
+
+            //initialize each of the top levels
+            var tree = $(this);
+            tree.addClass("tree");
+            tree.find('li').has("ul").each(function () {
+                var branch = $(this); //li with children ul
+                branch.prepend("<i class='fa " + closedClass + "'></i>");
+                branch.addClass('branch');
+                branch.on('click', function (e) {
+                    if (this == e.target) {
+                        var icon = $(this).children('i:first');
+                        icon.toggleClass(openedClass + " " + closedClass);
+                        $(this).children().children().toggle();
+                    }
+                })
+                branch.children().children().toggle();
+            });
+            //fire event from the dynamically added icon
+            tree.find('.branch .fa').each(function () {
+                $(this).on('click', function () {
+                    $(this).closest('li').click();
+                });
+            });
+            //fire event to open branch if the li contains an anchor instead of text
+            tree.find('.branch>a').each(function () {
+                $(this).on('click', function (e) {
+                    $(this).closest('li').click();
+                    e.preventDefault();
+                });
+            });
+            //fire event to open branch if the li contains a button instead of text
+            tree.find('.branch>button').each(function () {
+                $(this).on('click', function (e) {
+                    $(this).closest('li').click();
+                    e.preventDefault();
+                });
+            });
+        }
+    });
+    //Initialization of treeviews
+
+    $('#tree1').treed();
+</script>
 
 @* Layers, Measure, map *@
 <script type="text/javascript">
@@ -372,9 +482,9 @@
             },
             offset: {
                 x: -10,
-                y: 70
+                y: 10
             },
-            content: '<div class="card-body text-white text-center p-0"><h4 class="card-title">Satellite</h5><p class="card-text mb-1">Dataset</p><p class="card-text">YYYY. JDay: DD/MM - DD/MM</p></div >',
+            content: '<div class="card-body text-white text-center p-0"><h4 class="card-title">Dataset</h5><p class="card-text mb-1">Product</p><p class="card-text">YYYY. JDay: DD/MM - DD/MM</p></div >',
             overlay: false,
             repositionOnOpen: false
         }).open();
