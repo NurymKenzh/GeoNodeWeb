@@ -1118,6 +1118,41 @@ body[class*=" jBox-blockScroll-"] {
   fill: #bbb;
 }
 
+.jBox-TooltipSnow .jBox-container {
+    border: 1px solid #4a89dc;
+    border-radius: 4px;
+    background: #fff;
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.jBox-TooltipSnow .jBox-pointer:after {
+    border: 1px solid #4a89dc;
+    background: #fff;
+}
+
+.jBox-TooltipSnow .jBox-closeButton {
+    background: #000;
+}
+
+.jBox-TooltipSnow.jBox-closeButton-box:before {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.jBox-TooltipSnow.jBox-closeButton-box .jBox-closeButton path {
+    fill: #ddd;
+}
+
+.jBox-TooltipSnow.jBox-closeButton-box .jBox-closeButton:hover path {
+    fill: #fff;
+}
+
+.jBox-TooltipSnow.jBox-closeButton-box .jBox-closeButton:active path {
+    fill: #bbb;
+}
+
 .jBox-TooltipError {
   pointer-events: none;
 }
