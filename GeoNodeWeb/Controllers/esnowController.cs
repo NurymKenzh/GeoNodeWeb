@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Extensions.Localization;
 
 namespace GeoNodeWeb.Controllers
 {
@@ -19,6 +20,8 @@ namespace GeoNodeWeb.Controllers
     }
     public class esnowController : Controller
     {
+        private readonly IStringLocalizer<SharedResources> _sharedLocalizer;
+
         enum DataType
         {
             MissingData = 0,
@@ -92,10 +95,21 @@ namespace GeoNodeWeb.Controllers
             public int yearchart;
         }
 
+        private class ModisData
+        {
+            public DateTime date;
+            public int? value;
+        }
+
         private static bool server = Convert.ToBoolean(Startup.Configuration["Server"]);
         private string geoserverConnection = server ? Startup.Configuration["geoserverConnectionServer"].ToString() : Startup.Configuration["geoserverConnectionDebug"].ToString(),
             postgresConnection = server ? Startup.Configuration["postgresConnectionServer"].ToString() : Startup.Configuration["postgresConnectionDebug"].ToString(),
             geoportalConnection = server ? Startup.Configuration["geoportalConnectionServer"].ToString() : Startup.Configuration["geoportalConnectionDebug"].ToString();
+
+        public esnowController(IStringLocalizer<SharedResources> sharedLocalizer)
+        {
+            _sharedLocalizer = sharedLocalizer;
+        }
 
         public IActionResult Index()
         {
@@ -109,7 +123,7 @@ namespace GeoNodeWeb.Controllers
         {
             List<int> yearsL = new List<int>();
             string geoserverDir = server ? Startup.Configuration["EsnowGeoServerDirServer"].ToString() : Startup.Configuration["EsnowGeoServerDirDebug"].ToString();
-            foreach(string file in Directory.EnumerateFiles(geoserverDir, $"*_{ModisLayer}*.tif", SearchOption.TopDirectoryOnly))
+            foreach (string file in Directory.EnumerateFiles(geoserverDir, $"*_{ModisLayer}*.tif", SearchOption.TopDirectoryOnly))
             {
                 string yearS = Path.GetFileNameWithoutExtension(file).Substring(1, 4);
                 try
@@ -137,7 +151,7 @@ namespace GeoNodeWeb.Controllers
         {
             List<int> daysL = new List<int>();
             string geoserverDir = server ? Startup.Configuration["EsnowGeoServerDirServer"].ToString() : Startup.Configuration["EsnowGeoServerDirDebug"].ToString();
-            foreach(string file in Directory.EnumerateFiles(geoserverDir, $"A{Year}*{ModisLayer}*.tif", SearchOption.TopDirectoryOnly))
+            foreach (string file in Directory.EnumerateFiles(geoserverDir, $"A{Year}*{ModisLayer}*.tif", SearchOption.TopDirectoryOnly))
             {
                 string yearS = Path.GetFileNameWithoutExtension(file).Substring(5, 3);
                 try
@@ -329,7 +343,7 @@ namespace GeoNodeWeb.Controllers
                 // years average
                 foreach (dataset dataset in datasetsamm)
                 {
-                    if(dataset.Date < new DateTime(startYear, 1, 1).AddMonths(StartMonth + MonthsCount - 1))
+                    if (dataset.Date < new DateTime(startYear, 1, 1).AddMonths(StartMonth + MonthsCount - 1))
                     {
                         List<dataset> datasets_avg = datasets
                         .Where(d => d.MonthDay == dataset.MonthDay)
@@ -446,7 +460,7 @@ namespace GeoNodeWeb.Controllers
                             datasetsamm.Add(datasetamm);
                         }
                         // years
-                        foreach(int yearyear in Years)
+                        foreach (int yearyear in Years)
                         {
                             dataset datasetyear = datasets.FirstOrDefault(d => d.Date.Month == monthR && d.Date.Day == day && d.Date.Year == yearyear);
                             if (datasetyear != null)
@@ -622,7 +636,7 @@ namespace GeoNodeWeb.Controllers
             for (int i = 1; i < MonthsCount; i++)
             {
                 months[i] = StartMonth + i;
-                if(months[i]>12)
+                if (months[i] > 12)
                 {
                     months[i] -= 12;
                 }
@@ -763,7 +777,7 @@ namespace GeoNodeWeb.Controllers
                         Percentage = percentage / count,
                         PixelsCount = pixelsCount / count
                     });
-                    if(Years.Contains(rasterstatsm[i].date.Year))
+                    if (Years.Contains(rasterstatsm[i].date.Year))
                     {
                         avgyears.Add(new SnowData()
                         {
@@ -841,12 +855,12 @@ namespace GeoNodeWeb.Controllers
             }
             foreach (rasterstat rasterstat in rasterstats)
             {
-                foreach(SnowData snowData in rasterstat.SnowData)
+                foreach (SnowData snowData in rasterstat.SnowData)
                 {
                     stats.Add(new dataset()
                     {
                         feature_id = rasterstat.feature_id,
-                        DataType = (int) snowData.DataType,
+                        DataType = (int)snowData.DataType,
                         Date = rasterstat.date,
                         area = snowData.Area,
                         percentage = snowData.Percentage,
@@ -863,7 +877,7 @@ namespace GeoNodeWeb.Controllers
                 stats[i].area_avg = statsSame.Average(s => s.area);
                 stats[i].area_min = statsSame.Min(s => s.area);
                 stats[i].area_max = statsSame.Max(s => s.area);
-                if(stats[i].area_min != stats[i].area_max)
+                if (stats[i].area_min != stats[i].area_max)
                 {
 
                 }
@@ -889,7 +903,7 @@ namespace GeoNodeWeb.Controllers
             }
             rasterstats = rasterstats.ToList();
             // calculate rasterstats: Area, Percentage
-            foreach(rasterstat rasterstat in rasterstats)
+            foreach (rasterstat rasterstat in rasterstats)
             {
                 var data = JObject.Parse(rasterstat.data);
                 foreach (JProperty property in data.Properties())
@@ -920,15 +934,15 @@ namespace GeoNodeWeb.Controllers
             }
             // rasterstats to datasets
             List<dataset> datasets = new List<dataset>();
-            foreach(rasterstat rasterstat in rasterstats)
+            foreach (rasterstat rasterstat in rasterstats)
             {
-                foreach(SnowData snowData in rasterstat.SnowData)
+                foreach (SnowData snowData in rasterstat.SnowData)
                 {
                     datasets.Add(new dataset()
                     {
                         calculation_layer_id = rasterstat.calculation_layer_id,
                         feature_id = rasterstat.feature_id,
-                        DataType = (int) snowData.DataType,
+                        DataType = (int)snowData.DataType,
                         Date = rasterstat.date,
                         area = snowData.Area,
                         percentage = snowData.Percentage,
@@ -993,7 +1007,7 @@ namespace GeoNodeWeb.Controllers
                             decimal area_avg = datasets4.Average(d => d.area),
                                 area_min = datasets4.Min(d => d.area),
                                 area_max = datasets4.Max(d => d.area);
-                            foreach(dataset dataset in datasets4)
+                            foreach (dataset dataset in datasets4)
                             {
                                 dataset datasetAM = new dataset()
                                 {
@@ -1119,6 +1133,139 @@ namespace GeoNodeWeb.Controllers
             return Json(new
             {
                 days
+            });
+        }
+
+        [HttpPost]
+        public ActionResult GetSnowData(string Product,
+            int Year,
+            string X,
+            string Y)
+        {
+            string product = Product.Split('_')[1],
+                dataset = Product.Split('_')[3];
+            List<int?> values = new List<int?>();
+            List<string> valuelabels = new List<string>();
+            List<string> labels = new List<string>();
+            if (product != "MOD10A2006" && product != "MYD10A2006")
+            {
+                return Json(new
+                {
+                    values,
+                    labels,
+                    valuelabels
+                });
+            }
+            if (dataset != "MaxSnowExtent" && dataset != "SnowCover")
+            {
+                return Json(new
+                {
+                    values,
+                    labels,
+                    valuelabels
+                });
+            }
+            string GeoNodeWebModisConnection = Startup.Configuration["GeoNodeWebModisConnection"].ToString();
+            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            {
+                connection.Open();
+                // координаты произвольной точки ("POINT(70.28951652908 53.289871911106)")
+                string randomPoint = connection.Query<string>($"SELECT ST_AsText(geom) FROM public.testsnowextrpnt LIMIT 1;").ToList().FirstOrDefault();
+                // минимальное расстояние между точками
+                decimal minS = connection.Query<decimal>($"SELECT MIN(ST_Distance(ST_GeomFromEWKT(ST_AsText(geom)), ST_GeomFromEWKT('{randomPoint}')))" +
+                    $" FROM public.testsnowextrpnt" +
+                    $" WHERE ST_AsText(geom) <> '{randomPoint}';").ToList().FirstOrDefault();
+                // расстояние до ближайщей точки
+                decimal nearestS = connection.Query<decimal>($"SELECT MIN(ST_Distance(ST_GeomFromEWKT(ST_AsText(geom)), ST_GeomFromEWKT('POINT({X} {Y})')))" +
+                    $" FROM public.testsnowextrpnt" +
+                    $" WHERE ST_AsText(geom) <> 'POINT({X} {Y})';").ToList().FirstOrDefault();
+                // если текущая точка близка к точкам
+                if (Math.Pow((double)(minS * minS * 2), 0.5) > (double)nearestS)
+                {
+                    // id ближайшей точки
+                    int nearestId = connection.Query<int>($"SELECT pointid" +
+                        $" FROM public.testsnowextrpnt" +
+                        $" WHERE ST_AsText(geom) <> 'POINT({X} {Y})'" +
+                        $" ORDER BY ST_Distance(ST_GeomFromEWKT(ST_AsText(geom)), ST_GeomFromEWKT('POINT({X} {Y})')) ASC" +
+                        $" LIMIT 1;").ToList().FirstOrDefault();
+                    // данные по точке за год по продукту/датасету
+                    List<ModisData> valuesDB = connection.Query<ModisData>($"SELECT date, value" +
+                        $" FROM public.modispoints" +
+                        $" WHERE pointid = {nearestId}" +
+                        $" AND product = '{product}'" +
+                        $" AND dataset = '{dataset}'" +
+                        $" AND extract(year from date) = {Year}" +
+                        $" ORDER BY date;").ToList();
+
+                    int inc = 1;
+                    if (dataset == "MaxSnowExtent")
+                    {
+                        inc = 8;
+                    }
+                    for (int d = 0; d < 366; d += inc)
+                    {
+                        DateTime date = new DateTime(Year, 1, 1).AddDays(d);
+                        if (valuesDB.Count(v => v.date == date) == 0)
+                        {
+                            valuesDB.Add(new ModisData()
+                            {
+                                date = date,
+                                value = null
+                            });
+                        }
+                    }
+                    valuesDB = valuesDB.OrderBy(v => v.date).ToList();
+                    values = valuesDB.Select(v => v.value).ToList();
+                    labels = valuesDB.Select(v => v.date.ToString("yyyy-MM-dd")).ToList();
+                    for(int i=0;i<values.Count();i++)
+                    {
+                        switch (values[i])
+                        {
+                            case 0:
+                                valuelabels.Add(_sharedLocalizer["No"]);
+                                break;
+                            case 1:
+                                valuelabels.Add(_sharedLocalizer["Yes"]);
+                                break;
+                            case 25:
+                                valuelabels.Add(_sharedLocalizer["NoSnow"]);
+                                break;
+                            case 37:
+                                valuelabels.Add(_sharedLocalizer["Water"]);
+                                break;
+                            case 50:
+                                valuelabels.Add(_sharedLocalizer["Cloud"]);
+                                break;
+                            case 100:
+                                valuelabels.Add(_sharedLocalizer["Ice"]);
+                                break;
+                            case 200:
+                                valuelabels.Add(_sharedLocalizer["Snow"]);
+                                break;
+                            default:
+                                valuelabels.Add(_sharedLocalizer["NoData"]);
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    connection.Close();
+                    return Json(new
+                    {
+                        values,
+                        labels,
+                        valuelabels
+                    });
+                }
+                connection.Close();
+            }
+
+            return Json(new
+            {
+                values,
+                labels,
+                valuelabels
             });
         }
     }

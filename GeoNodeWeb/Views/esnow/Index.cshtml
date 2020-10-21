@@ -31,7 +31,7 @@
             </div>
             <div class="card-body p-1">
                 <form>
-                    <label class="m-0" for="DataSet">@SharedLocalizer["Dataset"]</label>
+                    @*<label class="m-0" for="DataSet">@SharedLocalizer["Dataset"]</label>
                     <div class="input-group input-group-sm">
                         <select class="form-control" id="DataSet">
                             <option>Terra Modis 8-day</option>
@@ -46,12 +46,15 @@
                                 </a>
                             </span>
                         </div>
-                    </div>
+                    </div>*@
                     <!-- for Dataset -->
                     <label class="m-0" for="ModisLayer">Product</label>
                     <div class="input-group input-group-sm">
                         <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
-                            <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">Max Snow Extent</option>
+                            <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">Terra Modis 8-day Max Snow Extent</option>
+                            <option value="MOSA_MYD10A2006_B00_MaxSnowExtent_4326">Aqua Modis 8-day Max Snow Extent</option>
+                            <option value="MOST_MOD10A2006_B01_SnowCover_4326">Terra Modis 8-day Snow Cover</option>
+                            <option value="MOSA_MYD10A2006_B01_SnowCover_4326">Aqua Modis 8-day Snow Cover</option>
                             <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ">NDSI</option>
                             <option value="MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly">NDSI (@SharedLocalizer["Anomaly"])</option>
                         </select>
@@ -68,8 +71,8 @@
                     <label class="m-0" for="year">Year</label>
                     <div class="input-group input-group-sm">
                         <select class="form-control" id="year" onchange="YearChange()">
-                            <option>2020</option>
-                            <option>2019</option>
+                            @*<option>2020</option>
+                            <option>2019</option>*@
                         </select>
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -88,8 +91,8 @@
                             </span>
                         </div>
                         <select class="custom-select" id="day" aria-describedby="DayHelpBlock" onchange="DayChange()">
-                            <option>280 : 09/29 - 10/06</option>
-                            <option>272 : 09/21 - 09/28</option>
+                            @*<option>280 : 09/29 - 10/06</option>
+                            <option>272 : 09/21 - 09/28</option>*@
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
@@ -307,8 +310,18 @@
     <img src="~/lib/images/Logo Water G.jpg" style="width: 220px;" />
 </div>
 <div class="tab-content mt-n2" id="InfoMapTabContent">
-    <h3 id="clickX">0</h3>
-    <h3 id="clickY">0</h3>
+    <table id="table1" class="table table-sm table-bordered">
+        <thead>
+            <tr class="table-primary">
+                <td>
+                    Дата
+                </td>
+                <td>
+                    Снег
+                </td>
+            </tr>
+        </thead>
+    </table>
 </div>
 
 
@@ -331,7 +344,7 @@
             'FORMAT': 'image/png',
             //'VERSION': '1.1.1',
             //tiled: true,
-            'LAYERS': 'MODIS:A2020033_MOSA_MYD10A2006_B00_MaxSnowExtent_4326'
+            'LAYERS': 'MODIS:_'
         },
         serverType: 'geoserver'
     });
@@ -341,6 +354,22 @@
     Layer_modis.set('name', 'modis');
     Layer_modis.setOpacity(0.80);
 
+    var url_points = geoserver_url + 'MODIS' + '/wms';
+    var Source_points = new ol.source.TileWMS({
+        url: url_points,
+        params: {
+            'FORMAT': 'image/png',
+            //'VERSION': '1.1.1',
+            //tiled: true,
+            'LAYERS': 'MODIS:TestSnowExtrPnt'
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_points = new ol.layer.Tile({
+        source: Source_points
+    });
+    Layer_points.set('name', 'points');
+
     var map = new ol.Map({
         target: 'map',
         controls: new ol.control.defaults({ attributionOptions: { collapsible: true } }).extend([
@@ -348,12 +377,13 @@
         ]),
         layers: [
             Layer_Base,
-            Layer_modis],
+            //Layer_modis,
+            Layer_points],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 5,
-            minZoom: 5,
-            extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
+            //minZoom: 5,
+            //extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
         })
     });
 </script>
@@ -479,9 +509,25 @@
     map.on('singleclick', function (evt) {
         clickX = ol.proj.toLonLat(evt.coordinate)[0];
         clickY = ol.proj.toLonLat(evt.coordinate)[1];
-        $('#clickX').text(clickX);
-        $('#clickY').text(clickY);
         InfoMapModal.open();
+        $.ajax({
+            url: '@Url.Action("GetSnowData")',
+            data: {
+                Product: $('#ModisLayer').val(),
+                Year: $('#year').val(),
+                X: ol.proj.toLonLat(evt.coordinate)[0].toString(),
+                Y: ol.proj.toLonLat(evt.coordinate)[1].toString()
+            },
+            type: 'POST',
+            success: function (data) {
+                $('#table1').find('tr:gt(0)').remove();
+                for (var l = 0; l < data.labels.length; l++) {
+                    $('#table1').append($('<tr><td>' + data.labels[l] + '</td><td>' + data.valuelabels[l] + '</td></tr>'));
+                }
+            },
+            error: function () {
+            }
+        })
     })
 </script>
 
