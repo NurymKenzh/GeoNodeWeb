@@ -324,7 +324,6 @@
     </table>
 </div>
 
-
 @* Layers, Measure, map *@
 <script type="text/javascript">
     var geoserver_url = '@ViewBag.GeoServerUrl';
@@ -377,13 +376,13 @@
         ]),
         layers: [
             Layer_Base,
-            //Layer_modis,
+            Layer_modis,
             Layer_points],
         view: new ol.View({
             center: ol.proj.fromLonLat([66.902, 48.714]),
             zoom: 5,
-            //minZoom: 5,
-            //extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
+            minZoom: 5,
+            extent: [5028944.964937042, 4754994.655562972, 10214432.963802021, 7494497.74930296]
         })
     });
 </script>

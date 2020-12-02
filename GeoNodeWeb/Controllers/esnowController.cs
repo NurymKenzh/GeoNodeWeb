@@ -113,7 +113,7 @@ namespace GeoNodeWeb.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.GeoServerUrl = Startup.Configuration["EsnowGeoServerUrl"].ToString();
+            ViewBag.GeoServerUrl = server ? Startup.Configuration["EsnowGeoServerUrl"].ToString() : Startup.Configuration["EsnowGeoServerUrlLocal"].ToString();
             return View();
         }
 

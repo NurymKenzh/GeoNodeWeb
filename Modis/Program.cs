@@ -191,6 +191,7 @@ namespace Modis
                 ModisPublish();
                 Anomaly();
                 Analize();
+                Snow();
 
                 if (dateNext == DateTime.Today)
                 {
@@ -815,7 +816,7 @@ namespace Modis
             Task.WaitAll(taskList.ToArray());
             using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
             {
-                foreach(PointData pointData in pointDatas)
+                foreach (PointData pointData in pointDatas)
                 {
                     string query = $"INSERT INTO public.modispoints(pointid, product, dataset, date, value) VALUES (" +
                         $"{pointData.pointid}, " +
@@ -826,6 +827,16 @@ namespace Modis
                     connection.Query(query);
                 }
             }
+            //List<string> pointDataS = new List<string>();
+            //foreach (var pointdata in pointDatas)
+            //{
+            //    pointDataS.Add($"{pointdata.pointid}\t" +
+            //        $"{pointdata.product}\t" +
+            //        $"{pointdata.dataset}\t" +
+            //        $"{pointdata.date.ToString("yyyy-MM-dd")}\t" +
+            //        $"{pointdata.value}");
+            //}
+            //File.AppendAllLines(@"D:\MODIS\modispoints.txt", pointDataS);
             pointDatas.Clear();
         }
 
@@ -965,6 +976,74 @@ namespace Modis
                         date = dateFinish,
                         value = value
                     });
+                }
+            }
+        }
+
+        private static void Snow()
+        {
+            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
+            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            {
+                connection.Open();
+                // id точек
+                List<int> pointIds= connection.Query<int>($"SELECT pointid FROM public.testsnowextrpnt;").ToList();
+                connection.Close();
+                foreach(int pointId in pointIds)
+                {
+                    SnowTask(pointId);
+                }
+            }
+        }
+
+        private class ModisData
+        {
+            public DateTime date;
+            public int? value;
+        }
+
+        private static void SnowTask(int PointId)
+        {
+            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
+            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            {
+                connection.Open();
+                // данные по точке
+                List<ModisData> pointSnows = connection.Query<ModisData>($"SELECT date, value" +
+                    $" FROM public.modispoints" +
+                    $" WHERE pointid = {PointId}" +
+                    $" AND product = 'MOD10A2006'" +
+                    $" AND dataset = 'SnowCover'" +
+                    $" ORDER BY date;").ToList();
+                connection.Close();
+                List<DateTime> starts = new List<DateTime>(),
+                    finishes = new List<DateTime>();
+                List<int> periods = new List<int>();
+                for (int i = 0; i < pointSnows.Count() - 30; i++)
+                {
+                    if(pointSnows[i].date == new DateTime(2010, 2, 11) || pointSnows[i].date == new DateTime(2017, 2, 3))
+                    {
+
+                    }
+                    if (pointSnows[i].value == 0 || pointSnows[i + 1].value == 0 || pointSnows[i + 2].value == 0)
+                    {
+                        continue;
+                    }
+                    for (int j = i; j < pointSnows.Count() - 3; j++)
+                    {
+                        if (pointSnows[j].value == 0 && pointSnows[j + 1].value == 0 && pointSnows[j + 2].value == 0 && pointSnows[j + 3].value == 0)
+                        {
+                            int days = (int)(pointSnows[j - 1].date - pointSnows[i].date).TotalDays + 1;
+                            if (days >= 30)
+                            {
+                                starts.Add(pointSnows[i].date);
+                                finishes.Add(pointSnows[j - 1].date);
+                                periods.Add(days);
+                            }
+                            i = j + 1;
+                            break;
+                        }
+                    }
                 }
             }
         }
