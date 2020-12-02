@@ -441,45 +441,6 @@ a.btn-customized-4 {
     }
 
 
-/***** General style, all sections *****/
-
-.section-container {
-    margin: 0 auto;
-    padding-bottom: 80px;
-}
-
-.section-container-gray-bg {
-    background: #f8f8f8;
-}
-
-.section-container-image-bg,
-.section-container-image-bg h2,
-.section-container-image-bg h3 {
-    color: #fff;
-}
-
-    .section-container-image-bg .divider-1 span {
-        border-color: #fff;
-        border-color: rgba(255, 255, 255, 0.8);
-    }
-
-.section-description {
-    margin-top: 60px;
-    padding-bottom: 10px;
-}
-
-    .section-description p {
-        margin-top: 20px;
-        padding: 0 120px;
-    }
-
-.section-container-image-bg .section-description p {
-    opacity: 0.8;
-}
-
-.section-bottom-button {
-    padding-top: 20px;
-}
 
 /* openlayers */
 .ol-zoom {
@@ -489,6 +450,7 @@ a.btn-customized-4 {
     font-size: 1.34em !important;
 }
 
+/*treesection*/ 
 .tree li {
     list-style-type: none;
     margin-left: 10px;
@@ -535,8 +497,6 @@ a.btn-customized-4 {
     display: none;
 }
 
-
-/*treesection*/ 
 .tree ul li a {
     display: block;
     padding: 5px 5px;
