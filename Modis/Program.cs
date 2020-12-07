@@ -241,7 +241,7 @@ namespace Modis
                 SaveNextDate();
 
                 ModisMosaic();
-                //ModisConvertTif();
+                ModisConvertTif();
                 //ModisConvertHdf();
                 //ModisCrop();
                 //ModisNorm();
@@ -652,24 +652,18 @@ namespace Modis
 
         private static void ModisConvertTif()
         {
-            //List<Task> taskList = new List<Task>();
-            //List<List<Task>> taskListList = new List<List<Task>>();
-            //taskListList.Add(new List<Task>());
+            List<Task> taskList = new List<Task>();
             foreach (string file in Directory.EnumerateFiles(MosaicDir, "*.tif"))
             {
-                //taskList.Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
-                //if (taskListList.Last().Count() >= 10)
-                //{
-                //    taskListList.Add(new List<Task>());
-                //}
-                //taskListList.Last().Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
-                ModisConvertTask(file);
+                taskList.Add(Task.Factory.StartNew(() => ModisConvertTask(file)));
+                if (taskList.Count == threadsCount)
+                {
+                    Task.WaitAll(taskList.ToArray());
+                    taskList = new List<Task>();
+                }
+                //ModisConvertTask(file);
             }
-            //Task.WaitAll(taskList.ToArray());
-            //foreach(var taskList in taskListList)
-            //{
-            //    Task.WaitAll(taskList.ToArray());
-            //}
+            Task.WaitAll(taskList.ToArray());
         }
 
         private static void ModisConvertTask(string TifFile)
