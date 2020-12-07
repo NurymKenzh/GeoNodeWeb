@@ -49,6 +49,8 @@ namespace Modis
             public int count;
         }
 
+        const int threadsCount = 4;
+
         //const string ModisUser = "sandugash_2004",
         //    ModisPassword = "Arina2009",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
@@ -231,7 +233,6 @@ namespace Modis
 
             while (true)
             {
-                EmptyDownloadedDir();
                 DateTime dateNext = GetNextDate();
                 foreach (ModisProduct modisProduct in modisProducts)
                 {
@@ -436,7 +437,7 @@ namespace Modis
                 mustFilesCount = exclusion.count;
             }
 
-            if (files.Count() == mustFilesCount)
+            if (files.Count() >= mustFilesCount)
             {
                 foreach (string file in files)
                 {
@@ -589,8 +590,13 @@ namespace Modis
                     {
                         continue;
                     }
-                    //taskList.Add(Task.Factory.StartNew(() => ModisMosaicTask(listFile)));
-                    ModisMosaicTask(listFile);
+                    taskList.Add(Task.Factory.StartNew(() => ModisMosaicTask(listFile)));
+                    if (taskList.Count == threadsCount)
+                    {
+                        Task.WaitAll(taskList.ToArray());
+                        taskList = new List<Task>();
+                    }
+                    //ModisMosaicTask(listFile);
                 }
                 Task.WaitAll(taskList.ToArray());
             }
