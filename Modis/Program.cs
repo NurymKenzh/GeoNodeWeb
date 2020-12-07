@@ -30,6 +30,7 @@ namespace Modis
             public int? AnomalyEndYear;
             public bool Analize = false;
             public int[] DayDividedDataSetIndexes;
+            public int Period;
         }
 
         class PointData
@@ -41,15 +42,24 @@ namespace Modis
             public int value;
         }
 
+        class Exclusion
+        {
+            public string product;
+            public DateTime date;
+            public int count;
+        }
+
         //const string ModisUser = "sandugash_2004",
         //    ModisPassword = "Arina2009",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
         //    DownloadingDir = @"C:\MODIS\Downloading",
         //    DownloadedDir = @"C:\MODIS\Downloaded",
+        //    Exclusions = @"C:\MODIS\exclusions.txt",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
         //    LastDateFile = "!last_date.txt",
         //    MosaicDir = @"C:\MODIS\Mosaic",
         //    ConvertDir = @"C:\MODIS\Convert",
+        //    ArchiveDir = @"C:\MODIS\Convert",!!!
         //    ModisProjection = "4326",
         //    GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
         //    GeoServerWorkspace = "MODIS",
@@ -63,10 +73,12 @@ namespace Modis
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
             DownloadingDir = @"D:\MODIS\Downloading",
             DownloadedDir = @"D:\MODIS\Downloaded",
+            Exclusions = @"D:\MODIS\exclusions.txt",
             CMDPath = @"C:\Windows\system32\cmd.exe",
             LastDateFile = "!last_date.txt",
             MosaicDir = @"D:\MODIS\Mosaic",
             ConvertDir = @"D:\MODIS\Convert",
+            ArchiveDir = @"D:\MODIS\Archive",
             ModisProjection = "4326",
             GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
             GeoServerWorkspace = "MODIS",
@@ -78,89 +90,130 @@ namespace Modis
 
         static List<PointData> pointDatas = new List<PointData>();
 
-        static ModisProduct[] modisProducts = new ModisProduct[3];
+        static ModisProduct[] modisProducts = new ModisProduct[5];
+
+        static List<Exclusion> exclusions = new List<Exclusion>();
 
         static void Main(string[] args)
         {
-            //modisProducts[0] = new ModisProduct()
-            //{
-            //    Source = "SAN/MOST",
-            //    Product = "MOD10A1.006",
-            //    StartDate = new DateTime(2000, 2, 24),
-            //    DataSets = new string[7]
-            //    {
-            //        "NDSISnowCover",
-            //        "NDSISnowCoverBasic",
-            //        "NDSISnowCoverAlgorithm",
-            //        "NDSI",
-            //        "SnowAlbedo",
-            //        "orbitpnt",
-            //        "granulepnt"
-            //    },
-            //    ExtractDataSetIndexes = new int[0] { },
-            //    Spans = true,
-            //    Mosaic = true,
-            //    ConvertHdf = false
-            //};
+            exclusions = new List<Exclusion>();
+            List<string> exclusionsS = File.ReadAllLines(Exclusions).ToList();
+            foreach(string exclusionS in exclusionsS)
+            {
+                string[] exclusionSArray = exclusionS.Split('\t');
+                string product = exclusionSArray[0];
+                DateTime date = new DateTime(Convert.ToInt32(exclusionSArray[1].Split('-')[0]),
+                    Convert.ToInt32(exclusionSArray[1].Split('-')[1]),
+                    Convert.ToInt32(exclusionSArray[1].Split('-')[2]));
+                int count = Convert.ToInt32(exclusionSArray[3]);
+                exclusions.Add(new Exclusion()
+                {
+                    product = product,
+                    date = date,
+                    count = count
+                });
+            }
+
             modisProducts[0] = new ModisProduct()
             {
                 Source = "SAN/MOST",
-                Product = "MOD10A2.006",
+                Product = "MOD10A1.006",
                 StartDate = new DateTime(2000, 2, 24),
-                DataSets = new string[2]
+                Period = 1,
+                DataSets = new string[7]
                 {
-                    "MaxSnowExtent",
-                    "SnowCover"
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
                 },
-                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                ExtractDataSetIndexes = new int[1] { 0 },
                 Spans = true,
                 Mosaic = true,
                 ConvertHdf = false,
                 Analize = true,
-                DayDividedDataSetIndexes = new int[1] { 1 }
+                DayDividedDataSetIndexes = new int[] { },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
             };
-            //modisProducts[2] = new ModisProduct()
-            //{
-            //    Source = "SAN/MOSA",
-            //    Product = "MYD10A1.006",
-            //    StartDate = new DateTime(2002, 7, 4),
-            //    DataSets = new string[7]
-            //    {
-            //        "NDSISnowCover",
-            //        "NDSISnowCoverBasic",
-            //        "NDSISnowCoverAlgorithm",
-            //        "NDSI",
-            //        "SnowAlbedo",
-            //        "orbitpnt",
-            //        "granulepnt"
-            //    },
-            //    ExtractDataSetIndexes = new int[0] { },
-            //    Spans = true,
-            //    Mosaic = true,
-            //    ConvertHdf = false
-            //};
             modisProducts[1] = new ModisProduct()
             {
                 Source = "SAN/MOSA",
-                Product = "MYD10A2.006",
+                Product = "MYD10A1.006",
                 StartDate = new DateTime(2002, 7, 4),
-                DataSets = new string[2]
+                Period = 1,
+                DataSets = new string[7]
                 {
-                    "MaxSnowExtent",
-                    "SnowCover"
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
                 },
-                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                ExtractDataSetIndexes = new int[1] { 0 },
                 Spans = true,
                 Mosaic = true,
                 ConvertHdf = false,
                 Analize = true,
-                DayDividedDataSetIndexes = new int[1] { 1 }
+                DayDividedDataSetIndexes = new int[] { },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
             };
             modisProducts[2] = new ModisProduct()
             {
                 Source = "SAN/MOST",
+                Product = "MOD10A2.006",
+                StartDate = new DateTime(2000, 2, 18),
+                Period = 8,
+                DataSets = new string[2]
+                {
+                    "MaxSnowExtent",
+                    "SnowCover"
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[1] { 1 },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
+            };
+            modisProducts[3] = new ModisProduct()
+            {
+                Source = "SAN/MOSA",
+                Product = "MYD10A2.006",
+                StartDate = new DateTime(2002, 7, 4),
+                Period = 8,
+                DataSets = new string[2]
+                {
+                    "MaxSnowExtent",
+                    "SnowCover"
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[1] { 1 },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
+            };
+            modisProducts[4] = new ModisProduct()
+            {
+                Source = "SAN/MOST",
                 Product = "MOD10C2.006",
                 StartDate = new DateTime(2000, 2, 24),
+                Period = 8,
                 DataSets = new string[1]
                 {
                     "NDSI"
@@ -169,6 +222,8 @@ namespace Modis
                 Spans = false,
                 Mosaic = false,
                 ConvertHdf = true,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[] { },
                 Norm = true,
                 AnomalyStartYear = 2001,
                 AnomalyEndYear = 2019
@@ -176,6 +231,7 @@ namespace Modis
 
             while (true)
             {
+                EmptyDownloadedDir();
                 DateTime dateNext = GetNextDate();
                 foreach (ModisProduct modisProduct in modisProducts)
                 {
@@ -184,20 +240,21 @@ namespace Modis
                 SaveNextDate();
 
                 ModisMosaic();
-                ModisConvertTif();
-                ModisConvertHdf();
-                ModisCrop();
-                ModisNorm();
-                ModisPublish();
-                Anomaly();
-                Analize();
-                Snow();
+                //ModisConvertTif();
+                //ModisConvertHdf();
+                //ModisCrop();
+                //ModisNorm();
+                //ModisPublish();
+                //Anomaly();
+                //Analize();
+                //Snow();
 
                 if (dateNext == DateTime.Today)
                 {
                     Log("Sleep 4 hour");
                     Thread.Sleep(1000 * 60 * 60 * 4);
                 }
+                EmptyDownloadedDir();
             }
         }
 
@@ -300,27 +357,116 @@ namespace Modis
             {
                 return;
             }
-            EmptyDownloadingDir();
-            try
+            if (!MustExists(ModisProduct, date))
             {
-                string arguments = 
-                    $"-U {ModisUser} -P {ModisPassword}" +
-                    $" -r -u https://n5eil01u.ecs.nsidc.org" +
-                    $" -p mail@pymodis.com" +
-                    $" -s {ModisProduct.Source}" +
-                    $" -p {ModisProduct.Product}" +
-                    (ModisProduct.Spans ? $" -t {ModisSpans}" : "") +
-                    $" -f {date.ToString("yyyy-MM-dd")}" +
-                    $" -e {date.ToString("yyyy-MM-dd")}" +
-                    $" {DownloadingDir}";
-                GDALExecute("modis_download.py", "", arguments);
-                MoveDownloadedFiles();
-            }
-            catch (Exception exception)
-            {
-                Log(exception.Message + ": " + exception.InnerException?.Message);
+                return;
             }
             EmptyDownloadingDir();
+            if (!CopyFromArchiveToDownloading(ModisProduct, date))
+            {
+                try
+                {
+                    string arguments =
+                        $"-U {ModisUser} -P {ModisPassword}" +
+                        $" -r -u https://n5eil01u.ecs.nsidc.org" +
+                        $" -p mail@pymodis.com" +
+                        $" -s {ModisProduct.Source}" +
+                        $" -p {ModisProduct.Product}" +
+                        (ModisProduct.Spans ? $" -t {ModisSpans}" : "") +
+                        $" -f {date.ToString("yyyy-MM-dd")}" +
+                        $" -e {date.ToString("yyyy-MM-dd")}" +
+                        $" {DownloadingDir}";
+                    GDALExecute("modis_download.py", "", arguments);
+                    CopyFromDownloadingToArchive();
+
+                    //int filesCount = Directory.GetFiles(DownloadingDir, "*hdf*").Count();
+                    //string day = "-";
+                    //if (filesCount > 0)
+                    //{
+                    //    day = Path.GetFileName(Directory.GetFiles(DownloadingDir, "*hdf*")?.FirstOrDefault()).Split('.')[1].Substring(5, 3);
+                    //}
+                    //string str = $"{ModisProduct.Product}\t{date.ToString("yyyy-MM-dd")}\t{day}\t{filesCount.ToString()}" + Environment.NewLine;
+                    //File.AppendAllText(@"D:\MODIS\exclusions.txt", str);
+                }
+                catch (Exception exception)
+                {
+                    Log(exception.Message + ": " + exception.InnerException?.Message);
+                }
+            }
+            MoveDownloadedFiles();
+            EmptyDownloadingDir();
+        }
+
+        private static bool MustExists(
+            ModisProduct ModisProduct,
+            DateTime date)
+        {
+            DateTime date1January = new DateTime(date.Year, 1, 1);
+            int days = (int)(date - date1January).TotalDays;
+            if (days % ModisProduct.Period == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CopyFromArchiveToDownloading(
+            ModisProduct ModisProduct,
+            DateTime date)
+        {
+            string folder = Path.Combine(ArchiveDir, $"{date.Year.ToString()}.{ModisProduct.Product.Split('.')[0]}"),
+                fileNameDate = $"*A{date.Year}{date.DayOfYear.ToString("D3")}*";
+            List<string> files = Directory.EnumerateFiles(folder, fileNameDate).ToList();
+            int mustFilesCount = 0;
+            if (ModisProduct.Spans)
+            {
+                mustFilesCount = 2 * ModisSpans.Split(',').Count();
+            }
+            else
+            {
+                mustFilesCount = 2;
+            }
+            // exclusions
+            Exclusion exclusion = exclusions.FirstOrDefault(e => e.product == ModisProduct.Product && e.date == date);
+            if (exclusion != null)
+            {
+                mustFilesCount = exclusion.count;
+            }
+
+            if (files.Count() == mustFilesCount)
+            {
+                foreach (string file in files)
+                {
+                    File.Copy(file, Path.Combine(DownloadingDir, Path.GetFileName(file)));
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static void CopyFromDownloadingToArchive()
+        {
+            foreach (string file in Directory.EnumerateFiles(DownloadingDir, "*.hdf*"))
+            {
+                try
+                {
+                    string[] fileNameArray = Path.GetFileNameWithoutExtension(file).Split('.');
+                    string product = fileNameArray[0],
+                        year = fileNameArray[1].Substring(1, 4),
+                        archiveFolder = Path.Combine(ArchiveDir, $"{year}.{product}");
+                    File.Copy(file, Path.Combine(archiveFolder, Path.GetFileName(file)), true);
+                }
+                catch (Exception exception)
+                {
+                    Log(exception.Message + ": " + exception.InnerException?.Message);
+                }
+            }
         }
 
         private static void MoveDownloadedFiles()
@@ -335,6 +481,25 @@ namespace Modis
                 {
                     Log(exception.Message + ": " + exception.InnerException?.Message);
                 }
+            }
+        }
+
+        private static void EmptyDownloadedDir()
+        {
+            try
+            {
+                foreach (string folder in Directory.EnumerateDirectories(DownloadedDir))
+                {
+                    Directory.Delete(folder, true);
+                }
+                foreach (string file in Directory.EnumerateFiles(DownloadedDir, "*.hdf*"))
+                {
+                    File.Delete(file);
+                }
+            }
+            catch (Exception exception)
+            {
+                Log(exception.Message + ": " + exception.InnerException?.Message);
             }
         }
 
