@@ -26,6 +26,7 @@ namespace Modis
             public bool Mosaic;
             public bool ConvertHdf;
             public bool Norm = false;
+            public bool Publish;
             public int? AnomalyStartYear;
             public int? AnomalyEndYear;
             public bool Analize = false;
@@ -136,6 +137,7 @@ namespace Modis
                 Spans = true,
                 Mosaic = true,
                 ConvertHdf = false,
+                Publish = false,
                 Analize = true,
                 DayDividedDataSetIndexes = new int[] { },
                 Norm = false,
@@ -162,6 +164,7 @@ namespace Modis
                 Spans = true,
                 Mosaic = true,
                 ConvertHdf = false,
+                Publish = false,
                 Analize = true,
                 DayDividedDataSetIndexes = new int[] { },
                 Norm = false,
@@ -183,6 +186,7 @@ namespace Modis
                 Spans = true,
                 Mosaic = true,
                 ConvertHdf = false,
+                Publish = true,
                 Analize = true,
                 DayDividedDataSetIndexes = new int[1] { 1 },
                 Norm = false,
@@ -204,6 +208,7 @@ namespace Modis
                 Spans = true,
                 Mosaic = true,
                 ConvertHdf = false,
+                Publish = true,
                 Analize = true,
                 DayDividedDataSetIndexes = new int[1] { 1 },
                 Norm = false,
@@ -224,6 +229,7 @@ namespace Modis
                 Spans = false,
                 Mosaic = false,
                 ConvertHdf = true,
+                Publish = true,
                 Analize = true,
                 DayDividedDataSetIndexes = new int[] { },
                 Norm = true,
@@ -242,10 +248,10 @@ namespace Modis
 
                 ModisMosaic();
                 ModisConvertTif();
-                //ModisConvertHdf();
-                //ModisCrop();
-                //ModisNorm();
-                //ModisPublish();
+                ModisConvertHdf();
+                ModisCrop();
+                ModisNorm();
+                ModisPublish();
                 //Anomaly();
                 //Analize();
                 //Snow();
@@ -750,8 +756,11 @@ namespace Modis
                 {
                     foreach (string file in Directory.EnumerateFiles(ConvertDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                     {
-                        //taskList.Add(Task.Factory.StartNew(() => ModisCropTask(file)));
-                        ModisCropTask(file);
+                        if (!Path.GetFileName(file).Contains("_KZ"))
+                        {
+                            //taskList.Add(Task.Factory.StartNew(() => ModisCropTask(file)));
+                            ModisCropTask(file);
+                        }
                     }
                 }
             }
@@ -809,8 +818,15 @@ namespace Modis
                     file,
                     Path.Combine(GeoServerDir, Path.GetFileName(file)));
                 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                //ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                string[] fileNameArray = Path.GetFileNameWithoutExtension(file).Split('_');
+                string source_ = fileNameArray[1],
+                    product_ = fileNameArray[2];
+                ModisProduct modisProduct = modisProducts.FirstOrDefault(m => m.Source.Split('/')[1] == source_ && m.Product.Replace(".", "") == product_);
+                if (modisProduct.Publish)
+                {
+                    taskList.Add(Task.Factory.StartNew(() => ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                    //ModisPublishTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                }
             }
             Task.WaitAll(taskList.ToArray());
         }
