@@ -70,7 +70,8 @@ namespace Modis
         //    GeoServerPassword = "geoserver",
         //    GeoServerURL = "http://localhost:8080/geoserver/",
         //    AnalizeShp = @"C:\MODIS\shp\TestSnowExtrPnt.shp",
-        //    ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py";
+        //    ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py",
+        //    CloudMask = @"C:\MODIS\Python\CloudMask_v03.py";
         const string ModisUser = "hvreren",
             ModisPassword = "Querty123",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
@@ -89,7 +90,11 @@ namespace Modis
             GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/",
             AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
-            ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py";
+            ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py",
+            CloudMask = @"D:\MODIS\Python\CloudMask_v03.py";
+
+        const string cloudsMaskSourceName = "CLOU",
+            cloudsMaskSourceFinalName = "CLMA"; // CLOUD MASK
 
         static List<PointData> pointDatas = new List<PointData>();
 
@@ -234,7 +239,7 @@ namespace Modis
                 DayDividedDataSetIndexes = new int[] { },
                 Norm = true,
                 AnomalyStartYear = 2001,
-                AnomalyEndYear = 2019
+                AnomalyEndYear = 2005
             };
 
             while (true)
@@ -252,8 +257,9 @@ namespace Modis
                 ModisCrop();
                 ModisNorm();
                 ModisPublish();
-                //Anomaly();
-                //Analize();
+                Anomaly();
+                Clouds();
+                Analize();
                 //Snow();
 
                 if (dateNext == DateTime.Today)
@@ -833,31 +839,32 @@ namespace Modis
 
         private static void ModisPublishTask(string TifFile)
         {
-            string layerName = Path.GetFileNameWithoutExtension(TifFile);
-            // store
-            string publishParameters = $" -v -u" +
-                $" {GeoServerUser}:{GeoServerPassword}" +
-                $" -POST -H \"Content-type: text/xml\"" +
-                $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
-                $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
-                $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
-            CurlBatExecute(publishParameters);
-            // layer
-            publishParameters = $" -v -u" +
-                $" {GeoServerUser}:{GeoServerPassword}" +
-                $" -PUT -H \"Content-type: text/xml\"" +
-                $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
-                $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
-            CurlBatExecute(publishParameters);
-            // style
-            string[] a_layerName = layerName.Split('_');
-            string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}";
-            publishParameters = $" -v -u" +
-                $" {GeoServerUser}:{GeoServerPassword}" +
-                $" -X PUT -H \"Content-type: text/xml\"" +
-                $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
-                $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
-            CurlBatExecute(publishParameters);
+            // uncomment
+            //string layerName = Path.GetFileNameWithoutExtension(TifFile);
+            //// store
+            //string publishParameters = $" -v -u" +
+            //    $" {GeoServerUser}:{GeoServerPassword}" +
+            //    $" -POST -H \"Content-type: text/xml\"" +
+            //    $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
+            //    $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
+            //    $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
+            //CurlBatExecute(publishParameters);
+            //// layer
+            //publishParameters = $" -v -u" +
+            //    $" {GeoServerUser}:{GeoServerPassword}" +
+            //    $" -PUT -H \"Content-type: text/xml\"" +
+            //    $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
+            //    $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
+            //CurlBatExecute(publishParameters);
+            //// style
+            //string[] a_layerName = layerName.Split('_');
+            //string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}";
+            //publishParameters = $" -v -u" +
+            //    $" {GeoServerUser}:{GeoServerPassword}" +
+            //    $" -X PUT -H \"Content-type: text/xml\"" +
+            //    $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
+            //    $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
+            //CurlBatExecute(publishParameters);
         }
 
         private static void Anomaly()
@@ -951,6 +958,7 @@ namespace Modis
                 GeoServerDir,
                 arguments);
 
+            // uncomment
             //// publish
             //string layerName = Path.GetFileNameWithoutExtension(anomalyFile);
             //// store
@@ -979,6 +987,151 @@ namespace Modis
             //CurlBatExecute(publishParameters);
         }
 
+        private static void Clouds()
+        {
+            CloudsPairs();
+            CloudsMasks();
+        }
+
+        private static void CloudsPairs()
+        {
+            ModisProduct[] modisProductsDaily = modisProducts.Where(m => m.Period == 1).ToArray();
+            List<Task> taskList = new List<Task>();
+            if (modisProductsDaily.Count() == 2)
+            {
+                foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProductsDaily[0].Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                {
+                    string pairFile = file
+                            .Replace(modisProductsDaily[0].Source.Split('/')[1], modisProductsDaily[1].Source.Split('/')[1])
+                            .Replace(modisProductsDaily[0].Product.Replace(".", ""), modisProductsDaily[1].Product.Replace(".", "")),
+                        cloudFile = file
+                            .Replace(modisProductsDaily[0].Source.Split('/')[1], cloudsMaskSourceName);
+                    if (File.Exists(pairFile))
+                    {
+                        taskList.Add(Task.Factory.StartNew(() => CloudsPairsTask(file, pairFile, cloudFile)));
+                    }
+                    else
+                    {
+                        File.Move(file, cloudFile);
+                    }
+                }
+                Task.WaitAll(taskList.ToArray());
+                taskList = new List<Task>();
+                foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProductsDaily[1].Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                {
+                    string pairFile = file
+                            .Replace(modisProductsDaily[1].Source.Split('/')[1], modisProductsDaily[0].Source.Split('/')[1])
+                            .Replace(modisProductsDaily[1].Product.Replace(".", ""), modisProductsDaily[0].Product.Replace(".", "")),
+                        cloudFile = file
+                            .Replace(modisProductsDaily[1].Source.Split('/')[1], cloudsMaskSourceName);
+                    if (File.Exists(pairFile))
+                    {
+                        taskList.Add(Task.Factory.StartNew(() => CloudsPairsTask(file, pairFile, cloudFile)));
+                    }
+                    else
+                    {
+                        File.Move(file, cloudFile);
+                    }
+                }
+                Task.WaitAll(taskList.ToArray());
+            }
+        }
+
+        private static void CloudsMasks()
+        {
+            List<Task> taskList = new List<Task>();
+            foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceName}*.tif", SearchOption.TopDirectoryOnly))
+            {
+                string yearS = Path.GetFileName(file).Substring(1, 4),
+                    dayS = Path.GetFileName(file).Substring(5, 3);
+                int day = Convert.ToInt32(dayS),
+                    year = Convert.ToInt32(yearS),
+                    dayPrev = day - 1,
+                    yearPrev = year,
+                    dayNext = day + 1,
+                    yearNext = year;
+                if (dayPrev == 0)
+                {
+                    yearPrev--;
+                    if (yearPrev % 4 == 0)
+                    {
+                        dayPrev = 366;
+                    }
+                    else
+                    {
+                        dayPrev = 365;
+                    }
+                }
+                if ((day == 366 && yearNext % 4 == 0) || (day == 366 && yearNext % 4 != 0))
+                {
+                    dayNext = 1;
+                    yearNext++;
+                }
+                string dayPrevS = dayPrev.ToString("D3"),
+                    yearPrevS = yearPrev.ToString(),
+                    dayNextS = dayNext.ToString("D3"),
+                    yearNextS = yearNext.ToString(),
+                    filePrev = file.Replace($"A{yearS}{dayS}", $"A{yearPrevS}{dayPrevS}"),
+                    fileNext = file.Replace($"A{yearS}{dayS}", $"A{yearNextS}{dayNextS}");
+                if (File.Exists(filePrev) && File.Exists(fileNext) && !File.Exists(file.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName)))
+                {
+                    taskList.Add(Task.Factory.StartNew(() => CloudsMasksTask(filePrev, file, fileNext)));
+                    //CloudsMasksTask(filePrev, file, fileNext);
+                }
+                //else if (!File.Exists(file.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName)))
+                //{
+                //    File.Copy(file, file.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName));
+                //}
+                // delete old CLOU files
+                DateTime date = new DateTime(year, 1, 1).AddDays(day - 1);
+                if ((GetNextDate() - date).Days > 3)
+                {
+                    File.Delete(file);
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+            //foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceName}*.tif", SearchOption.TopDirectoryOnly))
+            //{
+            //    File.Delete(file);
+            //}
+            foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*_RGB*.tif", SearchOption.TopDirectoryOnly))
+            {
+                File.Delete(file);
+            }
+            foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*_SegmentCloud*.tif", SearchOption.TopDirectoryOnly))
+            {
+                File.Delete(file);
+            }
+        }
+        
+        private static void CloudsPairsTask(string TifFile1, string TifFile2, string TifFileCloud)
+        {
+            string arguments = $"-A '{TifFile1}' -B '{TifFile2}' --outfile='{TifFileCloud}' --calc=\"A*(A<250) + B*(A==250)\"";
+            GDALExecute(
+                "gdal_calc.py",
+                GeoServerDir,
+                arguments);
+            File.Delete(TifFile1);
+            File.Delete(TifFile2);
+        }
+
+        private static void CloudsMasksTask(string TifFilePrev, string TifFileToday, string TifFileNext)
+        {
+            string arguments = $"{CloudMask}" +
+                $" \"{Path.GetFileName(TifFilePrev)}\"" +
+                $" \"{Path.GetFileName(TifFileToday)}\"" +
+                $" \"{Path.GetFileName(TifFileNext)}\"" +
+                $" \"{Path.GetFileNameWithoutExtension(TifFileToday.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName))}\"";
+            //if (File.Exists(TifFileToday.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName)))
+            //{
+            //    File.Delete(TifFileToday.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName));
+            //}
+            GDALExecute(
+                "python",
+                GeoServerDir,
+                arguments);
+        }
+
         private static void Analize()
         {
             List<Task> taskList = new List<Task>();
@@ -987,10 +1140,26 @@ namespace Modis
             {
                 if (modisProduct.Analize)
                 {
-                    foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                    if (modisProduct.Period == 1)
                     {
-                        taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                        //AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceFinalName}*.tif", SearchOption.TopDirectoryOnly))
+                        {
+                            taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                        }
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                        {
+                            if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
+                            {
+                                taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                        {
+                            taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                        }
                     }
                 }
             }
