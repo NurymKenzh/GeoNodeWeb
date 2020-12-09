@@ -1084,7 +1084,7 @@ namespace Modis
                 //}
                 // delete old CLOU files
                 DateTime date = new DateTime(year, 1, 1).AddDays(day - 1);
-                if ((GetNextDate() - date).Days > 3)
+                if (((GetNextDate() - date).Days > 3) && (File.Exists(file.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName))))
                 {
                     File.Delete(file);
                 }
@@ -1142,17 +1142,17 @@ namespace Modis
                 {
                     if (modisProduct.Period == 1)
                     {
-                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceFinalName}*.tif", SearchOption.TopDirectoryOnly))
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceFinalName}_{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
                             taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
                         }
-                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
-                        {
-                            if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
-                            {
-                                taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
-                            }
-                        }
+                        //foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                        //{
+                        //    if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
+                        //    {
+                        //        taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                        //    }
+                        //}
                     }
                     else
                     {
