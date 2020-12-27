@@ -75,23 +75,23 @@ namespace Modis
         const string ModisUser = "hvreren",
             ModisPassword = "Querty123",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-            DownloadingDir = @"D:\MODIS\Downloading",
-            DownloadedDir = @"D:\MODIS\Downloaded",
-            Exclusions = @"D:\MODIS\exclusions.txt",
+            DownloadingDir = @"E:\MODIS\Downloading",
+            DownloadedDir = @"E:\MODIS\Downloaded",
+            Exclusions = @"E:\MODIS\exclusions.txt",
             CMDPath = @"C:\Windows\system32\cmd.exe",
             LastDateFile = "!last_date.txt",
-            MosaicDir = @"D:\MODIS\Mosaic",
-            ConvertDir = @"D:\MODIS\Convert",
-            ArchiveDir = @"D:\MODIS\Archive",
+            MosaicDir = @"E:\MODIS\Mosaic",
+            ConvertDir = @"E:\MODIS\Convert",
+            ArchiveDir = @"E:\MODIS\Archive",
             ModisProjection = "4326",
-            GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
+            GeoServerDir = @"E:\GeoServer\data_dir\data\MODIS",
             GeoServerWorkspace = "MODIS",
             GeoServerUser = "admin",
             GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/",
-            AnalizeShp = @"D:\MODIS\shp\TestSnowExtrPnt.shp",
-            ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py",
-            CloudMask = @"D:\MODIS\Python\CloudMask_v03.py";
+            AnalizeShp = @"E:\MODIS\shp\TestSnowExtrPnt.shp",
+            ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
+            CloudMask = @"E:\MODIS\Python\CloudMask_v03.py";
 
         const string cloudsMaskSourceName = "CLOU",
             cloudsMaskSourceFinalName = "CLMA"; // CLOUD MASK
@@ -260,7 +260,8 @@ namespace Modis
                 Anomaly();
                 Clouds();
                 Analize();
-                //Snow();
+                Snow();
+                SnowPeriods();
 
                 if (dateNext == DateTime.Today)
                 {
@@ -309,8 +310,8 @@ namespace Modis
             }
             catch (Exception exception)
             {
-                //throw new Exception(exception.ToString(), exception?.InnerException);
                 Log($"{exception.ToString()}: {exception?.InnerException}");
+                throw new Exception(exception.ToString(), exception?.InnerException);
             }
             return output;
         }
@@ -1107,12 +1108,19 @@ namespace Modis
         private static void CloudsPairsTask(string TifFile1, string TifFile2, string TifFileCloud)
         {
             string arguments = $"-A '{TifFile1}' -B '{TifFile2}' --outfile='{TifFileCloud}' --calc=\"A*(A<250) + B*(A==250)\"";
-            GDALExecute(
-                "gdal_calc.py",
-                GeoServerDir,
-                arguments);
-            File.Delete(TifFile1);
-            File.Delete(TifFile2);
+            try
+            {
+                GDALExecute(
+                    "gdal_calc.py",
+                    GeoServerDir,
+                    arguments);
+                File.Delete(TifFile1);
+                File.Delete(TifFile2);
+            }
+            catch
+            { 
+            
+            }
         }
 
         private static void CloudsMasksTask(string TifFilePrev, string TifFileToday, string TifFileNext)
@@ -1126,10 +1134,17 @@ namespace Modis
             //{
             //    File.Delete(TifFileToday.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName));
             //}
-            GDALExecute(
-                "python",
-                GeoServerDir,
-                arguments);
+            try
+            {
+                GDALExecute(
+                    "python",
+                    GeoServerDir,
+                    arguments);
+            }
+            catch
+            {
+
+            }
         }
 
         private static void Analize()
@@ -1144,13 +1159,19 @@ namespace Modis
                     {
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceFinalName}_{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                            if (!Path.GetFileName(file).Contains("BASE"))
+                            {
+                                taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                            }
                         }
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
+                            if (!Path.GetFileName(file).Contains("BASE"))
                             {
-                                taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
+                                {
+                                    taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                }
                             }
                         }
                     }
@@ -1158,7 +1179,10 @@ namespace Modis
                     {
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                            if (!Path.GetFileName(file).Contains("BASE"))
+                            {
+                                taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                            }
                         }
                     }
                 }
@@ -1174,7 +1198,7 @@ namespace Modis
                         $"'{pointData.dataset}', " +
                         $"'{pointData.date.ToString("yyyy-MM-dd")}', " +
                         $"{pointData.value});";
-                    connection.Query(query);
+                    connection.Execute(query);
                 }
             }
             //List<string> pointDataS = new List<string>();
@@ -1267,7 +1291,7 @@ namespace Modis
             //                    $"'{dataset}', " +
             //                    $"'{date.ToString("yyyy-MM-dd")}', " +
             //                    $"{valuei});";
-            //                connection.Query(query);
+            //                connection.Execute(query);
             //            }
             //        }
             //        else
@@ -1278,7 +1302,7 @@ namespace Modis
             //                $"'{dataset}', " +
             //                $"'{dateFinish.ToString("yyyy-MM-dd")}', " +
             //                $"{value});";
-            //            connection.Query(query);
+            //            connection.Execute(query);
             //        }
             //    }
             //    connection.Close();
@@ -1332,6 +1356,7 @@ namespace Modis
 
         private static void Snow()
         {
+            List<Task> taskList = new List<Task>();
             string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
             using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
             {
@@ -1341,9 +1366,11 @@ namespace Modis
                 connection.Close();
                 foreach (int pointId in pointIds)
                 {
-                    SnowTask(pointId);
+                    //SnowTask(pointId);
+                    taskList.Add(Task.Factory.StartNew(() => SnowTask(pointId)));
                 }
             }
+            Task.WaitAll(taskList.ToArray());
         }
 
         private class ModisData
@@ -1377,11 +1404,198 @@ namespace Modis
                     $" ORDER BY date;").ToList(),
                     pointSnowInsert = new List<SnowData>(),
                     pointSnowUpdate = new List<SnowData>();
-                DateTime lastDateModis = pointModis.Max(p => p.date),
-                    lastDateSnow = pointSnow.Max(p => p.date),
-                    currentDate = GetNextDate(),
-                    lastDate = new DateTime();
+                DateTime currentDate = GetNextDate();
+                    //lastDateModis = pointModis.Count() > 0 ? pointModis.Max(p => p.date) : currentDate,
+                    //lastDateSnow = pointSnow.Count() > 0 ? pointSnow.Max(p => p.date) : currentDate;
+                foreach (DateTime _date in pointModis.Where(p => (currentDate - p.date).Days < 30).Select(p => p.date).Distinct())
+                {
+                    List<ModisData> pointModis_date = pointModis.Where(p => p.date == _date).ToList();
+                    bool snow = false;
+                    if (pointModis_date.Count(p => p.product == "MOD10A1006" && p.dataset == "NDSISnowCover" && p.value <= 100) > 0)
+                    {
+                        snow = true;
+                    }
+                    else if (pointModis_date.Count(p => p.product == "MYD10A1006" && p.dataset == "NDSISnowCover" && p.value <= 100) > 0)
+                    {
+                        snow = true;
+                    }
+                    else if (pointModis_date.Count(p => p.product == "MOD10A2006" && p.dataset == "MaxSnowExtent" && p.value == 200) > 0)
+                    {
+                        snow = true;
+                    }
+                    else if (pointModis_date.Count(p => p.product == "MOD10A2006" && p.dataset == "SnowCover" && p.value == 1) > 0)
+                    {
+                        snow = true;
+                    }
+                    else if (pointModis_date.Count(p => p.product == "MYD10A2006" && p.dataset == "MaxSnowExtent" && p.value == 200) > 0)
+                    {
+                        snow = true;
+                    }
+                    else if (pointModis_date.Count(p => p.product == "MYD10A2006" && p.dataset == "SnowCover" && p.value == 1) > 0)
+                    {
+                        snow = true;
+                    }
+                    else if (pointModis_date.Count(p => p.product == "MOD10C2006" && p.dataset == "NDSI" && p.value <= 100) > 0)
+                    {
+                        snow = true;
+                    }
+                    SnowData _snowData = pointSnow.FirstOrDefault(p => p.pointid == PointId && p.date == _date);
+                    if (_snowData == null)
+                    {
+                        pointSnowInsert.Add(new SnowData()
+                        {
+                            date = _date,
+                            pointid = PointId,
+                            snow = snow
+                        });
+                    }
+                    else if (_snowData.snow == false && snow == true)
+                    {
+                        pointSnowUpdate.Add(new SnowData()
+                        {
+                            date = _date,
+                            pointid = PointId,
+                            snow = snow
+                        });
+                    }
+                }
+                foreach (SnowData snowData in pointSnowInsert)
+                {
+                    string query = $"INSERT INTO public.modispointssnow(pointid, date, snow)" +
+                        $" VALUES ({snowData.pointid}," +
+                        $" '{snowData.date.ToString("yyyy-MM-dd")}'," +
+                        $" {snowData.snow.ToString()});";
+                    connection.Execute(query);
+                }
+                foreach (SnowData snowData in pointSnowUpdate)
+                {
+                    string query = $"UPDATE public.modispointssnow" +
+                        $" SET pointid={snowData.pointid}, date='{snowData.date.ToString("yyyy-MM-dd")}', snow={snowData.snow.ToString()}" +
+                        $" WHERE pointid={snowData.pointid} AND date='{snowData.date.ToString("yyyy-MM-dd")}';";
+                    connection.Execute(query);
+                }
+                connection.Close();
+            }
+        }
 
+        private static void SnowPeriods()
+        {
+            List<Task> taskList = new List<Task>();
+            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
+            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            {
+                connection.Open();
+                // id точек
+                List<int> pointIds = connection.Query<int>($"SELECT pointid FROM public.testsnowextrpnt;").ToList();
+                connection.Close();
+                foreach (int pointId in pointIds)
+                {
+                    //SnowPeriodsTask(pointId);
+                    taskList.Add(Task.Factory.StartNew(() => SnowPeriodsTask(pointId)));
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+        }
+
+        private class Period
+        {
+            public int pointid;
+            public DateTime start;
+            public DateTime finish;
+            public int period;
+        }
+
+        private static void SnowPeriodsTask(int PointId)
+        {
+            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
+            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            {
+                List<Period> periods = new List<Period>();
+                connection.Open();
+                string query = "";
+                List<SnowData> snows = connection.Query<SnowData>($"SELECT pointid, date, snow" +
+                    $" FROM public.modispointssnow" +
+                    $" WHERE pointid = {PointId}" +
+                    $" ORDER BY date;").ToList();
+                // заполнить snows (пропущенные даты)
+                for (DateTime d = snows.Min(s => s.date); d < snows.Max(s => s.date); d = d.AddDays(1))
+                {
+                    if (snows.Count(s => s.date == d) == 0)
+                    {
+                        snows.Add(new SnowData()
+                        {
+                            pointid = PointId,
+                            date = d,
+                            snow = false
+                        });
+                        query = $"INSERT INTO public.modispointssnow(pointid, date, snow)" +
+                            $" VALUES ({PointId}," +
+                            $" '{d.ToString("yyyy-MM-dd")}'," +
+                            $" {false.ToString()});";
+                        connection.Execute(query);
+                    }
+                }
+                // 3 дня без снега
+                snows.Add(new SnowData()
+                {
+                    pointid = PointId,
+                    date = snows.Min(s => s.date).AddDays(-1),
+                    snow = false
+                });
+                snows.Add(new SnowData()
+                {
+                    pointid = PointId,
+                    date = snows.Min(s => s.date).AddDays(-1),
+                    snow = false
+                });
+                snows.Add(new SnowData()
+                {
+                    pointid = PointId,
+                    date = snows.Min(s => s.date).AddDays(-1),
+                    snow = false
+                });
+                snows = snows.OrderBy(s => s.date).ToList();
+                for (int i = 0; i < snows.Count() - 3; i++)
+                {
+                    if (!snows[i].snow || !snows[i + 1].snow || !snows[i + 2].snow)
+                    {
+                        continue;
+                    }
+                    for (int j = i + 2; j < snows.Count() - 3; j++)
+                    {
+                        if (!snows[j].snow &&
+                            !snows[j + 1].snow
+                            && !snows[j + 2].snow
+                            && !snows[j + 3].snow)//?
+                        {
+                            int days = (int)(snows[j - 1].date - snows[i + 2].date).TotalDays + 1;
+                            if (days >= 30)
+                            {
+                                periods.Add(new Period()
+                                {
+                                    pointid = PointId,
+                                    start = snows[i].date,
+                                    finish = snows[j - 1].date,
+                                    period = days
+                                });
+                            }
+                            i = j + 1;
+                            break;
+                        }
+                    }
+                }
+                // delete old periods
+                query = $"DELETE FROM public.modispointsperiods" +
+                    $" WHERE pointid = {PointId};";
+                connection.Execute(query);
+                // add new periods
+                foreach(Period period in periods)
+                {
+                    query = $"INSERT INTO public.modispointsperiods" +
+                        $"(pointid, start, finish, period)" +
+                        $" VALUES ({period.pointid}, '{period.start.ToString("yyyy-MM-dd")}', '{period.finish.ToString("yyyy-MM-dd")}', {period.period});";
+                    connection.Execute(query);
+                }
                 connection.Close();
             }
         }
