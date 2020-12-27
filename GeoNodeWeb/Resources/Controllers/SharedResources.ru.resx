@@ -247,7 +247,7 @@
     <value>Испарение со снежного покрова</value>
   </data>
   <data name="et0xx" xml:space="preserve">
-    <value>et0xx</value>
+    <value>Эвапотранспирация</value>
   </data>
   <data name="evabs" xml:space="preserve">
     <value>evabs</value>
@@ -406,7 +406,7 @@
     <value>Периодичность</value>
   </data>
   <data name="pevxx" xml:space="preserve">
-    <value>pevxx</value>
+    <value>Потенциальное испарение</value>
   </data>
   <data name="Precipitation" xml:space="preserve">
     <value>Осадки (мм)</value>
@@ -430,7 +430,7 @@
     <value>Реки</value>
   </data>
   <data name="roxxx" xml:space="preserve">
-    <value>Среднемесячный суммарный сток</value>
+    <value>Суммарный сток</value>
   </data>
   <data name="Season" xml:space="preserve">
     <value>Сезон</value>
@@ -484,7 +484,7 @@
     <value>Лето</value>
   </data>
   <data name="t2mxx" xml:space="preserve">
-    <value>t2mxx</value>
+    <value>Температура воздуха на уровне 2 м</value>
   </data>
   <data name="Table" xml:space="preserve">
     <value>Таблица</value>

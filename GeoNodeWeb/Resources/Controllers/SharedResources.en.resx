@@ -247,7 +247,7 @@
     <value>Snow evaporation</value>
   </data>
   <data name="et0xx" xml:space="preserve">
-    <value>et0xx</value>
+    <value>Evapotranspiration</value>
   </data>
   <data name="evabs" xml:space="preserve">
     <value>evabs</value>
@@ -406,7 +406,7 @@
     <value>Periodicity</value>
   </data>
   <data name="pevxx" xml:space="preserve">
-    <value>pevxx</value>
+    <value>Potential evaporation</value>
   </data>
   <data name="Precipitation" xml:space="preserve">
     <value>Precipitation (mm)</value>
@@ -430,7 +430,7 @@
     <value>Rivers</value>
   </data>
   <data name="roxxx" xml:space="preserve">
-    <value>Runoff</value>
+    <value>Total runoff</value>
   </data>
   <data name="Season" xml:space="preserve">
     <value>Season</value>
@@ -484,7 +484,7 @@
     <value>Summer</value>
   </data>
   <data name="t2mxx" xml:space="preserve">
-    <value>t2mxx</value>
+    <value>Air temperature at 2 m</value>
   </data>
   <data name="Table" xml:space="preserve">
     <value>Table</value>

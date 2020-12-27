@@ -1134,6 +1134,14 @@ namespace Modis
             //{
             //    File.Delete(TifFileToday.Replace(cloudsMaskSourceName, cloudsMaskSourceFinalName));
             //}
+            if (Path.GetFileName(TifFileToday) == "A2000056_CLOU_MOD10A1006_B00_NDSISnowCover_4326.tif" ||
+                Path.GetFileName(TifFileToday) == "A2000057_CLOU_MOD10A1006_B00_NDSISnowCover_4326.tif" ||
+                Path.GetFileName(TifFileToday) == "A2000149_CLOU_MOD10A1006_B00_NDSISnowCover_4326.tif" ||
+                Path.GetFileName(TifFileToday) == "A2000150_CLOU_MOD10A1006_B00_NDSISnowCover_4326.tif" ||
+                Path.GetFileName(TifFileToday) == "A2000151_CLOU_MOD10A1006_B00_NDSISnowCover_4326.tif")
+            {
+                return;
+            }
             try
             {
                 GDALExecute(
@@ -1518,6 +1526,11 @@ namespace Modis
                     $" WHERE pointid = {PointId}" +
                     $" ORDER BY date;").ToList();
                 // заполнить snows (пропущенные даты)
+                if (snows.Count() == 0)
+                {
+                    connection.Close();
+                    return;
+                }
                 for (DateTime d = snows.Min(s => s.date); d < snows.Max(s => s.date); d = d.AddDays(1))
                 {
                     if (snows.Count(s => s.date == d) == 0)

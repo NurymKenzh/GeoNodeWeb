@@ -247,7 +247,7 @@
     <value>Испарение со снежного покрова</value>
   </data>
   <data name="et0xx" xml:space="preserve">
-    <value>et0xx</value>
+    <value>Эвотранспирация</value>
   </data>
   <data name="evabs" xml:space="preserve">
     <value>evabs</value>
@@ -406,7 +406,7 @@
     <value>Мерзімділік</value>
   </data>
   <data name="pevxx" xml:space="preserve">
-    <value>pevxx</value>
+    <value>Потенциалды булану</value>
   </data>
   <data name="Precipitation" xml:space="preserve">
     <value>Жауын-шашын (мм)</value>
@@ -430,7 +430,7 @@
     <value>Өзендер</value>
   </data>
   <data name="roxxx" xml:space="preserve">
-    <value>Среднемесячный суммарный сток</value>
+    <value>Жалпы ағынды су</value>
   </data>
   <data name="Season" xml:space="preserve">
     <value>Маусым</value>
@@ -475,16 +475,16 @@
     <value>Көктем</value>
   </data>
   <data name="sroxx" xml:space="preserve">
-    <value>Поверхностный сток</value>
+    <value>Беткі ағын</value>
   </data>
   <data name="ssrox" xml:space="preserve">
-    <value>Подземный сток</value>
+    <value>Жерасты дренажы</value>
   </data>
   <data name="Summer" xml:space="preserve">
     <value>Жаз</value>
   </data>
   <data name="t2mxx" xml:space="preserve">
-    <value>t2mxx</value>
+    <value>Ауа температурасы 2 м</value>
   </data>
   <data name="Table" xml:space="preserve">
     <value>Кесте</value>
