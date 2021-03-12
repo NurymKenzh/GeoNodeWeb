@@ -1466,17 +1466,17 @@ namespace Modis
             {
                 text.Append($"{pointData_.pointid}\t" +
                     $"'{pointData_.date.ToString("yyyy-MM-dd")}'\t" +
-                    $"{pointData_.MOD10A1006_NDSISnowCover}\t" +
-                    $"{pointData_.MYD10A1006_NDSISnowCover}\t" +
-                    $"{pointData_.MOD10A2006_MaxSnowExtent}\t" +
-                    $"{pointData_.MOD10A2006_SnowCover}\t" +
-                    $"{pointData_.MYD10A2006_MaxSnowExtent}\t" +
-                    $"{pointData_.MYD10A2006_SnowCover}\t" +
-                    $"{pointData_.MOD10C2006_NDSI}\t" +
+                    //$"{pointData_.MOD10A1006_NDSISnowCover}\t" +
+                    //$"{pointData_.MYD10A1006_NDSISnowCover}\t" +
+                    //$"{pointData_.MOD10A2006_MaxSnowExtent}\t" +
+                    //$"{pointData_.MOD10A2006_SnowCover}\t" +
+                    //$"{pointData_.MYD10A2006_MaxSnowExtent}\t" +
+                    //$"{pointData_.MYD10A2006_SnowCover}\t" +
+                    //$"{pointData_.MOD10C2006_NDSI}\t" +
                     $"{pointData_.snow}" + Environment.NewLine);
             }
             File.AppendAllText(Path.Combine(BuferFolder, "modispoints.txt"), text.ToString());
-            CopyToDb($"COPY public.modispoints (pointid, date, \"MOD10A1006_NDSISnowCover\", \"MYD10A1006_NDSISnowCover\", \"MOD10A2006_MaxSnowExtent\", \"MOD10A2006_SnowCover\", \"MYD10A2006_MaxSnowExtent\", \"MYD10A2006_SnowCover\", \"MOD10C2006_NDSI\", snow) FROM '{Path.Combine(BuferFolder, "modispoints.txt")}' DELIMITER E'\\t';");
+            CopyToDb($"COPY public.modispoints (pointid, date, snow) FROM '{Path.Combine(BuferFolder, "modispoints.txt")}' DELIMITER E'\\t';");
             File.Delete(Path.Combine(BuferFolder, "modispoints.txt"));
 
             pointDatas.Clear();
@@ -1597,14 +1597,17 @@ namespace Modis
 
         private static void AnalizeTask2(List<PointData> pointDatasPoint)
         {
+            // pointDatasPoint(all data)
+            // =>
+            // pointDatasTask(output)
+
             using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
             {
                 connection.Open();
 
                 // pointDatasPoint - добавить данные за последние 8 дней с базы по точке
                 DateTime dateTimeLast = pointDatasPoint.Max(p => p.date);
-                string query = $"SELECT pointid, date, snow, \"MOD10A1006_NDSISnowCover\", \"MYD10A1006_NDSISnowCover\", \"MOD10A2006_MaxSnowExtent\"," +
-                    $" \"MOD10A2006_SnowCover\", \"MYD10A2006_MaxSnowExtent\", \"MYD10A2006_SnowCover\", \"MOD10C2006_NDSI\"" +
+                string query = $"SELECT pointid, date, snow" +
                     $" FROM public.modispoints" +
                     $" WHERE pointid = {pointDatasPoint.FirstOrDefault().pointid}" +
                     $" AND date > '{dateTimeLast.AddDays(-8).ToString("yyyy-MM-dd")}';";
@@ -1626,48 +1629,70 @@ namespace Modis
                 PointData pointDataExist = pointDatasTask.FirstOrDefault(p => p.date == pointData.date);
                 if (pointDataExist == null)
                 {
-                    switch ($"{pointData.product}_{pointData.dataset}")
+                    if (pointData.snow)
                     {
-                        case "MOD10A1006_NDSISnowCover":
-                            pointData.MOD10A1006_NDSISnowCover = pointData.value;
-                            break;
-                        case "MYD10A1006_NDSISnowCover":
-                            pointData.MYD10A1006_NDSISnowCover = pointData.value;
-                            break;
-                        case "MOD10A2006_MaxSnowExtent":
-                            pointData.MOD10A2006_MaxSnowExtent = pointData.value;
-                            break;
-                        case "MOD10A2006_SnowCover":
-                            pointData.MOD10A2006_SnowCover = pointData.value;
-                            break;
-                        case "MYD10A2006_MaxSnowExtent":
-                            pointData.MYD10A2006_MaxSnowExtent = pointData.value;
-                            break;
-                        case "MYD10A2006_SnowCover":
-                            pointData.MYD10A2006_SnowCover = pointData.value;
-                            break;
-                        case "MOD10C2006_NDSI":
-                            pointData.MOD10C2006_NDSI = pointData.value;
-                            break;
+                        pointDatasTask.Add(new PointData()
+                        {
+                            pointid = pointData.pointid,
+                            date = pointData.date,
+                            snow = pointData.snow
+                        });
                     }
-                    pointDatasTask.Add(new PointData()
+                    else
                     {
-                        pointid = pointData.pointid,
-                        product = pointData.product,
-                        dataset = pointData.dataset,
-                        date = pointData.date,
-                        value = pointData.value,
-                        MOD10A1006_NDSISnowCover = pointData.MOD10A1006_NDSISnowCover,
-                        MYD10A1006_NDSISnowCover = pointData.MYD10A1006_NDSISnowCover,
-                        MOD10A2006_MaxSnowExtent = pointData.MOD10A2006_MaxSnowExtent,
-                        MOD10A2006_SnowCover = pointData.MOD10A2006_SnowCover,
-                        MYD10A2006_MaxSnowExtent = pointData.MYD10A2006_MaxSnowExtent,
-                        MYD10A2006_SnowCover = pointData.MYD10A2006_SnowCover,
-                        MOD10C2006_NDSI = pointData.MOD10C2006_NDSI,
-                        snow = false
-                    });
+                        switch ($"{pointData.product}_{pointData.dataset}")
+                        {
+                            case "MOD10A1006_NDSISnowCover":
+                                pointData.MOD10A1006_NDSISnowCover = pointData.value;
+                                break;
+                            case "MYD10A1006_NDSISnowCover":
+                                pointData.MYD10A1006_NDSISnowCover = pointData.value;
+                                break;
+                            case "MOD10A2006_MaxSnowExtent":
+                                pointData.MOD10A2006_MaxSnowExtent = pointData.value;
+                                break;
+                            case "MOD10A2006_SnowCover":
+                                pointData.MOD10A2006_SnowCover = pointData.value;
+                                break;
+                            case "MYD10A2006_MaxSnowExtent":
+                                pointData.MYD10A2006_MaxSnowExtent = pointData.value;
+                                break;
+                            case "MYD10A2006_SnowCover":
+                                pointData.MYD10A2006_SnowCover = pointData.value;
+                                break;
+                            case "MOD10C2006_NDSI":
+                                pointData.MOD10C2006_NDSI = pointData.value;
+                                break;
+                            default:
+                                pointData.MOD10A1006_NDSISnowCover = -1;
+                                pointData.MYD10A1006_NDSISnowCover = -1;
+                                pointData.MOD10A2006_MaxSnowExtent = -1;
+                                pointData.MOD10A2006_SnowCover = -1;
+                                pointData.MYD10A2006_MaxSnowExtent = -1;
+                                pointData.MYD10A2006_SnowCover = -1;
+                                pointData.MOD10C2006_NDSI = -1;
+                                break;
+                        }
+                        pointDatasTask.Add(new PointData()
+                        {
+                            pointid = pointData.pointid,
+                            product = pointData.product,
+                            dataset = pointData.dataset,
+                            date = pointData.date,
+                            value = pointData.value,
+                            MOD10A1006_NDSISnowCover = pointData.MOD10A1006_NDSISnowCover,
+                            MYD10A1006_NDSISnowCover = pointData.MYD10A1006_NDSISnowCover,
+                            MOD10A2006_MaxSnowExtent = pointData.MOD10A2006_MaxSnowExtent,
+                            MOD10A2006_SnowCover = pointData.MOD10A2006_SnowCover,
+                            MYD10A2006_MaxSnowExtent = pointData.MYD10A2006_MaxSnowExtent,
+                            MYD10A2006_SnowCover = pointData.MYD10A2006_SnowCover,
+                            MOD10C2006_NDSI = pointData.MOD10C2006_NDSI,
+                            snow = false
+                        });
+                    }
                 }
                 else
+                // if pointDatasPoint[i].date already exists in pointDatasTask (date)
                 {
                     switch ($"{pointData.product}_{pointData.dataset}")
                     {
@@ -1692,34 +1717,39 @@ namespace Modis
                         case "MOD10C2006_NDSI":
                             pointDataExist.MOD10C2006_NDSI = pointData.value;
                             break;
+                        // pointData from DB, not from raster
                         default:
-                            if (pointDataExist.MOD10A1006_NDSISnowCover == -1)
+                            //if (pointDataExist.MOD10A1006_NDSISnowCover == -1)
+                            //{
+                            //    pointDataExist.MOD10A1006_NDSISnowCover = pointData.MOD10A1006_NDSISnowCover;
+                            //}
+                            //if (pointDataExist.MYD10A1006_NDSISnowCover == -1)
+                            //{
+                            //    pointDataExist.MYD10A1006_NDSISnowCover = pointData.MYD10A1006_NDSISnowCover;
+                            //}
+                            //if (pointDataExist.MOD10A2006_MaxSnowExtent == -1)
+                            //{
+                            //    pointDataExist.MOD10A2006_MaxSnowExtent = pointData.MOD10A2006_MaxSnowExtent;
+                            //}
+                            //if (pointDataExist.MOD10A2006_SnowCover == -1)
+                            //{
+                            //    pointDataExist.MOD10A2006_SnowCover = pointData.MOD10A2006_SnowCover;
+                            //}
+                            //if (pointDataExist.MYD10A2006_MaxSnowExtent == -1)
+                            //{
+                            //    pointDataExist.MYD10A2006_MaxSnowExtent = pointData.MYD10A2006_MaxSnowExtent;
+                            //}
+                            //if (pointDataExist.MYD10A2006_SnowCover == -1)
+                            //{
+                            //    pointDataExist.MYD10A2006_SnowCover = pointData.MYD10A2006_SnowCover;
+                            //}
+                            //if (pointDataExist.MOD10C2006_NDSI == -1)
+                            //{
+                            //    pointDataExist.MOD10C2006_NDSI = pointData.MOD10C2006_NDSI;
+                            //}
+                            if (pointData.snow)
                             {
-                                pointDataExist.MOD10A1006_NDSISnowCover = pointData.MOD10A1006_NDSISnowCover;
-                            }
-                            if (pointDataExist.MYD10A1006_NDSISnowCover == -1)
-                            {
-                                pointDataExist.MYD10A1006_NDSISnowCover = pointData.MYD10A1006_NDSISnowCover;
-                            }
-                            if (pointDataExist.MOD10A2006_MaxSnowExtent == -1)
-                            {
-                                pointDataExist.MOD10A2006_MaxSnowExtent = pointData.MOD10A2006_MaxSnowExtent;
-                            }
-                            if (pointDataExist.MOD10A2006_SnowCover == -1)
-                            {
-                                pointDataExist.MOD10A2006_SnowCover = pointData.MOD10A2006_SnowCover;
-                            }
-                            if (pointDataExist.MYD10A2006_MaxSnowExtent == -1)
-                            {
-                                pointDataExist.MYD10A2006_MaxSnowExtent = pointData.MYD10A2006_MaxSnowExtent;
-                            }
-                            if (pointDataExist.MYD10A2006_SnowCover == -1)
-                            {
-                                pointDataExist.MYD10A2006_SnowCover = pointData.MYD10A2006_SnowCover;
-                            }
-                            if (pointDataExist.MOD10C2006_NDSI == -1)
-                            {
-                                pointDataExist.MOD10C2006_NDSI = pointData.MOD10C2006_NDSI;
+                                pointDataExist.snow = pointData.snow;
                             }
                             break;
                     }
