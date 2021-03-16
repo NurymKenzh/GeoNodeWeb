@@ -84,6 +84,7 @@ namespace Modis
         //    CloudMask = @"C:\MODIS\Python\CloudMask_v03.py",
         //    runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
         //    postgresPassword = "postgres",
+        //    db = "GeoNodeWebModis",
         //    BuferFolder = @"C:\MODIS";
         const string ModisUser = "hvreren",
             ModisPassword = "Querty123",
@@ -286,7 +287,7 @@ namespace Modis
                     Clouds();
                     AnalizeV2();
                     //Snow();
-                    //SnowPeriods();
+                    SnowPeriods();
 
                     if (dateNext == DateTime.Today)
                     {
@@ -1503,7 +1504,16 @@ namespace Modis
             DateTime dateFinish = GetTifDate(TifFile);
             using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
             {
-                connection.Open();
+                bool opened = false;
+                while (!opened)
+                {
+                    try
+                    {
+                        connection.Open();
+                        opened = true;
+                    }
+                    catch { }
+                }
                 string query = $"SELECT COUNT(*) FROM public.modispoints WHERE" +
                     //$" product = '{product}' AND" +
                     //$" dataset = '{dataset}' AND" +
