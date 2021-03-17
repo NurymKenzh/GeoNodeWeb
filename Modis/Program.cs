@@ -128,180 +128,180 @@ namespace Modis
         static void Main(string[] args)
         {
             Console.WriteLine("Press ESC to stop!");
+            
+            exclusions = new List<Exclusion>();
+            List<string> exclusionsS = File.ReadAllLines(Exclusions).ToList();
+            foreach (string exclusionS in exclusionsS)
+            {
+                string[] exclusionSArray = exclusionS.Split('\t');
+                string product = exclusionSArray[0];
+                DateTime date = new DateTime(Convert.ToInt32(exclusionSArray[1].Split('-')[0]),
+                    Convert.ToInt32(exclusionSArray[1].Split('-')[1]),
+                    Convert.ToInt32(exclusionSArray[1].Split('-')[2]));
+                int count = Convert.ToInt32(exclusionSArray[3]);
+                exclusions.Add(new Exclusion()
+                {
+                    product = product,
+                    date = date,
+                    count = count
+                });
+            }
+
+            modisProducts[0] = new ModisProduct()
+            {
+                Source = "SAN/MOST",
+                Product = "MOD10A1.006",
+                StartDate = new DateTime(2000, 2, 24),
+                Period = 1,
+                DataSets = new string[7]
+                {
+                "NDSISnowCover",
+                "NDSISnowCoverBasic",
+                "NDSISnowCoverAlgorithm",
+                "NDSI",
+                "SnowAlbedo",
+                "orbitpnt",
+                "granulepnt"
+                },
+                ExtractDataSetIndexes = new int[1] { 0 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false,
+                Publish = false,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[] { },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
+            };
+            modisProducts[1] = new ModisProduct()
+            {
+                Source = "SAN/MOSA",
+                Product = "MYD10A1.006",
+                StartDate = new DateTime(2002, 7, 4),
+                Period = 1,
+                DataSets = new string[7]
+                {
+                "NDSISnowCover",
+                "NDSISnowCoverBasic",
+                "NDSISnowCoverAlgorithm",
+                "NDSI",
+                "SnowAlbedo",
+                "orbitpnt",
+                "granulepnt"
+                },
+                ExtractDataSetIndexes = new int[1] { 0 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false,
+                Publish = false,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[] { },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
+            };
+            modisProducts[2] = new ModisProduct()
+            {
+                Source = "SAN/MOST",
+                Product = "MOD10A2.006",
+                StartDate = new DateTime(2000, 2, 18),
+                Period = 8,
+                DataSets = new string[2]
+                {
+                "MaxSnowExtent",
+                "SnowCover"
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false,
+                Publish = true,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[1] { 1 },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
+            };
+            modisProducts[3] = new ModisProduct()
+            {
+                Source = "SAN/MOSA",
+                Product = "MYD10A2.006",
+                StartDate = new DateTime(2002, 7, 4),
+                Period = 8,
+                DataSets = new string[2]
+                {
+                "MaxSnowExtent",
+                "SnowCover"
+                },
+                ExtractDataSetIndexes = new int[2] { 0, 1 },
+                Spans = true,
+                Mosaic = true,
+                ConvertHdf = false,
+                Publish = true,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[1] { 1 },
+                Norm = false,
+                AnomalyStartYear = null,
+                AnomalyEndYear = null
+            };
+            modisProducts[4] = new ModisProduct()
+            {
+                Source = "SAN/MOST",
+                Product = "MOD10C2.006",
+                StartDate = new DateTime(2000, 2, 24),
+                Period = 8,
+                DataSets = new string[1]
+                {
+                "NDSI"
+                },
+                ExtractDataSetIndexes = new int[1] { 0 },
+                Spans = false,
+                Mosaic = false,
+                ConvertHdf = true,
+                Publish = true,
+                Analize = true,
+                DayDividedDataSetIndexes = new int[] { },
+                Norm = true,
+                AnomalyStartYear = 2001,
+                AnomalyEndYear = 2019
+            };
+
             while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
             {
-                exclusions = new List<Exclusion>();
-                List<string> exclusionsS = File.ReadAllLines(Exclusions).ToList();
-                foreach (string exclusionS in exclusionsS)
+                DateTime start = DateTime.Now;
+
+                DateTime dateNext = GetNextDate();
+                foreach (ModisProduct modisProduct in modisProducts)
                 {
-                    string[] exclusionSArray = exclusionS.Split('\t');
-                    string product = exclusionSArray[0];
-                    DateTime date = new DateTime(Convert.ToInt32(exclusionSArray[1].Split('-')[0]),
-                        Convert.ToInt32(exclusionSArray[1].Split('-')[1]),
-                        Convert.ToInt32(exclusionSArray[1].Split('-')[2]));
-                    int count = Convert.ToInt32(exclusionSArray[3]);
-                    exclusions.Add(new Exclusion()
-                    {
-                        product = product,
-                        date = date,
-                        count = count
-                    });
+                    ModisDownload(modisProduct, dateNext);
                 }
+                SaveNextDate();
 
-                modisProducts[0] = new ModisProduct()
-                {
-                    Source = "SAN/MOST",
-                    Product = "MOD10A1.006",
-                    StartDate = new DateTime(2000, 2, 24),
-                    Period = 1,
-                    DataSets = new string[7]
-                    {
-                    "NDSISnowCover",
-                    "NDSISnowCoverBasic",
-                    "NDSISnowCoverAlgorithm",
-                    "NDSI",
-                    "SnowAlbedo",
-                    "orbitpnt",
-                    "granulepnt"
-                    },
-                    ExtractDataSetIndexes = new int[1] { 0 },
-                    Spans = true,
-                    Mosaic = true,
-                    ConvertHdf = false,
-                    Publish = false,
-                    Analize = true,
-                    DayDividedDataSetIndexes = new int[] { },
-                    Norm = false,
-                    AnomalyStartYear = null,
-                    AnomalyEndYear = null
-                };
-                modisProducts[1] = new ModisProduct()
-                {
-                    Source = "SAN/MOSA",
-                    Product = "MYD10A1.006",
-                    StartDate = new DateTime(2002, 7, 4),
-                    Period = 1,
-                    DataSets = new string[7]
-                    {
-                    "NDSISnowCover",
-                    "NDSISnowCoverBasic",
-                    "NDSISnowCoverAlgorithm",
-                    "NDSI",
-                    "SnowAlbedo",
-                    "orbitpnt",
-                    "granulepnt"
-                    },
-                    ExtractDataSetIndexes = new int[1] { 0 },
-                    Spans = true,
-                    Mosaic = true,
-                    ConvertHdf = false,
-                    Publish = false,
-                    Analize = true,
-                    DayDividedDataSetIndexes = new int[] { },
-                    Norm = false,
-                    AnomalyStartYear = null,
-                    AnomalyEndYear = null
-                };
-                modisProducts[2] = new ModisProduct()
-                {
-                    Source = "SAN/MOST",
-                    Product = "MOD10A2.006",
-                    StartDate = new DateTime(2000, 2, 18),
-                    Period = 8,
-                    DataSets = new string[2]
-                    {
-                    "MaxSnowExtent",
-                    "SnowCover"
-                    },
-                    ExtractDataSetIndexes = new int[2] { 0, 1 },
-                    Spans = true,
-                    Mosaic = true,
-                    ConvertHdf = false,
-                    Publish = true,
-                    Analize = true,
-                    DayDividedDataSetIndexes = new int[1] { 1 },
-                    Norm = false,
-                    AnomalyStartYear = null,
-                    AnomalyEndYear = null
-                };
-                modisProducts[3] = new ModisProduct()
-                {
-                    Source = "SAN/MOSA",
-                    Product = "MYD10A2.006",
-                    StartDate = new DateTime(2002, 7, 4),
-                    Period = 8,
-                    DataSets = new string[2]
-                    {
-                    "MaxSnowExtent",
-                    "SnowCover"
-                    },
-                    ExtractDataSetIndexes = new int[2] { 0, 1 },
-                    Spans = true,
-                    Mosaic = true,
-                    ConvertHdf = false,
-                    Publish = true,
-                    Analize = true,
-                    DayDividedDataSetIndexes = new int[1] { 1 },
-                    Norm = false,
-                    AnomalyStartYear = null,
-                    AnomalyEndYear = null
-                };
-                modisProducts[4] = new ModisProduct()
-                {
-                    Source = "SAN/MOST",
-                    Product = "MOD10C2.006",
-                    StartDate = new DateTime(2000, 2, 24),
-                    Period = 8,
-                    DataSets = new string[1]
-                    {
-                    "NDSI"
-                    },
-                    ExtractDataSetIndexes = new int[1] { 0 },
-                    Spans = false,
-                    Mosaic = false,
-                    ConvertHdf = true,
-                    Publish = true,
-                    Analize = true,
-                    DayDividedDataSetIndexes = new int[] { },
-                    Norm = true,
-                    AnomalyStartYear = 2001,
-                    AnomalyEndYear = 2019
-                };
+                ModisMosaic();
+                ModisConvertTif();
+                ModisConvertHdf();
+                ModisCrop();
+                ModisNorm();
+                ModisPublish();
+                Anomaly();
+                Clouds();
+                Console.WriteLine("Press ESC to stop!");
+                AnalizeV2();
+                Console.WriteLine("Press ESC to stop!");
+                SnowPeriods();
+                Console.WriteLine("Press ESC to stop!");
 
-                while (true)
+                if (dateNext == DateTime.Today)
                 {
-                    DateTime start = DateTime.Now;
-
-                    DateTime dateNext = GetNextDate();
-                    foreach (ModisProduct modisProduct in modisProducts)
-                    {
-                        ModisDownload(modisProduct, dateNext);
-                    }
-                    SaveNextDate();
-
-                    ModisMosaic();
-                    ModisConvertTif();
-                    ModisConvertHdf();
-                    ModisCrop();
-                    ModisNorm();
-                    ModisPublish();
-                    Anomaly();
-                    Clouds();
-                    AnalizeV2();
-                    //Snow();
-                    SnowPeriods();
-
-                    if (dateNext == DateTime.Today)
-                    {
-                        Log("Sleep 4 hour");
-                        Thread.Sleep(1000 * 60 * 60 * 4);
-                    }
-                    EmptyDownloadedDir();
-
-                    DateTime finish = DateTime.Now;
-                    TimeSpan duration = finish - start;
-                    File.AppendAllText(@"E:\MODIS\time.txt", $"{start}\t{finish}\t{duration}{Environment.NewLine}");
+                    Log("Sleep 4 hour");
+                    Thread.Sleep(1000 * 60 * 60 * 4);
                 }
+                EmptyDownloadedDir();
+
+                DateTime finish = DateTime.Now;
+                TimeSpan duration = finish - start;
+                File.AppendAllText(@"E:\MODIS\time.txt", $"{start}\t{finish}\t{duration}{Environment.NewLine}");
             }
         }
 
