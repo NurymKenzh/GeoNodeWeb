@@ -118,6 +118,7 @@ namespace Modis
         static BlockingCollection<PointData> pointDatas2 = new BlockingCollection<PointData>();
         static List<SnowData> pointSnows = new List<SnowData>();
         static BlockingCollection<SnowData> pointSnowsBlocking = new BlockingCollection<SnowData>();
+        static BlockingCollection<Period> periods = new BlockingCollection<Period>();
 
         static ModisProduct[] modisProducts = new ModisProduct[5];
 
@@ -1767,11 +1768,15 @@ namespace Modis
             }
             foreach(PointData pointDataTask in pointDatasTask)
             {
-                if (pointDataTask.MOD10A1006_NDSISnowCover <= 100 && pointDataTask.MOD10A1006_NDSISnowCover != -1)
+                if (pointDataTask.date == new DateTime(2000, 5, 2))
+                {
+                    int g = 0;
+                }
+                if (pointDataTask.MOD10A1006_NDSISnowCover > 0 && pointDataTask.MOD10A1006_NDSISnowCover <= 100 && pointDataTask.MOD10A1006_NDSISnowCover != -1)
                 {
                     pointDataTask.snow = true;
                 }
-                else if (pointDataTask.MYD10A1006_NDSISnowCover <= 100 && pointDataTask.MYD10A1006_NDSISnowCover != -1)
+                else if (pointDataTask.MYD10A1006_NDSISnowCover > 0 && pointDataTask.MYD10A1006_NDSISnowCover <= 100 && pointDataTask.MYD10A1006_NDSISnowCover != -1)
                 {
                     pointDataTask.snow = true;
                 }
@@ -1791,7 +1796,7 @@ namespace Modis
                 {
                     pointDataTask.snow = true;
                 }
-                else if (pointDataTask.MOD10C2006_NDSI <= 100 && pointDataTask.MOD10C2006_NDSI != -1)
+                else if (pointDataTask.MOD10C2006_NDSI > 0 && pointDataTask.MOD10C2006_NDSI <= 100 && pointDataTask.MOD10C2006_NDSI != -1)
                 {
                     pointDataTask.snow = true;
                 }
@@ -1961,6 +1966,14 @@ namespace Modis
 
         private static void SnowPeriods()
         {
+            // летом пересчитывать периоды нет смысла
+            //DateTime date = GetNextDate();
+            //if (date.Month > 5 && date.Month < 10)
+            //{
+            //    return;
+            //}
+
+            while (periods.TryTake(out _)) { }
             List<Task> taskList = new List<Task>();
             string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
             using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
@@ -1976,6 +1989,19 @@ namespace Modis
                 }
             }
             Task.WaitAll(taskList.ToArray());
+            StringBuilder text = new StringBuilder();
+            foreach (Period period in periods)
+            {
+                text.Append($"{period.pointid}\t" +
+                    $"'{period.start.ToString("yyyy-MM-dd")}'\t" +
+                    $"'{period.finish.ToString("yyyy-MM-dd")}'\t" +
+                    $"{period.period}" + Environment.NewLine);
+            }
+            File.AppendAllText(Path.Combine(BuferFolder, "modispointsperiods.txt"), text.ToString());
+            CopyToDb($"COPY public.modispointsperiods (pointid, start, finish, period) FROM '{Path.Combine(BuferFolder, "modispointsperiods.txt")}' DELIMITER E'\\t';");
+            File.Delete(Path.Combine(BuferFolder, "modispointsperiods.txt"));
+
+            while (periods.TryTake(out _)) { }
         }
 
         private class Period
@@ -1988,15 +2014,19 @@ namespace Modis
 
         private static void SnowPeriodsTask(int PointId)
         {
+            DateTime date = GetNextDate();
+            date = new DateTime(date.Year - 1, 7, 15);
+
             string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
             using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
             {
-                List<Period> periods = new List<Period>();
+                List<Period> periodsTask = new List<Period>();
                 connection.Open();
                 string query = "";
-                List<SnowData> snows = connection.Query<SnowData>($"SELECT pointid, date, snow" +
-                    $" FROM public.modispointssnow" +
+                List<PointData> snows = connection.Query<PointData>($"SELECT pointid, date, snow" +
+                    $" FROM public.modispoints" +
                     $" WHERE pointid = {PointId}" +
+                    $" AND date < '{date.ToString("yyyy-MM-dd")}'" +
                     $" ORDER BY date;").ToList();
                 // заполнить snows (пропущенные даты)
                 if (snows.Count() == 0)
@@ -2008,13 +2038,13 @@ namespace Modis
                 {
                     if (snows.Count(s => s.date == d) == 0)
                     {
-                        snows.Add(new SnowData()
+                        snows.Add(new PointData()
                         {
                             pointid = PointId,
                             date = d,
                             snow = false
                         });
-                        query = $"INSERT INTO public.modispointssnow(pointid, date, snow)" +
+                        query = $"INSERT INTO public.modispoints(pointid, date, snow)" +
                             $" VALUES ({PointId}," +
                             $" '{d.ToString("yyyy-MM-dd")}'," +
                             $" {false.ToString()});";
@@ -2022,19 +2052,19 @@ namespace Modis
                     }
                 }
                 // 3 дня без снега
-                snows.Add(new SnowData()
+                snows.Add(new PointData()
                 {
                     pointid = PointId,
                     date = snows.Min(s => s.date).AddDays(-1),
                     snow = false
                 });
-                snows.Add(new SnowData()
+                snows.Add(new PointData()
                 {
                     pointid = PointId,
                     date = snows.Min(s => s.date).AddDays(-1),
                     snow = false
                 });
-                snows.Add(new SnowData()
+                snows.Add(new PointData()
                 {
                     pointid = PointId,
                     date = snows.Min(s => s.date).AddDays(-1),
@@ -2057,7 +2087,7 @@ namespace Modis
                             int days = (int)(snows[j - 1].date - snows[i + 2].date).TotalDays + 1;
                             if (days >= 30)
                             {
-                                periods.Add(new Period()
+                                periodsTask.Add(new Period()
                                 {
                                     pointid = PointId,
                                     start = snows[i].date,
@@ -2070,17 +2100,19 @@ namespace Modis
                         }
                     }
                 }
-                // delete old periods
+                // delete old periods (old data from modispointsperiods)
                 query = $"DELETE FROM public.modispointsperiods" +
-                    $" WHERE pointid = {PointId};";
+                    $" WHERE pointid = {PointId}" +
+                    $" AND start < '{date.ToString("yyyy-MM-dd")}';";
                 connection.Execute(query);
                 // add new periods
-                foreach(Period period in periods)
+                foreach(Period period in periodsTask)
                 {
-                    query = $"INSERT INTO public.modispointsperiods" +
-                        $"(pointid, start, finish, period)" +
-                        $" VALUES ({period.pointid}, '{period.start.ToString("yyyy-MM-dd")}', '{period.finish.ToString("yyyy-MM-dd")}', {period.period});";
-                    connection.Execute(query);
+                    //query = $"INSERT INTO public.modispointsperiods" +
+                    //    $"(pointid, start, finish, period)" +
+                    //    $" VALUES ({period.pointid}, '{period.start.ToString("yyyy-MM-dd")}', '{period.finish.ToString("yyyy-MM-dd")}', {period.period});";
+                    //connection.Execute(query);
+                    periods.Add(period);
                 }
                 connection.Close();
             }
