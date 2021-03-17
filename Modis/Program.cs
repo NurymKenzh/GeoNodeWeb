@@ -65,27 +65,28 @@ namespace Modis
         //const string ModisUser = "sandugash_2004",
         //    ModisPassword = "Arina2009",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"C:\MODIS\Downloading",
-        //    DownloadedDir = @"C:\MODIS\Downloaded",
-        //    Exclusions = @"C:\MODIS\exclusions.txt",
+        //    DownloadingDir = @"E:\MODIS\Downloading",
+        //    DownloadedDir = @"E:\MODIS\Downloaded",
+        //    Exclusions = @"E:\MODIS\exclusions.txt",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
         //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"C:\MODIS\Mosaic",
-        //    ConvertDir = @"C:\MODIS\Convert",
-        //    ArchiveDir = @"C:\MODIS\Convert",!!!
+        //    MosaicDir = @"E:\MODIS\Mosaic",
+        //    ConvertDir = @"E:\MODIS\Convert",
+        //    ArchiveDir = @"C:\MODIS\Archive",
         //    ModisProjection = "4326",
-        //    GeoServerDir = @"C:\Program Files (x86)\GeoServer 2.13.4\data_dir\data\MODIS",
+        //    GeoServerDir = @"E:\GeoServer\data_dir\data\MODIS",
         //    GeoServerWorkspace = "MODIS",
         //    GeoServerUser = "admin",
         //    GeoServerPassword = "geoserver",
         //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"C:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
-        //    ExtractRasterValueByPoint = @"C:\MODIS\Python\ExtractRasterValueByPoint.py",
-        //    CloudMask = @"C:\MODIS\Python\CloudMask_v03.py",
+        //    AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
+        //    ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
+        //    CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
         //    runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
         //    postgresPassword = "postgres",
         //    db = "GeoNodeWebModis",
-        //    BuferFolder = @"C:\MODIS";
+        //    BuferFolder = @"E:\MODIS";
+
         const string ModisUser = "hvreren",
             ModisPassword = "Querty123",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
@@ -1966,12 +1967,12 @@ namespace Modis
 
         private static void SnowPeriods()
         {
-            // летом пересчитывать периоды нет смысла
-            //DateTime date = GetNextDate();
-            //if (date.Month > 5 && date.Month < 10)
-            //{
-            //    return;
-            //}
+            // don't calc from June to September
+            DateTime date = GetNextDate();
+            if (date.Month > 5 && date.Month < 10)
+            {
+                return;
+            }
 
             while (periods.TryTake(out _)) { }
             List<Task> taskList = new List<Task>();
