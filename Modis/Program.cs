@@ -2027,7 +2027,7 @@ namespace Modis
                 List<PointData> snows = connection.Query<PointData>($"SELECT pointid, date, snow" +
                     $" FROM public.modispoints" +
                     $" WHERE pointid = {PointId}" +
-                    $" AND date < '{date.ToString("yyyy-MM-dd")}'" +
+                    $" AND date > '{date.ToString("yyyy-MM-dd")}'" +
                     $" ORDER BY date;").ToList();
                 // заполнить snows (пропущенные даты)
                 if (snows.Count() == 0)
@@ -2104,10 +2104,10 @@ namespace Modis
                 // delete old periods (old data from modispointsperiods)
                 query = $"DELETE FROM public.modispointsperiods" +
                     $" WHERE pointid = {PointId}" +
-                    $" AND start < '{date.ToString("yyyy-MM-dd")}';";
+                    $" AND start > '{date.ToString("yyyy-MM-dd")}';";
                 connection.Execute(query);
                 // add new periods
-                foreach(Period period in periodsTask)
+                foreach (Period period in periodsTask)
                 {
                     //query = $"INSERT INTO public.modispointsperiods" +
                     //    $"(pointid, start, finish, period)" +
