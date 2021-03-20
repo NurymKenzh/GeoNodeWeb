@@ -32,6 +32,7 @@ namespace Modis
             public int? AnomalyStartYear;
             public int? AnomalyEndYear;
             public bool Analize = false;
+            public bool ZonalStatRaster = false;
             public int[] DayDividedDataSetIndexes;
             public int Period;
         }
@@ -51,6 +52,16 @@ namespace Modis
             public int MYD10A2006_SnowCover;
             public int MOD10C2006_NDSI;
             public bool snow;
+        }
+
+        class ZonalStat
+        {
+            public string shp;
+            public int gridid;
+            public DateTime date;
+            public decimal area;
+            public int snow;
+            public int nosnow;
         }
 
         class Exclusion
@@ -82,6 +93,7 @@ namespace Modis
         //    AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
         //    ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
         //    CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
+        //    ZonalStatRaster = @"E:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
         //    runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
         //    postgresPassword = "postgres",
         //    db = "GeoNodeWebModis",
@@ -107,10 +119,16 @@ namespace Modis
             AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
             ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
             CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
+            ZonalStatRaster = @"E:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
             runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
             postgresPassword = "postgres",
             db = "GeoNodeWebModis",
             BuferFolder = @"E:\MODIS";
+
+        static readonly string[] ZonalShps = {
+            @"E:\MODIS\shp\WatershedsIleBasinOrder0.shp",
+            @"E:\MODIS\shp\WatershedsIleBasinOrder1.shp",
+            @"E:\MODIS\shp\WatershedsIleBasinOrder2.shp" };
 
         const string cloudsMaskSourceName = "CLOU",
             cloudsMaskSourceFinalName = "CLMA"; // CLOUD MASK
@@ -120,6 +138,7 @@ namespace Modis
         static List<SnowData> pointSnows = new List<SnowData>();
         static BlockingCollection<SnowData> pointSnowsBlocking = new BlockingCollection<SnowData>();
         static BlockingCollection<Period> periods = new BlockingCollection<Period>();
+        static List<ZonalStat> zonalStats = new List<ZonalStat>();
 
         static ModisProduct[] modisProducts = new ModisProduct[5];
 
@@ -169,6 +188,7 @@ namespace Modis
                 ConvertHdf = false,
                 Publish = false,
                 Analize = true,
+                ZonalStatRaster = true,
                 DayDividedDataSetIndexes = new int[] { },
                 Norm = false,
                 AnomalyStartYear = null,
@@ -196,6 +216,7 @@ namespace Modis
                 ConvertHdf = false,
                 Publish = false,
                 Analize = true,
+                ZonalStatRaster = true,
                 DayDividedDataSetIndexes = new int[] { },
                 Norm = false,
                 AnomalyStartYear = null,
@@ -218,6 +239,7 @@ namespace Modis
                 ConvertHdf = false,
                 Publish = true,
                 Analize = true,
+                ZonalStatRaster = true,
                 DayDividedDataSetIndexes = new int[1] { 1 },
                 Norm = false,
                 AnomalyStartYear = null,
@@ -240,6 +262,7 @@ namespace Modis
                 ConvertHdf = false,
                 Publish = true,
                 Analize = true,
+                ZonalStatRaster = true,
                 DayDividedDataSetIndexes = new int[1] { 1 },
                 Norm = false,
                 AnomalyStartYear = null,
@@ -261,6 +284,7 @@ namespace Modis
                 ConvertHdf = true,
                 Publish = true,
                 Analize = true,
+                ZonalStatRaster = false,
                 DayDividedDataSetIndexes = new int[] { },
                 Norm = true,
                 AnomalyStartYear = 2001,
@@ -287,9 +311,11 @@ namespace Modis
                 Anomaly();
                 Clouds();
                 Console.WriteLine("Press ESC to stop!");
-                AnalizeV2();
-                Console.WriteLine("Press ESC to stop!");
-                SnowPeriods();
+                //AnalizeV2();
+                //Console.WriteLine("Press ESC to stop!");
+                //SnowPeriods();
+                //Console.WriteLine("Press ESC to stop!");
+                AnalizeZonalStatRaster();
                 Console.WriteLine("Press ESC to stop!");
 
                 if (dateNext == DateTime.Today)
@@ -402,32 +428,27 @@ namespace Modis
             try
             {
                 process.StartInfo.UseShellExecute = false;
-                Thread.Sleep(300);
                 process.StartInfo.RedirectStandardOutput = true;
-                Thread.Sleep(300);
                 process.StartInfo.RedirectStandardInput = true;
-                Thread.Sleep(300);
                 process.StartInfo.RedirectStandardError = true;
-                Thread.Sleep(300);
                 process.StartInfo.EnvironmentVariables["PGPASSWORD"] = postgresPassword;
                 process.StartInfo.FileName = runpsqlPath;
-                Thread.Sleep(300);
                 process.Start();
                 
                 process.StandardInput.WriteLine("");
-                Thread.Sleep(300);
+                Thread.Sleep(1000);
                 process.StandardInput.WriteLine(db);
-                Thread.Sleep(300);
+                Thread.Sleep(1000);
                 process.StandardInput.WriteLine("");
-                Thread.Sleep(300);
+                Thread.Sleep(1000);
                 process.StandardInput.WriteLine("");
-                Thread.Sleep(300);
+                Thread.Sleep(1000);
                 //process.StandardInput.WriteLine($"COPY public.modispoints (pointid, product, dataset, date, value) FROM 'E:/MODIS/modispoints.txt' DELIMITER E'\\t';" + Environment.NewLine + "\\q");
                 process.StandardInput.WriteLine(Command + Environment.NewLine + "\\q");
-                Thread.Sleep(300);
+                Thread.Sleep(1000);
                 //process.StandardInput.WriteLine("\\q");
                 process.StandardInput.WriteLine("");
-                Thread.Sleep(300);
+                Thread.Sleep(1000);
 
                 string output = process.StandardOutput.ReadToEnd();
                 Log(output);
@@ -2117,6 +2138,271 @@ namespace Modis
                 }
                 connection.Close();
             }
+        }
+
+        private static void AnalizeZonalStatRaster()
+        {
+            List<Task> taskList = new List<Task>();
+            zonalStats.Clear();
+            // load 8-day zonalStats from DB
+            // ...
+
+            foreach (ModisProduct modisProduct in modisProducts)
+            {
+                if (modisProduct.ZonalStatRaster)
+                {
+                    if (modisProduct.Period == 1)
+                    {
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceFinalName}_{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                        {
+                            if (!Path.GetFileName(file).Contains("BASE"))
+                            {
+                                //taskList.Add(Task.Factory.StartNew(() => AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                            }
+                        }
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                        {
+                            if (!Path.GetFileName(file).Contains("BASE"))
+                            {
+                                if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
+                                {
+                                    //taskList.Add(Task.Factory.StartNew(() => AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                    AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
+                        {
+                            if (!Path.GetFileName(file).Contains("BASE"))
+                            {
+                                //taskList.Add(Task.Factory.StartNew(() => AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
+                            }
+                        }
+                    }
+                }
+            }
+            Task.WaitAll(taskList.ToArray());
+            StringBuilder text = new StringBuilder();
+            foreach (ZonalStat zonalStat in zonalStats)
+            {
+                text.Append($"{zonalStat.shp}\t" +
+                    $"{zonalStat.gridid}\t" +
+                    $"'{zonalStat.date.ToString("yyyy-MM-dd")}'\t" +
+                    $"{zonalStat.area}\t" +
+                    $"{zonalStat.snow}\t" +
+                    $"{zonalStat.nosnow}" + Environment.NewLine);
+            }
+            File.AppendAllText(Path.Combine(BuferFolder, "modiszonalstats.txt"), text.ToString());
+            CopyToDb($"COPY public.modiszonalstats (shp, gridid, date, area, snow, nosnow) FROM '{Path.Combine(BuferFolder, "modiszonalstats.txt")}' DELIMITER E'\\t';");
+            File.Delete(Path.Combine(BuferFolder, "modiszonalstats.txt"));
+            zonalStats.Clear();
+        }
+
+        private static void AnalizeZonalStatRasterTask(string TifFile)
+        {
+            List<ZonalStat> zonalStatsTask = new List<ZonalStat>();
+            DateTime date = GetTifDate(TifFile);
+            string raster = Path.GetFileNameWithoutExtension(TifFile);
+            string[] TifFileArray = raster.Split('_');
+            string product = TifFileArray[2],
+                dataset = TifFileArray[4];
+            ModisProduct modisProduct = modisProducts.FirstOrDefault(m => m.Product.Replace(".", "") == product);
+            int datasetIndex = -1;
+            for (int i = 0; i < modisProduct.DataSets.Count(); i++)
+            {
+                if (modisProduct.DataSets[i] == dataset)
+                {
+                    datasetIndex = i;
+                    break;
+                }
+            }
+            foreach (string zonalShp in ZonalShps)
+            {
+                string arguments = $"{ZonalStatRaster}" +
+                        $" \"{zonalShp}\"" +
+                        $" \"{TifFile}\"",
+                    output = GDALExecute("python",
+                        GeoServerDir,
+                        arguments),
+                        shp = Path.GetFileNameWithoutExtension(zonalShp);
+                string[] outputs = output.Split(Environment.NewLine);
+                foreach (string s in outputs)
+                {
+                    if (s.Contains("OrderedDict"))
+                    {
+                        ZonalStat zonalStat = new ZonalStat();
+                        List<ZonalStat> zonalStats1or8 = new List<ZonalStat>();
+                        zonalStat.date = date;
+                        zonalStat.shp = shp;
+                        zonalStat.snow = 0;
+                        zonalStat.nosnow = 0;
+                        string sm = s.Replace("OrderedDict([(", "");
+                        sm = sm.Replace(")])", "").Replace("'", "");
+                        string[] pairs = sm.Split("), (");
+                        List<int> valuesList = new List<int>();
+                        List<int> countsList = new List<int>();
+                        foreach (string pair in pairs)
+                        {
+                            string[] values = pair.Split(", ");
+                            int v0 = 0;
+                            if (values[0] == "Area_sq_km")
+                            {
+                                zonalStat.area = Convert.ToDecimal(values[1]);
+                            }
+                            else if (values[0] == "GridID")
+                            {
+                                zonalStat.gridid = Convert.ToInt32(values[1]);
+                            }
+                            else if (int.TryParse(values[0], out v0))
+                            {
+                                valuesList.Add(v0);
+                                countsList.Add(Convert.ToInt32(values[1]));
+                            }
+                        }
+                        if (modisProduct.DayDividedDataSetIndexes.Contains(datasetIndex))
+                        {
+                            for (int i = 0; i < valuesList.Count(); i++)
+                            {
+                                BitArray bits = new BitArray(new byte[] { (byte)valuesList[i] });
+                                for (int d = 0; d < bits.Count; d++)
+                                {
+                                    DateTime date8 = date.AddDays(d - bits.Count + 1);
+                                    int valuei = Convert.ToInt32(bits[d]);
+                                    bool snow = SnowOrNo(product, dataset, valuei);
+                                    if (!zonalStats1or8.Exists(z => z.date == date8))
+                                    {
+                                        zonalStats1or8.Add(new ZonalStat()
+                                        {
+                                            area = zonalStat.area,
+                                            date = date8,
+                                            gridid = zonalStat.gridid,
+                                            shp = zonalStat.shp = shp,
+                                            snow = snow ? countsList[i] : 0,
+                                            nosnow = !snow ? countsList[i] : 0
+                                        });
+                                    }
+                                    else
+                                    {
+                                        ZonalStat zonalStat8 = zonalStats1or8.FirstOrDefault(z => z.date == date8);
+                                        if (snow)
+                                        {
+                                            zonalStat8.snow += countsList[i];
+                                        }
+                                        else
+                                        {
+                                            zonalStat8.nosnow += countsList[i];
+                                        }
+                                    }
+                                }
+                            }
+                            zonalStatsTask.AddRange(zonalStats1or8);
+                        }
+                        else
+                        {
+                            for (int i = 0; i < valuesList.Count(); i++)
+                            {
+                                if (SnowOrNo(product, dataset, valuesList[i]))
+                                {
+                                    zonalStat.snow += countsList[i];
+                                }
+                                else
+                                {
+                                    zonalStat.nosnow += countsList[i];
+                                }
+                            }
+                            zonalStatsTask.Add(zonalStat);
+                        }
+                    }
+                }
+            }
+            zonalStats.AddRange(zonalStatsTask);
+        }
+
+        private static bool SnowOrNo(
+            string Product,
+            string Dataset,
+            int Value)
+        {
+            bool snow = false;
+            switch ($"{Product}_{Dataset}")
+            {
+                case "MOD10A1006_NDSISnowCover":
+                    if (Value > 0 && Value <= 100 && Value != -1)
+                    {
+                        snow = true;
+                    }
+                    else
+                    {
+                        snow = false;
+                    }
+                    break;
+                case "MYD10A1006_NDSISnowCover":
+                    if (Value > 0 && Value <= 100 && Value != -1)
+                    {
+                        snow = true;
+                    }
+                    else
+                    {
+                        snow = false;
+                    }
+                    break;
+                case "MOD10A2006_MaxSnowExtent":
+                    if (Value == 200)
+                    {
+                        snow = true;
+                    }
+                    else
+                    {
+                        snow = false;
+                    }
+                    break;
+                case "MOD10A2006_SnowCover":
+                    if (Value == 1)
+                    {
+                        snow = true;
+                    }
+                    else
+                    {
+                        snow = false;
+                    }
+                    break;
+                case "MYD10A2006_MaxSnowExtent":
+                    if (Value == 200)
+                    {
+                        snow = true;
+                    }
+                    else
+                    {
+                        snow = false;
+                    }
+                    break;
+                case "MYD10A2006_SnowCover":
+                    if (Value == 1)
+                    {
+                        snow = true;
+                    }
+                    else
+                    {
+                        snow = false;
+                    }
+                    break;
+                case "MOD10C2006_NDSI":
+                    if (Value > 0 && Value <= 100 && Value != -1)
+                    {
+                        snow = true;
+                    }
+                    else
+                    {
+                        snow = false;
+                    }
+                    break;
+            }
+            return snow;
         }
 
         //private static List<DateTime> starts = new List<DateTime>(),
