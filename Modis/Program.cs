@@ -62,6 +62,21 @@ namespace Modis
             public decimal area;
             public int snow;
             public int nosnow;
+            public int count;
+            public decimal snowperc
+            {
+                get
+                {
+                    return count > 0 ? (decimal) snow / count : 0;
+                }
+            }
+            public decimal nosnowperc
+            {
+                get
+                {
+                    return count > 0 ? (decimal) nosnow / count : 0;
+                }
+            }
         }
 
         class Exclusion
@@ -311,10 +326,10 @@ namespace Modis
                 Anomaly();
                 Clouds();
                 Console.WriteLine("Press ESC to stop!");
-                //AnalizeV2();
-                //Console.WriteLine("Press ESC to stop!");
-                //SnowPeriods();
-                //Console.WriteLine("Press ESC to stop!");
+                AnalizeV2();
+                Console.WriteLine("Press ESC to stop!");
+                SnowPeriods();
+                Console.WriteLine("Press ESC to stop!");
                 AnalizeZonalStatRaster();
                 Console.WriteLine("Press ESC to stop!");
 
@@ -2144,8 +2159,18 @@ namespace Modis
         {
             List<Task> taskList = new List<Task>();
             zonalStats.Clear();
-            // load 8-day zonalStats from DB
-            // ...
+            List<string> zonalstattiffsDB = new List<string>(),
+                zonalstattiffsNew = new List<string>();
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            {
+                connection.Open();
+
+                string query = $"SELECT name" +
+                    $" FROM public.modiszonalstattiffs;";
+                zonalstattiffsDB = connection.Query<string>(query).ToList();
+
+                connection.Close();
+            }
 
             foreach (ModisProduct modisProduct in modisProducts)
             {
@@ -2155,19 +2180,21 @@ namespace Modis
                     {
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceFinalName}_{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            if (!Path.GetFileName(file).Contains("BASE"))
+                            if (!Path.GetFileName(file).Contains("BASE") && !zonalstattiffsDB.Contains(Path.GetFileName(file)))
                             {
                                 //taskList.Add(Task.Factory.StartNew(() => AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                zonalstattiffsNew.Add(Path.GetFileName(file));
                                 AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
                             }
                         }
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            if (!Path.GetFileName(file).Contains("BASE"))
+                            if (!Path.GetFileName(file).Contains("BASE") && !zonalstattiffsDB.Contains(Path.GetFileName(file)))
                             {
                                 if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
                                 {
                                     //taskList.Add(Task.Factory.StartNew(() => AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                    zonalstattiffsNew.Add(Path.GetFileName(file));
                                     AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
                                 }
                             }
@@ -2177,9 +2204,10 @@ namespace Modis
                     {
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            if (!Path.GetFileName(file).Contains("BASE"))
+                            if (!Path.GetFileName(file).Contains("BASE") && !zonalstattiffsDB.Contains(Path.GetFileName(file)))
                             {
                                 //taskList.Add(Task.Factory.StartNew(() => AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                zonalstattiffsNew.Add(Path.GetFileName(file));
                                 AnalizeZonalStatRasterTask(Path.Combine(GeoServerDir, Path.GetFileName(file)));
                             }
                         }
@@ -2187,6 +2215,18 @@ namespace Modis
                 }
             }
             Task.WaitAll(taskList.ToArray());
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            {
+                connection.Open();
+                foreach(string zonalstattiff in zonalstattiffsNew)
+                {
+                    string query = $"INSERT INTO public.modiszonalstattiffs(name) VALUES ('{zonalstattiff}');";
+                    connection.Execute(query);
+                }
+
+                connection.Close();
+            }
+
             StringBuilder text = new StringBuilder();
             foreach (ZonalStat zonalStat in zonalStats)
             {
@@ -2195,10 +2235,11 @@ namespace Modis
                     $"'{zonalStat.date.ToString("yyyy-MM-dd")}'\t" +
                     $"{zonalStat.area}\t" +
                     $"{zonalStat.snow}\t" +
-                    $"{zonalStat.nosnow}" + Environment.NewLine);
+                    $"{zonalStat.nosnow}\t" +
+                    $"{zonalStat.count}" + Environment.NewLine);
             }
             File.AppendAllText(Path.Combine(BuferFolder, "modiszonalstats.txt"), text.ToString());
-            CopyToDb($"COPY public.modiszonalstats (shp, gridid, date, area, snow, nosnow) FROM '{Path.Combine(BuferFolder, "modiszonalstats.txt")}' DELIMITER E'\\t';");
+            CopyToDb($"COPY public.modiszonalstats (shp, gridid, date, area, snow, nosnow, count) FROM '{Path.Combine(BuferFolder, "modiszonalstats.txt")}' DELIMITER E'\\t';");
             File.Delete(Path.Combine(BuferFolder, "modiszonalstats.txt"));
             zonalStats.Clear();
         }
@@ -2236,11 +2277,11 @@ namespace Modis
                     if (s.Contains("OrderedDict"))
                     {
                         ZonalStat zonalStat = new ZonalStat();
-                        List<ZonalStat> zonalStats1or8 = new List<ZonalStat>();
                         zonalStat.date = date;
                         zonalStat.shp = shp;
                         zonalStat.snow = 0;
                         zonalStat.nosnow = 0;
+                        zonalStat.count = 0;
                         string sm = s.Replace("OrderedDict([(", "");
                         sm = sm.Replace(")])", "").Replace("'", "");
                         string[] pairs = sm.Split("), (");
@@ -2258,11 +2299,40 @@ namespace Modis
                             {
                                 zonalStat.gridid = Convert.ToInt32(values[1]);
                             }
+                            else if (values[0] == "count")
+                            {
+                                zonalStat.count = Convert.ToInt32(values[1]);
+                            }
                             else if (int.TryParse(values[0], out v0))
                             {
                                 valuesList.Add(v0);
                                 countsList.Add(Convert.ToInt32(values[1]));
                             }
+                        }
+                        // load 8-day zonalStats from DB
+                        List<ZonalStat> zonalStats1or8 = new List<ZonalStat>();
+                        List<ZonalStat> zonalStatsDB = new List<ZonalStat>();
+                        using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+                        {
+                            connection.Open();
+
+                            // modiszonalstats - добавить данные за последние 8 дней с базы по полигону
+                            string query = $"SELECT shp, gridid, date, area, snow, nosnow, count" +
+                                $" FROM public.modiszonalstats" +
+                                $" WHERE shp = '{Path.GetFileNameWithoutExtension(zonalShp)}'" +
+                                $" AND date > '{date.AddDays(-8).ToString("yyyy-MM-dd")}'" +
+                                $" AND gridid = {zonalStat.gridid};";
+                            var zonalStatDB = connection.Query<ZonalStat>(query);
+                            zonalStatsDB.AddRange(zonalStatDB.ToList());
+
+                            // удалить данные с базы за последние 8 дней по полигону
+                            query = $"DELETE FROM public.modiszonalstats" +
+                                $" WHERE shp = '{Path.GetFileNameWithoutExtension(zonalShp)}'" +
+                                $" AND date > '{date.AddDays(-8).ToString("yyyy-MM-dd")}'" +
+                                $" AND gridid = {zonalStat.gridid};";
+                            connection.Execute(query);
+
+                            connection.Close();
                         }
                         if (modisProduct.DayDividedDataSetIndexes.Contains(datasetIndex))
                         {
@@ -2283,7 +2353,8 @@ namespace Modis
                                             gridid = zonalStat.gridid,
                                             shp = zonalStat.shp = shp,
                                             snow = snow ? countsList[i] : 0,
-                                            nosnow = !snow ? countsList[i] : 0
+                                            nosnow = !snow ? countsList[i] : 0,
+                                            count = zonalStat.count
                                         });
                                     }
                                     else
@@ -2300,7 +2371,6 @@ namespace Modis
                                     }
                                 }
                             }
-                            zonalStatsTask.AddRange(zonalStats1or8);
                         }
                         else
                         {
@@ -2315,12 +2385,34 @@ namespace Modis
                                     zonalStat.nosnow += countsList[i];
                                 }
                             }
-                            zonalStatsTask.Add(zonalStat);
+                            zonalStats1or8.Add(zonalStat);
                         }
+                        zonalStatsTask.AddRange(zonalStatsDB);
+                        zonalStatsTask.AddRange(zonalStats1or8);
                     }
                 }
             }
-            zonalStats.AddRange(zonalStatsTask);
+            foreach (ZonalStat zonalStat1or8 in zonalStatsTask)
+            {
+                if (!zonalStats.Exists(z => z.date == zonalStat1or8.date &&
+                    z.shp == zonalStat1or8.shp &&
+                    z.gridid == zonalStat1or8.gridid))
+                {
+                    zonalStats.Add(zonalStat1or8);
+                }
+                else
+                {
+                    ZonalStat zonalStatExist = zonalStats.FirstOrDefault(z => z.date == zonalStat1or8.date &&
+                        z.shp == zonalStat1or8.shp &&
+                        z.gridid == zonalStat1or8.gridid);
+                    if (zonalStat1or8.count >= zonalStatExist.count && zonalStat1or8.snowperc > zonalStatExist.snowperc)
+                    {
+                        zonalStatExist.snow = zonalStat1or8.snow;
+                        zonalStatExist.nosnow = zonalStat1or8.nosnow;
+                        zonalStatExist.count = zonalStat1or8.count;
+                    }
+                }
+            }
         }
 
         private static bool SnowOrNo(
