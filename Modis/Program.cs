@@ -958,32 +958,31 @@ namespace Modis
 
         private static void ModisPublishTask(string TifFile)
         {
-            // uncomment
-            //string layerName = Path.GetFileNameWithoutExtension(TifFile);
-            //// store
-            //string publishParameters = $" -v -u" +
-            //    $" {GeoServerUser}:{GeoServerPassword}" +
-            //    $" -POST -H \"Content-type: text/xml\"" +
-            //    $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
-            //    $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
-            //    $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
-            //CurlBatExecute(publishParameters);
-            //// layer
-            //publishParameters = $" -v -u" +
-            //    $" {GeoServerUser}:{GeoServerPassword}" +
-            //    $" -PUT -H \"Content-type: text/xml\"" +
-            //    $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
-            //    $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
-            //CurlBatExecute(publishParameters);
-            //// style
-            //string[] a_layerName = layerName.Split('_');
-            //string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}";
-            //publishParameters = $" -v -u" +
-            //    $" {GeoServerUser}:{GeoServerPassword}" +
-            //    $" -X PUT -H \"Content-type: text/xml\"" +
-            //    $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
-            //    $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
-            //CurlBatExecute(publishParameters);
+            string layerName = Path.GetFileNameWithoutExtension(TifFile);
+            // store
+            string publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -POST -H \"Content-type: text/xml\"" +
+                $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
+                $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
+                $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
+            CurlBatExecute(publishParameters);
+            // layer
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
+                $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
+            CurlBatExecute(publishParameters);
+            // style
+            string[] a_layerName = layerName.Split('_');
+            string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}";
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -X PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
+                $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
+            CurlBatExecute(publishParameters);
         }
 
         private static void Anomaly()
@@ -1077,33 +1076,32 @@ namespace Modis
                 GeoServerDir,
                 arguments);
 
-            // uncomment
-            //// publish
-            //string layerName = Path.GetFileNameWithoutExtension(anomalyFile);
-            //// store
-            //string publishParameters = $" -v -u" +
-            //    $" {GeoServerUser}:{GeoServerPassword}" +
-            //    $" -POST -H \"Content-type: text/xml\"" +
-            //    $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
-            //    $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
-            //    $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
-            //CurlBatExecute(publishParameters);
-            //// layer
-            //publishParameters = $" -v -u" +
-            //    $" {GeoServerUser}:{GeoServerPassword}" +
-            //    $" -PUT -H \"Content-type: text/xml\"" +
-            //    $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
-            //    $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
-            //CurlBatExecute(publishParameters);
-            //// style
-            //string[] a_layerName = layerName.Split('_');
-            //string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}_{a_layerName[7]}";
-            //publishParameters = $" -v -u" +
-            //    $" {GeoServerUser}:{GeoServerPassword}" +
-            //    $" -X PUT -H \"Content-type: text/xml\"" +
-            //    $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
-            //    $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
-            //CurlBatExecute(publishParameters);
+            // publish
+            string layerName = Path.GetFileNameWithoutExtension(anomalyFile);
+            // store
+            string publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -POST -H \"Content-type: text/xml\"" +
+                $" -d \"<coverageStore><name>{layerName}</name><type>GeoTIFF</type><enabled>true</enabled><workspace>{GeoServerWorkspace}</workspace><url>" +
+                $"/data/{GeoServerWorkspace}/{layerName}.tif</url></coverageStore>\"" +
+                $" {GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores?configure=all";
+            CurlBatExecute(publishParameters);
+            // layer
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<coverage><name>{layerName}</name><title>{layerName}</title><defaultInterpolationMethod><name>nearest neighbor</name></defaultInterpolationMethod></coverage>\"" +
+                $" \"{GeoServerURL}rest/workspaces/{GeoServerWorkspace}/coveragestores/{layerName}/coverages?recalculate=nativebbox\"";
+            CurlBatExecute(publishParameters);
+            // style
+            string[] a_layerName = layerName.Split('_');
+            string style = $"{a_layerName[1]}_{a_layerName[2]}_{a_layerName[3]}_{a_layerName[4]}_{a_layerName[7]}";
+            publishParameters = $" -v -u" +
+                $" {GeoServerUser}:{GeoServerPassword}" +
+                $" -X PUT -H \"Content-type: text/xml\"" +
+                $" -d \"<layer><defaultStyle><name>{style}</name></defaultStyle></layer>\"" +
+                $" {GeoServerURL}rest/layers/{GeoServerWorkspace}:{layerName}.xml";
+            CurlBatExecute(publishParameters);
         }
 
         private static void Clouds()
