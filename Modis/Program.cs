@@ -2052,7 +2052,7 @@ namespace Modis
             DateTime date = GetNextDate();
             date = new DateTime(date.Year - 1, 7, 15);
 
-            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
+            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;CommandTimeout=0;Keepalive=0;";
             using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
             {
                 List<Period> periodsTask = new List<Period>();
