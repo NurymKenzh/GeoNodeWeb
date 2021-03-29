@@ -88,34 +88,8 @@ namespace Modis
 
         const int threadsCount = 4;
 
-        //const string ModisUser = "sandugash_2004",
-        //    ModisPassword = "Arina2009",
-        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"E:\MODIS\Downloading",
-        //    DownloadedDir = @"E:\MODIS\Downloaded",
-        //    Exclusions = @"E:\MODIS\exclusions.txt",
-        //    CMDPath = @"C:\Windows\system32\cmd.exe",
-        //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"E:\MODIS\Mosaic",
-        //    ConvertDir = @"E:\MODIS\Convert",
-        //    ArchiveDir = @"C:\MODIS\Archive",
-        //    ModisProjection = "4326",
-        //    GeoServerDir = @"E:\GeoServer\data_dir\data\MODIS",
-        //    GeoServerWorkspace = "MODIS",
-        //    GeoServerUser = "admin",
-        //    GeoServerPassword = "geoserver",
-        //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
-        //    ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
-        //    CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
-        //    ZonalStatRaster = @"E:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
-        //    runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
-        //    postgresPassword = "postgres",
-        //    db = "GeoNodeWebModis",
-        //    BuferFolder = @"E:\MODIS";
-
-        const string ModisUser = "hvreren",
-            ModisPassword = "Querty123",
+        const string ModisUser = "sandugash_2004",
+            ModisPassword = "Arina2009",
             ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
             DownloadingDir = @"E:\MODIS\Downloading",
             DownloadedDir = @"E:\MODIS\Downloaded",
@@ -124,7 +98,7 @@ namespace Modis
             LastDateFile = "!last_date.txt",
             MosaicDir = @"E:\MODIS\Mosaic",
             ConvertDir = @"E:\MODIS\Convert",
-            ArchiveDir = @"E:\MODIS\Archive",
+            ArchiveDir = @"C:\MODIS\Archive",
             ModisProjection = "4326",
             GeoServerDir = @"E:\GeoServer\data_dir\data\MODIS",
             GeoServerWorkspace = "MODIS",
@@ -139,6 +113,32 @@ namespace Modis
             postgresPassword = "postgres",
             db = "GeoNodeWebModis",
             BuferFolder = @"E:\MODIS";
+
+        //const string ModisUser = "hvreren",
+        //    ModisPassword = "Querty123",
+        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+        //    DownloadingDir = @"E:\MODIS\Downloading",
+        //    DownloadedDir = @"E:\MODIS\Downloaded",
+        //    Exclusions = @"E:\MODIS\exclusions.txt",
+        //    CMDPath = @"C:\Windows\system32\cmd.exe",
+        //    LastDateFile = "!last_date.txt",
+        //    MosaicDir = @"E:\MODIS\Mosaic",
+        //    ConvertDir = @"E:\MODIS\Convert",
+        //    ArchiveDir = @"E:\MODIS\Archive",
+        //    ModisProjection = "4326",
+        //    GeoServerDir = @"E:\GeoServer\data_dir\data\MODIS",
+        //    GeoServerWorkspace = "MODIS",
+        //    GeoServerUser = "admin",
+        //    GeoServerPassword = "geoserver",
+        //    GeoServerURL = "http://localhost:8080/geoserver/",
+        //    AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
+        //    ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
+        //    CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
+        //    ZonalStatRaster = @"E:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
+        //    runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
+        //    postgresPassword = "postgres",
+        //    db = "GeoNodeWebModis",
+        //    BuferFolder = @"E:\MODIS";
 
         static readonly string[] ZonalShps = {
             @"E:\MODIS\shp\WatershedsIleBasinOrder0.shp",
@@ -330,8 +330,8 @@ namespace Modis
                 Console.WriteLine("Press ESC to stop!");
                 SnowPeriods();
                 Console.WriteLine("Press ESC to stop!");
-                AnalizeZonalStatRaster();
-                Console.WriteLine("Press ESC to stop!");
+                //AnalizeZonalStatRaster();
+                //Console.WriteLine("Press ESC to stop!");
 
                 if (dateNext == DateTime.Today)
                 {
@@ -1647,9 +1647,18 @@ namespace Modis
             // =>
             // pointDatasTask(output)
 
-            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;"))
             {
-                connection.Open();
+                bool opened = false;
+                while (!opened)
+                {
+                    try
+                    {
+                        connection.Open();
+                        opened = true;
+                    }
+                    catch { }
+                }
 
                 // pointDatasPoint - добавить данные за последние 8 дней с базы по точке
                 DateTime dateTimeLast = pointDatasPoint.Max(p => p.date);
