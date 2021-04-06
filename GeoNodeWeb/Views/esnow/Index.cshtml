@@ -669,27 +669,6 @@
     }
 
     function YearChange() {
-        @*$.ajax({
-            url: '@Url.Action("GetModisDays")',
-            data: {
-                ModisLayer: $('#ModisLayer').val(),
-                Year: $('#year').val()
-            },
-            type: 'POST',
-            success: function (data) {
-                $('#day').empty();
-                $.each(data.days, function () {
-                    var date = new Date($('#year').val(), 0, 1);
-                    date = date.addDays(this - 1);
-                    var datestring = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
-                    $('#day').append($('<option />').val(this).text(datestring + ' (' + this + ')'));
-                });
-                $('#day option:last').attr('selected', 'selected');
-                DayChange();
-            },
-            error: function () {
-            }
-        })*@
         var dates = [];
         if ($('#ModisLayer').val() == 'MOST_MOD10A2006_B00_MaxSnowExtent_4326') {
             dates = MOD10A2006_B00_MaxSnowExtent_Dates;
@@ -732,6 +711,7 @@
 @* LegendChange *@
 <script>
     function LegendChange() {
+        console.log($('#ModisLayer').val());
         $("#legend").attr("src", "/esnow/img/legend/" + $('#ModisLayer').val() + ".svg");
     }
 </script>
@@ -889,15 +869,15 @@
                 y: -70
             },
             onOpen: function () {
-                this.setContent('<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legendESnow/Maximum_Snow_Extent.svg"></div>');
+                this.setContent('<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legend/MOST_MOD10A2006_B00_MaxSnowExtent_4326.svg"></div>');
             }
         });
         // Tooltip below to the right
         new jBox('Tooltip', {
             theme: 'TooltipSnow',
             zIndex: 'auto',
-            attach: '.ShortInfo',
-            content: '<div class="p-0"><p class="card-title" style="width: 8rem;">Aspect is the direction of the maximum rate of change in the z-value from each cell in a raster surface.</p><img id="legend" class="card-img-top" src="/esnow/img/legendESnow/Aspect.JPG"></div>',
+            attach: '#LegendBtn',
+            content: '<div class="p-0"><p class="card-title" style="width: 8rem;">Aspect is the direction of the maximum rate of change in the z-value from each cell in a raster surface.</p><img id="legend" class="card-img-top" src="/esnow/img/legend/MOST_MOD10A2006_B00_MaxSnowExtent_4326.svg"></div>',
             position: {
                 x: 'right',
             },

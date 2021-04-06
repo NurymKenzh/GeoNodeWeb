@@ -162,11 +162,14 @@ namespace GeoNodeWeb.Controllers
             string json = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
             dynamic stuff = JsonConvert.DeserializeObject(json);
-            foreach (JObject layer in stuff.layers.layer)
+            if (!string.IsNullOrEmpty(json))
             {
-                if (layer.First.First.ToString().Contains("MODIS:"))
+                foreach (JObject layer in stuff.layers.layer)
                 {
-                    r.Add(layer.First.First.ToString().Replace("MODIS:", ""));
+                    if (layer.First.First.ToString().Contains("MODIS:"))
+                    {
+                        r.Add(layer.First.First.ToString().Replace("MODIS:", ""));
+                    }
                 }
             }
             return r.ToArray();
