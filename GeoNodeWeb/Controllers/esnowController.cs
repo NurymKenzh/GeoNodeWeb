@@ -10,6 +10,8 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.Extensions.Localization;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace GeoNodeWeb.Controllers
 {
@@ -114,7 +116,60 @@ namespace GeoNodeWeb.Controllers
         public IActionResult Index()
         {
             ViewBag.GeoServerUrl = server ? Startup.Configuration["EsnowGeoServerUrl"].ToString() : Startup.Configuration["EsnowGeoServerUrlLocal"].ToString();
+            string[] modisLayers = GetMODISLayers();
+            ViewBag.MOD10A2006_B00_MaxSnowExtent_Dates = GetModisDates(modisLayers, "MOD10A2006_B00_MaxSnowExtent");
+            ViewBag.MOD10A2006_B01_SnowCover_Dates = GetModisDates(modisLayers, "MOD10A2006_B01_SnowCover");
+            ViewBag.MYD10A2006_B00_MaxSnowExtent_Dates = GetModisDates(modisLayers, "MYD10A2006_B00_MaxSnowExtent");
+            ViewBag.MYD10A2006_B01_SnowCover_Dates = GetModisDates(modisLayers, "MYD10A2006_B01_SnowCover");
+            ViewBag.MOD10C2006_B00_NDSI_Dates = GetModisDates(modisLayers, "MOD10C2006_B00_NDSI");
+            ViewBag.MOD10C2006_B00_NDSI_Anomaly_Dates = GetModisDates(modisLayers, "MOD10C2006_B00_NDSI_Anomaly");
             return View();
+        }
+
+        public string[] GetModisDates(
+            string[] Layers,
+            string ProductDataset)
+        {
+            List<string> dates = Layers
+                .Where(l => l.Contains(ProductDataset))
+                .Select(l => GetLayerDate(l))
+                .ToList();
+            return dates.ToArray();
+        }
+
+        public string GetLayerDate(string Layer)
+        {
+            string date = Layer.Substring(1, 7);
+            int year = Convert.ToInt32(date.Substring(0, 4)),
+                day = Convert.ToInt32(date.Substring(4, 3));
+            return (new DateTime(year, 1, 1).AddDays(day - 1)).ToString("yyyy-MM-dd") + "-" + Layer.Substring(5, 3);
+        }
+
+        public string[] GetMODISLayers()
+        {
+            List<string> r = new List<string>();
+            Process process = new Process();
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.FileName = @"C:\Windows\curl.exe";
+            process.StartInfo.Arguments = $" -u " +
+                    $"admin:" +
+                    $"geoserver" +
+                    $" -XGET" +
+                    $" http://elake.kagis.kz:8080/geoserver/rest/layers.json";
+            process.Start();
+            string json = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            dynamic stuff = JsonConvert.DeserializeObject(json);
+            foreach (JObject layer in stuff.layers.layer)
+            {
+                if (layer.First.First.ToString().Contains("MODIS:"))
+                {
+                    r.Add(layer.First.First.ToString().Replace("MODIS:", ""));
+                }
+            }
+            return r.ToArray();
         }
 
         [HttpPost]
