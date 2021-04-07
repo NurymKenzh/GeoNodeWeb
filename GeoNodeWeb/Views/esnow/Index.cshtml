@@ -84,31 +84,11 @@
                     <ul class="list-unstyled menu-elements">
                         <li class="tree">
                             <a href="#LayerSections" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" role="button" aria-controls="LayerSections">
-                                <i class="fas fa-layer-group"></i>Layers:
+                                <i class="fas fa-layer-group"></i>@SharedLocalizer["Layers"]:
                             </a>
                             <ul class="collapse list-unstyled" id="LayerSections">
                                 <li>
                                     <ul>
-                                        <li>
-                                            <a data-toggle="collapse" href="#LayerLabel" aria-expanded="false" aria-controls="LayerLabel">
-                                                <i class="collapsed"><i class="fas fa-plus-circle"></i></i>
-                                                <i class="expanded"><i class="fas fa-minus-circle"></i></i> Label
-                                            </a>
-                                            <ul>
-                                                <li id="LayerLabel" class="collapse scroll-link">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                                        <label class="form-check-label" for="inlineCheckbox1">Admin Level 1</label>
-                                                    </div>
-                                                </li>
-                                                <li id="LayerLabel" class="collapse">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                                                        <label class="form-check-label" for="inlineCheckbox2">Admin Level 2</label>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
                                         <li>
                                             <a data-toggle="collapse" href="#LayerShape" aria-expanded="false" aria-controls="LayerShape">
                                                 <i class="collapsed"><i class="fas fa-folder-plus"></i></i>
@@ -138,7 +118,7 @@
                                         <li>
                                             <a data-toggle="collapse" href="#LayerMask" aria-expanded="false" aria-controls="LayerMask">
                                                 <i class="collapsed"><i class="fas fa-folder-plus"></i></i>
-                                                <i class="expanded"><i class="far fa-folder-open"></i></i> Mask
+                                                <i class="expanded"><i class="far fa-folder-open"></i></i>@SharedLocalizer["Mask"]
                                             </a>
                                             <ul>
                                                 <li id="LayerMask" class="collapse scroll-link">
@@ -434,6 +414,51 @@
 <script type="text/javascript">
     var geoserver_url = '@ViewBag.GeoServerUrl';
 
+    var url_Aspect90_8bit = geoserver_url + 'esnow' + '/wms';
+    var Source_Aspect90_8bit = new ol.source.TileWMS({
+        url: url_Aspect90_8bit,
+        params: {
+            'FORMAT': 'image/png',
+            'LAYERS': 'esnow:Aspect90_8bit'
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_Aspect90_8bit = new ol.layer.Tile({
+        source: Source_Aspect90_8bit
+    });
+    Layer_Aspect90_8bit.set('name', 'Aspect90_8bit');
+    Layer_Aspect90_8bit.setOpacity(0.80);
+
+    var url_LandCover_90 = geoserver_url + 'esnow' + '/wms';
+    var Source_LandCover_90 = new ol.source.TileWMS({
+        url: url_LandCover_90,
+        params: {
+            'FORMAT': 'image/png',
+            'LAYERS': 'esnow:LandCover_90'
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_LandCover_90 = new ol.layer.Tile({
+        source: Source_LandCover_90
+    });
+    Layer_LandCover_90.set('name', 'LandCover_90');
+    Layer_LandCover_90.setOpacity(0.80);
+
+    var url_SRTM_90m = geoserver_url + 'esnow' + '/wms';
+    var Source_SRTM_90m = new ol.source.TileWMS({
+        url: url_SRTM_90m,
+        params: {
+            'FORMAT': 'image/png',
+            'LAYERS': 'esnow:SRTM_90m'
+        },
+        serverType: 'geoserver'
+    });
+    var Layer_SRTM_90m = new ol.layer.Tile({
+        source: Source_SRTM_90m
+    });
+    Layer_SRTM_90m.set('name', 'SRTM_90m');
+    Layer_SRTM_90m.setOpacity(0.80);
+
     var url_modis = geoserver_url + 'MODIS' + '/wms';
     var Source_modis = new ol.source.TileWMS({
         url: url_modis,
@@ -449,19 +474,19 @@
     Layer_modis.set('name', 'modis');
     Layer_modis.setOpacity(0.80);
 
-    var url_points = geoserver_url + 'MODIS' + '/wms';
-    var Source_points = new ol.source.TileWMS({
-        url: url_points,
-        params: {
-            'FORMAT': 'image/png',
-            'LAYERS': 'MODIS:TestSnowExtrPnt'
-        },
-        serverType: 'geoserver'
-    });
-    var Layer_points = new ol.layer.Tile({
-        source: Source_points
-    });
-    Layer_points.set('name', 'points');
+    //var url_points = geoserver_url + 'MODIS' + '/wms';
+    //var Source_points = new ol.source.TileWMS({
+    //    url: url_points,
+    //    params: {
+    //        'FORMAT': 'image/png',
+    //        'LAYERS': 'MODIS:TestSnowExtrPnt'
+    //    },
+    //    serverType: 'geoserver'
+    //});
+    //var Layer_points = new ol.layer.Tile({
+    //    source: Source_points
+    //});
+    //Layer_points.set('name', 'points');
 
     var url_WatershedsIleBasinOrder0 = geoserver_url + 'esnow' + '/wms';
     var Source_WatershedsIleBasinOrder0 = new ol.source.TileWMS({
@@ -512,6 +537,9 @@
         ]),
         layers: [
             Layer_Base,
+            //Layer_Aspect90_8bit,
+            //Layer_LandCover_90,
+            //Layer_SRTM_90m,
             Layer_modis,
             //Layer_points
             Layer_WatershedsIleBasinOrder0,
