@@ -31,7 +31,7 @@
                 <form>
                     <label class="m-0" for="ModisLayer">@SharedLocalizer["ModisLayer"]</label>
                     <div class="input-group input-group-sm">
-                        <select class="form-control" id="ModisLayer" onchange="DatasetChange(); LegendChange();">
+                        <select class="form-control" id="ModisLayer" onchange="DatasetChange(); ModisLegendChange();">
                             <option value="MOST_MOD10A2006_B00_MaxSnowExtent_4326">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent"]</option>
                             <option value="MOST_MOD10A2006_B01_SnowCover_4326">@SharedLocalizer["MOST_MOD10A2006_B01_SnowCover"]</option>
                             <option value="MOSA_MYD10A2006_B00_MaxSnowExtent_4326">@SharedLocalizer["MOSA_MYD10A2006_B00_MaxSnowExtent"]</option>
@@ -41,7 +41,7 @@
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
-                                <a href="#" id="LegendBtn" class="target-click">
+                                <a href="#" id="ModisLegendBtn" class="target-click">
                                     <i class="ShortInfo fa fa-tag" InfoTitle="Legend"></i>
                                 </a>
                             </span>
@@ -708,11 +708,92 @@
     }
 </script>
 
-@* LegendChange *@
+@* ModisLegendChange *@
 <script>
-    function LegendChange() {
-        console.log($('#ModisLayer').val());
-        $("#legend").attr("src", "/esnow/img/legend/" + $('#ModisLayer').val() + ".svg");
+    var jboxModisLegend1 = null,
+        jboxModisLegend2 = null;
+    function ModisLegendChange() {
+        $("#modislegend2").attr("src", "/esnow/img/legend/" + $('#ModisLayer').val() + ".svg");
+
+        jboxModisLegend1.destroy();
+        if ($('#ModisLayer').val() == 'MOST_MOD10A2006_B00_MaxSnowExtent_4326') {
+            // Tooltip below to the right
+            jboxModisLegend1 = new jBox('Tooltip', {
+                theme: 'TooltipSnow',
+                zIndex: 'auto',
+                attach: '#ModisLegendBtn',
+                content: '<div class="p-0"><p class="card-title" id="modislegendtext" style="width: 8rem;">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_LegendText"]</p><img id="modislegend" class="card-img-top" src="/esnow/img/legend/' + $('#ModisLayer').val() + '.svg"></div>',
+                position: {
+                    x: 'right',
+                },
+                outside: 'x' // Horizontal Tooltips need to change their outside position
+            });
+        }
+        else if ($('#ModisLayer').val() == 'MOST_MOD10A2006_B01_SnowCover_4326') {
+            // Tooltip below to the right
+            jboxModisLegend1 = new jBox('Tooltip', {
+                theme: 'TooltipSnow',
+                zIndex: 'auto',
+                attach: '#ModisLegendBtn',
+                content: '<div class="p-0"><p class="card-title" id="modislegendtext" style="width: 8rem;">@SharedLocalizer["MOST_MOD10A2006_B01_SnowCover_LegendText"]</p><img id="modislegend" class="card-img-top" src="/esnow/img/legend/' + $('#ModisLayer').val() + '.svg"></div>',
+                position: {
+                    x: 'right',
+                },
+                outside: 'x' // Horizontal Tooltips need to change their outside position
+            });
+        }
+        else if ($('#ModisLayer').val() == 'MOSA_MYD10A2006_B00_MaxSnowExtent_4326') {
+            // Tooltip below to the right
+            jboxModisLegend1 = new jBox('Tooltip', {
+                theme: 'TooltipSnow',
+                zIndex: 'auto',
+                attach: '#ModisLegendBtn',
+                content: '<div class="p-0"><p class="card-title" id="modislegendtext" style="width: 8rem;">@SharedLocalizer["MOSA_MYD10A2006_B00_MaxSnowExtent_LegendText"]</p><img id="modislegend" class="card-img-top" src="/esnow/img/legend/' + $('#ModisLayer').val() + '.svg"></div>',
+                position: {
+                    x: 'right',
+                },
+                outside: 'x' // Horizontal Tooltips need to change their outside position
+            });
+        }
+        else if ($('#ModisLayer').val() == 'MOSA_MYD10A2006_B01_SnowCover_4326') {
+            // Tooltip below to the right
+            jboxModisLegend1 = new jBox('Tooltip', {
+                theme: 'TooltipSnow',
+                zIndex: 'auto',
+                attach: '#ModisLegendBtn',
+                content: '<div class="p-0"><p class="card-title" id="modislegendtext" style="width: 8rem;">@SharedLocalizer["MOSA_MYD10A2006_B01_SnowCover_LegendText"]</p><img id="modislegend" class="card-img-top" src="/esnow/img/legend/' + $('#ModisLayer').val() + '.svg"></div>',
+                position: {
+                    x: 'right',
+                },
+                outside: 'x' // Horizontal Tooltips need to change their outside position
+            });
+        }
+        else if ($('#ModisLayer').val() == 'MOST_MOD10C2006_B00_NDSI_4326_KZ') {
+            // Tooltip below to the right
+            jboxModisLegend1 = new jBox('Tooltip', {
+                theme: 'TooltipSnow',
+                zIndex: 'auto',
+                attach: '#ModisLegendBtn',
+                content: '<div class="p-0"><p class="card-title" id="modislegendtext" style="width: 8rem;">@SharedLocalizer["MOST_MOD10C2006_B00_NDSI_LegendText"]</p><img id="modislegend" class="card-img-top" src="/esnow/img/legend/' + $('#ModisLayer').val() + '.svg"></div>',
+                position: {
+                    x: 'right',
+                },
+                outside: 'x' // Horizontal Tooltips need to change their outside position
+            });
+        }
+        else if ($('#ModisLayer').val() == 'MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly') {
+            // Tooltip below to the right
+            jboxModisLegend1 = new jBox('Tooltip', {
+                theme: 'TooltipSnow',
+                zIndex: 'auto',
+                attach: '#ModisLegendBtn',
+                content: '<div class="p-0"><p class="card-title" id="modislegendtext" style="width: 8rem;">@SharedLocalizer["MOST_MOD10C2006_B00_NDSI_Anomaly_LegendText"]</p><img id="modislegend" class="card-img-top" src="/esnow/img/legend/' + $('#ModisLayer').val() + '.svg"></div>',
+                position: {
+                    x: 'right',
+                },
+                outside: 'x' // Horizontal Tooltips need to change their outside position
+            });
+        }
     }
 </script>
 
@@ -851,8 +932,8 @@
             repositionOnOpen: false
         }).open();
         // Map Legend
-        new jBox('Modal', {
-            attach: '#LegendBtn',
+        jboxModisLegend2 = new jBox('Modal', {
+            attach: '#ModisLegendBtn',
             id: 'modal-maptitle',
             zIndex: 'auto',
             closeButton: true,
@@ -869,27 +950,20 @@
                 y: -70
             },
             onOpen: function () {
-                this.setContent('<div class="p-0"><img id="legend" class="card-img-top" src="/esnow/img/legend/MOST_MOD10A2006_B00_MaxSnowExtent_4326.svg"></div>');
+                this.setContent('<div class="p-0"><img id="modislegend2" class="card-img-top" src="/esnow/img/legend/' + $('#ModisLayer').val() + '.svg"></div>');
             }
         });
         // Tooltip below to the right
-        new jBox('Tooltip', {
+        jboxModisLegend1 = new jBox('Tooltip', {
             theme: 'TooltipSnow',
             zIndex: 'auto',
-            attach: '#LegendBtn',
-            content: '<div class="p-0"><p class="card-title" style="width: 8rem;">Aspect is the direction of the maximum rate of change in the z-value from each cell in a raster surface.</p><img id="legend" class="card-img-top" src="/esnow/img/legend/MOST_MOD10A2006_B00_MaxSnowExtent_4326.svg"></div>',
+            attach: '#ModisLegendBtn',
+            content: '<div class="p-0"><p class="card-title" id="modislegendtext" style="width: 8rem;">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_LegendText"]</p><img id="modislegend" class="card-img-top" src="/esnow/img/legend/MOST_MOD10A2006_B00_MaxSnowExtent_4326.svg"></div>',
             position: {
                 x: 'right',
             },
             outside: 'x' // Horizontal Tooltips need to change their outside position
         });
-
-    });
-</script>
-
-@* $(document).ready *@
-<script>
-    $(document).ready(function () {
         DatasetChange();
     });
 </script>
