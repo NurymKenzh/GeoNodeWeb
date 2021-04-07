@@ -837,7 +837,12 @@
             },
             serverType: 'geoserver'
         });
-        Layer_modis.setSource(Source_modis_new);
+        if ($('#day').val() == null) {
+            Layer_modis.setSource(null);
+        }
+        else {
+            Layer_modis.setSource(Source_modis_new);
+        }
     }
 </script>
 
