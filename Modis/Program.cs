@@ -117,28 +117,28 @@ namespace Modis
         //const string ModisUser = "hvreren",
         //    ModisPassword = "Querty123",
         //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
-        //    DownloadingDir = @"E:\MODIS\Downloading",
-        //    DownloadedDir = @"E:\MODIS\Downloaded",
-        //    Exclusions = @"E:\MODIS\exclusions.txt",
+        //    DownloadingDir = @"D:\MODIS\Downloading",
+        //    DownloadedDir = @"D:\MODIS\Downloaded",
+        //    Exclusions = @"D:\MODIS\exclusions.txt",
         //    CMDPath = @"C:\Windows\system32\cmd.exe",
         //    LastDateFile = "!last_date.txt",
-        //    MosaicDir = @"E:\MODIS\Mosaic",
-        //    ConvertDir = @"E:\MODIS\Convert",
-        //    ArchiveDir = @"E:\MODIS\Archive",
+        //    MosaicDir = @"D:\MODIS\Mosaic",
+        //    ConvertDir = @"D:\MODIS\Convert",
+        //    ArchiveDir = @"D:\MODIS\Archive",
         //    ModisProjection = "4326",
-        //    GeoServerDir = @"E:\GeoServer\data_dir\data\MODIS",
+        //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODIS",
         //    GeoServerWorkspace = "MODIS",
         //    GeoServerUser = "admin",
         //    GeoServerPassword = "geoserver",
         //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
-        //    ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
-        //    CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
-        //    ZonalStatRaster = @"E:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
+        //    AnalizeShp = @"D:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
+        //    ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py",
+        //    CloudMask = @"D:\MODIS\Python\CloudMask_v03.py",
+        //    ZonalStatRaster = @"D:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
         //    runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
         //    postgresPassword = "postgres",
         //    db = "GeoNodeWebModis",
-        //    BuferFolder = @"E:\MODIS";
+        //    BuferFolder = @"D:\MODIS";
 
         static readonly string[] ZonalShps = {
             @"E:\MODIS\shp\WatershedsIleBasinOrder0.shp",
@@ -1438,6 +1438,18 @@ namespace Modis
         {
             List<Task> taskList = new List<Task>();
             pointDatas.Clear();
+            List<string> modispointsrastersDB = new List<string>(),
+                modispointsrastersNew = new List<string>();
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            {
+                connection.Open();
+
+                string query = $"SELECT name" +
+                    $" FROM public.modispointsrasters;";
+                modispointsrastersDB = connection.Query<string>(query).ToList();
+
+                connection.Close();
+            }
             foreach (ModisProduct modisProduct in modisProducts)
             {
                 if (modisProduct.Analize)
@@ -1446,18 +1458,20 @@ namespace Modis
                     {
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{cloudsMaskSourceFinalName}_{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            if (!Path.GetFileName(file).Contains("BASE"))
+                            if (!Path.GetFileName(file).Contains("BASE") && !modispointsrastersDB.Contains(Path.GetFileName(file)))
                             {
                                 taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                modispointsrastersNew.Add(Path.GetFileName(file));
                             }
                         }
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            if (!Path.GetFileName(file).Contains("BASE"))
+                            if (!Path.GetFileName(file).Contains("BASE") && !modispointsrastersDB.Contains(Path.GetFileName(file)))
                             {
                                 if (((GetNextDate() - GetTifDate(file)).Days > 3) && (!File.Exists(file.Replace(modisProduct.Product.Split('.')[0], cloudsMaskSourceFinalName))))
                                 {
                                     taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                    modispointsrastersNew.Add(Path.GetFileName(file));
                                 }
                             }
                         }
@@ -1466,13 +1480,25 @@ namespace Modis
                     {
                         foreach (string file in Directory.EnumerateFiles(GeoServerDir, $"*{modisProduct.Product.Split('.')[0]}*.tif", SearchOption.TopDirectoryOnly))
                         {
-                            if (!Path.GetFileName(file).Contains("BASE"))
+                            if (!Path.GetFileName(file).Contains("BASE") && !modispointsrastersDB.Contains(Path.GetFileName(file)))
                             {
                                 taskList.Add(Task.Factory.StartNew(() => AnalizeTask(Path.Combine(GeoServerDir, Path.GetFileName(file)))));
+                                modispointsrastersNew.Add(Path.GetFileName(file));
                             }
                         }
                     }
                 }
+            }
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            {
+                connection.Open();
+                foreach (string modispointsraster in modispointsrastersNew)
+                {
+                    string query = $"INSERT INTO public.modispointsrasters(name) VALUES ('{modispointsraster}');";
+                    connection.Execute(query);
+                }
+
+                connection.Close();
             }
             Task.WaitAll(taskList.ToArray());
 
