@@ -1524,23 +1524,42 @@ namespace Modis
             }
             Task.WaitAll(taskList2.ToArray());
 
-            StringBuilder text = new StringBuilder();
-            foreach (PointData pointData_ in pointDatas2)
+            //StringBuilder text = new StringBuilder();
+            //foreach (PointData pointData_ in pointDatas2)
+            //{
+            //    text.Append($"{pointData_.pointid}\t" +
+            //        $"'{pointData_.date.ToString("yyyy-MM-dd")}'\t" +
+            //        //$"{pointData_.MOD10A1006_NDSISnowCover}\t" +
+            //        //$"{pointData_.MYD10A1006_NDSISnowCover}\t" +
+            //        //$"{pointData_.MOD10A2006_MaxSnowExtent}\t" +
+            //        //$"{pointData_.MOD10A2006_SnowCover}\t" +
+            //        //$"{pointData_.MYD10A2006_MaxSnowExtent}\t" +
+            //        //$"{pointData_.MYD10A2006_SnowCover}\t" +
+            //        //$"{pointData_.MOD10C2006_NDSI}\t" +
+            //        $"{pointData_.snow}" + Environment.NewLine);
+            //}
+            //File.AppendAllText(Path.Combine(BuferFolder, "modispoints.txt"), text.ToString());
+            //CopyToDb($"COPY public.modispoints (pointid, date, snow) FROM '{Path.Combine(BuferFolder, "modispoints.txt")}' DELIMITER E'\\t';");
+            //File.Delete(Path.Combine(BuferFolder, "modispoints.txt"));
+            if (pointDatas2.Count() > 0)
             {
-                text.Append($"{pointData_.pointid}\t" +
-                    $"'{pointData_.date.ToString("yyyy-MM-dd")}'\t" +
-                    //$"{pointData_.MOD10A1006_NDSISnowCover}\t" +
-                    //$"{pointData_.MYD10A1006_NDSISnowCover}\t" +
-                    //$"{pointData_.MOD10A2006_MaxSnowExtent}\t" +
-                    //$"{pointData_.MOD10A2006_SnowCover}\t" +
-                    //$"{pointData_.MYD10A2006_MaxSnowExtent}\t" +
-                    //$"{pointData_.MYD10A2006_SnowCover}\t" +
-                    //$"{pointData_.MOD10C2006_NDSI}\t" +
-                    $"{pointData_.snow}" + Environment.NewLine);
+                StringBuilder text = new StringBuilder();
+                text.Append($"INSERT INTO public.modispoints(pointid, date, snow) VALUES ");
+                foreach (PointData pointData_ in pointDatas2)
+                {
+                    text.Append($"({pointData_.pointid}, '{pointData_.date.ToString("yyyy-MM-dd")}', {pointData_.snow})," + Environment.NewLine);
+                }
+                text.Length--;
+                text.Length--;
+                text.Length--;
+                text.Append(";");
+                using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;"))
+                {
+                    connection.Open();
+                    connection.Execute(text.ToString());
+                    connection.Close();
+                }
             }
-            File.AppendAllText(Path.Combine(BuferFolder, "modispoints.txt"), text.ToString());
-            CopyToDb($"COPY public.modispoints (pointid, date, snow) FROM '{Path.Combine(BuferFolder, "modispoints.txt")}' DELIMITER E'\\t';");
-            File.Delete(Path.Combine(BuferFolder, "modispoints.txt"));
 
             pointDatas.Clear();
             while(pointDatas2.TryTake(out _)) { }
