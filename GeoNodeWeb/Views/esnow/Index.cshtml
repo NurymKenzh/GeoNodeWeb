@@ -62,17 +62,17 @@
                     <div class="input-group input-group-sm">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                <a href="#" target="_blank">
-                                    <i class="fa fa-chevron-left"></i>
+                                <a href="#">
+                                    <i class="fa fa-chevron-left" onclick="DayMinus()"></i>
                                 </a>
                             </span>
                         </div>
-                        <select class="custom-select" id="day" aria-describedby="DayHelpBlock" onchange="DayChange()">
+                        <select class="custom-select" id="day" aria-describedby="DayHelpBlock" onchange="ModisLayerChange(); ModisLegendChange();">
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">
-                                <a href="#" target="_blank">
-                                    <i class="fa fa-chevron-right"></i>
+                                <a href="#">
+                                    <i class="fa fa-chevron-right" onclick="DayPlus()"></i>
                                 </a>
                             </span>
                         </div>
@@ -706,6 +706,41 @@
         $('#day option:last').attr('selected', 'selected');
         ModisLayerChange();
     }
+
+    function DayPlus() {
+        var day = $("#day").prop('selectedIndex') + 1,
+            year = $("#year").prop('selectedIndex') + 1,
+            dayCount = $('#day option').length,
+            yearCount = $('#year option').length;
+        if (day < dayCount) {
+            $('#day :nth-child(' + (day + 1) + ')').prop('selected', true);
+            ModisLayerChange();
+            ModisLegendChange();
+        }
+        else if (year < yearCount) {
+            $('#year :nth-child(' + (year + 1) + ')').prop('selected', true);
+            $('#day :nth-child(1)').prop('selected', true);
+            ModisLayerChange();
+            ModisLegendChange();
+        }
+    }
+
+    function DayMinus() {
+        var day = $("#day").prop('selectedIndex') + 1,
+            year = $("#year").prop('selectedIndex') + 1,
+            dayCount = $('#day option').length,
+            yearCount = $('#year option').length;
+        if (day > 1) {
+            $('#day :nth-child(' + (day - 1) + ')').prop('selected', true);
+            ModisLayerChange();
+            ModisLegendChange();
+        }
+        else if (year > 1){
+            $('#year :nth-child(' + (year - 1) + ')').prop('selected', true);
+            ModisLayerChange();
+            ModisLegendChange();
+        }
+    }
 </script>
 
 @* ModisLegendChange *@
@@ -714,6 +749,12 @@
         jboxModisLegend2 = null;
     function ModisLegendChange() {
         $("#modislegend2").attr("src", "/esnow/img/legend/" + $('#ModisLayer').val() + ".svg");
+        if ($('#day').val() != null) {
+            $('#modisdate').text($('#year').val() + '. ' + $('#day').val() + ': ' + $("#day option:selected").text());
+        }
+        else {
+            $('#modisdate').text('');
+        }
 
         jboxModisLegend1.destroy();
         if ($('#ModisLayer').val() == 'MOST_MOD10A2006_B00_MaxSnowExtent_4326') {
@@ -944,7 +985,7 @@
                 x: -10,
                 y: 10
             },
-            content: '<div class="card-body text-white text-center p-0"><h5 class="card-title" id="modistitle">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Title"]</h5><p class="card-text mb-1" id="modistext">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Text"]</p><p class="card-text">2020y. 057: 19/02 - 26/02</p></div >',
+            content: '<div class="card-body text-white text-center p-0"><h5 class="card-title" id="modistitle">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Title"]</h5><p class="card-text mb-1" id="modistext">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Text"]</p><p class="card-text" id="modisdate"></p></div >',
             overlay: false,
             repositionOnOpen: false
         }).open();
@@ -982,5 +1023,6 @@
             outside: 'x' // Horizontal Tooltips need to change their outside position
         });
         DatasetChange();
+        ModisLegendChange();
     });
 </script>
