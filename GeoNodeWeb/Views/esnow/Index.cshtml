@@ -728,6 +728,8 @@
                 },
                 outside: 'x' // Horizontal Tooltips need to change their outside position
             });
+            $("#modistitle").text('@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Title"]');
+            $("#modistext").text('@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Text"]');
         }
         else if ($('#ModisLayer').val() == 'MOST_MOD10A2006_B01_SnowCover_4326') {
             // Tooltip below to the right
@@ -741,6 +743,8 @@
                 },
                 outside: 'x' // Horizontal Tooltips need to change their outside position
             });
+            $("#modistitle").text('@SharedLocalizer["MOST_MOD10A2006_B01_SnowCover_Title"]');
+            $("#modistext").text('@SharedLocalizer["MOST_MOD10A2006_B01_SnowCover_Text"]');
         }
         else if ($('#ModisLayer').val() == 'MOSA_MYD10A2006_B00_MaxSnowExtent_4326') {
             // Tooltip below to the right
@@ -754,6 +758,8 @@
                 },
                 outside: 'x' // Horizontal Tooltips need to change their outside position
             });
+            $("#modistitle").text('@SharedLocalizer["MOSA_MYD10A2006_B00_MaxSnowExtent_Title"]');
+            $("#modistext").text('@SharedLocalizer["MOSA_MYD10A2006_B00_MaxSnowExtent_Text"]');
         }
         else if ($('#ModisLayer').val() == 'MOSA_MYD10A2006_B01_SnowCover_4326') {
             // Tooltip below to the right
@@ -767,6 +773,8 @@
                 },
                 outside: 'x' // Horizontal Tooltips need to change their outside position
             });
+            $("#modistitle").text('@SharedLocalizer["MOSA_MYD10A2006_B01_SnowCover_Title"]');
+            $("#modistext").text('@SharedLocalizer["MOSA_MYD10A2006_B01_SnowCover_Text"]');
         }
         else if ($('#ModisLayer').val() == 'MOST_MOD10C2006_B00_NDSI_4326_KZ') {
             // Tooltip below to the right
@@ -780,6 +788,8 @@
                 },
                 outside: 'x' // Horizontal Tooltips need to change their outside position
             });
+            $("#modistitle").text('@SharedLocalizer["MOST_MOD10C2006_B00_NDSI_Title"]');
+            $("#modistext").text('@SharedLocalizer["MOST_MOD10C2006_B00_NDSI_Text"]');
         }
         else if ($('#ModisLayer').val() == 'MOST_MOD10C2006_B00_NDSI_4326_KZ_Anomaly') {
             // Tooltip below to the right
@@ -793,6 +803,8 @@
                 },
                 outside: 'x' // Horizontal Tooltips need to change their outside position
             });
+            $("#modistitle").text('@SharedLocalizer["MOST_MOD10C2006_B00_NDSI_Anomaly_Title"]');
+            $("#modistext").text('@SharedLocalizer["MOST_MOD10C2006_B00_NDSI_Anomaly_Text"]');
         }
     }
 </script>
@@ -927,7 +939,7 @@
                 x: -10,
                 y: 10
             },
-            content: '<div class="card-body text-white text-center p-0"><h5 class="card-title">Terra Modis 8-day</h5><p class="card-text mb-1">Maximum snow extent </p><p class="card-text">2020y. 057: 19/02 - 26/02</p></div >',
+            content: '<div class="card-body text-white text-center p-0"><h5 class="card-title" id="modistitle">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Title"]</h5><p class="card-text mb-1" id="modistext">@SharedLocalizer["MOST_MOD10A2006_B00_MaxSnowExtent_Text"]</p><p class="card-text">2020y. 057: 19/02 - 26/02</p></div >',
             overlay: false,
             repositionOnOpen: false
         }).open();
