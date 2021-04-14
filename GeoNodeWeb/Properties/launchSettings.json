@@ -14,7 +14,8 @@
       "launchUrl": "esnow",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "nativeDebugging": false
     },
     "GeoNodeWeb": {
       "commandName": "Project",

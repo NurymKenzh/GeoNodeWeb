@@ -54,7 +54,7 @@
                         </select>
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <input type="checkbox" id="layerMODISShow" checked="checked">
+                                <input type="checkbox" id="layerMODISShow" checked="checked" onchange="ChangeLayers()">
                             </div>
                         </div>
                     </div>
@@ -175,6 +175,110 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="checkbox" id="inlineSrtm2" value="option2">
                                                                 <label class="form-check-label" for="inlineSrtm2">SRTM Level 2</label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li id="LayerMask" class="collapse">
+                                                    <a data-toggle="collapse" href="#LayerLandCover_90" aria-expanded="false" aria-controls="LayerLandCover_90">
+                                                        <i class="collapsed"><i class="fas fa-plus-circle"></i></i>
+                                                        <i class="expanded"><i class="fas fa-minus-circle"></i></i> @SharedLocalizer["LandCover_90"] <i class="fa fa-info-circle float-right ShortInfo" InfoTitle="Info"></i>
+                                                    </a>
+                                                    <ul>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_111" value="LandCover_90_opacity111" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_111">@SharedLocalizer["LandCover_90_111"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_113" value="LandCover_90_opacity113">
+                                                                <label class="form-check-label" for="inlineLandCover_90_113">@SharedLocalizer["LandCover_90_113"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_114" value="LandCover_90_opacity114" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_114">@SharedLocalizer["LandCover_90_114"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_115" value="LandCover_90_opacity115" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_115">@SharedLocalizer["LandCover_90_115"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_116" value="LandCover_90_opacity116" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_116">@SharedLocalizer["LandCover_90_116"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_124" value="LandCover_90_opacity124" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_124">@SharedLocalizer["LandCover_90_124"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_126" value="LandCover_90_opacity126" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_126">@SharedLocalizer["LandCover_90_126"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_20" value="LandCover_90_opacity20" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_20">@SharedLocalizer["LandCover_90_20"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_30" value="LandCover_90_opacity30" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_30">@SharedLocalizer["LandCover_90_30"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_90" value="LandCover_90_opacity90" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_90">@SharedLocalizer["LandCover_90_90"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_60" value="LandCover_90_opacity60" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_60">@SharedLocalizer["LandCover_90_60"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_40" value="LandCover_90_opacity40" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_40">@SharedLocalizer["LandCover_90_40"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_50" value="LandCover_90_opacity50" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_50">@SharedLocalizer["LandCover_90_50"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_70" value="LandCover_90_opacity70" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_70">@SharedLocalizer["LandCover_90_70"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_80" value="LandCover_90_opacity80" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_80">@SharedLocalizer["LandCover_90_80"]</label>
+                                                            </div>
+                                                        </li>
+                                                        <li id="LayerLandCover_90" class="collapse scroll-link">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="inlineLandCover_90_0" value="LandCover_90_opacity0" onchange="ChangeLayers()">
+                                                                <label class="form-check-label" for="inlineLandCover_90_0">@SharedLocalizer["LandCover_90_0"]</label>
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -443,6 +547,7 @@
     });
     Layer_LandCover_90.set('name', 'LandCover_90');
     Layer_LandCover_90.setOpacity(0.80);
+    Layer_LandCover_90.getSource().updateParams({ env: 'opacity40:0' });
 
     var url_SRTM_90m = geoserver_url + 'esnow' + '/wms';
     var Source_SRTM_90m = new ol.source.TileWMS({
@@ -538,7 +643,7 @@
         layers: [
             Layer_Base,
             //Layer_Aspect90_8bit,
-            //Layer_LandCover_90,
+            Layer_LandCover_90,
             //Layer_SRTM_90m,
             Layer_modis,
             //Layer_points
@@ -636,7 +741,28 @@
                 layer.setVisible(document.getElementById("WatershedsIleBasinOrder2Show").checked);
             }
             if (layer.get('name') == 'modis') {
-                layer.setOpacity($('#layerMODISOpacity').val() / 100)
+                layer.setVisible(document.getElementById("layerMODISShow").checked);
+                layer.setOpacity($('#layerMODISOpacity').val() / 100);
+            }
+            if (layer.get('name') == 'LandCover_90') {
+                var opacity111 = $('#inlineLandCover_90_111').is(":checked") ? '1' : '0',
+                    opacity113 = $('#inlineLandCover_90_113').is(":checked") ? '1' : '0',
+                    opacity114 = $('#inlineLandCover_90_114').is(":checked") ? '1' : '0',
+                    opacity115 = $('#inlineLandCover_90_115').is(":checked") ? '1' : '0',
+                    opacity116 = $('#inlineLandCover_90_116').is(":checked") ? '1' : '0',
+                    opacity124 = $('#inlineLandCover_90_124').is(":checked") ? '1' : '0',
+                    opacity126 = $('#inlineLandCover_90_126').is(":checked") ? '1' : '0',
+                    opacity20 = $('#inlineLandCover_90_20').is(":checked") ? '1' : '0',
+                    opacity30 = $('#inlineLandCover_90_30').is(":checked") ? '1' : '0',
+                    opacity90 = $('#inlineLandCover_90_90').is(":checked") ? '1' : '0',
+                    opacity60 = $('#inlineLandCover_90_60').is(":checked") ? '1' : '0',
+                    opacity40 = $('#inlineLandCover_90_40').is(":checked") ? '1' : '0',
+                    opacity50 = $('#inlineLandCover_90_50').is(":checked") ? '1' : '0',
+                    opacity70 = $('#inlineLandCover_90_70').is(":checked") ? '1' : '0',
+                    opacity80 = $('#inlineLandCover_90_80').is(":checked") ? '1' : '0',
+                    opacity0 = $('#inlineLandCover_90_0').is(":checked") ? '1' : '0',
+                    params = `opacity111:${opacity111};opacity113:${opacity113};opacity114:${opacity114};opacity115:${opacity115};opacity116:${opacity116};opacity124:${opacity124};opacity126:${opacity126};opacity20:${opacity20};opacity30:${opacity30};opacity90:${opacity90};opacity60:${opacity60};opacity40:${opacity40};opacity50:${opacity50};opacity70:${opacity70};opacity80:${opacity80};opacity0:${opacity0}`;
+                Layer_LandCover_90.getSource().updateParams({ env: params });
             }
         })
     }
