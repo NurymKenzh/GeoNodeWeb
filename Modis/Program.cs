@@ -348,7 +348,7 @@ namespace Modis
 
                 DateTime finish = DateTime.Now;
                 TimeSpan duration = finish - start;
-                File.AppendAllText(@"D:\MODISGNW\time.txt", $"{start}\t{finish}\t{dateNext.ToString("yyyy-MM-dd")}\t{duration}{Environment.NewLine}");
+                File.AppendAllText(@"E:\MODIS\time.txt", $"{start}\t{finish}\t{dateNext.ToString("yyyy-MM-dd")}\t{duration}{Environment.NewLine}");
             }
         }
 
