@@ -108,11 +108,7 @@ namespace Modis
             AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
             ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
             CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
-            ZonalStatRaster = @"E:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
-            runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
-            postgresPassword = "postgres",
-            db = "GeoNodeWebModis",
-            BuferFolder = @"E:\MODIS";
+            Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;";
 
         //const string ModisUser = "hvreren",
         //    ModisPassword = "Querty123",
@@ -134,11 +130,7 @@ namespace Modis
         //    AnalizeShp = @"D:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
         //    ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py",
         //    CloudMask = @"D:\MODIS\Python\CloudMask_v03.py",
-        //    ZonalStatRaster = @"D:\MODIS\Python\ZonalStatRaster_v20210318v01.py",
-        //    runpsqlPath = @"C:\Program Files\PostgreSQL\10\scripts\runpsql.bat",
-        //    postgresPassword = "postgres",
-        //    db = "GeoNodeWebModis",
-        //    BuferFolder = @"D:\MODIS";
+        //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;";
 
         const string cloudsMaskSourceName = "CLOU",
             cloudsMaskSourceFinalName = "CLMA"; // CLOUD MASK
@@ -1193,7 +1185,7 @@ namespace Modis
             pointDatas.Clear();
             List<string> modispointsrastersDB = new List<string>(),
                 modispointsrastersNew = new List<string>();
-            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 connection.Open();
 
@@ -1242,7 +1234,7 @@ namespace Modis
                     }
                 }
             }
-            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 connection.Open();
                 foreach (string modispointsraster in modispointsrastersNew)
@@ -1255,10 +1247,9 @@ namespace Modis
             }
             Task.WaitAll(taskList.ToArray());
 
-            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
             while (pointDatas2.TryTake(out _)) { }
             List<int> pointIds = new List<int>();
-            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 connection.Open();
                 // id точек
@@ -1306,7 +1297,7 @@ namespace Modis
                 text.Length--;
                 text.Length--;
                 text.Append(";");
-                using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;"))
+                using (var connection = new NpgsqlConnection(Connection))
                 {
                     connection.Open();
                     connection.Execute(text.ToString());
@@ -1336,7 +1327,7 @@ namespace Modis
                 }
             }
             DateTime dateFinish = GetTifDate(TifFile);
-            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 bool opened = false;
                 while (!opened)
@@ -1445,7 +1436,7 @@ namespace Modis
             // =>
             // pointDatasTask(output)
 
-            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;"))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 bool opened = false;
                 while (!opened)
@@ -1665,8 +1656,7 @@ namespace Modis
 
             while (periods.TryTake(out _)) { }
             List<Task> taskList = new List<Task>();
-            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres";
-            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 connection.Open();
                 // id точек
@@ -1703,7 +1693,7 @@ namespace Modis
             text.Length--;
             text.Length--;
             text.Append(";");
-            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;"))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 connection.Open();
                 connection.Execute(text.ToString());
@@ -1726,8 +1716,7 @@ namespace Modis
             DateTime date = GetNextDate();
             date = new DateTime(date.Year - 1, 7, 15);
 
-            string GeoNodeWebModisConnection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;CommandTimeout=0;Keepalive=0;";
-            using (var connection = new NpgsqlConnection(GeoNodeWebModisConnection))
+            using (var connection = new NpgsqlConnection(Connection))
             {
                 List<Period> periodsTask = new List<Period>();
                 connection.Open();
