@@ -1702,24 +1702,27 @@ namespace Modis
             //File.AppendAllText(Path.Combine(BuferFolder, "modispointsperiods.txt"), text.ToString());
             //CopyToDb($"COPY public.modispointsperiods (pointid, start, finish, period) FROM '{Path.Combine(BuferFolder, "modispointsperiods.txt")}' DELIMITER E'\\t';");
             //File.Delete(Path.Combine(BuferFolder, "modispointsperiods.txt"));
-            text.Append($"INSERT INTO public.modispointsperiods(pointid, start, finish, period) VALUES ");
-            foreach (Period period in periods)
+            if (periods.Count() > 0)
             {
-                text.Append($"({period.pointid}, " +
-                    $"'{period.start.ToString("yyyy-MM-dd")}', " +
-                    $"'{period.finish.ToString("yyyy-MM-dd")}', " +
-                    $"{period.period})," + 
-                    Environment.NewLine);
-            }
-            text.Length--;
-            text.Length--;
-            text.Length--;
-            text.Append(";");
-            using (var connection = new NpgsqlConnection(Connection))
-            {
-                connection.Open();
-                connection.Execute(text.ToString());
-                connection.Close();
+                text.Append($"INSERT INTO public.modispointsperiods(pointid, start, finish, period) VALUES ");
+                foreach (Period period in periods)
+                {
+                    text.Append($"({period.pointid}, " +
+                        $"'{period.start.ToString("yyyy-MM-dd")}', " +
+                        $"'{period.finish.ToString("yyyy-MM-dd")}', " +
+                        $"{period.period})," +
+                        Environment.NewLine);
+                }
+                text.Length--;
+                text.Length--;
+                text.Length--;
+                text.Append(";");
+                using (var connection = new NpgsqlConnection(Connection))
+                {
+                    connection.Open();
+                    connection.Execute(text.ToString());
+                    connection.Close();
+                }
             }
 
             while (periods.TryTake(out _)) { }
