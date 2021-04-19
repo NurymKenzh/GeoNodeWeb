@@ -132,6 +132,28 @@ namespace Modis
         //    CloudMask = @"D:\MODIS\Python\CloudMask_v03.py",
         //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;";
 
+        //const string ModisUser = "hvreren",
+        //    ModisPassword = "Querty123",
+        //    ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+        //    DownloadingDir = @"D:\MODISGNW\Downloading",
+        //    DownloadedDir = @"D:\MODISGNW\Downloaded",
+        //    Exclusions = @"D:\MODISGNW\exclusions.txt",
+        //    CMDPath = @"C:\Windows\system32\cmd.exe",
+        //    LastDateFile = "!last_date.txt",
+        //    MosaicDir = @"D:\MODISGNW\Mosaic",
+        //    ConvertDir = @"D:\MODISGNW\Convert",
+        //    ArchiveDir = @"D:\MODISGNW\Archive",
+        //    ModisProjection = "4326",
+        //    GeoServerDir = @"D:\GeoServer\data_dir\data\MODISGNW",
+        //    GeoServerWorkspace = "MODISGNW",
+        //    GeoServerUser = "admin",
+        //    GeoServerPassword = "geoserver",
+        //    GeoServerURL = "http://localhost:8080/geoserver/",
+        //    AnalizeShp = @"D:\MODISGNW\shp\WatershedsIleBasinPnt20201230.shp",
+        //    ExtractRasterValueByPoint = @"D:\MODISGNW\Python\ExtractRasterValueByPoint.py",
+        //    CloudMask = @"D:\MODISGNW\Python\CloudMask_v03.py",
+        //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;";
+
         const string cloudsMaskSourceName = "CLOU",
             cloudsMaskSourceFinalName = "CLMA"; // CLOUD MASK
 
@@ -326,7 +348,7 @@ namespace Modis
 
                 DateTime finish = DateTime.Now;
                 TimeSpan duration = finish - start;
-                File.AppendAllText(@"E:\MODIS\time.txt", $"{start}\t{finish}\t{dateNext.ToString("yyyy-MM-dd")}\t{duration}{Environment.NewLine}");
+                File.AppendAllText(@"D:\MODISGNW\time.txt", $"{start}\t{finish}\t{dateNext.ToString("yyyy-MM-dd")}\t{duration}{Environment.NewLine}");
             }
         }
 
