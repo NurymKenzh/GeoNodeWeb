@@ -67,14 +67,14 @@ namespace Modis
             {
                 get
                 {
-                    return count > 0 ? (decimal) snow / count : 0;
+                    return count > 0 ? (decimal)snow / count : 0;
                 }
             }
             public decimal nosnowperc
             {
                 get
                 {
-                    return count > 0 ? (decimal) nosnow / count : 0;
+                    return count > 0 ? (decimal)nosnow / count : 0;
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace Modis
         static void Main(string[] args)
         {
             Console.WriteLine("Press ESC to stop!");
-            
+
             exclusions = new List<Exclusion>();
             List<string> exclusionsS = File.ReadAllLines(Exclusions).ToList();
             foreach (string exclusionS in exclusionsS)
@@ -189,13 +189,13 @@ namespace Modis
                 Period = 1,
                 DataSets = new string[7]
                 {
-                "NDSISnowCover",
-                "NDSISnowCoverBasic",
-                "NDSISnowCoverAlgorithm",
-                "NDSI",
-                "SnowAlbedo",
-                "orbitpnt",
-                "granulepnt"
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
                 },
                 ExtractDataSetIndexes = new int[1] { 0 },
                 Spans = true,
@@ -217,13 +217,13 @@ namespace Modis
                 Period = 1,
                 DataSets = new string[7]
                 {
-                "NDSISnowCover",
-                "NDSISnowCoverBasic",
-                "NDSISnowCoverAlgorithm",
-                "NDSI",
-                "SnowAlbedo",
-                "orbitpnt",
-                "granulepnt"
+                    "NDSISnowCover",
+                    "NDSISnowCoverBasic",
+                    "NDSISnowCoverAlgorithm",
+                    "NDSI",
+                    "SnowAlbedo",
+                    "orbitpnt",
+                    "granulepnt"
                 },
                 ExtractDataSetIndexes = new int[1] { 0 },
                 Spans = true,
@@ -245,8 +245,8 @@ namespace Modis
                 Period = 8,
                 DataSets = new string[2]
                 {
-                "MaxSnowExtent",
-                "SnowCover"
+                    "MaxSnowExtent",
+                    "SnowCover"
                 },
                 ExtractDataSetIndexes = new int[2] { 0, 1 },
                 Spans = true,
@@ -268,8 +268,8 @@ namespace Modis
                 Period = 8,
                 DataSets = new string[2]
                 {
-                "MaxSnowExtent",
-                "SnowCover"
+                    "MaxSnowExtent",
+                    "SnowCover"
                 },
                 ExtractDataSetIndexes = new int[2] { 0, 1 },
                 Spans = true,
@@ -291,7 +291,7 @@ namespace Modis
                 Period = 8,
                 DataSets = new string[1]
                 {
-                "NDSI"
+                    "NDSI"
                 },
                 ExtractDataSetIndexes = new int[1] { 0 },
                 Spans = false,
@@ -449,7 +449,7 @@ namespace Modis
                 process.StartInfo.EnvironmentVariables["PGPASSWORD"] = postgresPassword;
                 process.StartInfo.FileName = runpsqlPath;
                 process.Start();
-                
+
                 process.StandardInput.WriteLine("");
                 Thread.Sleep(1000);
                 process.StandardInput.WriteLine(db);
@@ -679,7 +679,7 @@ namespace Modis
         private static void SaveNextDate()
         {
             DateTime dateLast = GetNextDate();
-            if(dateLast == DateTime.Today)
+            if (dateLast == DateTime.Today)
             {
                 dateLast = dateLast.AddDays(-30);
             }
@@ -1220,7 +1220,7 @@ namespace Modis
                 File.Delete(file);
             }
         }
-        
+
         private static void CloudsPairsTask(string TifFile1, string TifFile2, string TifFileCloud)
         {
             string arguments = $"-A '{TifFile1}' -B '{TifFile2}' --outfile='{TifFileCloud}' --calc=\"A*(A<250) + B*(A==250)\"";
@@ -1234,8 +1234,8 @@ namespace Modis
                 File.Delete(TifFile2);
             }
             catch
-            { 
-            
+            {
+
             }
         }
 
@@ -1562,7 +1562,7 @@ namespace Modis
             }
 
             pointDatas.Clear();
-            while(pointDatas2.TryTake(out _)) { }
+            while (pointDatas2.TryTake(out _)) { }
         }
 
         private static void AnalizeTask(string TifFile)
@@ -1724,7 +1724,7 @@ namespace Modis
             }
 
             List<PointData> pointDatasTask = new List<PointData>();
-            foreach(PointData pointData in pointDatasPoint)
+            foreach (PointData pointData in pointDatasPoint)
             {
                 PointData pointDataExist = pointDatasTask.FirstOrDefault(p => p.date == pointData.date);
                 if (pointDataExist == null)
@@ -1855,7 +1855,7 @@ namespace Modis
                     }
                 }
             }
-            foreach(PointData pointDataTask in pointDatasTask)
+            foreach (PointData pointDataTask in pointDatasTask)
             {
                 if (pointDataTask.date == new DateTime(2000, 5, 2))
                 {
@@ -2050,7 +2050,7 @@ namespace Modis
                 }
                 connection.Close();
             }
-                
+
         }
 
         private static void SnowPeriods()
@@ -2079,16 +2079,35 @@ namespace Modis
             }
             Task.WaitAll(taskList.ToArray());
             StringBuilder text = new StringBuilder();
+            //foreach (Period period in periods)
+            //{
+            //    text.Append($"{period.pointid}\t" +
+            //        $"'{period.start.ToString("yyyy-MM-dd")}'\t" +
+            //        $"'{period.finish.ToString("yyyy-MM-dd")}'\t" +
+            //        $"{period.period}" + Environment.NewLine);
+            //}
+            //File.AppendAllText(Path.Combine(BuferFolder, "modispointsperiods.txt"), text.ToString());
+            //CopyToDb($"COPY public.modispointsperiods (pointid, start, finish, period) FROM '{Path.Combine(BuferFolder, "modispointsperiods.txt")}' DELIMITER E'\\t';");
+            //File.Delete(Path.Combine(BuferFolder, "modispointsperiods.txt"));
+            text.Append($"INSERT INTO public.modispointsperiods(pointid, start, finish, period) VALUES ");
             foreach (Period period in periods)
             {
-                text.Append($"{period.pointid}\t" +
-                    $"'{period.start.ToString("yyyy-MM-dd")}'\t" +
-                    $"'{period.finish.ToString("yyyy-MM-dd")}'\t" +
-                    $"{period.period}" + Environment.NewLine);
+                text.Append($"({period.pointid}, " +
+                    $"'{period.start.ToString("yyyy-MM-dd")}', " +
+                    $"'{period.finish.ToString("yyyy-MM-dd")}', " +
+                    $"{period.period})," + 
+                    Environment.NewLine);
             }
-            File.AppendAllText(Path.Combine(BuferFolder, "modispointsperiods.txt"), text.ToString());
-            CopyToDb($"COPY public.modispointsperiods (pointid, start, finish, period) FROM '{Path.Combine(BuferFolder, "modispointsperiods.txt")}' DELIMITER E'\\t';");
-            File.Delete(Path.Combine(BuferFolder, "modispointsperiods.txt"));
+            text.Length--;
+            text.Length--;
+            text.Length--;
+            text.Append(";");
+            using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;"))
+            {
+                connection.Open();
+                connection.Execute(text.ToString());
+                connection.Close();
+            }
 
             while (periods.TryTake(out _)) { }
         }
@@ -2270,7 +2289,7 @@ namespace Modis
             using (var connection = new NpgsqlConnection("Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432"))
             {
                 connection.Open();
-                foreach(string zonalstattiff in zonalstattiffsNew)
+                foreach (string zonalstattiff in zonalstattiffsNew)
                 {
                     string query = $"INSERT INTO public.modiszonalstattiffs(name) VALUES ('{zonalstattiff}');";
                     connection.Execute(query);
