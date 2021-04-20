@@ -105,10 +105,11 @@ namespace Modis
             GeoServerUser = "admin",
             GeoServerPassword = "geoserver",
             GeoServerURL = "http://localhost:8080/geoserver/",
-            AnalizeShp = @"E:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
+            AnalizeShp = @"E:\MODIS\shp\points.shp",
             ExtractRasterValueByPoint = @"E:\MODIS\Python\ExtractRasterValueByPoint.py",
             CloudMask = @"E:\MODIS\Python\CloudMask_v03.py",
-            Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;";
+            Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;",
+            PointsTable = "points";
 
         //const string ModisUser = "hvreren",
         //    ModisPassword = "Querty123",
@@ -127,10 +128,11 @@ namespace Modis
         //    GeoServerUser = "admin",
         //    GeoServerPassword = "geoserver",
         //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"D:\MODIS\shp\WatershedsIleBasinPnt20201230.shp",
+        //    AnalizeShp = @"D:\MODIS\shp\points.shp",
         //    ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py",
         //    CloudMask = @"D:\MODIS\Python\CloudMask_v03.py",
-        //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;";
+        //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;",
+        //    PointsTable = "points"
 
         //const string ModisUser = "hvreren",
         //    ModisPassword = "Querty123",
@@ -149,10 +151,11 @@ namespace Modis
         //    GeoServerUser = "admin",
         //    GeoServerPassword = "geoserver",
         //    GeoServerURL = "http://localhost:8080/geoserver/",
-        //    AnalizeShp = @"D:\MODISGNW\shp\WatershedsIleBasinPnt20201230.shp",
+        //    AnalizeShp = @"D:\MODISGNW\shp\points.shp",
         //    ExtractRasterValueByPoint = @"D:\MODISGNW\Python\ExtractRasterValueByPoint.py",
         //    CloudMask = @"D:\MODISGNW\Python\CloudMask_v03.py",
-        //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;";
+        //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;",
+        //    PointsTable = "points"
 
         const string cloudsMaskSourceName = "CLOU",
             cloudsMaskSourceFinalName = "CLMA"; // CLOUD MASK
@@ -1275,7 +1278,7 @@ namespace Modis
             {
                 connection.Open();
                 // id точек
-                pointIds = connection.Query<int>($"SELECT pointid FROM public.watershedsilebasinpnt20201230;").ToList();
+                pointIds = connection.Query<int>($"SELECT pointid FROM public.{PointsTable};").ToList();
                 connection.Close();
             }
             List<Task> taskList2 = new List<Task>();
@@ -1688,7 +1691,7 @@ namespace Modis
             {
                 connection.Open();
                 // id точек
-                List<int> pointIds = connection.Query<int>($"SELECT pointid FROM public.watershedsilebasinpnt20201230;").ToList();
+                List<int> pointIds = connection.Query<int>($"SELECT pointid FROM public.{PointsTable};").ToList();
                 connection.Close();
                 foreach (int pointId in pointIds)
                 {
