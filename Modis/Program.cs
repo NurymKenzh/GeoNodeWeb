@@ -1309,21 +1309,27 @@ namespace Modis
             //File.Delete(Path.Combine(BuferFolder, "modispoints.txt"));
             if (pointDatas2.Count() > 0)
             {
-                StringBuilder text = new StringBuilder();
-                text.Append($"INSERT INTO public.modispoints(pointid, date, snow) VALUES ");
-                foreach (PointData pointData_ in pointDatas2)
+                var pointDatas2Splitted = pointDatas2.Select((item, index) => new { index, item })
+                    .GroupBy(x => x.index % pointDatas2.Count() / 100000)
+                    .Select(x => x.Select(y => y.item));
+                foreach (IEnumerable<PointData> pointDatas2N in pointDatas2Splitted)
                 {
-                    text.Append($"({pointData_.pointid}, '{pointData_.date.ToString("yyyy-MM-dd")}', {pointData_.snow})," + Environment.NewLine);
-                }
-                text.Length--;
-                text.Length--;
-                text.Length--;
-                text.Append(";");
-                using (var connection = new NpgsqlConnection(Connection))
-                {
-                    connection.Open();
-                    connection.Execute(text.ToString());
-                    connection.Close();
+                    StringBuilder text = new StringBuilder();
+                    text.Append($"INSERT INTO public.modispoints(pointid, date, snow) VALUES ");
+                    foreach (PointData pointData_ in pointDatas2N)
+                    {
+                        text.Append($"({pointData_.pointid}, '{pointData_.date.ToString("yyyy-MM-dd")}', {pointData_.snow})," + Environment.NewLine);
+                    }
+                    text.Length--;
+                    text.Length--;
+                    text.Length--;
+                    text.Append(";");
+                    using (var connection = new NpgsqlConnection(Connection))
+                    {
+                        connection.Open();
+                        connection.Execute(text.ToString());
+                        connection.Close();
+                    }
                 }
             }
 
