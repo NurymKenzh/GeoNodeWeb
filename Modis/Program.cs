@@ -828,7 +828,7 @@ namespace Modis
         private static void ModisCropTask(string TifFile)
         {
             string arguments = $" {Path.GetFileName(TifFile)}" +
-                $" -projwin 43.990499 56.041399 88.340325 39.642653" +
+                $" -projwin 36.4253 56.3124 98.1245 31.5722" +
                 $" {Path.ChangeExtension(Path.GetFileNameWithoutExtension(TifFile) + "_KZ", ".tif")}";
             GDALExecute(
                 "gdal_translate",
