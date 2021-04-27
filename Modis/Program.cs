@@ -90,7 +90,7 @@ namespace Modis
 
         const string ModisUser = "sandugash_2004",
             ModisPassword = "Arina2009",
-            ModisSpans = "h21v03,h21v04,h22v03,h22v04,h23v03,h23v04,h24v03,h24v04",
+            ModisSpans = "h21v03,h21v04,h21v05,h22v03,h22v04,h22v05,h23v03,h23v04,h23v05,h24v03,h24v04,h24v05",
             DownloadingDir = @"E:\MODIS\Downloading",
             DownloadedDir = @"E:\MODIS\Downloaded",
             Exclusions = @"E:\MODIS\exclusions.txt",
@@ -132,7 +132,7 @@ namespace Modis
         //    ExtractRasterValueByPoint = @"D:\MODIS\Python\ExtractRasterValueByPoint.py",
         //    CloudMask = @"D:\MODIS\Python\CloudMask_v03.py",
         //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;",
-        //    PointsTable = "points"
+        //    PointsTable = "points";
 
         //const string ModisUser = "hvreren",
         //    ModisPassword = "Querty123",
@@ -155,7 +155,7 @@ namespace Modis
         //    ExtractRasterValueByPoint = @"D:\MODISGNW\Python\ExtractRasterValueByPoint.py",
         //    CloudMask = @"D:\MODISGNW\Python\CloudMask_v03.py",
         //    Connection = "Host=localhost;Database=GeoNodeWebModis;Username=postgres;Password=postgres;Port=5432;CommandTimeout=0;Keepalive=0;",
-        //    PointsTable = "points"
+        //    PointsTable = "points";
 
         const string cloudsMaskSourceName = "CLOU",
             cloudsMaskSourceFinalName = "CLMA"; // CLOUD MASK
@@ -250,7 +250,7 @@ namespace Modis
             {
                 Source = "SAN/MOST",
                 Product = "MOD10A2.006",
-                StartDate = new DateTime(2000, 2, 18),
+                StartDate = new DateTime(2000, 2, 24),
                 Period = 8,
                 DataSets = new string[2]
                 {
@@ -525,6 +525,10 @@ namespace Modis
                     string product = fileNameArray[0],
                         year = fileNameArray[1].Substring(1, 4),
                         archiveFolder = Path.Combine(ArchiveDir, $"{year}.{product}");
+                    if (!Directory.Exists(archiveFolder))
+                    {
+                        Directory.CreateDirectory(archiveFolder);
+                    }
                     File.Copy(file, Path.Combine(archiveFolder, Path.GetFileName(file)), true);
                 }
                 catch (Exception exception)
