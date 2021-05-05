@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoNodeWeb", "GeoNodeWeb\Ge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBCache", "DBCache\DBCache.csproj", "{C2ADEE30-EEE7-4849-93DC-EB33AAA796C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modis", "Modis\Modis.csproj", "{763AEA51-349C-4DEE-98B6-3D38C687A2C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Modis", "Modis\Modis.csproj", "{763AEA51-349C-4DEE-98B6-3D38C687A2C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModisDownloader", "ModisDownloader\ModisDownloader.csproj", "{9B3434BB-C90F-4525-8BA2-9F5366BE3F73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{763AEA51-349C-4DEE-98B6-3D38C687A2C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{763AEA51-349C-4DEE-98B6-3D38C687A2C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{763AEA51-349C-4DEE-98B6-3D38C687A2C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3434BB-C90F-4525-8BA2-9F5366BE3F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3434BB-C90F-4525-8BA2-9F5366BE3F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3434BB-C90F-4525-8BA2-9F5366BE3F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3434BB-C90F-4525-8BA2-9F5366BE3F73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
