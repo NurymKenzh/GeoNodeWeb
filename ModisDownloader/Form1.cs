@@ -47,7 +47,7 @@ namespace ModisDownloader
             modisProducts.Add(new ModisProduct()
             {
                 Source = "SAN/MOST",
-                Product = "MOD10A1.006",
+                Product = "MOD10A1.061",
                 StartDate = new DateTime(2000, 2, 24),
                 Period = 1,
                 DataSets = new string[7]
@@ -75,7 +75,7 @@ namespace ModisDownloader
             modisProducts.Add(new ModisProduct()
             {
                 Source = "SAN/MOSA",
-                Product = "MYD10A1.006",
+                Product = "MYD10A1.061",
                 StartDate = new DateTime(2002, 7, 4),
                 Period = 1,
                 DataSets = new string[7]
@@ -103,7 +103,7 @@ namespace ModisDownloader
             modisProducts.Add(new ModisProduct()
             {
                 Source = "SAN/MOST",
-                Product = "MOD10A2.006",
+                Product = "MOD10A2.061",
                 StartDate = new DateTime(2000, 2, 24),
                 Period = 8,
                 DataSets = new string[2]
@@ -126,7 +126,7 @@ namespace ModisDownloader
             modisProducts.Add(new ModisProduct()
             {
                 Source = "SAN/MOSA",
-                Product = "MYD10A2.006",
+                Product = "MYD10A2.061",
                 StartDate = new DateTime(2002, 7, 4),
                 Period = 8,
                 DataSets = new string[2]
@@ -149,7 +149,7 @@ namespace ModisDownloader
             modisProducts.Add(new ModisProduct()
             {
                 Source = "SAN/MOST",
-                Product = "MOD10C2.006",
+                Product = "MOD10C2.061",
                 StartDate = new DateTime(2000, 2, 24),
                 Period = 8,
                 DataSets = new string[1]
