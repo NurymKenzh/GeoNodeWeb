@@ -36,6 +36,15 @@ namespace ModisDownloader
             {
                 return Product.Split('.')[0];
             }
+            public string GetProductVersion()
+            {
+                string version = Product.Split('.')[1];
+                while (version[0] == '0')
+                {
+                    version = version.Substring(1);
+                }
+                return version;
+            }
         }
 
         //static ModisProduct[] modisProducts = new ModisProduct[5];
@@ -249,7 +258,7 @@ namespace ModisDownloader
                 {
                     string resource = $"https://n5eil02u.ecs.nsidc.org/egi/request?" +
                             $"short_name={ModisProduct.GetProductWithoutVersion()}&" +
-                            $"version=6&" +
+                            $"version={ModisProduct.GetProductVersion()}&" +
                             $"time={Date.ToString("yyyy-MM-dd")},{Date.ToString("yyyy-MM-dd")}&" +
                             $"bounding_box={textBoxBoundingBox.Text}&" +
                             $"agent=NO&" +
