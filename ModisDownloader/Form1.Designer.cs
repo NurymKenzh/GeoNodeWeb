@@ -51,9 +51,10 @@ namespace ModisDownloader
             this.tabControl1.Controls.Add(this.tabPageLog);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(800, 450);
+            this.tabControl1.Size = new System.Drawing.Size(1143, 750);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPageOptions
@@ -64,19 +65,21 @@ namespace ModisDownloader
             this.tabPageOptions.Controls.Add(this.buttonStart);
             this.tabPageOptions.Controls.Add(this.label1);
             this.tabPageOptions.Controls.Add(this.textBoxArchiveDirectory);
-            this.tabPageOptions.Location = new System.Drawing.Point(4, 24);
+            this.tabPageOptions.Location = new System.Drawing.Point(4, 34);
+            this.tabPageOptions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPageOptions.Name = "tabPageOptions";
-            this.tabPageOptions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageOptions.Size = new System.Drawing.Size(792, 422);
+            this.tabPageOptions.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPageOptions.Size = new System.Drawing.Size(1135, 712);
             this.tabPageOptions.TabIndex = 0;
             this.tabPageOptions.Text = "Options";
             this.tabPageOptions.UseVisualStyleBackColor = true;
             // 
             // buttonStop
             // 
-            this.buttonStop.Location = new System.Drawing.Point(104, 3);
+            this.buttonStop.Location = new System.Drawing.Point(149, 5);
+            this.buttonStop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonStop.Name = "buttonStop";
-            this.buttonStop.Size = new System.Drawing.Size(95, 23);
+            this.buttonStop.Size = new System.Drawing.Size(136, 38);
             this.buttonStop.TabIndex = 6;
             this.buttonStop.Text = "Stop";
             this.buttonStop.UseVisualStyleBackColor = true;
@@ -84,26 +87,29 @@ namespace ModisDownloader
             // 
             // textBoxBoundingBox
             // 
-            this.textBoxBoundingBox.Location = new System.Drawing.Point(110, 75);
+            this.textBoxBoundingBox.Location = new System.Drawing.Point(157, 125);
+            this.textBoxBoundingBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxBoundingBox.Name = "textBoxBoundingBox";
-            this.textBoxBoundingBox.Size = new System.Drawing.Size(334, 23);
+            this.textBoxBoundingBox.Size = new System.Drawing.Size(475, 31);
             this.textBoxBoundingBox.TabIndex = 5;
             this.textBoxBoundingBox.Text = "50,40,80,50";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 75);
+            this.label2.Location = new System.Drawing.Point(11, 125);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(85, 15);
+            this.label2.Size = new System.Drawing.Size(128, 25);
             this.label2.TabIndex = 4;
             this.label2.Text = "Bounding box:";
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(3, 3);
+            this.buttonStart.Location = new System.Drawing.Point(4, 5);
+            this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(95, 23);
+            this.buttonStart.Size = new System.Drawing.Size(136, 38);
             this.buttonStart.TabIndex = 0;
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = true;
@@ -112,27 +118,30 @@ namespace ModisDownloader
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 33);
+            this.label1.Location = new System.Drawing.Point(6, 55);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 15);
+            this.label1.Size = new System.Drawing.Size(149, 25);
             this.label1.TabIndex = 2;
             this.label1.Text = "Archive directory:";
             // 
             // textBoxArchiveDirectory
             // 
-            this.textBoxArchiveDirectory.Location = new System.Drawing.Point(110, 36);
+            this.textBoxArchiveDirectory.Location = new System.Drawing.Point(157, 60);
+            this.textBoxArchiveDirectory.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxArchiveDirectory.Name = "textBoxArchiveDirectory";
-            this.textBoxArchiveDirectory.Size = new System.Drawing.Size(334, 23);
+            this.textBoxArchiveDirectory.Size = new System.Drawing.Size(475, 31);
             this.textBoxArchiveDirectory.TabIndex = 3;
-            this.textBoxArchiveDirectory.Text = "D:\\MODIS\\Archive";
+            this.textBoxArchiveDirectory.Text = "C:\\MODIS\\Archive";
             // 
             // tabPageLog
             // 
             this.tabPageLog.Controls.Add(this.textBoxLog);
-            this.tabPageLog.Location = new System.Drawing.Point(4, 24);
+            this.tabPageLog.Location = new System.Drawing.Point(4, 34);
+            this.tabPageLog.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPageLog.Name = "tabPageLog";
-            this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(792, 422);
+            this.tabPageLog.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPageLog.Size = new System.Drawing.Size(1135, 712);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -140,11 +149,12 @@ namespace ModisDownloader
             // textBoxLog
             // 
             this.textBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxLog.Location = new System.Drawing.Point(3, 3);
+            this.textBoxLog.Location = new System.Drawing.Point(4, 5);
+            this.textBoxLog.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxLog.Size = new System.Drawing.Size(786, 416);
+            this.textBoxLog.Size = new System.Drawing.Size(1127, 702);
             this.textBoxLog.TabIndex = 0;
             this.textBoxLog.WordWrap = false;
             // 
@@ -156,10 +166,11 @@ namespace ModisDownloader
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1143, 750);
             this.Controls.Add(this.tabControl1);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormMain";
             this.Text = "MODIS Downloader";
             this.tabControl1.ResumeLayout(false);

@@ -212,7 +212,7 @@ namespace ModisDownloader
             ModisProduct modisProductToDownload = new ModisProduct();
             foreach (ModisProduct modisProduct in modisProducts)
             {
-                DateTime dateCurrent = GetProductLastDate(modisProduct);
+                DateTime dateCurrent = GetProductLastDate(modisProduct).AddDays(modisProduct.Period);
                 if (dateCurrent < dateMin)
                 {
                     dateMin = dateCurrent;
@@ -228,7 +228,7 @@ namespace ModisDownloader
             dateFile = Path.ChangeExtension(dateFile, "txt");
             if (!File.Exists(dateFile))
             {
-                return ModisProduct.StartDate.AddDays(-1);
+                return ModisProduct.StartDate.AddDays(-ModisProduct.Period);
             }
             string s_lastDate = File.ReadAllText(dateFile),
                 s_year = s_lastDate.Split('-')[0],
